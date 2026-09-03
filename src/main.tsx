@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, useLocation, useNavigate } from "react-router-dom";
 import * as Icons from "lucide-react";
@@ -437,6 +437,139 @@ function AskConversationView({
   );
 }
 
+function LearnSettingsDock({
+  theme,
+  palette,
+  onThemeChange,
+  onPaletteChange,
+}: {
+  theme: Theme;
+  palette: Palette;
+  onThemeChange: (theme: Theme) => void;
+  onPaletteChange: (palette: Palette) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [authenticated, setAuthenticated] = useState<boolean | null>(null);
+  const dock = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    let active = true;
+    const updateFromSession = () => {
+      fetch("/api/auth/session", { credentials: "same-origin", headers: { accept: "application/json" } })
+        .then((response) => response.ok ? response.json() as Promise<{ authenticated?: boolean }> : Promise.reject())
+        .then((session) => { if (active) setAuthenticated(session.authenticated === true); })
+        .catch(() => { if (active) setAuthenticated(false); });
+    };
+    const updateFromEvent = (event: Event) => {
+      const detail = (event as CustomEvent<{ authenticated?: boolean }>).detail;
+      if (active && typeof detail?.authenticated === "boolean") setAuthenticated(detail.authenticated);
+    };
+    updateFromSession();
+    window.addEventListener("replit-auth-changed", updateFromEvent);
+    return () => {
+      active = false;
+      window.removeEventListener("replit-auth-changed", updateFromEvent);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const close = (event: MouseEvent) => {
+      if (dock.current && !dock.current.contains(event.target as Node)) setOpen(false);
+    };
+    const escape = (event: KeyboardEvent) => { if (event.key === "Escape") setOpen(false); };
+    document.addEventListener("mousedown", close);
+    document.addEventListener("keydown", escape);
+    return () => {
+      document.removeEventListener("mousedown", close);
+      document.removeEventListener("keydown", escape);
+    };
+  }, [open]);
+
+  const signIn = () => {
+    const returnTo = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    window.location.assign(`/api/auth/login?returnTo=${encodeURIComponent(returnTo)}`);
+  };
+
+  const openHeaderAccount = () => {
+    setOpen(false);
+    document.querySelector<HTMLButtonElement>(".account-trigger:not(.account-loading)")?.click();
+  };
+
+  const openAccount = () => {
+    if (authenticated === true) openHeaderAccount();
+    if (authenticated === false) signIn();
+  };
+
+  return (
+    <aside className="learn-settings-dock" ref={dock} aria-label="Learn account and settings">
+      {open && (
+        <section className="learn-settings-panel" id="learn-settings-panel" role="dialog" aria-label="Learn settings">
+          <header>
+            <div><strong>Settings</strong><small>Personalize Replit Learn</small></div>
+            <button type="button" onClick={() => setOpen(false)} aria-label="Close settings"><Icons.X size={16} /></button>
+          </header>
+
+          <div className="learn-settings-section">
+            <span>Account</span>
+            <button className="learn-settings-account" type="button" onClick={openAccount} disabled={authenticated === null}>
+              <i><Icons.UserRound size={16} /></i>
+              <span>
+                <strong>{authenticated ? "Replit account" : "Sign in with Replit"}</strong>
+                <small>{authenticated ? "Open your account menu" : "Sync your identity and connected apps"}</small>
+              </span>
+              <Icons.ChevronRight size={15} />
+            </button>
+          </div>
+
+          <div className="learn-settings-section">
+            <span>Appearance</span>
+            <div className="learn-settings-mode-grid" role="group" aria-label="Appearance mode">
+              <button type="button" className={theme === "light" ? "selected" : ""} onClick={() => onThemeChange("light")} aria-pressed={theme === "light"}>
+                <Icons.Sun size={16} /> Light
+              </button>
+              <button type="button" className={theme === "dark" ? "selected" : ""} onClick={() => onThemeChange("dark")} aria-pressed={theme === "dark"}>
+                <Icons.Moon size={16} /> Dark
+              </button>
+            </div>
+          </div>
+
+          <div className="learn-settings-section">
+            <span>Theme</span>
+            <div className="learn-settings-palette-list" role="group" aria-label="Color theme">
+              <button type="button" className={palette === "replit" ? "selected" : ""} onClick={() => onPaletteChange("replit")} aria-pressed={palette === "replit"}>
+                <i className="theme-swatch theme-swatch-replit" aria-hidden="true" />
+                <span><strong>Replit</strong><small>Warm brand colors</small></span>
+                {palette === "replit" && <Icons.Check size={15} />}
+              </button>
+              <button type="button" className={palette === "silver" ? "selected" : ""} onClick={() => onPaletteChange("silver")} aria-pressed={palette === "silver"}>
+                <i className="theme-swatch theme-swatch-silver" aria-hidden="true" />
+                <span><strong>Silver</strong><small>Cool neutral colors</small></span>
+                {palette === "silver" && <Icons.Check size={15} />}
+              </button>
+              <button type="button" className={palette === "neutral" ? "selected" : ""} onClick={() => onPaletteChange("neutral")} aria-pressed={palette === "neutral"}>
+                <i className="theme-swatch theme-swatch-neutral" aria-hidden="true" />
+                <span><strong>Soft Stone</strong><small>Quiet neutral colors</small></span>
+                {palette === "neutral" && <Icons.Check size={15} />}
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
+
+      <div className="learn-settings-dock-row">
+        <button className="learn-settings-account-shortcut" type="button" onClick={openAccount} disabled={authenticated === null}>
+          <i><Icons.UserRound size={16} /></i>
+          <span>{authenticated ? "Account" : authenticated === false ? "Sign in" : "Account"}</span>
+        </button>
+        <button className="learn-settings-dock-toggle" type="button" onClick={() => setOpen((value) => !value)} aria-label="Learn settings" aria-haspopup="dialog" aria-controls="learn-settings-panel" aria-expanded={open}>
+          <Icons.Settings size={18} />
+        </button>
+      </div>
+    </aside>
+  );
+}
+
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -446,7 +579,6 @@ function App() {
   const [askViewMode, setAskViewMode] = useState<AskViewMode>("split");
   const [selectedAskAppId, setSelectedAskAppId] = useState("");
   const [selectedAskDocs, setSelectedAskDocs] = useState<AskDocsReference[]>([]);
-  const [themeSettingsOpen, setThemeSettingsOpen] = useState(false);
   const [theme, setTheme] = useState<Theme>(() => {
     const saved = window.localStorage.getItem("replit-learn-theme");
     if (saved === "light" || saved === "dark") return saved;
@@ -579,29 +711,12 @@ function App() {
           <span className="brand-product-label">Learn</span>
         </button>
         <div className="header-actions">
-          <button className="appearance-toggle" onClick={() => setTheme(theme === "light" ? "dark" : "light")} aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`} title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}>
-            {theme === "light" ? <Icons.Moon size={18} /> : <Icons.Sun size={18} />}
-          </button>
-          <div className="theme-settings">
-            <button className="theme-settings-trigger" onClick={() => setThemeSettingsOpen((open) => !open)} aria-label="Theme settings" aria-expanded={themeSettingsOpen}><Icons.Settings2 size={18} /></button>
-            {themeSettingsOpen && (
-              <div className="theme-settings-panel">
-                <div>
-                  <span>Theme</span>
-                  <div role="group" aria-label="Color theme">
-                    <button className={palette === "replit" ? "selected" : ""} onClick={() => setPalette("replit")}>Replit<i className="theme-swatch theme-swatch-replit" aria-hidden="true" /></button>
-                    <button className={palette === "silver" ? "selected" : ""} onClick={() => setPalette("silver")}>Silver<i className="theme-swatch theme-swatch-silver" aria-hidden="true" /></button>
-                    <button className={palette === "neutral" ? "selected" : ""} onClick={() => setPalette("neutral")}>Soft Stone<i className="theme-swatch theme-swatch-neutral" aria-hidden="true" /></button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
           <button className="search" onClick={() => document.querySelector<HTMLTextAreaElement>('[aria-label="Ask Replit Learn"]')?.focus()} aria-label="Ask AI" title="Ask AI"><Icons.Search size={19} /></button>
           <ReplitAccount />
           <a className="open-button" href="https://replit.com" target="_blank" rel="noreferrer">Open Replit <span>→</span></a>
         </div>
       </header>
+      <LearnSettingsDock theme={theme} palette={palette} onThemeChange={setTheme} onPaletteChange={setPalette} />
       <div className="page-stage standalone-learn-stage">
         {askTurns.length > 0 && askViewMode === "focus" ? (
           <section className="learn-ask-focus">
