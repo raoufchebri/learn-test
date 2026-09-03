@@ -1,0 +1,9 @@
+# OpenAI powers grounded answers over the bundled Learn index.
+OPENAI_API_KEY=
+
+# Protects the optional endpoint that loads Learn embeddings into Vectorize.
+RAG_INDEX_SECRET=
+
+# Optional overrides. The defaults point to Replit's production OIDC and MCP endpoints.
+# REPLIT_OIDC_ISSUER=https://replit.com/oidc
+# REPLIT_MCP_URL=https://replit-mcp.com/server/mcp

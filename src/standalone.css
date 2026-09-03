@@ -1,0 +1,253 @@
+/* Standalone-only layout glue. The visual system remains in the two source CSS files. */
+.standalone-learn-stage {
+  min-height: calc(100vh - 69px);
+}
+
+.learn-main-column {
+  min-width: 0;
+}
+
+.course-mobile-toggle {
+  display: none;
+}
+
+.learn-with-ask .learn-page {
+  width: auto;
+  max-width: calc(100vw - 460px);
+  margin-left: max(24px, calc((100vw - 1360px) / 2));
+  margin-right: 460px;
+  grid-template-columns: minmax(220px, 300px) minmax(0, 730px);
+}
+
+.standalone-ask-blade {
+  position: fixed;
+  z-index: 55;
+  top: 69px;
+  right: 0;
+  bottom: 0;
+  width: 440px;
+  height: auto;
+  margin: 0;
+  padding-top: 34px;
+}
+
+.standalone-ask-blade .ask-conversation-view > header {
+  justify-content: space-between;
+}
+
+.standalone-ask-blade .ask-conversation-view > header button:first-child {
+  display: flex;
+}
+
+.learn-ask-focus {
+  width: min(850px, calc(100vw - 48px));
+  min-height: calc(100vh - 69px);
+  margin: 0 auto;
+  padding: 48px 0 190px;
+}
+
+.learn-focus-composer {
+  position: fixed;
+  z-index: 65;
+  right: max(24px, calc((100vw - 850px) / 2));
+  bottom: 20px;
+  left: max(24px, calc((100vw - 850px) / 2));
+}
+
+.learn-focus-composer .replit-prompt-composer,
+.learn-focus-composer .replit-prompt-composer:hover,
+.learn-focus-composer .replit-prompt-composer:focus-within {
+  position: static;
+  width: 100%;
+  margin: 0;
+}
+
+@media (max-width: 1100px) {
+  .learn-with-ask .learn-page {
+    width: calc(100vw - 390px);
+    margin-left: 0;
+    margin-right: 390px;
+    padding-right: 20px;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .standalone-ask-blade {
+    width: 390px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .main-header {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+
+  .product-nav {
+    display: none;
+  }
+
+  .learn-with-ask .learn-page {
+    display: none;
+  }
+
+  .standalone-ask-blade {
+    position: fixed;
+    top: 69px;
+    width: 100%;
+    height: calc(100vh - 69px);
+  }
+}
+
+/* The source layout switches at 700px. Standalone Learn moves the course rail
+   into a drawer a little earlier so tablet-sized lessons keep a useful width. */
+@media (max-width: 820px) {
+  .header-actions {
+    gap: 7px;
+  }
+
+  .theme-settings,
+  .open-button {
+    display: none;
+  }
+
+  .learn-page {
+    position: relative;
+    display: block;
+    padding: 48px 22px;
+  }
+
+  .course-mobile-toggle {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 16px;
+    border: 1px solid var(--replit-warm-light-gray);
+    border-radius: 10px;
+    background: var(--replit-dropdown-bg);
+    padding: 11px 13px;
+    color: var(--replit-dark-gray);
+    font: 600 13px/1.2 'ABC Diatype Plus', 'Diatype', sans-serif;
+  }
+
+  .course-mobile-toggle span {
+    margin-left: auto;
+    font-size: 16px;
+  }
+
+  .learn-page .course-nav {
+    display: none;
+  }
+
+  .learn-page .course-nav.mobile-open {
+    display: block;
+    max-height: min(62vh, 560px);
+    overflow: auto;
+    margin-bottom: 28px;
+    border: 1px solid var(--replit-warm-light-gray);
+    border-radius: 12px;
+    background: var(--replit-dropdown-bg);
+    padding: 16px 12px;
+  }
+
+  .learn-page .course-nav.mobile-open button.course-welcome {
+    display: flex;
+  }
+
+  .learn-page .course-nav.mobile-open button.course-module-title,
+  .learn-page .course-nav.mobile-open .course-chapters button {
+    display: grid;
+  }
+
+  .video-board {
+    grid-template-columns: 1fr;
+  }
+
+  .video-board > section {
+    min-height: 180px;
+  }
+
+  .video-board aside {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .learn-ask-focus {
+    width: 100%;
+    padding: 24px 16px 170px;
+  }
+
+  .learn-focus-composer {
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+  }
+}
+
+/* Several illustrated Learn cards intentionally keep their light surfaces in
+   dark mode. Pin their ink colors as well so the original visual treatment
+   remains readable instead of inheriting the surrounding light-on-dark text. */
+:root[data-theme="dark"] .video-board > section,
+:root[data-theme="dark"] .video-board aside > div,
+:root[data-theme="dark"] .frontend-window,
+:root[data-theme="dark"] .learning-outcomes,
+:root[data-theme="dark"] .replit-example,
+:root[data-theme="dark"] .learn-path-intro button {
+  color: #312e2e;
+}
+
+:root[data-theme="dark"] .video-board > section small,
+:root[data-theme="dark"] .video-board aside > div small {
+  color: #625e5b;
+}
+
+:root[data-theme="dark"] .learning-outcomes li,
+:root[data-theme="dark"] .replit-example p:last-child {
+  color: #312e2e;
+}
+
+:root[data-theme="dark"] .learning-outcomes li span {
+  background: #ff3c00;
+}
+
+:root[data-theme="dark"] .learning-outcomes .eyebrow,
+:root[data-theme="dark"] .replit-example .eyebrow {
+  color: #a92a00;
+}
+
+:root[data-theme="dark"] .architecture-map,
+:root[data-theme="dark"] .ui-states-map,
+:root[data-theme="dark"] .frontend-example {
+  background: linear-gradient(135deg, var(--replit-dropdown-bg), var(--replit-off-white));
+}
+
+:root[data-theme="dark"] .learn-path-intro button span {
+  color: #ff3c00;
+}
+
+:root[data-theme="dark"] .learn-path-intro button:hover,
+:root[data-theme="dark"] .quiz-question button.selected,
+:root[data-theme="dark"] .quiz-question button.correct {
+  color: #312e2e;
+}
+
+:root[data-theme="dark"] .quiz-question button.selected span,
+:root[data-theme="dark"] .quiz-question button.correct span {
+  color: #56514e;
+}
+
+:root[data-theme="dark"] .next-lesson {
+  color: #211f1e;
+}
+
+:root[data-theme="dark"] .course-chapters button.active,
+:root[data-theme="dark"] .course-welcome.active {
+  background: var(--replit-light-gray);
+  color: var(--replit-off-black);
+}
+
+@media (max-width: 520px) {
+  .video-board aside {
+    grid-template-columns: 1fr;
+  }
+}

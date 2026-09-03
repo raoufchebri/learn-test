@@ -1,0 +1,6 @@
+modules = ["nodejs-22"]
+run = "pnpm dev:auth"
+
+[[ports]]
+localPort = 4173
+externalPort = 80
