@@ -575,12 +575,9 @@ function App() {
       <header className="main-header">
         <button className="brand" onClick={() => navigate("/learn")} aria-label="Replit Learn home">
           <img className="brand-wordmark" src={logo} alt="Replit" />
+          <span className="brand-product-divider" aria-hidden="true" />
+          <span className="brand-product-label">Learn</span>
         </button>
-        <nav className="product-nav" aria-label="Product">
-          <a href="https://docs.replit.com">Docs</a>
-          <a href="https://docs.replit.com/use-cases">Use Cases</a>
-          <button className="selected" onClick={() => navigate("/learn")}>Learn</button>
-        </nav>
         <div className="header-actions">
           <button className="appearance-toggle" onClick={() => setTheme(theme === "light" ? "dark" : "light")} aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`} title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}>
             {theme === "light" ? <Icons.Moon size={18} /> : <Icons.Sun size={18} />}
