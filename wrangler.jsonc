@@ -27,7 +27,7 @@
   "vectorize": [
     {
       "binding": "LEARN_VECTORIZE",
-      "index_name": "replit-learn-openai"
+      "index_name": "replit-docs-openai-staging"
     }
   ],
   "vars": {

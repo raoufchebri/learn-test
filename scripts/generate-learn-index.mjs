@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { transform } from "esbuild";
+import { build } from "esbuild";
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const sourcePath = resolve(projectRoot, "src/learn-content.ts");
@@ -28,13 +28,14 @@ const segment = (value) => value
   .replace(/[^a-z0-9]+/g, "-")
   .replace(/^-|-$/g, "");
 
-const source = await readFile(sourcePath, "utf8");
-const { code: compiled } = await transform(source, {
-  loader: "ts",
+const compiledSource = await build({
+  entryPoints: [sourcePath],
+  bundle: true,
+  write: false,
   format: "esm",
   target: "es2022",
-  sourcefile: sourcePath,
 });
+const compiled = compiledSource.outputFiles[0].text;
 
 const encoded = Buffer.from(`${compiled}\n//# sourceURL=${pathToFileURL(sourcePath).href}`).toString("base64");
 const lessonsModule = await import(`data:text/javascript;base64,${encoded}`);
@@ -66,22 +67,23 @@ for (const lesson of allLessons) {
   const lessonSections = [
     {
       heading: "Overview",
-      text: [lesson.module, lesson.summary, ...(lesson.outcomes ?? []), lesson.replitExample].join("\n"),
+      text: [lesson.module, lesson.summary, ...(lesson.introduction ?? []).flatMap((part) => typeof part === 'string' ? [part] : [part.text, ...part.items]), ...(lesson.outcomes ?? []), lesson.replitExample].join("\n"),
     },
     ...lesson.sections.map((section) => ({
       heading: section.heading,
-      text: [lesson.module, section.body, ...(section.items ?? [])].join("\n"),
+      text: [lesson.module, section.body, ...(section.prompt ? [section.prompt] : []), ...(section.afterPrompt ? [section.afterPrompt] : []), ...(section.items ?? []), ...(section.image ? [section.image.alt, section.image.caption, section.image.source] : [])].join("\n"),
     })),
+    ...(lesson.practice ? [{ heading: 'Your turn', text: [lesson.practice.prompt, ...lesson.practice.checks].join('\n') }] : []),
   ];
 
   lessonSections.forEach((section, slot) => {
     chunks.push({
       id: `${stableSourceId}:${String(slot).padStart(3, "0")}`,
       sourceId: stableSourceId,
-      title: lesson.title,
+      title: lessonsModule.learnDisplayTitle(lesson.title),
       heading: section.heading,
       text: section.text,
-      url: slot === 0 ? pageUrl : `${pageUrl}#${segment(section.heading)}`,
+      url: slot === 0 ? pageUrl : `${pageUrl}#${section.id ?? segment(section.heading)}`,
       pageUrl,
       sourcePath: `src/learn-content.ts#${stableSourceId}`,
     });

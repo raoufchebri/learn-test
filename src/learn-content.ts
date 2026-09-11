@@ -1,8 +1,61 @@
+import { recipeFoundationLessons } from './app-foundation-content';
+import { discoverLessons } from './discover-content';
+
 export type QuizQuestion = {
   prompt: string;
-  choices: [string, string, string];
+  choices: string[];
   answer: number;
+  feedback?: string;
 };
+
+const learnTitleTerms: Record<string, string> = {
+  agent: 'Agent',
+  ai: 'AI',
+  api: 'API',
+  apis: 'APIs',
+  css: 'CSS',
+  figma: 'Figma',
+  github: 'GitHub',
+  html: 'HTML',
+  javascript: 'JavaScript',
+  llm: 'LLM',
+  llms: 'LLMs',
+  mcp: 'MCP',
+  memory: 'Memory',
+  nexus: 'Nexus',
+  replit: 'Replit',
+  reps: 'Reps',
+  routine: 'Routine',
+  routines: 'Routines',
+  seo: 'SEO',
+  ui: 'UI',
+  vm: 'VM',
+  vms: 'VMs',
+  workspace: 'Workspace',
+  workspaces: 'Workspaces',
+};
+
+export function learnDisplayTitle(value: string) {
+  const courseLabels: Record<string, string> = {
+    'Replit 101': 'Discover Replit',
+    'What You Can Do with Replit': 'Welcome to Replit',
+    'From Conversation to Outcome': 'Start with a conversation',
+    'Build and Publish a Simple App': 'Build your first app',
+    'Create a Design and Image': 'Explore design and create an image',
+  };
+  if (courseLabels[value]) return courseLabels[value];
+  // Build is the course name in its welcome page, not the verb.
+  if (value === 'Welcome to Build') return value;
+  let wordIndex = 0;
+  return value.replace(/[A-Za-z][A-Za-z0-9’'-]*/g, (word) => {
+    const brandedTerm = learnTitleTerms[word.toLowerCase()];
+    const formatted = brandedTerm ?? (wordIndex === 0
+      ? `${word.charAt(0).toUpperCase()}${word.slice(1).toLowerCase()}`
+      : word.toLowerCase());
+    wordIndex += 1;
+    return formatted;
+  });
+}
 
 export type LearnLesson = {
   module: string;
@@ -10,174 +63,89 @@ export type LearnLesson = {
   duration: string;
   video: string;
   summary: string;
+  openingImage?: { src: string; alt: string };
+  entryLink?: string;
+  promptGate?: boolean;
+  introduction?: Array<string | { text: string; items: string[] }>;
+  encouragement?: string;
+  activity?: 'recipe-build';
+  projectTask?: { id: string; label: string; prompt: string };
+  testingUnlocked?: boolean;
+  practice?: { prompt: string; checks: string[] };
+  checkpoint?: { afterSection: number; questions: QuizQuestion[] };
   outcomes?: string[];
-  sections: Array<{ heading: string; body: string; items?: string[] }>;
+  sections: Array<{ heading: string; id?: string; body: string; prompt?: string; afterPrompt?: string; items?: string[]; image?: { src: string; alt: string; caption: string; source: string }; diagram?: 'recipe-architecture' | 'recipe-iteration' }>;
   replitExample: string;
-  quiz: [QuizQuestion, QuizQuestion, QuizQuestion];
+  quiz: QuizQuestion[];
 };
 
 export const appFoundationLessons: LearnLesson[] = [
   {
+    module: 'App Foundations', title: 'Welcome to Build', duration: '3 min', video: 'Your path from idea to app',
+    summary: 'Maybe you’ve been dreaming of an app of your own: a personal project, a business idea, or something useful to share with friends and family. Perhaps you’ve even started, but finding the time to bring all the pieces together has been the tricky part.',
+    introduction: [
+      'Replit helps you turn that idea into an app using natural language. Describe what you want in your own words, then use Replit to bring it to life. You can build, test, and publish in one place. You bring the direction, try the result, and decide what to improve.',
+      'You don’t need to master the underlying infrastructure, the systems that keep an app running, before you begin. This course introduces the building blocks one at a time, then helps you put them to work in an app you can share.',
+      'Build is about more than getting your first app on the screen. It’s a path toward becoming a power builder: someone who understands how an app’s building blocks work together and can use that understanding to make better decisions. You’ll practice describing what you need, testing what Replit creates, and improving your app step by step. That understanding helps you tackle more ambitious ideas with confidence.',
+      'Already a developer? Some of these concepts will be familiar. Feel free to skim the basics and focus on how the pieces fit together in Replit, and how Replit can support your existing workflow.',
+    ],
+    outcomes: [
+      'Describe what the Build course will help you practice',
+      'Explain your role when building with Replit',
+      'Choose a small app idea to explore as you learn',
+    ],
+    sections: [
+      { heading: 'What you’ll learn', body: 'Build takes you from understanding an app to creating, sharing, and improving one. The course follows four connected parts:', items: ['App foundations: get to know interfaces, code, data, access, and the connections that make an app work.', 'Build with Replit: describe what you need, make changes, test the result, and publish a working version.', 'Secure and monitor: protect your app and understand what happens when people use it.', 'Grow and scale: learn from feedback, help people find your app, and prepare it for more activity.'] },
+      { heading: 'Start with something small enough to try', body: 'Your idea doesn’t need to be a business or a big launch. A family recipe collection, a booking tool, or a small improvement to an existing app is a useful starting point. Choose one thing you want someone to be able to do. You can add more once that first piece works.' },
+      { heading: 'Build your understanding as you go', body: 'Read an explanation, try a small change, and look at what happened. You can ask Replit to explain unfamiliar code or an error in plain language. You don’t have to write every line yourself, but you’ll learn enough to ask better questions and check the result. If something doesn’t work the first time, that gives you something specific to investigate.' },
+      { heading: 'Make the course fit your starting point', body: 'New to building apps? Follow the lessons in order and take your time with App foundations. Already comfortable with software development? Skim familiar concepts and spend more time on the Replit workflows that are new to you. Discover Replit is available for broader orientation, but you don’t need to finish it before starting Build.' },
+      { heading: 'Your first step', body: 'Write down who your app could help and one thing it could help them do. You can change your mind later. This is a starting point, not a commitment. Next, “What is an app?” connects familiar everyday apps to the building blocks you’ll use.' },
+    ],
+    replitExample: 'When you’re ready to explore your idea, you could ask Replit: “I want to build a simple app for [someone] to [do something]. Help me plan a small first version, and explain any unfamiliar terms.” Review the plan before asking Replit to build it.',
+    quiz: [
+      { prompt: 'What does the Build course cover?', choices: ['Creating, testing, publishing, and improving an app', 'Only the visual appearance of an app', 'Only the code before it is published'], answer: 0 },
+      { prompt: 'What is your role when building with Replit?', choices: ['Accept every change without trying it', 'Provide direction, try the result, and guide improvements', 'Set up every service before asking for help'], answer: 1 },
+      { prompt: 'How can an experienced developer use this course?', choices: ['Complete Discover Replit before starting', 'Repeat every familiar concept before continuing', 'Skim familiar concepts and focus on new Replit workflows'], answer: 2 },
+    ],
+  },
+  {
     module: 'App Foundations', title: 'What Is an App?', duration: '5 min', video: 'How an app works',
-    summary: 'An app is a tool or service that helps someone get something done. It can help a person organise work, make a decision, create something, or help a business serve its customers.',
+    activity: 'recipe-build',
+    summary: 'You probably use apps every day to message friends, check the weather, or book something in your browser. But what makes something an app? At its simplest, an app is software that helps someone do something.',
+    introduction: ['In this lesson, you’ll build a personal recipe app with Replit. You’ll add, edit, and find recipes, then explore the building blocks that make it work.'],
     outcomes: [
-      'Explain what an app does in plain language',
-      'Name the core parts that make an app work',
-      'Describe how those parts work together',
+      'Explain what an app is',
+      'Recognize the different building blocks of an app',
+      'Build your first app on Replit',
     ],
     sections: [
-      { heading: 'An app helps someone do something', body: 'Apps exist to provide a useful service. A calendar app helps people plan time. A shop helps people find and buy something. A project tool helps a team organise work. Some apps are for one person, while others help a business serve many people. What matters is that the app has a purpose and helps someone make progress.' },
-      { heading: 'Most apps use a few core parts', body: 'You do not need to know how to build every part yet. For now, it helps to know what each part is responsible for.', items: ['Frontend and UI: the screens, buttons, forms, and messages that people see and use.', 'Backend and logic: the behind-the-scenes work, including rules, decisions, and actions.', 'Data: the information an app remembers, such as accounts, projects, messages, settings, or orders.'] },
-      { heading: 'Some apps need more pieces', body: 'As an app becomes more useful, it may also need file storage for images or documents, sign-in for personal accounts, payments, or connections to other services. These are useful additions, not requirements for every first version.' },
-      { heading: 'The parts work together', body: 'When someone takes an action, the frontend collects it and shows the result. The backend performs the work that should happen behind the scenes. Data helps the app remember what happened. The diagram below shows that simple path.' },
-      { heading: 'You can start small', body: 'You do not need to understand every part before you begin. Start with one useful idea, build a small version, and add the pieces your app needs as you learn. The next chapters introduce each building block one at a time.' },
+      { heading: 'Apps can live on your phone or in your browser', body: 'Think of Spotify for music, WhatsApp for messages, or Google Calendar for planning your week. Each helps you do something different. App is short for application. Some apps are installed on a phone or computer. Others open through a link in a browser, and many offer both options.', image: { src: '/images/spotify-browser-mobile.png', alt: 'Illustration of Spotify showing the same Everyday favorites playlist in a laptop browser and a mobile app.', caption: 'One app, different screens. AI-generated illustration of Spotify, not a product screenshot.', source: '/images/spotify-browser-mobile.png' } },
+      { heading: 'Let’s build your first app', id: 'your-app-can-start-with-something-familiar', body: 'Let’s build a little recipe book just for you. You’ll be able to add your favorite recipes, edit the ingredients, and find something to cook. Start simple: no accounts or sharing yet, just a useful app of your own. With Replit, you can describe what you want in plain English or another language you speak. That’s what natural language means: your own words, rather than code. Here’s the request you’ll use:', prompt: 'Create a personal recipe app where I can add, edit, and find my favorite recipes. Include a recipe name, ingredients, and instructions. Keep it simple and save my recipes in this browser. No sign-in needed.', afterPrompt: 'That description is called a prompt. Replit uses it to create the code that makes your app work. You can try the result and ask for changes as you go. Let’s look at what happens behind the scenes.' },
+      { heading: 'What did Replit make?', id: 'a-few-building-blocks-make-it-work', body: 'Your prompt describes an experience. Behind the scenes, Replit creates the interface, the logic that responds to your actions, and a way to remember your recipes. For this first version, those pieces can all run in your browser. The frontend is the part you see and interact with. Its user interface, or UI, includes the recipe list, form, and buttons.', items: ['The interface turns “add, edit, and find” into controls you can use, such as a recipe form, an Edit button, and a search field.', 'The app’s logic responds to those controls. When you select Save, it can check that you entered a title, then add the recipe or update an existing one.', 'Browser storage remembers the recipes in this browser on this device, even after you close the page. Clearing that storage can erase them, and they won’t automatically appear on another device.'] },
     ],
-    replitExample: 'In Replit, you can begin with a plain-language description of the service you want to provide. Agent can help turn that idea into a working project, and you can inspect the screens, code, data, and published result in one place.',
+    replitExample: 'Try the recipe prompt above in Replit. In Preview, add a recipe, edit an ingredient, and search for it by name. Refresh the page to check that it is still there in the same browser. If something doesn’t work as expected, describe what you tried and what happened to Replit. Each small check helps you turn your idea into an app you can rely on.',
     quiz: [
-      { prompt: 'What is the main purpose of an app?', choices: ['To help someone get something done', 'To use as many technologies as possible', 'To have a large number of screens'], answer: 0 },
-      { prompt: 'Which part of an app shows screens, buttons, and messages?', choices: ['Data', 'Frontend and UI', 'Backend and logic'], answer: 1 },
-      { prompt: 'What is a sensible way to begin building an app?', choices: ['Learn every technical detail first', 'Build every possible feature at once', 'Start with one useful idea and add pieces as needed'], answer: 2 },
+      { prompt: 'Which description best explains what an app is?', choices: ['A database that stores information', 'Software that helps someone carry out a task', 'A program that must be installed on a phone'], answer: 1 },
+      { prompt: 'In the recipe app, which part shows the recipe form and Save button?', choices: ['The backend', 'The database', 'The frontend and user interface'], answer: 2 },
+      { prompt: 'When you select Save, what checks the recipe title and adds the recipe to your collection?', choices: ['The app’s logic', 'The color of the Save button', 'The recipe name itself'], answer: 0 },
     ],
   },
-  {
-    module: 'App Foundations', title: 'Projects, Code & Files', duration: '5 min', video: 'How an app is organised',
-    summary: 'An app begins as instructions written in code. A project keeps those instructions in files, so the different parts of an app can stay organised and work together.',
-    outcomes: [
-      'Explain the relationship between code, files, and a project',
-      'Recognise why an app uses more than one file',
-      'Describe how a framework helps organise an app',
-    ],
-    sections: [
-      { heading: 'Code is a set of instructions', body: 'Code tells an app what to show, what to do when someone takes an action, and how to work with information. You do not need to read or write every line to understand the basic idea: code is the written set of instructions behind an app.' },
-      { heading: 'A project keeps the work together', body: 'A project is the home for an app and the work that supports it. It holds the code, files, settings, and other resources needed to build, run, and improve that app. Keeping related work together makes a project easier to understand and change over time.' },
-      { heading: 'Files organise work by responsibility', body: 'Most apps use many files because one large file becomes difficult to follow. Files can be organised around a screen, a reusable part of the interface, backend logic, a connection to data, or a setting. The exact structure differs between projects, but the purpose is always the same: give each piece of work a clear home.', items: ['A UI component file might describe a button, form, or screen.', 'A backend file might handle a request or apply a business rule.', 'A data file might describe how the app reads or saves information.', 'A configuration file might tell the project how to run or publish.'] },
-      { heading: 'Frameworks provide a shared structure', body: 'A framework is a set of helpful conventions and tools for building an app. It gives a project a predictable way to organise screens, routes, shared components, and other common needs. This means builders do not have to invent the structure from scratch every time.' },
-      { heading: 'You only need the map for now', body: 'At this stage, you do not need to memorise a project’s files. It is enough to recognise that an app is organised work: instructions live in files, files live in a project, and the project brings the pieces together into something people can use. Later, you will explore how AI agents can work with this same project structure.' },
-    ],
-    replitExample: 'A Replit project gives you one place to see the files behind an app, run it, and preview the result. As you explore a project, notice that the file tree is an organised map of the work—not a list you need to understand all at once.',
-    quiz: [
-      { prompt: 'What is code in the context of an app?', choices: ['A set of written instructions', 'A type of database record', 'Only the colours on a screen'], answer: 0 },
-      { prompt: 'Why do apps usually use multiple files?', choices: ['To make a project harder to read', 'To organise work by responsibility', 'Because every file must be a screen'], answer: 1 },
-      { prompt: 'What does a framework provide?', choices: ['A predictable structure and useful conventions', 'A replacement for every project file', 'A way to avoid thinking about the app’s purpose'], answer: 0 },
-    ],
-  },
-  {
-    module: 'App Foundations', title: 'Frontend & UI', duration: '5 min', video: 'The experience people use',
-    summary: 'The frontend is the part of an app that people see and use. It turns an app’s purpose into screens, controls, information, and feedback that help someone get something done.',
-    outcomes: [
-      'Explain what the frontend and UI are',
-      'Recognise the roles of HTML, CSS, and JavaScript',
-      'Identify the key states a helpful interface should show',
-    ],
-    sections: [
-      { heading: 'The frontend is the part people use', body: 'When someone opens an app, reads a message, fills in a form, or taps a button, they are using the frontend. The frontend gives people a way to take action and see the result. It is the part of the app that makes the service feel clear and usable.' },
-      { heading: 'The UI guides someone through a task', body: 'UI means user interface. It includes the screens, buttons, forms, labels, menus, and messages that appear in an app. A good UI makes the next step easy to find. It explains what someone can do, what is happening now, and what happened after they acted.' },
-      { heading: 'Frontend code has a few familiar jobs', body: 'You do not need to write this code yet. It is enough to know the role each part usually plays.', items: ['HTML gives a screen its structure, such as headings, text, forms, and buttons.', 'CSS controls how the screen looks, including layout, spacing, colours, and typography.', 'JavaScript makes the screen respond to actions, such as opening a menu, checking a form, or showing new information.'] },
-      { heading: 'Helpful interfaces show their state', body: 'An app changes as someone uses it. It may have no information yet, be waiting for something to load, show a result, confirm success, or explain a problem. Showing those states helps people understand the app instead of leaving them to guess.' },
-      { heading: 'Feedback is part of the experience', body: 'Feedback is not decoration. A loading message tells someone the app is working. A confirmation tells them their action succeeded. A clear error message helps them recover. Small signals like these make an app feel calm, trustworthy, and easier to use.' },
-      { heading: 'Start with one clear task', body: 'You do not need a perfect interface before you begin. Pick one action the app should help someone complete, make that action easy to find, and show a useful result. You can improve the details as you learn from real use.' },
-    ],
-    replitExample: 'Use Replit Design to explore a screen before you commit to code. You can ask Agent to create a first version, compare variations, and refine the experience. Then use Preview to try the task as a builder would, including loading, empty, and error states.',
-    quiz: [
-      { prompt: 'What is the frontend?', choices: ['The part of an app people see and use', 'Only the database', 'A place to store passwords'], answer: 0 },
-      { prompt: 'What does CSS usually control?', choices: ['How a screen looks and is laid out', 'The app’s stored records', 'A person’s account permissions'], answer: 0 },
-      { prompt: 'Why should an interface show a loading state?', choices: ['To make people wait longer', 'To show that the app is working on their request', 'To replace the final result'], answer: 1 },
-    ],
-  },
-  {
-    module: 'App Foundations', title: 'Backend & Logic', duration: '6 min', video: 'Where app decisions happen',
-    summary: 'The backend handles work that should not happen only in the browser, including rules, workflows, and communication with data or outside services.',
-    sections: [
-      { heading: 'Put decisions in the right place', body: 'The backend checks what is allowed, decides what happens next, and protects work that should not be controlled by the interface alone. This can include processing a payment, deciding who can edit a project, or sending an email.' },
-      { heading: 'APIs are contracts', body: 'An API is a structured agreement for exchanging information. Your frontend asks for something in a predictable way; the backend returns a predictable response. Clear contracts make a system easier to change and debug.' },
-      { heading: 'Build one workflow at a time', body: 'Start with a single request from beginning to end. Once it works, you can add validation, errors, permissions, and more complex behavior without losing the thread.' },
-    ],
-    replitExample: 'When you ask Agent to add a feature in Replit, it can work across the interface and server code together. Review the changes as one workflow rather than treating the frontend and backend as unrelated projects.',
-    quiz: [
-      { prompt: 'What is a backend responsible for?', choices: ['Only colors and layout', 'Rules, workflows, and protected work', 'Replacing every UI interaction'], answer: 1 },
-      { prompt: 'What is an API?', choices: ['A visual style guide', 'A structured agreement for systems to exchange information', 'A type of database'], answer: 1 },
-      { prompt: 'What is a good first backend milestone?', choices: ['Every feature at once', 'One complete workflow', 'A production-scale architecture'], answer: 1 },
-    ],
-  },
-  {
-    module: 'App Foundations', title: 'Databases', duration: '6 min', video: 'Remembering structured information',
-    summary: 'Databases help apps remember structured information that needs to be searched, updated, and connected to other records.',
-    sections: [
-      { heading: 'Model what matters', body: 'Begin by naming the things your app needs to remember: people, projects, messages, orders, or preferences. Then identify how those records relate. This is a product decision before it becomes a technical one.' },
-      { heading: 'Use a database for records', body: 'Databases are for information you need to search, filter, update, and connect. A project table, for example, can link a project to its creator and its tasks.' },
-    ],
-    replitExample: 'Replit Database gives you a place to add persistent records as an idea becomes a useful product. Agent can help you sketch the model, but you should still decide what the app needs to remember.',
-    quiz: [
-      { prompt: 'What belongs in a database?', choices: ['A searchable project record', 'A large video file', 'A button color'], answer: 0 },
-      { prompt: 'What should you decide before modeling data?', choices: ['What the app needs to remember', 'Which SQL keyword to use', 'How many servers to reserve'], answer: 0 },
-      { prompt: 'Why use a database?', choices: ['To search, update, and connect records', 'To design a button', 'To replace an API'], answer: 0 },
-    ],
-  },
-  {
-    module: 'App Foundations', title: 'File Storage', duration: '5 min', video: 'Working with files',
-    summary: 'File storage gives an app a durable home for images, documents, audio, video, and other larger files that do not fit naturally into a database record.',
-    sections: [
-      { heading: 'Files are different from records', body: 'A profile picture, invoice, or uploaded video is useful information, but it is not the same as a name, date, or status. Files can be large, varied, and expensive to move, so apps store them differently from structured records.' },
-      { heading: 'Connect files to your data', body: 'A database record can keep a reference to a file in storage. That lets the app answer useful questions: who uploaded it, which project it belongs to, whether it is public, and when it should appear.' },
-      { heading: 'Decide what people can access', body: 'Before adding uploads, decide who can add, view, replace, or remove a file. This keeps storage aligned with the identity and permissions model of your app.' },
-    ],
-    replitExample: 'Use Replit Object Storage when your project needs to keep files such as images or documents. Pair it with Replit Database to store the references and metadata that make those files useful in your app.',
-    quiz: [
-      { prompt: 'What is file storage best for?', choices: ['An uploaded image', 'A project status field', 'A navigation route'], answer: 0 },
-      { prompt: 'Why keep a file reference in a database?', choices: ['To connect it to the person or project it belongs to', 'To make the file smaller', 'To avoid permissions'], answer: 0 },
-      { prompt: 'What should you decide before adding uploads?', choices: ['Who can access and manage the files', 'Which font the app uses', 'How many pages the app has'], answer: 0 },
-    ],
-  },
-  {
-    module: 'App Foundations', title: 'Users & Access', duration: '5 min', video: 'Identity and permissions',
-    summary: 'Identity lets an app know who someone is. Authentication verifies that identity, while permissions decide what that person can see or do.',
-    sections: [
-      { heading: 'Identity creates ownership', body: 'Accounts let people return to saved work, collaborate, and trust that their information belongs to them. Even a simple app often needs a clear answer to: who is this person?' },
-      { heading: 'Authentication and authorization differ', body: 'Authentication answers “are you who you say you are?” Authorization answers “are you allowed to do this?” Keeping those questions separate makes it easier to reason about access.' },
-      { heading: 'Start with the smallest useful role model', body: 'A product may only need an owner and a collaborator at first. Add more roles only when they represent a real difference in responsibility or access.' },
-    ],
-    replitExample: 'Replit can help you add an authentication flow as part of a project. Later, in Secure and Monitor, you will learn how to protect secrets and review permissions more deeply.',
-    quiz: [
-      { prompt: 'What does authentication verify?', choices: ['Who someone is', 'How fast the app is', 'Where a file is stored'], answer: 0 },
-      { prompt: 'What does authorization decide?', choices: ['Whether someone can take an action', 'What their password is', 'Which model to use'], answer: 0 },
-      { prompt: 'What is a good first role model?', choices: ['Every role you can imagine', 'The smallest set that matches real responsibilities', 'No roles at all'], answer: 1 },
-    ],
-  },
-  {
-    module: 'App Foundations', title: 'Integrations', duration: '5 min', video: 'Connecting useful services',
-    summary: 'Integrations let an app use capabilities such as payments, email, maps, analytics, and AI without rebuilding those systems from scratch.',
-    sections: [
-      { heading: 'Extend the core experience', body: 'Choose integrations that directly support the job your app helps someone do. A calendar connection may be essential to a scheduling product, while payments may be unnecessary until someone is ready to buy.' },
-      { heading: 'Plan for the outside world', body: 'External services can be slow, unavailable, or return unexpected results. A resilient app explains what happened, keeps important work recoverable, and does not assume every request will succeed.' },
-      { heading: 'Keep boundaries clear', body: 'Use the backend to manage credentials and communicate with sensitive services. This helps you protect secrets and gives your product one dependable place to handle errors.' },
-    ],
-    replitExample: 'In Replit, Agent can help connect an external service to your project, but you still decide the product flow: when the connection is needed, what data moves, and what the app should do if it fails.',
-    quiz: [
-      { prompt: 'Why use an integration?', choices: ['To add a useful capability without rebuilding it', 'To avoid designing a product flow', 'To remove the need for a backend'], answer: 0 },
-      { prompt: 'Where should sensitive service credentials live?', choices: ['In frontend code', 'In a protected backend environment', 'In a public README'], answer: 1 },
-      { prompt: 'What should an app do when a service fails?', choices: ['Assume it cannot happen', 'Give useful feedback and keep work recoverable', 'Delete the person’s data'], answer: 1 },
-    ],
-  },
-  {
-    module: 'App Foundations', title: 'App Architecture', duration: '6 min', video: 'Seeing the whole system',
-    summary: 'App architecture is the way the interface, logic, data, identity, and integrations work together to deliver a reliable experience.',
-    sections: [
-      { heading: 'Trace a single journey', body: 'Pick one meaningful action, such as creating a project or sending a message. Follow it from the screen, through the backend, into data or services, and back to the person. This reveals how your app is actually organized.' },
-      { heading: 'Make the boundaries visible', body: 'Clear boundaries help you change an app safely. Keep interface concerns, business rules, data access, and external connections understandable rather than hiding everything in one place.' },
-      { heading: 'Grow through iteration', body: 'You do not need a perfect architecture before you begin. Build a simple, complete workflow, learn from real use, then improve the pieces that need to carry more responsibility.' },
-    ],
-    replitExample: 'Replit keeps your project, preview, code, services, and publishing workflow close together. That makes it easier to trace one journey and decide where a new capability belongs before you ask Agent to build it.',
-    quiz: [
-      { prompt: 'What is a practical way to understand an app architecture?', choices: ['Trace one complete action through the system', 'Start with every possible diagram', 'Ignore data and services'], answer: 0 },
-      { prompt: 'Why do clear boundaries help?', choices: ['They make safe changes easier', 'They remove the need for testing', 'They prevent people from using the app'], answer: 0 },
-      { prompt: 'What should come before a complex architecture?', choices: ['A simple, complete workflow', 'A reserved VM', 'An extensive role hierarchy'], answer: 0 },
-    ],
-  },
+  ...recipeFoundationLessons,
 ];
 
 type LessonBrief = { title: string; concept: string; replit: string; check: string };
 
 const moduleGuidance: Record<string, { purpose: string; fit: string; tryIt: string }> = {
+  'Replit 101': {
+    purpose: 'It gives you a map of Replit, then turns that map into practical experience. You will see the possible outcomes and try each one without needing to master everything first.',
+    fit: 'A conversation is often the front door, but it is not a mandatory sequence. From there, you can continue exploring, create a Routine or Rep, begin a design, or build software depending on the outcome you need.',
+    tryIt: 'Choose one real theme—such as planning an event or launching a small service—and reuse it as you explore answers, recurring work, persistent agent loops, designs, slides, and apps.',
+  },
+  'Work with Agent': {
+    purpose: 'It gives you a reusable way to collaborate with Agent across every Replit path. You provide direction and judgment; Agent helps investigate, create, and move the work forward.',
+    fit: 'Good Agent work connects a clear outcome to relevant context, sensible constraints, an appropriate mode, and observable checks. The same loop applies to research, automation, design, and software.',
+    tryIt: 'Write a small goal using four parts: the outcome, useful context, important constraints, and evidence that would show the result works. Then decide where you want to review Agent’s progress.',
+  },
   'AI Foundations': {
     purpose: 'It helps you design AI features with intent instead of treating a model like magic. The aim is a useful, bounded experience that people can understand and trust.',
     fit: 'In a real product, an AI model sits behind a clear interface and a thoughtful workflow. People provide information, the model helps with a defined task, and your app makes the result easy to review or use.',
@@ -187,6 +155,21 @@ const moduleGuidance: Record<string, { purpose: string; fit: string; tryIt: stri
     purpose: 'It helps you collaborate with an AI system that can take several steps toward an outcome. You stay responsible for the goal and the meaningful tradeoffs; the agent helps move the work forward.',
     fit: 'An agent belongs in a loop with people, project context, and defined tools. It observes, proposes or acts, reports what happened, and gives you a useful place to steer the next step.',
     tryIt: 'Pick a task with a clear finish line, such as improving one screen or investigating one bug. Write the desired outcome, the boundaries the agent should respect, and the point where you want to review its work.',
+  },
+  'Protect and Share': {
+    purpose: 'It introduces the trust decisions that belong in every Replit workflow. You learn to protect sensitive information, choose appropriate access, inspect security signals, and verify an outcome before other people depend on it.',
+    fit: 'These habits appear where they matter instead of becoming a separate security course. Build covers application security in depth, while Admin covers organization-wide policy and response.',
+    tryIt: 'Before sharing one outcome, identify any sensitive information, decide who should access it, run the available checks, and record the evidence that makes you comfortable sharing it.',
+  },
+  'Learn and Grow': {
+    purpose: 'It helps you treat delivery as the start of a learning loop. Feedback, usage signals, discoverability, performance, and capacity all help you decide what should improve next.',
+    fit: 'Discover introduces the questions and signals. Build later covers SEO, monitoring, performance, publishing options, and scaling controls in depth.',
+    tryIt: 'Choose one outcome you shared. Name one signal for successful use, one source of feedback, and one technical signal that would tell you the experience needs attention.',
+  },
+  'Operate with Replit': {
+    purpose: 'It helps you use Agent for ongoing work beyond a single app build. You learn how to provide context, connect approved tools, choose the right kind of agent workflow, and review what happens.',
+    fit: 'Conversations support exploration and direct work. Integrations bring in relevant context. Routines repeat work on a schedule, while Reps and Nexus support longer-running or coordinated work toward a goal.',
+    tryIt: 'Pick a recurring or multi-step task. Identify the context it needs, the systems it may connect to, how often it should run, and the evidence you would review before trusting the result.',
   },
   'Design with Agent': {
     purpose: 'It helps you turn a fuzzy idea into an experience people can use. Agent gives you momentum, while your job is to keep the focus on the person, their task, and the feeling of progress.',
@@ -208,6 +191,27 @@ const moduleGuidance: Record<string, { purpose: string; fit: string; tryIt: stri
     fit: 'As an app reaches more people, product learning, performance, capacity, and support become connected. The goal is not growth for its own sake; it is a reliable path from discovery to a successful outcome.',
     tryIt: 'Name the first useful action a new person should complete. Then choose one signal for discovery, one for successful use, and one for reliability. Those are the beginnings of a practical growth view.',
   },
+  'Administer Replit': {
+    purpose: 'It helps an enterprise administrator enable Replit safely and successfully across an organization. The focus is organization-level configuration, policy, visibility, and rollout rather than building an individual app.',
+    fit: 'Administration connects identity, access, publishing policy, shared capabilities, security findings, audit evidence, usage, spend, and ongoing adoption across an enterprise Workspace.',
+    tryIt: 'Imagine a small pilot group joining an enterprise Workspace. List the access, publishing, security, support, and monitoring decisions you would make before expanding the rollout.',
+  },
+};
+
+const moduleReassurance: Record<string, string> = {
+  'Replit 101': 'You do not need to choose the perfect path or master everything today. Keep each outcome small, follow your curiosity, and notice what becomes easier after one real attempt.',
+  'Work with Agent': 'Working with Agent is a conversation, not a test of who can write the cleverest prompt. Clear direction, useful context, and honest feedback will take you far.',
+  'AI Foundations': 'AI can sound mysterious from the outside. You only need one idea at a time here, and every idea connects to something practical you can inspect.',
+  'Agent Foundations': 'You are still in charge. Agent can take many steps, but you decide the goal, the boundaries, and when the result is ready.',
+  'App Foundations': 'New to software? You are exactly where you should be. You only need a useful map of the parts—not years of coding experience—to follow along.',
+  'Protect and Share': 'Security is not about becoming suspicious of everything. A few calm habits help you protect what matters and share your work with confidence.',
+  'Learn and Grow': 'A first version does not need to be perfect. Real feedback turns a finished-looking result into the beginning of a useful learning loop.',
+  'Operate with Replit': 'Start with one task you already understand. Once that task works well, you can make it repeatable, connected, and increasingly independent.',
+  'Design with Agent': 'You do not need to call yourself a designer to make thoughtful design choices. Focus on the person, the task, and the next clear step.',
+  'Build with Agent': 'You do not need to hold the entire app in your head. Build one visible slice, check it, and use what you learn to choose the next slice.',
+  'Secure and Monitor': 'These topics can feel serious because they are. The good news is that a small, repeatable checklist is much more useful than trying to anticipate everything.',
+  'Grow and Scale': 'Growth is not a race to make every number larger. Begin by protecting the useful experience that made someone care about your app.',
+  'Administer Replit': 'Enterprise administration carries real responsibility, but you do not have to solve every scenario from memory. Use policy, evidence, and repeatable workflows to make sound decisions.',
 };
 
 const chapterDepth: Record<string, string> = {
@@ -259,32 +263,58 @@ const chapterDepth: Record<string, string> = {
 
 function guidedLesson(module: string, brief: LessonBrief): LearnLesson {
   const guidance = moduleGuidance[module];
-  const depth = chapterDepth[`${module}/${brief.title}`];
+  const depth = chapterDepth[`${module}/${brief.title}`] ?? brief.concept;
+  const answerOffset = Array.from(brief.title).reduce((total, character) => total + character.charCodeAt(0), 0) % 3;
+  const withAnswer = (correct: string, distractors: [string, string], answer: number): [string, string, string] => {
+    const choices = [...distractors];
+    choices.splice(answer, 0, correct);
+    return choices as [string, string, string];
+  };
   return {
     module,
     title: brief.title,
     duration: '5 min',
     video: brief.title,
     summary: brief.concept,
+    encouragement: moduleReassurance[module],
+    outcomes: [
+      `Explain “${learnDisplayTitle(brief.title)}” in plain language`,
+      brief.check,
+      'Apply the idea to one small, observable Replit outcome',
+    ],
     sections: [
-      { heading: 'What it is', body: brief.concept },
-      { heading: 'Why it matters', body: `${brief.check} is the practical reason to learn this. ${guidance.purpose} The point is not to memorise a term. It is to recognise when this idea can make a task clearer, safer, or more useful for the person doing the work.` },
-      { heading: 'What it is for', body: `Use ${brief.title} to make one part of a workflow more intentional. Begin with a real need, state what a helpful result looks like, and keep the first version small enough to inspect. A focused first attempt gives you something concrete to improve instead of a vague feeling that the work should be “more advanced.”` },
-      { heading: 'Where it fits', body: guidance.fit },
-      { heading: 'In practice', body: depth },
-      { heading: 'What to notice', body: `Pay attention to the hand-off between a person and the system. What do they provide? What does the app or agent do next? What feedback tells them that the result is ready, incomplete, or needs a different approach? Those moments are where a concept becomes a usable experience.` },
-      { heading: 'Give it a try', body: guidance.tryIt },
+      { heading: 'Start with the big idea', body: depth },
+      { heading: 'Why this is worth learning', body: `${brief.check} is the practical reason to learn this. ${guidance.purpose} You are not here to memorize a term. You are learning when the idea can make an outcome clearer, safer, or more useful.` },
+      { heading: 'Keep the first attempt manageable', body: `Use ${brief.title} to improve one part of a real workflow. Name the need, describe a helpful result, and keep the first attempt small enough to inspect. A focused attempt gives you something concrete to celebrate, question, and improve.` },
+      { heading: 'See where it fits', body: guidance.fit },
+      { heading: 'Notice the handoff', body: 'Pay attention to what you provide, what the app or Agent does next, and what comes back. Useful feedback should tell you whether the result is ready, incomplete, or needs another pass. These handoffs turn an abstract idea into an experience you can understand and guide.' },
+      { heading: 'Try a small version', body: guidance.tryIt },
     ],
     replitExample: brief.replit,
     quiz: [
-      { prompt: `What is the main purpose of ${brief.title}?`, choices: [brief.check, 'To remove the need for human judgment', 'To replace every other part of an app'], answer: 0 },
-      { prompt: 'What is the best way to begin using this idea?', choices: ['Start with a small, observable outcome', 'Add every possible feature first', 'Skip testing until launch'], answer: 0 },
-      { prompt: 'Which question keeps the concept practical?', choices: ['What problem does this solve?', 'Which term sounds most technical?', 'How can we make it more abstract?'], answer: 0 },
+      { prompt: `What is the main purpose of ${learnDisplayTitle(brief.title)}?`, choices: withAnswer(brief.check, ['To remove the need for human judgment', 'To replace every other part of the experience'], answerOffset), answer: answerOffset },
+      { prompt: 'What is the most useful way to begin?', choices: withAnswer('Start with a small outcome you can inspect', ['Add every possible feature before reviewing anything', 'Wait until you understand every technical detail'], (answerOffset + 1) % 3), answer: (answerOffset + 1) % 3 },
+      { prompt: 'Which question helps you decide whether the result is ready?', choices: withAnswer('What evidence shows that it meets the goal?', ['Does it use the most complicated approach?', 'Did Agent finish without asking any questions?'], (answerOffset + 2) % 3), answer: (answerOffset + 2) % 3 },
     ],
   };
 }
 
 const courseBriefs: Record<string, LessonBrief[]> = {
+  'Replit 101': [
+    { title: 'What You Can Do with Replit', concept: 'Replit is a place to explore questions, direct agents, automate recurring work, create designs and slides, and build software. This overview shows the landscape before you choose a deeper path.', replit: 'Begin with a goal rather than a feature. Replit can help you research it in a Conversation, automate it with a Routine or Rep, explore it visually in Design, or turn it into working software.', check: 'Recognizing the range of outcomes Replit can help create' },
+    { title: 'From Conversation to Outcome', concept: 'A conversation is often the starting point in Replit, but the next step branches according to your goal. You might keep exploring, schedule recurring work, start a persistent agent loop, create a design, or build an app.', replit: 'Use the prompt box to describe an outcome, add useful context, and choose the path that matches the work. The paths are options—not steps everyone must follow in the same order.', check: 'Choosing an appropriate path from a conversation to an outcome' },
+    { title: 'Research with a Conversation', concept: 'A Conversation can combine questions, connected context, and source-backed exploration without requiring you to create an app. The useful outcome is a finding you can inspect and use.', replit: 'Research a real question with one connected source. Review the cited material, separate evidence from interpretation, and summarize the useful conclusion.', check: 'Producing and verifying a useful research outcome' },
+    { title: 'Create a Routine', concept: 'A Routine schedules repeatable agent work. Foundations covers the full lifecycle: create, schedule, run, inspect, edit, pause, and disable.', replit: 'Create a small Routine tied to a real need, run it once, inspect the result, change one part, then pause or disable it.', check: 'Managing a Routine through its complete lifecycle' },
+    { title: 'Supervise a Rep', concept: 'A Rep works continuously toward a defined goal instead of responding once or running only on a fixed schedule. Good supervision keeps the goal, boundaries, progress, and stopping conditions visible.', replit: 'Give a Rep a bounded goal, define the progress evidence you expect, inspect one cycle, and decide whether to continue, redirect, or stop it.', check: 'Supervising a persistent Agent loop toward a bounded goal' },
+    { title: 'Create a Design and Image', concept: 'Replit can help you explore an app interface and create supporting visual assets. At foundations depth, the goal is to make a coherent first direction and refine it intentionally.', replit: 'Create one app screen, compare a variation, refine the preferred direction, and generate one image that supports the experience.', check: 'Creating and refining a coherent visual outcome' },
+    { title: 'Create Slides', concept: 'A slide deck turns a message into a clear sequence. Agent can help structure the story, create the first version, and refine individual slides while you remain responsible for the argument and audience.', replit: 'Create a short deck with a clear audience and purpose. Review the sequence, evidence, and visual consistency before sharing it.', check: 'Turning a clear message into a reviewable slide deck' },
+    { title: 'Build and Publish a Simple App', concept: 'A small app brings interface, behavior, data, and publishing together. Foundations requires a useful end-to-end outcome without requiring you to write code manually or troubleshoot every underlying system.', replit: 'Describe one useful workflow, guide Agent through a small build, preview the main path, add basic data or authentication when appropriate, then publish and test the result.', check: 'Creating and verifying a small published app end to end' },
+  ],
+  'Work with Agent': [
+    { title: 'Direct Agent Effectively', concept: 'Effective Agent work follows a reusable loop: define the outcome, provide relevant context, add constraints, inspect what happens, and refine the next step. This is more durable than memorizing prompt tricks.', replit: 'Describe a small outcome to Agent, include what it should preserve, and state how you will check the result. Review the work and give one focused piece of feedback.', check: 'Using an outcome, context, constraints, inspection, and refinement loop' },
+    { title: 'Context and Connections', concept: 'Agent works better when it can reach the right context. Project files, integrations, Memory, Skills, and MCP provide different ways to supply information or approved capabilities.', replit: 'Connect an existing tool when possible, select only the context relevant to the task, and confirm what the connection makes available before relying on the result.', check: 'Providing useful context through an appropriate source or capability' },
+    { title: 'Choose a Working Mode', concept: 'Different tasks need different balances of capability, speed, cost, and control. Choose a working mode based on the outcome and risk rather than treating the most powerful option as the automatic choice.', replit: 'Compare a quick exploratory request with a longer multi-step task. Choose an appropriate mode for each and explain the tradeoff.', check: 'Matching Agent capability, speed, cost, and control to the task' },
+  ],
   'AI Foundations': [
     { title: 'What Is AI?', concept: 'AI is a broad term for systems that perform tasks associated with perception, language, prediction, or decision-making. In this course, you will focus on AI that works with language and helps people create, analyze, and act.', replit: 'Use Agent in Replit as a practical example: you describe an outcome in language, then collaborate with an AI system that can explore and change a project.', check: 'Understanding what AI can and cannot help with' },
     { title: 'Models & LLMs', concept: 'A model is a trained system that turns inputs into outputs. A large language model, or LLM, is trained to understand and generate language, which makes it useful for conversation, writing, analysis, and code.', replit: 'When you choose an AI capability for a Replit project, the model is the engine behind the experience. Choose based on the task, quality, speed, and cost.', check: 'Choosing an engine that fits a language task' },
@@ -303,6 +333,22 @@ const courseBriefs: Record<string, LessonBrief[]> = {
     { title: 'Tool Calls', concept: 'Tool calls let an agent do more than write text. A tool can search, read a file, run code, query data, or take a defined action, then return information for the next step.', replit: 'In Replit, Agent uses project tools to inspect files, make edits, and run checks. A clear tool boundary makes its work easier to understand and review.', check: 'Letting an agent take a defined action and observe the result' },
     { title: 'MCP, Connectors & Skills', concept: 'MCP, connectors, and skills extend an agent with reusable capabilities and access to approved systems. They make specialized work possible without asking the model to guess how every system works.', replit: 'Use approved connections in Replit when a project needs information or actions from another service. Treat every connection as a capability with a clear purpose and boundary.', check: 'Extending an agent with a defined, reusable capability' },
     { title: 'Human-in-the-Loop', concept: 'Human-in-the-loop means people keep judgment over goals, tradeoffs, and consequential actions. Agents can accelerate work, but they should not replace responsibility for decisions.', replit: 'Use Agent to explore and propose in Replit, then review changes, give feedback, and approve the next step. The strongest workflow is collaborative, not hands-off.', check: 'Keeping people responsible for important decisions' },
+  ],
+  'Protect and Share': [
+    { title: 'Protect Sensitive Information', concept: 'Sensitive values and private information need deliberate handling. Keep secrets out of prompts, source code, and browser-visible output, and connect only the context a task needs.', replit: 'Use Secrets for credentials, review what a connected service exposes, and remove unnecessary sensitive information before asking Agent to work with a task.', check: 'Keeping secrets and sensitive context within appropriate boundaries' },
+    { title: 'Access, Visibility and Security Checks', concept: 'Authentication establishes identity, permissions control actions, and visibility determines who can reach a shared or published outcome. Security checks help identify issues, but they still require human review and remediation.', replit: 'Choose appropriate access and publishing visibility, then review dependency checks, Agent analysis, and the available pentest level at a high level before sharing an app.', check: 'Choosing access boundaries and interpreting basic security checks' },
+    { title: 'Share and Verify an Outcome', concept: 'Delivery means another person can reach and understand the result. Verification checks the outcome against success criteria instead of treating creation itself as proof of quality.', replit: 'Share a project or output with suitable access, invite feedback when useful, and record the link, screenshot, run result, or explanation that demonstrates success.', check: 'Delivering an outcome with appropriate access and observable evidence' },
+  ],
+  'Learn and Grow': [
+    { title: 'Monitor and Learn', concept: 'After you share an outcome, feedback and operational signals reveal what works and what needs attention. Begin with a small set of signals connected to the experience people rely on.', replit: 'Identify one success signal, one error or reliability signal, and one source of feedback. Use them to choose the next improvement.', check: 'Using feedback and observable signals to guide iteration' },
+    { title: 'Discoverability and Growth', concept: 'Growth begins when the right people understand and receive value from an outcome. Clear descriptions, useful content, basic analytics, and search-friendly pages help you learn how people discover and use it.', replit: 'Review a published outcome from a new visitor’s perspective. Clarify its title and purpose, identify the first useful action, and choose one measure of successful use.', check: 'Helping the right audience discover and understand an outcome' },
+    { title: 'Performance and Scale', concept: 'Performance affects trust, while scaling keeps an experience available as demand changes. At foundations depth, you should recognize slow or unreliable behavior and understand that deployment capacity must fit the workload.', replit: 'Observe how a published app responds, identify its most important workflow, and explain when autoscaling or reserved capacity might become relevant.', check: 'Recognizing when performance or capacity needs attention' },
+  ],
+  'Operate with Replit': [
+    { title: 'Conversations and Context', concept: 'A strong Agent workflow begins with a clear outcome and the context needed to pursue it. Conversations let you explore, refine, and direct the work while keeping meaningful decisions visible.', replit: 'Start a Conversation with the outcome, relevant background, constraints, and success criteria. Add only the context that helps Agent make the next useful decision.', check: 'Directing Agent with a clear outcome and relevant context' },
+    { title: 'Integrations', concept: 'Integrations connect Agent to approved information and capabilities in other tools. They make work more relevant, but each connection should have a clear purpose and appropriate access.', replit: 'Connect a tool you already use, bring its context into a Conversation, and verify the source and result before using it in a consequential decision.', check: 'Using connected tools intentionally and verifying their output' },
+    { title: 'Routines', concept: 'A Routine turns a repeatable task into scheduled agent work. A useful Routine has a clear trigger, expected result, review point, and lifecycle from creation through pausing or retirement.', replit: 'Create a small Routine, schedule and run it, inspect the result, then edit, pause, or disable it so you understand the complete lifecycle.', check: 'Managing scheduled agent work through its full lifecycle' },
+    { title: 'Reps and Nexus', concept: 'Some goals need ongoing progress rather than a one-time response or fixed schedule. Reps provide a persistent loop toward a goal, while Nexus helps you see and coordinate broader agent activity.', replit: 'Define a bounded goal for a Rep, decide what progress evidence matters, and use Nexus to supervise rather than treating autonomous activity as invisible work.', check: 'Supervising persistent and coordinated agent work' },
   ],
   'Design with Agent': [
     { title: 'Start with an Idea', concept: 'A useful design begins with the outcome someone needs, not with a screen full of controls. Describe the audience, their job, and the moment where they should feel progress.', replit: 'Use Replit Design to turn an idea into a first screen, then test whether the most important action is clear.', check: 'Defining the person and outcome before designing a screen' },
@@ -341,8 +387,14 @@ const courseBriefs: Record<string, LessonBrief[]> = {
     { title: 'Capacity Planning', concept: 'Capacity planning connects expected demand to the resources an app needs. It is a habit of measuring, forecasting, testing, and deciding before a growth moment becomes an outage.', replit: 'Use deployment behavior and monitoring signals in Replit to identify which workflows need more capacity or a simpler design.', check: 'Preparing for demand before it becomes a problem' },
     { title: 'Serving More Users', concept: 'Serving more people means more than adding infrastructure. It means preserving a useful, reliable, understandable experience as support requests, data, and usage patterns become more complex.', replit: 'Keep iterating in Replit as your app grows: listen to feedback, watch real usage, improve the product loop, and strengthen the systems that carry the most value.', check: 'Preserving a useful experience as usage grows' },
   ],
+  'Administer Replit': [
+    { title: 'Enterprise Workspaces', concept: 'An enterprise Workspace gives an organization a shared Replit environment with centralized controls. Administrators shape how people join, create, share, and use organizational resources.', replit: 'Review the organization-level settings that affect creators, then connect each policy to the behavior it enables or limits inside a project.', check: 'Understanding the scope and purpose of enterprise administration' },
+    { title: 'Identity and Access', concept: 'Identity and access controls determine who can join an organization, which role they receive, what they can reach, and how access changes when they move or leave.', replit: 'Practice a simulated joiner, role-change, and offboarding workflow. Verify the resulting access from the affected person’s perspective.', check: 'Managing access across a person’s organizational lifecycle' },
+    { title: 'Security and Governance', concept: 'Organization-wide governance sets safe boundaries for publishing, integrations, shared resources, and security response. Administrators identify and prioritize findings, coordinate or start remediation, and verify the outcome.', replit: 'Use a simulated Workspace Security Center scenario to review dependency findings, prioritize by severity and exposure, start an Agent-assisted fix where appropriate, notify the owner, and confirm remediation.', check: 'Applying organization-level policy and coordinating security response' },
+    { title: 'Rollout, Usage and Audit Logs', concept: 'A controlled rollout starts with a pilot, observes adoption and spend, resolves gaps, then expands. Audit logs provide evidence of important administrative and security activity.', replit: 'Use a sandbox scenario to investigate audit events, review usage and cost signals, support a pilot group, and decide what must change before the next rollout stage.', check: 'Using evidence to operate and expand an enterprise Replit environment' },
+  ],
 };
 
 export const courseLessons: Record<string, LearnLesson[]> = Object.fromEntries(
-  Object.entries(courseBriefs).map(([module, briefs]) => [module, briefs.map((brief) => guidedLesson(module, brief))]),
+  Object.entries(courseBriefs).map(([module, briefs]) => [module, module === 'Replit 101' ? discoverLessons : briefs.map((brief) => guidedLesson(module, brief))]),
 );

@@ -1,4 +1,5 @@
 import { createRemoteJWKSet, jwtVerify } from "jose";
+import { RECIPE_PROMPT, type RecipeBuild } from "../src/recipe-activity";
 
 type StoredUser = {
   id: string;
@@ -23,6 +24,7 @@ type PendingAuthorization = {
   nonce: string;
   redirectUri: string;
   returnTo: string;
+  createApps?: boolean;
   state: string;
   expiresAt: number;
 };
@@ -32,6 +34,7 @@ type AuthSession = {
   user: StoredUser;
   expiresAt: number;
   oauthClientId?: string;
+  canCreateApps?: boolean;
   mcpAccess?: {
     accessToken: string;
     refreshToken?: string;
@@ -39,7 +42,8 @@ type AuthSession = {
   };
 };
 
-type StoredRecord = OAuthClientRecord | PendingAuthorization | AuthSession;
+type BuildRecord = RecipeBuild & { kind: "recipe-build"; startedAt: number; turnId?: string };
+type StoredRecord = OAuthClientRecord | PendingAuthorization | AuthSession | BuildRecord;
 
 type DurableObjectStorageLike = {
   get<T>(key: string): Promise<T | undefined>;
@@ -112,6 +116,14 @@ export class AuthSessionStore {
   constructor(private readonly state: DurableObjectStateLike) {}
 
   async fetch(request: Request): Promise<Response> {
+    if (request.method === "POST" && new URL(request.url).pathname === "/claim-build") {
+      // Storage input gates keep this read/write atomic, with no external I/O.
+      const existing = await this.state.storage.get<BuildRecord>(RECORD_KEY);
+      if (existing) return json({ claimed: false, build: existing });
+      const build: BuildRecord = { kind: "recipe-build", status: "submitting", startedAt: Date.now() };
+      await this.state.storage.put(RECORD_KEY, build);
+      return json({ claimed: true, build });
+    }
     if (request.method === "GET") {
       const record = await this.state.storage.get<StoredRecord>(RECORD_KEY);
       return json(record ?? null);
@@ -249,6 +261,7 @@ async function startLogin(request: Request, env: Env): Promise<Response> {
   const codeVerifier = randomToken(48);
   const redirectUri = `${requestUrl.origin}/api/auth/callback`;
   const returnTo = safeReturnTo(requestUrl.searchParams.get("returnTo"));
+  const createApps = requestUrl.searchParams.get("activity") === "recipe";
 
   await putRecord(env, `flow:${flowId}`, {
     kind: "pending-authorization",
@@ -257,6 +270,7 @@ async function startLogin(request: Request, env: Env): Promise<Response> {
     nonce,
     redirectUri,
     returnTo,
+    createApps,
     state,
     expiresAt: Date.now() + AUTHORIZATION_LIFETIME_MS,
   });
@@ -265,7 +279,7 @@ async function startLogin(request: Request, env: Env): Promise<Response> {
   authorizationUrl.searchParams.set("client_id", clientId);
   authorizationUrl.searchParams.set("redirect_uri", redirectUri);
   authorizationUrl.searchParams.set("response_type", "code");
-  authorizationUrl.searchParams.set("scope", `${IDENTITY_SCOPES} offline_access ${MCP_SCOPE}`);
+  authorizationUrl.searchParams.set("scope", `${IDENTITY_SCOPES} offline_access ${MCP_SCOPE}${createApps ? " apps:write" : ""}`);
   authorizationUrl.searchParams.set("resource", mcpUrl(env));
   authorizationUrl.searchParams.set("state", state);
   authorizationUrl.searchParams.set("nonce", nonce);
@@ -333,6 +347,7 @@ async function finishLogin(request: Request, env: Env): Promise<Response> {
       user,
       expiresAt: Date.now() + SESSION_LIFETIME_MS,
       oauthClientId: flow.clientId,
+      canCreateApps: flow.createApps === true,
       mcpAccess: {
         accessToken: tokens.access_token,
         refreshToken: tokens.refresh_token,
@@ -414,6 +429,7 @@ type McpEnvelope = {
 };
 
 class McpAuthorizationError extends Error {}
+class McpBusyError extends Error {}
 
 function safeString(value: unknown, maxLength: number): string | undefined {
   return typeof value === "string" && value.trim() ? value.trim().slice(0, maxLength) : undefined;
@@ -556,14 +572,24 @@ async function listMcpApps(env: Env, accessToken: string): Promise<SafeApp[]> {
 function answerFromToolResult(value: unknown): string | undefined {
   if (!value || typeof value !== "object") return undefined;
   const result = value as Record<string, unknown>;
+  if (result.isError) throw new Error("Project inspection was rejected");
   if (result.structuredContent && typeof result.structuredContent === "object") {
     const structured = result.structuredContent as Record<string, unknown>;
+    if (structured.phase === 'busy') throw new McpBusyError('App is busy');
     for (const key of ["answer", "response", "output", "text"]) {
       const answer = safeString(structured[key], 20_000)?.trim();
       if (answer) return answer;
     }
   }
   if (!Array.isArray(result.content)) return undefined;
+  // Text-only MCP clients receive a JSON mirror of the same lifecycle phase.
+  for (const block of result.content) {
+    if (typeof block?.text !== 'string') continue;
+    let mirror: { phase?: string; response?: string };
+    try { mirror = JSON.parse(block.text); } catch { continue; }
+    if (mirror?.phase === 'busy') throw new McpBusyError('App is busy');
+    if (mirror?.phase === 'paused' && typeof mirror.response === 'string' && mirror.response.trim()) return mirror.response;
+  }
   const text = result.content.flatMap((block) => {
     if (!block || typeof block !== "object") return [];
     const value = (block as Record<string, unknown>).text;
@@ -599,6 +625,179 @@ async function mcpAppsResponse(request: Request, env: Env): Promise<Response> {
   } catch (error) {
     if (error instanceof McpAuthorizationError) return json({ status: "reauth_required" });
     return json({ status: "temporarily_unavailable" }, { status: 503 });
+  }
+}
+
+function toolObject(value: unknown): Record<string, unknown> {
+  if (!value || typeof value !== "object") throw new Error("Invalid tool result");
+  const result = value as Record<string, unknown>;
+  if (result.isError) throw new Error("Tool rejected request");
+  if (result.structuredContent && typeof result.structuredContent === "object") return result.structuredContent as Record<string, unknown>;
+  for (const block of Array.isArray(result.content) ? result.content : []) {
+    if (typeof block?.text !== "string") continue;
+    try {
+      const parsed = JSON.parse(block.text);
+      if (parsed && typeof parsed === "object") return parsed;
+    } catch { /* Skip presentation text. */ }
+  }
+  throw new Error("Missing structured result");
+}
+
+function publicBuild(build: BuildRecord | undefined): RecipeBuild {
+  if (!build) return { status: "idle" };
+  return {
+    status: build.status === "submitting" && Date.now() - build.startedAt > 120_000 ? "unknown" : build.status,
+    replId: build.replId,
+    replUrl: build.replUrl,
+    previewUrl: build.previewUrl,
+  };
+}
+
+async function recipeBuildResponse(request: Request, env: Env): Promise<Response> {
+  const sessionId = cookieValue(request, SESSION_COOKIE);
+  const session = await authenticatedSession(request, env);
+  if (!session || !sessionId) return json({ error: "authentication_required" }, { status: 401 });
+  const key = `recipe-build:v1:${session.user.id}`;
+  const existing = await getRecord<BuildRecord>(env, key);
+  if (request.method === "GET") return json({ build: publicBuild(existing), canCreate: session.canCreateApps === true });
+  if (request.headers.get("origin") !== new URL(request.url).origin) return json({ error: "invalid_origin" }, { status: 403 });
+  let fresh = false;
+  try { fresh = (await request.json<{ fresh?: boolean }>()).fresh === true; } catch { /* Older clients resume their saved request. */ }
+  if (existing && !fresh) return json({ build: publicBuild(existing) });
+  if (!session.canCreateApps) return json({ error: "reauth_required" }, { status: 401 });
+  const authorized = await refreshMcpAccess(env, sessionId, session);
+  if (!authorized?.mcpAccess) return json({ error: "reauth_required" }, { status: 401 });
+  // Initialize before claiming. A failed connection here cannot have created an app.
+  let protocol: string;
+  try { protocol = await initializeMcp(env, authorized.mcpAccess.accessToken); }
+  catch { return json({ error: "connection_unavailable" }, { status: 503 }); }
+  if (existing && fresh) await deleteRecord(env, key);
+  const claimResponse = await recordStub(env, key).fetch(new Request("https://sessions.internal/claim-build", { method: "POST" }));
+  const { claimed, build } = await claimResponse.json<{ claimed: boolean; build: BuildRecord }>();
+  if (!claimed) return json({ build: publicBuild(build) });
+  try {
+    const output = toolObject(await mcpRpc(env, authorized.mcpAccess.accessToken, {
+      jsonrpc: "2.0", id: 2, method: "tools/call",
+      params: { name: "create_app_from_prompt", arguments: { appDescription: RECIPE_PROMPT, app_stack: "react_website" } },
+    }, 2, protocol, 90_000));
+    const replId = safeString(output.replId, 160);
+    const replUrl = safeReplitUrl(output.replUrl);
+    if (output.phase !== "creating" || !replId || !replUrl) throw new Error("Creation not confirmed");
+    const created: BuildRecord = { ...build, status: "creating", replId, replUrl, turnId: safeString(output.turnId, 160) };
+    await putRecord(env, key, created);
+    return json({ build: publicBuild(created) });
+  } catch (error) {
+    if (error instanceof McpAuthorizationError) {
+      await deleteRecord(env, key);
+      return json({ error: "reauth_required" }, { status: 401 });
+    }
+    // A timeout or ambiguous tool error may follow app creation. Never retry it automatically.
+    const uncertain: BuildRecord = { ...build, status: "unknown" };
+    await putRecord(env, key, uncertain);
+    return json({ build: publicBuild(uncertain) });
+  }
+}
+
+async function recipeIterationResponse(request: Request, env: Env): Promise<Response> {
+  const sessionId = cookieValue(request, SESSION_COOKIE);
+  const session = await authenticatedSession(request, env);
+  if (!session || !sessionId || !session.canCreateApps) return json({ error: 'reauth_required' }, { status: 401 });
+  if (request.headers.get('origin') !== new URL(request.url).origin) return json({ error: 'invalid_origin' }, { status: 403 });
+  const recipe = await getRecord<BuildRecord>(env, `recipe-build:v1:${session.user.id}`);
+  if (!recipe?.replId || recipe.status !== 'complete') return json({ error: 'build_not_ready' }, { status: 409 });
+  const key = `recipe-favorites:v1:${session.user.id}:${recipe.replId}`;
+  const existing = await getRecord<BuildRecord>(env, key);
+  if (existing) return json({ accepted: existing.status === 'complete' }, { status: existing.status === 'complete' ? 200 : 409 });
+  const authorized = await refreshMcpAccess(env, sessionId, session);
+  if (!authorized?.mcpAccess) return json({ error: 'reauth_required' }, { status: 401 });
+  let protocol: string;
+  try { protocol = await initializeMcp(env, authorized.mcpAccess.accessToken); }
+  catch { return json({ error: 'connection_unavailable' }, { status: 503 }); }
+  const claim = await recordStub(env, key).fetch(new Request('https://sessions.internal/claim-build', { method: 'POST' }));
+  const { claimed, build } = await claim.json<{ claimed: boolean; build: BuildRecord }>();
+  if (!claimed) return json({ accepted: build.status === 'complete' }, { status: build.status === 'complete' ? 200 : 409 });
+  try {
+    const output = toolObject(await mcpRpc(env, authorized.mcpAccess.accessToken, {
+      jsonrpc: '2.0', id: 2, method: 'tools/call',
+      params: { name: 'update_app_using_prompt', arguments: { replId: recipe.replId, changeDescription: 'Keep the current recipe features, but add a way to mark favorites.' } },
+    }, 2, protocol, 90_000));
+    if (output.phase !== 'updating' || output.replId !== recipe.replId) throw new Error('Update not confirmed');
+    // Complete means the exercise request was accepted, not that the app update finished.
+    await putRecord(env, key, { ...build, status: 'complete', replId: recipe.replId, turnId: safeString(output.turnId, 160) });
+    return json({ accepted: true });
+  } catch {
+    await putRecord(env, key, { ...build, status: 'unknown' });
+    return json({ error: 'request_unconfirmed' }, { status: 409 });
+  }
+}
+
+async function recipeBuildEvents(request: Request, env: Env): Promise<Response> {
+  const sessionId = cookieValue(request, SESSION_COOKIE);
+  const session = await authenticatedSession(request, env);
+  if (!session || !sessionId) return json({ error: "authentication_required" }, { status: 401 });
+  const key = `recipe-build:v1:${session.user.id}`;
+  const build = await getRecord<BuildRecord>(env, key);
+  if (!build?.replId) return json({ error: "build_not_found" }, { status: 404 });
+  if (build.status === "complete") return new Response('data: {"status":"complete"}\n\n', { headers: { "content-type": "text/event-stream", "cache-control": "no-store" } });
+  const authorized = await refreshMcpAccess(env, sessionId, session);
+  if (!authorized?.mcpAccess) return json({ error: "reauth_required" }, { status: 401 });
+  try {
+    const protocol = await initializeMcp(env, authorized.mcpAccess.accessToken);
+    // Replit's widget status stream uses an encrypted token, not the OAuth token.
+    // Keep both server-side. If this internal integration is unavailable, the UI
+    // reports disconnected status and links to the app instead of faking progress.
+    const token = toolObject(await mcpRpc(env, authorized.mcpAccess.accessToken, {
+      jsonrpc: "2.0", id: 2, method: "tools/call",
+      params: { name: "replit_widget_get_auth_token", arguments: { replId: build.replId } },
+    }, 2, protocol));
+    if (token.status !== "ok" || typeof token.authnToken !== "string") throw new Error("Status unavailable");
+    const url = new URL(`/api/mcp/${encodeURIComponent(build.replId)}/sse`, mcpUrl(env));
+    if (build.turnId) url.searchParams.set("turnId", build.turnId);
+    const upstream = await fetch(url, {
+      headers: { accept: "text/event-stream", authorization: `Bearer ${token.authnToken}` },
+      signal: AbortSignal.any([request.signal, AbortSignal.timeout(60_000)]),
+    });
+    if (!upstream.ok || !upstream.body) throw new Error("Status unavailable");
+    const decoder = new TextDecoder();
+    const encoder = new TextEncoder();
+    let buffer = "";
+    const stream = upstream.body.pipeThrough(new TransformStream<Uint8Array, Uint8Array>({
+      async transform(chunk, controller) {
+        buffer = (buffer + decoder.decode(chunk, { stream: true })).replace(/\r\n/g, "\n");
+        if (buffer.length > 262_144) throw new Error("Status event too large");
+        let boundary: number;
+        while ((boundary = buffer.indexOf("\n\n")) >= 0) {
+          const frame = buffer.slice(0, boundary);
+          buffer = buffer.slice(boundary + 2);
+          const data = frame.split("\n").filter((line) => line.startsWith("data:")).map((line) => line.slice(5).trim()).join("\n");
+          if (!data) continue;
+          let event: { kind?: string; url?: unknown };
+          try { event = JSON.parse(data); } catch { continue; }
+          if (event.kind === "done") {
+            // Never forward preview tokens, query strings, or arbitrary URLs.
+            let previewUrl: string | undefined;
+            try {
+              const candidate = typeof event.url === "string" ? new URL(event.url) : undefined;
+              if (candidate?.protocol === "https:" && candidate.hostname.endsWith(".replit.dev") && !candidate.username && !candidate.password && !candidate.port) previewUrl = candidate.origin;
+            } catch { /* The project link remains available when no safe preview is returned. */ }
+            await putRecord(env, key, { ...build, status: "complete", previewUrl });
+            controller.enqueue(encoder.encode('data: {"status":"complete"}\n\n'));
+            controller.terminate();
+            return;
+          }
+          if (event.kind === "error") {
+            // An event-stream error is not proof the build failed.
+            controller.enqueue(encoder.encode('data: {"status":"disconnected"}\n\n'));
+            controller.terminate();
+            return;
+          }
+          if (event.kind === "events") controller.enqueue(encoder.encode('data: {"status":"creating"}\n\n'));
+        }
+      },
+    }));
+    return new Response(stream, { headers: { "content-type": "text/event-stream", "cache-control": "no-store" } });
+  } catch {
+    return json({ error: "status_unavailable" }, { status: 503 });
   }
 }
 
@@ -829,6 +1028,7 @@ async function askResponse(request: Request, env: Env): Promise<Response> {
     const answer = await askMcpQuestion(env, authorized.mcpAccess.accessToken, appId, contextualQuestion);
     return streamedAnswer(answer, [], "project");
   } catch (error) {
+    if (error instanceof McpBusyError) return json({ error: 'app_busy' }, { status: 409 });
     if (error instanceof McpAuthorizationError) return json({ error: "reauth_required" }, { status: 401 });
     return json({ error: "ask_temporarily_unavailable" }, { status: 503 });
   }
@@ -876,6 +1076,9 @@ async function route(request: Request, env: Env): Promise<Response> {
   if (pathname === "/api/auth/session" && request.method === "GET") return sessionResponse(request, env);
   if (pathname === "/api/auth/logout" && request.method === "POST") return logout(request, env);
   if (pathname === "/api/mcp/apps" && request.method === "GET") return mcpAppsResponse(request, env);
+  if (pathname === "/api/activities/recipe" && ["GET", "POST"].includes(request.method)) return recipeBuildResponse(request, env);
+  if (pathname === "/api/activities/recipe/events" && request.method === "GET") return recipeBuildEvents(request, env);
+  if (pathname === '/api/activities/recipe/iterate' && request.method === 'POST') return recipeIterationResponse(request, env);
   if (pathname === "/api/rag/index" && request.method === "POST") return indexVectorBatch(request, env);
   if (pathname === "/api/ask" && request.method === "POST") return askResponse(request, env);
   if (pathname.startsWith("/api/")) return json({ error: "Not found" }, { status: 404 });

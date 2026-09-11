@@ -50,7 +50,8 @@ export function ReplitPromptComposer({
   const slashMatch = value.match(slashPattern);
   const slashQuery = slashMatch?.[1]?.toLocaleLowerCase() ?? "";
   const slashOpen = editorFocused && Boolean(slashMatch);
-  const selectedApp = apps.find((app) => app.id === selectedAppId);
+  const simulatedRecipe = ['localhost', '127.0.0.1'].includes(window.location.hostname) && selectedAppId === 'simulated-recipe-context';
+  const selectedApp = simulatedRecipe ? { id: selectedAppId, title: 'Recipe Box · simulation' } : apps.find((app) => app.id === selectedAppId);
   const canSubmit = value.trim().length > 0 && !loading;
 
   const projectOptions = useMemo(() => apps
@@ -103,14 +104,14 @@ export function ReplitPromptComposer({
         } else {
           setApps([]);
           setAppsStatus(context.status === "reauth_required" ? "reauth_required" : "unavailable");
-          onAppChange("");
+          if (!simulatedRecipe) onAppChange("");
         }
       })
       .catch(() => {
         if (!active) return;
         setApps([]);
         setAppsStatus("unavailable");
-        onAppChange("");
+        if (!simulatedRecipe) onAppChange("");
       });
     return () => { active = false; };
   }, [authState, onAppChange]);

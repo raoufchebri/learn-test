@@ -1,0 +1,155 @@
+import type { LearnLesson } from './learn-content';
+
+// One project, one new concept per lesson. Inspection never changes the app.
+export const recipeFoundationLessons: LearnLesson[] = [
+  {
+    module: 'App Foundations', title: 'What Is Replit Building?', duration: '3 min', video: 'From your request to a running app',
+    summary: 'You’ve described your recipe app in a prompt: a request that tells Replit what you want to create. While the app is being built for you, let’s explore how that prompt becomes a first version you can open and try.',
+    introduction: ['The good news with Replit is that you can get started without knowing how to write code. Replit handles that work, while you decide what your app should do and check that the result matches your needs. A simple first version can take minutes. More ambitious apps need more time, testing, and refinement.', 'This lesson explains the process of building an app. Follow progress in chat or open your project in Replit. Chat will notify you when it receives the completed build update.'],
+    outcomes: ['Explain how Replit turns your prompt into code and an interface', 'Test a first version in Preview', 'Request a specific improvement and test the result again'],
+    sections: [
+      { heading: 'First, your prompt becomes a task', body: 'Your recipe prompt sets the goal and the boundaries: add, edit, and find recipes, save them in this browser, and leave out sign-in. Replit uses those details to decide what the first version needs. A clear prompt helps keep the work focused.' },
+      { heading: 'Your app starts with instructions', body: 'When you save a recipe, the app takes what you typed and adds it to your collection. When you search for an ingredient, it finds matching recipes. Neither action happens by itself: the app follows written instructions. Those instructions are called code. Replit writes that code and saves it in files.', items: ['Some instructions describe what appears on the screen. Others describe what happens when you select a button or save a recipe.', 'Together with images, settings, and other resources, these files make up the project for your app. You don’t need to read every line to start exploring what it does.'] },
+      { heading: 'Replit creates the parts you see and use', body: 'Think about opening your recipe app. You see recipe cards, type into a search field, and select a button to add a recipe. These visible, interactive parts are its user interface, or UI. Replit writes the code that brings them to life in your browser. This browser-side part of the app is called the frontend.', items: ['To put those pieces on the page, web apps use HTML for structure, CSS for appearance, and JavaScript for behavior. For example, the recipe heading needs structure, the card needs styling, and the search field needs instructions to filter recipes.', 'Replit may organize that code with a framework, a set of tools for building an app. You don’t need to learn these languages or tools before getting started. For now, connect the names to the things you can see and try.', 'Understanding these building blocks gives you an advantage as a builder. You can give Replit more specific direction, such as changing the recipe cards’ appearance while keeping the saving behavior the same. That curiosity helps you become a power builder, one small discovery at a time. It is a way to grow, not a requirement for getting started.', 'For this first recipe app, the recipe logic and saved recipes also stay in the browser. It does not need an application backend, shared database, or family accounts.'] },
+      { heading: 'Testing turns code into something you can try', body: 'Replit starts the app, checks for problems, and can revise the code as it builds. A development server serves your web app to Preview, where you can see and test it. In this recipe app, the interface and recipe logic then run in your browser. A working Preview is not proof that every feature is correct.', items: ['Preview lets you compare the result with what you had in mind. Try the controls, notice what works, and describe anything that needs changing.', 'Preview is not the same as publishing a production version. Development links can still be accessible to others, so do not assume an unpublished app is private.'] },
+      { heading: 'When it is ready, give it a small test', body: 'Watch for the ready message in chat, then open your recipe app. Add a made-up recipe, edit it, and refresh to see whether it is still there. If something is wrong, describe what you tried and what happened. You do not need to diagnose the code yourself. Next, you’ll explore the project, code, and files behind that experience.' },
+      { heading: 'A first version is a starting point', body: 'Your prompt describes a deliberately simple app, not every detail you might have in mind. Replit has to make choices about the details you leave open, so the result may not match everything you pictured. Ask for one specific improvement at a time, then test the change. That cycle is called iteration.', diagram: 'recipe-iteration' },
+      { heading: 'Next, meet your project', body: 'In Replit, a project brings together your code, resources, and the things you create. It can contain one app or several related outputs, called artifacts, such as a web app, mobile app, slide deck, or dashboard. Next, you’ll explore the project and files behind your recipe app.' },
+    ],
+    replitExample: '',
+    quiz: [
+      { prompt: 'What does Replit do with your recipe app prompt?', choices: ['Uses it to write code, create the interface, and run a first version', 'Only saves the prompt as a note', 'Publishes every idea immediately without a review'], answer: 0 },
+      { prompt: 'Your app appears in Preview. What should you do next?', choices: ['Assume every feature works because the page opened', 'Add and edit a recipe, then check that saving works as expected', 'Skip testing until you have added every feature'], answer: 1 },
+      { prompt: 'The first version is missing a way to mark favorites. What is a useful next step?', choices: ['Start a new project for every small change', 'Ask for several unrelated changes without testing', 'Ask Replit for that specific improvement, then try the result'], answer: 2 },
+    ],
+  },
+  {
+    module: 'App Foundations', title: 'Projects, Code & Files', duration: '4 min', video: 'Meet your recipe project',
+    // Temporary review access. Does not bypass sign-in or make an inspection succeed.
+    summary: 'You’ve seen Replit build a first version of your recipe app. Behind that result, it wrote code and organized it into files and folders. Let’s open your project and see how those pieces fit together.',
+    introduction: ['The good news is that these files are available for you to explore, but you don’t need to manage or edit them yourself. You can describe a change to Replit and let it update the code. For now, your goal is to recognize the organization, not understand every file.'],
+    outcomes: ['Open your project’s Files panel', 'Explain how projects, artifacts, and files fit together', 'Describe a change to Replit without editing files yourself'],
+    projectTask: { id: 'project-files', label: 'Explore my project', prompt: 'Inspect this recipe project without changing anything. Show a short file tree using actual paths. Identify the recipe interface, the save or edit logic, and how the app starts. Quote at most eight relevant lines of existing code with its path and explain them in plain language. Do not show secrets or environment variable values. If a file is unavailable, say so rather than inventing a path.' },
+    sections: [
+      { heading: 'Open your project’s files', body: 'Open the same recipe project you’ve been using. In the layout shown below, the Library control sits in the upper-right corner, next to Publish.', items: ['Open Library, then select the Files tab.', 'Expand the artifacts folder, then the recipe-box folder to explore this example.', 'Notice the folders and files alongside Preview. This list is called a file tree, like the folders on your computer. Your own project may use different names.'], image: { src: '/images/recipe-project-files.png', alt: 'Recipe Box running in Preview beside the expanded Files panel, with the recipe-box folder selected inside artifacts.', caption: 'The running app is in the center. Its project files are on the right. Open the image to enlarge the file tree.', source: '/images/recipe-project-files.png' } },
+      { heading: 'See how Replit organized the work', body: 'In this example, the artifacts folder contains three folders: api-server, mockup-sandbox, and recipe-box. The recipe-box folder is our starting point. Inside it, you can see source and public folders, along with files used to configure the app.', items: ['The other folder names suggest supporting server and preview tooling. Their presence alone does not tell you which features your recipe app uses. Replit can inspect their contents and explain their roles.', 'Outside that folder, you can also see lib, scripts, replit.md, and configuration files. You don’t need to learn every name now.', 'Some files contain code. Others hold images, written guidance, or settings. Together, they support the app you see in Preview.'] },
+      { heading: 'A project brings the pieces together', body: 'Your recipe app is something you can build and publish. In Replit, an output like this is called an artifact. Other examples include a mobile app, a slide deck, or a dashboard. A project can contain one artifact or several related artifacts, together with their code, shared resources, and settings.', items: ['The project is the container for the work.', 'Artifacts are the outputs you create inside it.', 'Files and folders organize the code and resources that support those outputs. Not every folder is a separate artifact.'] },
+      { heading: 'Explore without managing every file', body: 'You can open the files whenever you want to understand more. Looking at a file does not change the app, and you don’t have to edit its code to make improvements. Describe the result you want to Replit, then test the change in Preview.', items: ['For example, you can ask for clearer recipe titles without knowing which file controls their appearance.', 'If you’re curious, ask Replit which files it changed and why. Connecting those explanations to your project helps you become a more confident builder.', 'Next, you’ll explore the frontend and UI more closely, using the same recipe app.'] },
+    ],
+    replitExample: '',
+    quiz: [
+      { prompt: 'Where can you explore the files Replit created in the layout shown?', choices: ['Only inside the running recipe app', 'Open Library, then select Files', 'Create a new project first'], answer: 1 },
+      { prompt: 'How do projects and artifacts fit together?', choices: ['A project holds one or more artifacts, plus supporting files and resources', 'Every folder is a separate artifact', 'A project can contain only a single code file'], answer: 0 },
+      { prompt: 'You want to improve the recipe titles but don’t know which file to edit. What can you do?', choices: ['Rename every file until the titles change', 'Start over because you cannot edit code', 'Describe the change to Replit, then test the result in Preview'], answer: 2 },
+    ],
+  },
+  {
+    module: 'App Foundations', title: 'Frontend & UI', duration: '4 min', video: 'From recipe form to interface',
+    summary: 'The recipe form, the Save button, and the list of things you want to cook are your app’s user interface. Let’s connect what you see to what makes it work.',
+    outcomes: ['Recognize the frontend and user interface', 'Explain the roles of structure, style, and interaction', 'Notice how an interface responds to an action'],
+    projectTask: { id: 'frontend-ui', label: 'Explore my interface', prompt: 'Inspect the existing recipe app frontend without editing it. Identify the actual component or file that renders the recipe form. Show a short code excerpt and its path. Explain which parts provide structure, styling, and interaction. Describe its current empty state and any save feedback that actually exists. If either is missing, say so. Do not invent a screenshot or claim you tested the browser.' },
+    sections: [
+      { heading: 'Start with a button you recognize', body: 'Ask Replit to show the code behind your recipe form. Then open the app from chat and find the form yourself. The details may differ, but the connection is the same: code becomes an interface you can use.' },
+      { heading: 'What did Replit show you?', body: 'The frontend runs in the browser. Its user interface, or UI, is the part you see and interact with. The code in chat connects the recipe fields and buttons to that visible experience.' },
+      { heading: 'Three jobs behind the screen', body: 'You don’t need to write these languages to recognize their jobs. In a web app, they work together:', items: ['HTML provides structure, such as headings, labels, and buttons. React may describe that structure using a syntax called JSX.', 'CSS controls appearance, such as the space between recipe cards and the color of a button.', 'JavaScript handles interaction, such as filtering recipes when you type. TypeScript adds checks to JavaScript code.'] },
+      { heading: 'A helpful interface answers back', body: 'Try saving a recipe in your app. Does the recipe appear? Does anything explain an empty title? Useful feedback makes the result clear. If feedback is missing, you have found a specific improvement, not failed the lesson. Next, you’ll follow the logic behind that action.' },
+    ],
+    replitExample: '',
+    quiz: [
+      { prompt: 'Which part is the user interface?', choices: ['The recipe form and buttons you use', 'Only the saved recipe data', 'Only the project settings'], answer: 0 },
+      { prompt: 'What controls the spacing and colors of recipe cards?', choices: ['Account permissions', 'CSS styles', 'A database record'], answer: 1 },
+      { prompt: 'Why show a message when a recipe title is missing?', choices: ['To add more decoration', 'To prove the app has a backend', 'To explain what needs fixing so someone can continue'], answer: 2 },
+    ],
+  },
+  {
+    module: 'App Foundations', title: 'Backend & Logic', duration: '4 min', video: 'Follow the Save button',
+    summary: 'A button is only the start. When you select Save, your app follows instructions: check the recipe, update the collection, and remember the result. That is app logic.',
+    outcomes: ['Trace the logic behind saving a recipe', 'Explain why app logic does not always need a backend', 'Recognize work that belongs on a server'],
+    projectTask: { id: 'backend-logic', label: 'Follow my Save action', prompt: 'Read this recipe project without changing it. Trace saving a recipe from the form through validation to storage. Use actual file paths and one short relevant code excerpt. Say whether the logic runs in the browser or on a server, and whether an application backend exists. Do not assume a backend exists just because a development server is running. Separate observed behavior from suggested improvements.' },
+    sections: [
+      { heading: 'Follow one recipe', body: 'Ask Replit to trace the Save action in your project. You are looking for a short story: what happens first, what happens next, and where the recipe ends up.' },
+      { heading: 'What did Replit show you?', body: 'Logic means the rules and steps the app follows. Checking a title, adding a recipe, and filtering a list are all logic. Your first recipe app can do these jobs in the browser. Logic does not automatically mean backend.' },
+      { heading: 'When does a backend help?', body: 'A backend is application code that runs on a server rather than in the reader’s browser. It can check permissions, work with shared data, or call a service using a secret. People can inspect and change browser code, so important access checks cannot rely on the interface alone.' },
+      { heading: 'A request connects the two', body: 'For a future shared recipe collection, the interface could send a Save request to the backend. The backend would check access, save the recipe, and return a result. An API is the agreed way those parts exchange requests and responses. That is a possible next version, not a claim that your app already works this way. Next, you’ll explore where recipes are remembered.' },
+    ],
+    replitExample: '',
+    quiz: [
+      { prompt: 'Does checking a recipe title always require a backend?', choices: ['Yes, every button needs a server', 'Yes, because browsers cannot run logic', 'No, that check can run in the browser'], answer: 2 },
+      { prompt: 'Which job needs a trusted server-side check?', choices: ['Whether someone may edit a shared family recipe', 'The spacing between two buttons', 'The color of a heading'], answer: 0 },
+      { prompt: 'What is an API used for here?', choices: ['Choosing the app’s font', 'Exchanging requests and responses between parts of the app', 'Replacing every project file'], answer: 1 },
+    ],
+  },
+  {
+    module: 'App Foundations', title: 'Databases', duration: '4 min', video: 'Where your recipes are remembered',
+    summary: 'You save a recipe, close the page, and come back later. How does the app remember it? Let’s check where your first version keeps its recipes.',
+    outcomes: ['Identify where the recipe app currently saves data', 'Explain a database record using a recipe', 'Distinguish browser storage from shared data'],
+    projectTask: { id: 'databases', label: 'Find my saved recipe logic', prompt: 'Inspect how this recipe app persists recipes, without modifying code or reading private recipe contents. Show actual file paths and a short excerpt of the storage logic. Does it use browser storage, a database, or something else? Explain what a refresh, clearing browser data, and a second device mean for this implementation. Separately outline what would change for shared recipes. Do not create a database or claim sharing already works.' },
+    sections: [
+      { heading: 'Find out before adding more', body: 'The original request asked for browser storage. Ask Replit to inspect what was actually created. The answer matters more than assuming the prompt was followed perfectly.' },
+      { heading: 'What did Replit show you?', body: 'Browser storage belongs to this app’s address in this browser. It can survive a refresh, but it does not automatically travel to another device. Clearing browser data can remove it. Use a made-up recipe when you test, not your only copy of a favorite.' },
+      { heading: 'A database gives information a shared home', body: 'A database organizes information so an app can find and update it. A recipe can be a record with fields such as an ID, name, ingredients, and instructions. The ID distinguishes two recipes even if both are called Pancakes.' },
+      { heading: 'What about the family collection?', body: 'To load recipes across devices, a later version could save them in a shared database. That does not automatically make them public or give family members permission. Access rules still matter. This lesson inspects your current storage; it does not migrate or erase your recipes. Next, you’ll consider recipe photos.' },
+    ],
+    replitExample: '',
+    quiz: [
+      { prompt: 'Your app uses browser storage. Will recipes automatically appear on another device?', choices: ['Yes, because the app has a link', 'No, browser storage does not automatically sync across devices', 'Only if both devices have the same screen size'], answer: 1 },
+      { prompt: 'Why give each recipe an ID?', choices: ['To distinguish records even when names match', 'To make every recipe public', 'To replace the ingredients'], answer: 0 },
+      { prompt: 'Does adding a shared database give everyone permission to read its recipes?', choices: ['Yes, sharing and permission are the same', 'Yes, if the Save button is hidden', 'No, the app still needs access rules'], answer: 2 },
+    ],
+  },
+  {
+    module: 'App Foundations', title: 'File Storage', duration: '4 min', video: 'Give recipe photos a home',
+    summary: 'A recipe name is text. A photo of your pancakes is a file. Your app can use both, but they have different storage needs.',
+    outcomes: ['Distinguish project files from uploaded files', 'Explain how a recipe can reference a photo', 'Identify checks needed before accepting uploads'],
+    projectTask: { id: 'file-storage', label: 'Explore photos and files', prompt: 'Inspect this recipe project without modifying it. Identify any bundled recipe images or upload functionality using actual paths. If uploads are absent, say that clearly. Explain the difference between an image shipped with the code and a photo uploaded later. Outline a possible photo upload with a storage reference, size/type checks, and access rules. Do not upload anything, add services, or show credentials.' },
+    sections: [
+      { heading: 'Does your app already have photos?', body: 'Ask Replit to check. A decorative image included with the project is not the same as an upload feature. It is completely fine if your simple recipe app has neither yet.' },
+      { heading: 'What did Replit show you?', body: 'Project files help build the app. Uploaded files arrive when someone uses it. A photo saved later needs a durable home, not just a temporary file on the running server.' },
+      { heading: 'Connect a photo to its recipe', body: 'Object storage is designed to keep files such as images. A recipe record can store a reference to its photo while the image itself lives in file storage. Think of the reference as the address of the photo, not the photo itself.' },
+      { heading: 'A useful upload has boundaries', body: 'Before adding uploads, decide which file types and sizes are allowed, and who can view or remove them. A photo is not private just because its link is hard to guess. Your app needs to enforce access. Next, you’ll explore who should be allowed into the family recipe collection.' },
+    ],
+    replitExample: '',
+    quiz: [
+      { prompt: 'Which item is an uploaded file?', choices: ['The recipe title field', 'A photo someone adds while using the app', 'The CSS rule for a button'], answer: 1 },
+      { prompt: 'What can a recipe record store to connect it to a photo?', choices: ['A reference to the stored file', 'The app’s color palette', 'Someone’s password'], answer: 0 },
+      { prompt: 'Does an obscure photo link guarantee privacy?', choices: ['Yes, nobody can ever find it', 'Yes, if the filename is long', 'No, private files need enforced access rules'], answer: 2 },
+    ],
+  },
+  {
+    module: 'App Foundations', title: 'Users & Access', duration: '4 min', video: 'Invite your family thoughtfully',
+    summary: 'Your first recipe app was just for you. If you invite your family, the app needs to know who is visiting and what they are allowed to do.',
+    outcomes: ['Distinguish signing in from having permission', 'Choose simple access rules for shared recipes', 'Recognize that Learn sign-in is separate from app sign-in'],
+    projectTask: { id: 'users-access', label: 'Explore access in my app', prompt: 'Inspect authentication and authorization in this recipe app without changing it or reading personal data. State whether app sign-in and server-side permission checks exist, with actual file references if they do. Do not confuse signing into Replit or Learn with signing into this app. If absent, explain a proposed family-owner/member access model and where checks would be needed. Do not add accounts, invite anyone, or change access.' },
+    sections: [
+      { heading: 'Check what exists today', body: 'Ask Replit to inspect access in your app. Your original prompt said no sign-in. Being signed into Learn or Replit does not mean the recipe app has its own family accounts.' },
+      { heading: 'What did Replit show you?', body: 'Authentication verifies identity: who is signing in? Authorization checks permission: may this person view or change this recipe? An app can recognize someone without granting them access to every collection.' },
+      { heading: 'Keep the first rules small', body: 'For a future shared collection, you might let an owner invite family members and let members add recipes. Decide who can edit or delete someone else’s recipe. There is no need to invent ten roles when two explain the real responsibilities.' },
+      { heading: 'A hidden button is not protection', body: 'Hiding Delete helps explain the interface, but it does not secure shared data. The backend must check permission when a request arrives. Family access is a future change to review and test, not something this inspection enables. Next, you’ll see how an app can connect to another service.' },
+    ],
+    replitExample: '',
+    quiz: [
+      { prompt: 'What does authentication check?', choices: ['Who someone is', 'Which recipes taste best', 'The screen size'], answer: 0 },
+      { prompt: 'A family member is signed in. May they delete every recipe?', choices: ['Always', 'Only if the app’s permission rules allow it', 'Only if they know the recipe name'], answer: 1 },
+      { prompt: 'Why is hiding Delete insufficient for protecting shared recipes?', choices: ['Buttons cannot be hidden', 'Every family member needs to delete recipes', 'The backend must also reject unauthorized requests'], answer: 2 },
+    ],
+  },
+  {
+    module: 'App Foundations', title: 'Integrations', duration: '4 min', video: 'Connect one useful service',
+    summary: 'Imagine sending yourself a shopping list from your recipe app. Instead of building an email service, your app could connect to an existing one. That connection is an integration.',
+    outcomes: ['Explain an integration with a recipe app example', 'Identify where private service credentials belong', 'Describe a safe response when a service fails'],
+    projectTask: { id: 'integrations', label: 'Explore my app’s connections', prompt: 'Inspect this recipe app for existing external service calls without changing anything or revealing secrets. Show actual file paths if any exist; say clearly if none do. Then describe, as a proposal only, how an email shopping-list integration could work: data sent, server-side credentials, and failure feedback. Do not install packages, connect accounts, send email, or enable paid services.' },
+    sections: [
+      { heading: 'Look for connections', body: 'Ask Replit which external services your app actually uses. A small browser-only recipe app may not need any. The activity also explores one possible addition without connecting an account or sending an email.' },
+      { heading: 'What did Replit show you?', body: 'An integration lets your app use a capability from another service. An API is how the two communicate. For a shopping-list email, the app would send selected ingredients and a recipient to an email service. Only send the information the task needs.' },
+      { heading: 'Keep private keys out of the browser', body: 'Some services require a private API key, a credential that allows the app to make requests. Keep private keys in a protected server environment, not in browser code, lesson chat, or a public file. A backend can use the key without handing it to the person opening the app.' },
+      { heading: 'Plan for a missed delivery', body: 'A service can be unavailable. Your app should say the email was not confirmed, preserve the shopping list, and offer a safe next step. It should not claim success because a button was pressed. When retries are needed, avoid sending duplicate emails.' },
+      { heading: 'You have a map of your app', body: 'You followed one recipe app from its files to its interface, logic, storage, access, and possible connections. You don’t need to remember every technical term. You now know what to ask, where to look, and what to check before adding more. That completes App foundations. The next module focuses on building and improving features.' },
+    ],
+    replitExample: '',
+    quiz: [
+      { prompt: 'What would an email integration help the recipe app do?', choices: ['Replace all its code', 'Automatically make every recipe public', 'Use an existing service to send a shopping list'], answer: 2 },
+      { prompt: 'Where should a private email-service API key live?', choices: ['In browser code', 'In a protected server environment', 'In a recipe description'], answer: 1 },
+      { prompt: 'The email service times out. What is a helpful response?', choices: ['Keep the list and explain that delivery was not confirmed', 'Delete the shopping list', 'Always show Sent successfully'], answer: 0 },
+    ],
+  },
+];

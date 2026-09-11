@@ -2,7 +2,7 @@
 
 Standalone Replit Learn MVP extracted from commit `ff17310402fc97167cf72ce8d5f1fa6e32d34bd8` on the `platform/fumadocs` migration of `replit-docs`.
 
-The project preserves the current Learn experience while removing its runtime and content dependencies on the parent documentation repository. It includes the existing 53 lessons, the two-level module and lesson navigation, Replit styling and themes, Replit sign-in, Ask AI, and read-only project context through the Replit MCP server.
+The project preserves the current Learn experience while removing its runtime and content dependencies on the parent documentation repository. It includes the existing 53 lessons, five course pillars, Replit styling and themes, Replit sign-in, Ask AI, and read-only project context through the Replit MCP server.
 
 ## Architecture
 
@@ -36,7 +36,7 @@ cp .dev.vars.example .dev.vars
 pnpm dev:auth
 ```
 
-Open [http://localhost:4173/learn](http://localhost:4173/learn). Add `OPENAI_API_KEY` to `.dev.vars` for generated answers grounded in Learn content. Without it, Learn questions use the extractive fallback; project questions still use the Replit MCP server after sign-in.
+Open [http://localhost:4173](http://localhost:4173). Add `OPENAI_API_KEY` to `.dev.vars` for generated answers grounded in Learn content. Without it, Learn questions use the extractive fallback; project questions still use the Replit MCP server after sign-in.
 
 The Replit Run button uses this full-stack command.
 
@@ -64,7 +64,17 @@ The Worker uses the standalone `LEARN_VECTORIZE` binding when a Learn-owned `rep
 
 ## Content
 
-For this MVP, lesson content remains in `src/learn-content.ts` to preserve the exact migrated interface. The Fumadocs compiler is ready for a later, incremental MDX conversion. The proposed five-pillar curriculum is intentionally not included yet.
+For this MVP, lesson content remains in `src/learn-content.ts` to preserve the migrated interface. The Fumadocs compiler is ready for a later, incremental MDX conversion.
+
+The navigation groups Learn into five pillars without moving the existing lesson URLs:
+
+1. Discover Replit
+2. Operate
+3. Design
+4. Build
+5. Admin
+
+The existing 53 lessons remain intact. App Foundations, AI Foundations, and Agent Foundations now sit under Discover Replit. Additional lightweight prototype lessons demonstrate the missing Discover, Operate, and Admin paths; they are not final curriculum.
 
 ## Configuration
 
@@ -83,7 +93,7 @@ Do not commit `.dev.vars` or any other secret file.
 Included:
 
 - Current Learn pages and interaction patterns
-- Module → lesson navigation
+- Pillar → module → lesson navigation
 - Existing CSS, fonts, logos, theme controls, and responsive behavior
 - Replit sign-in, Ask AI, and Replit MCP integration
 - Standalone development and build configuration
@@ -91,6 +101,6 @@ Included:
 Not included:
 
 - CI/CD or deployment automation
-- New five-pillar course content
+- Full rewrites of the existing lessons or finalized five-pillar curriculum
 - Persistent course progress or quiz scoring
 - Cloud resource provisioning for the declared Learn Vectorize index
