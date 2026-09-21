@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-21T14:39:06.461Z",
+  "generatedAt": "2026-09-21T14:40:35.678Z",
   "mode": "full",
-  "hash": "fc451238c552e9c5b720f3505542774021b2f4566a595b8bfe35c7f3a5e3173f",
+  "hash": "1dc0ed22c42f07de67c4ea565ee3401526a59462080708411029f019c0b7cbb0",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "07ca5219c8b108771546",
@@ -960,16 +960,6 @@
       "heading": "3. Turn your choices into a checklist",
       "text": "Replit 101\nOnce you like the options, let’s put everything in one place. Keep the checklist in this chat so you can return to it as you prepare. We’ll use the same list in the next lesson to check your progress each week.\nTurn the party supplies we chose into a checklist in this chat. Give each item an ID, quantity, product link, estimated cost, buy-by date, purchase status, and notes. Use “Not started,” “Ordered,” and “Delivered” for purchases, and don’t mark anything bought unless I’ve confirmed it. Add a separate preparation section for invitations and RSVPs, the cake, and planning games. Keep the total within our agreed budget, and show unknown costs separately. Ask about missing details rather than guessing. Don’t place orders or send invitations.\nAlready have the plates at home? Bought decorations in a shop? Tell Replit and ask it to update the notes. Your updates matter just as much as an email receipt.",
       "url": "/learn/replit-101/work-effectively-with-replit#3-turn-your-choices-into-a-checklist",
-      "pageUrl": "/learn/replit-101/work-effectively-with-replit",
-      "sourcePath": "src/learn-content.ts#bcdfc673c3ead9df1416"
-    },
-    {
-      "id": "bcdfc673c3ead9df1416:004",
-      "sourceId": "bcdfc673c3ead9df1416",
-      "title": "Create a checklist",
-      "heading": "Your turn",
-      "text": "Show me our latest birthday checklist and estimated shopping total. Highlight anything we still need to choose or verify before buying. Keep this list in our planning chat for the weekly review we’ll set up next.\nI searched for supplies that fit my theme, guest count, and budget.\nI opened product links and checked prices, quantities, and delivery details.\nI reviewed the checklist and added anything I already have or have purchased.",
-      "url": "/learn/replit-101/work-effectively-with-replit#your-turn",
       "pageUrl": "/learn/replit-101/work-effectively-with-replit",
       "sourcePath": "src/learn-content.ts#bcdfc673c3ead9df1416"
     },

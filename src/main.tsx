@@ -607,7 +607,7 @@ function LessonPage({
           {activityConfirmed ? <Icons.Check size={20} aria-hidden="true" /> : <LessonUnlockIcon />}
           <span>{lesson.activityConfirmation}</span>
         </button>
-        <small aria-live="polite">{activityConfirmed ? 'Success! Your quiz is unlocked.' : 'Confirm once you’re connected to unlock the quiz. This records your progress, not a live account check.'}</small>
+        <small aria-live="polite">{activityConfirmed ? 'Success! Your quiz is unlocked.' : 'Confirm you’ve completed the activity to unlock the quiz. This records your progress; it doesn’t verify actions in Replit.'}</small>
       </div>}
       {activityConfirmed && <section className="lesson-quiz" id={lesson.activityConfirmation ? 'confirmed-activity-quiz' : undefined}>
         <div className="quiz-heading"><span>{lesson.quiz.length} {lesson.quiz.length === 1 ? 'question' : 'questions'}</span><p className="eyebrow">CHECK YOUR UNDERSTANDING</p></div>
