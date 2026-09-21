@@ -40,6 +40,7 @@ export function learnDisplayTitle(value: string) {
     'Replit 101': 'Discover Replit',
     'What You Can Do with Replit': 'Welcome to Replit',
     'From Conversation to Outcome': 'Start with a chat',
+    'Add the birthday to your calendar': 'Use your tools',
     'Build and Publish a Simple App': 'Build your first app',
     'Create a Design and Image': 'Explore design and create an image',
   };
