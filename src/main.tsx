@@ -521,7 +521,7 @@ function LessonPage({
           <h2>{section.heading}</h2>
           <p>{section.body}</p>
           {section.prompt && <blockquote className="lesson-example-prompt"><p>{section.prompt}</p></blockquote>}
-          {lesson.promptGate && section.prompt && <div className="practice-actions"><button type="button" onClick={async () => {
+          {(lesson.promptGate || lesson.copyPrompts) && section.prompt && <div className="practice-actions"><button type="button" onClick={async () => {
             try { await navigator.clipboard.writeText(section.prompt!); setCopiedPrompt(section.prompt!); }
             catch { setCopiedPrompt('failed'); }
           }}>{copiedPrompt === section.prompt ? 'Copied' : 'Copy prompt'}</button><span role="status">{copiedPrompt === 'failed' ? 'Select the prompt above and copy it manually.' : 'Paste it into Replit and send it there.'}</span></div>}
