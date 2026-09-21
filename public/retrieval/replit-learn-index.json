@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-21T14:43:06.300Z",
+  "generatedAt": "2026-09-21T14:46:37.945Z",
   "mode": "full",
-  "hash": "28715269fb942656fdf7f1d53fae7f5dc6b3fea41780d807a76c328033f42ef1",
+  "hash": "387edc535caae75f9b6a0b0162c41be848ca89fdb51716578bb8cde6dad9e24f",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "07ca5219c8b108771546",
@@ -998,7 +998,7 @@
       "sourceId": "c29185cacb2ae6783540",
       "title": "Create a Routine",
       "heading": "3. See how preparations are going",
-      "text": "Replit 101\nLet’s try one check-in together before making it a weekly habit. Fill in the brackets below with your planning start date, invitation subject, and the shops or order subjects relevant to your party. Replit will use those details to focus on the right emails.\nLet’s check how our birthday preparations are going. Review our latest checklist and search Gmail for messages since [planning start date] about [invitation subject] and [party suppliers or order subjects]. Tell me who has explicitly accepted or declined, and flag unclear replies. Look for receipts and order confirmations that clearly match our checklist items. Mark confirmed orders as “Ordered,” not “Delivered,” and link to the emails supporting each update. Keep my manual updates. If there’s no matching email, say “No email evidence found” rather than assuming the task isn’t done. Flag uncertain matches, cancellations, or refunds. Show the updated checklist and what still needs attention here in the chat. Don’t send messages, change the calendar, buy anything, or create a Routine yet.\nTake a look at the report and open a supporting email. Does it match? An order confirmation doesn’t mean the parcel has arrived, and silence from a guest doesn’t mean “no.” This review checks email replies, which may differ from the response shown in Google Calendar.",
+      "text": "Replit 101\nLet’s try a quick check-in. In the chat with your checklist, ask Replit to look for this week’s purchase confirmations in Gmail and update your list.\nCheck my Gmail for items I purchased this week that are on our birthday checklist. Mark the matching items as ordered and show me the updated checklist with links to the confirmation emails.\nCheck the matches before moving on. “Ordered” means you’ve bought the item, not that it has arrived. If you bought something in person, tell Replit so it can update that too.",
       "url": "/learn/replit-101/create-a-routine#3-see-how-preparations-are-going",
       "pageUrl": "/learn/replit-101/create-a-routine",
       "sourcePath": "src/learn-content.ts#c29185cacb2ae6783540"
