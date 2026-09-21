@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-21T14:46:37.945Z",
+  "generatedAt": "2026-09-21T14:47:18.175Z",
   "mode": "full",
-  "hash": "387edc535caae75f9b6a0b0162c41be848ca89fdb51716578bb8cde6dad9e24f",
+  "hash": "b7eb8f8fd354f77624e0b800adef14fce1fa443017c131c2042df03faa77c0b6",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "07ca5219c8b108771546",
@@ -1008,7 +1008,7 @@
       "sourceId": "c29185cacb2ae6783540",
       "title": "Create a Routine",
       "heading": "4. Make it a weekly check-in",
-      "text": "Replit 101\nHappy with the review? Let’s have Replit do this each week. In Replit, we call this creating a Routine. For example, every Monday morning, Replit can check your party emails and give you an update on who’s coming, what you’ve ordered, and what’s still on your checklist. Choose a day, time, and time zone that suit you. If the party is tomorrow, try this with a later practice date so a weekly schedule makes sense.\nLet’s make this a weekly Routine called “Birthday preparation check-in,” every Monday at 9:00 AM, Europe/Zurich time. Repeat the Gmail and checklist review we just tried. Include our checklist, party date, email search details, and rules for checking receipts and replies in the instructions. Use the latest checklist and my manual updates in this chat, and tell me if you can’t find them. Each week, post the updated checklist, RSVP summary, purchase updates with email links, anything uncertain, and three suggested next steps here. Don’t send messages, change calendar events, or make purchases. Show me the schedule, instructions, and per-run budget before activating it.\nRoutines require a paid plan and available workspace access. If you’re not ready to activate one, that’s fine: you can review the proposal and run the check-in manually instead.",
+      "text": "Replit 101\nHappy with the review? Let’s have Replit do this each week. In Replit, we call this creating a Routine. For example, every Thursday morning, Replit can check your purchase confirmations and update your checklist. Ask in the same chat so Replit knows which result you mean. If the party is tomorrow, try this with a later practice date so a weekly schedule makes sense.\nI like this result. Can you please turn it into a routine and run it every Thursday morning?\nRoutines require a paid plan and available workspace access. If you’re not ready to activate one, that’s fine: you can review the proposal and run the check-in manually instead.",
       "url": "/learn/replit-101/create-a-routine#4-make-it-a-weekly-check-in",
       "pageUrl": "/learn/replit-101/create-a-routine",
       "sourcePath": "src/learn-content.ts#c29185cacb2ae6783540"
@@ -1018,7 +1018,7 @@
       "sourceId": "c29185cacb2ae6783540",
       "title": "Create a Routine",
       "heading": "5. Take a look inside your Routine",
-      "text": "Replit 101\nReplit will show you a proposal before the weekly check-in starts. Let’s take a moment to read it together. These details tell Replit what to do, when to do it, and how much it can spend on each run. If something doesn’t match what you had in mind, adjust it before confirming.\nName: “Birthday preparation check-in” helps you recognize this Routine later.\nInstructions: review our checklist, look for relevant RSVP emails and purchase confirmations, and report what still needs attention. Check that the checklist items and email search details are included, with no permission to buy anything or send messages.\nSchedule and time zone: our example is every Monday at 9:00 AM, Europe/Zurich time. Make sure that works for you.\nPer-run budget: this is the budget for Replit to carry out one check-in, not your party-shopping budget. It applies to each run, not to the entire series of weekly reviews. Review the amount before activating.\nExpected result: an updated checklist, RSVP summary, purchase updates with email links, and suggested next steps returned to this chat.",
+      "text": "Replit 101\nReplit will show you a proposal before the weekly check-in starts. Let’s take a moment to read it together. These details tell Replit what to do, when to do it, and how much it can spend on each run. If something doesn’t match what you had in mind, adjust it before confirming.\nName: a name such as “Birthday preparation check-in” helps you recognize this Routine later.\nInstructions: repeat the purchase review we just tried and update the checklist. Check that it uses the right list and does not buy anything or send messages. You can also ask to include RSVP replies if you want to track who’s coming.\nSchedule and time zone: our example is every Thursday morning. Check the exact time and time zone in the proposal and adjust them if needed.\nPer-run budget: this is the budget for Replit to carry out one check-in, not your party-shopping budget. It applies to each run, not to the entire series of weekly reviews. Review the amount before activating.\nExpected result: your updated checklist with links to the purchase confirmation emails, returned to this chat.",
       "url": "/learn/replit-101/create-a-routine#5-take-a-look-inside-your-routine",
       "pageUrl": "/learn/replit-101/create-a-routine",
       "sourcePath": "src/learn-content.ts#c29185cacb2ae6783540"
