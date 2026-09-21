@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-21T14:40:35.678Z",
+  "generatedAt": "2026-09-21T14:42:25.978Z",
   "mode": "full",
-  "hash": "1dc0ed22c42f07de67c4ea565ee3401526a59462080708411029f019c0b7cbb0",
+  "hash": "b02053e80c317b0ef1e4adbbbb5a51f031d7677ca8dda6541089c51d827b3e4c",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "07ca5219c8b108771546",
@@ -1008,7 +1008,7 @@
       "sourceId": "c29185cacb2ae6783540",
       "title": "Create a Routine",
       "heading": "4. Make it a weekly check-in",
-      "text": "Replit 101\nHappy with the review? Let’s have Replit do it each week so you don’t need to keep asking. Monday morning is our example, but choose a day, time, and time zone that suit you. If the party is tomorrow, try this with a later practice date so a weekly schedule makes sense.\nLet’s make this a weekly Routine called “Birthday preparation check-in,” every Monday at 9:00 AM, Europe/Zurich time. Repeat the Gmail and checklist review we just tried. Include our checklist, party date, email search details, and rules for checking receipts and replies in the instructions. Use the latest checklist and my manual updates in this chat, and tell me if you can’t find them. Each week, post the updated checklist, RSVP summary, purchase updates with email links, anything uncertain, and three suggested next steps here. Don’t send messages, change calendar events, or make purchases. Show me the schedule, instructions, and per-run budget before activating it.\nRoutines require a paid plan and available workspace access. If you’re not ready to activate one, that’s fine: you can review the proposal and run the check-in manually instead.",
+      "text": "Replit 101\nHappy with the review? Let’s have Replit do this each week. In Replit, we call this creating a Routine. For example, every Monday morning, Replit can check your party emails and give you an update on who’s coming, what you’ve ordered, and what’s still on your checklist. Choose a day, time, and time zone that suit you. If the party is tomorrow, try this with a later practice date so a weekly schedule makes sense.\nLet’s make this a weekly Routine called “Birthday preparation check-in,” every Monday at 9:00 AM, Europe/Zurich time. Repeat the Gmail and checklist review we just tried. Include our checklist, party date, email search details, and rules for checking receipts and replies in the instructions. Use the latest checklist and my manual updates in this chat, and tell me if you can’t find them. Each week, post the updated checklist, RSVP summary, purchase updates with email links, anything uncertain, and three suggested next steps here. Don’t send messages, change calendar events, or make purchases. Show me the schedule, instructions, and per-run budget before activating it.\nRoutines require a paid plan and available workspace access. If you’re not ready to activate one, that’s fine: you can review the proposal and run the check-in manually instead.",
       "url": "/learn/replit-101/create-a-routine#4-make-it-a-weekly-check-in",
       "pageUrl": "/learn/replit-101/create-a-routine",
       "sourcePath": "src/learn-content.ts#c29185cacb2ae6783540"
