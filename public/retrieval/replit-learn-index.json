@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-21T14:49:57.714Z",
+  "generatedAt": "2026-09-21T14:52:51.153Z",
   "mode": "full",
-  "hash": "05158361f8660dd4f038ebf895bb7a76e2ac789980e209dd52e1848a6bb6f9cb",
+  "hash": "7ebd66cfd55f57488b3de8765b7d435226249901b47b3a69d51d023d7ad0a593",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "07ca5219c8b108771546",
@@ -1044,21 +1044,11 @@
       "sourcePath": "src/learn-content.ts#c29185cacb2ae6783540"
     },
     {
-      "id": "c29185cacb2ae6783540:008",
-      "sourceId": "c29185cacb2ae6783540",
-      "title": "Create a Routine",
-      "heading": "Your turn",
-      "text": "Give me a quick recap of our birthday check-in: which checklist and emails it will review, when it will run, the time zone and budget, and where I can read the results. Remind me how to turn it off after the party. Don’t activate it or change any settings in this recap.\nI found my checklist from the previous lesson and added any progress updates.\nI tried the Gmail review, or reviewed the example without connecting an account.\nI checked the weekly schedule, time zone, and budget before deciding whether to activate it.\nI know where to read my updates and how to turn the Routine off after the party.",
-      "url": "/learn/replit-101/create-a-routine#your-turn",
-      "pageUrl": "/learn/replit-101/create-a-routine",
-      "sourcePath": "src/learn-content.ts#c29185cacb2ae6783540"
-    },
-    {
       "id": "91a21c98ad3525889549:000",
       "sourceId": "91a21c98ad3525889549",
       "title": "Build your first app",
       "heading": "Overview",
-      "text": "Replit 101\nYour chat has helped you make a plan. Now you can turn part of that plan into something you can use: a small app for organizing gathering activities.\nDescribe one manageable first version\nTry the app in Preview\nRequest and test one improvement\n",
+      "text": "Replit 101\nYou’ve planned the birthday, picked a theme, and started getting everything ready. Now let’s impress your friends with a little RSVP app! Instead of sending just another message, you can share a party page where guests see the details and tell you if they’re coming.\nBuild a birthday RSVP app from a prompt\nTest the guest experience and saved responses\nPrepare your app to share with friends\n",
       "url": "/learn/replit-101/build-and-publish-a-simple-app",
       "pageUrl": "/learn/replit-101/build-and-publish-a-simple-app",
       "sourcePath": "src/learn-content.ts#91a21c98ad3525889549"
@@ -1067,9 +1057,9 @@
       "id": "91a21c98ad3525889549:001",
       "sourceId": "91a21c98ad3525889549",
       "title": "Build your first app",
-      "heading": "Choose one thing the app should do",
-      "text": "Replit 101\nStart with an activity list. You should be able to add an idea and mark it as chosen. Leave invitations, accounts, and payments for later. A smaller first version gives you something concrete to try sooner.",
-      "url": "/learn/replit-101/build-and-publish-a-simple-app#choose-one-thing-the-app-should-do",
+      "heading": "1. Imagine the invitation you’d love to share",
+      "text": "Replit 101\nPicture your friends opening a page that matches your party theme, with a cheerful welcome, the date and time, and a simple RSVP button. That’s our first app. We’ll keep it focused: guests can reply, and you can see their responses in a private host view. Use fictional party details while you’re learning.",
+      "url": "/learn/replit-101/build-and-publish-a-simple-app#1-imagine-the-invitation-you-d-love-to-share",
       "pageUrl": "/learn/replit-101/build-and-publish-a-simple-app",
       "sourcePath": "src/learn-content.ts#91a21c98ad3525889549"
     },
@@ -1077,9 +1067,9 @@
       "id": "91a21c98ad3525889549:002",
       "sourceId": "91a21c98ad3525889549",
       "title": "Build your first app",
-      "heading": "Ask Replit to build it",
-      "text": "Replit 101\nOpen a new chat or continue your planning chat. Say explicitly that you want a web app. Replit creates a project for the work and writes the files that make the app function. Building can take a few minutes; keep the chat open and respond if it needs clarification.",
-      "url": "/learn/replit-101/build-and-publish-a-simple-app#ask-replit-to-build-it",
+      "heading": "2. Ask Replit to build it",
+      "text": "Replit 101\nContinue in your planning chat and paste the prompt below. Replit will move the app-building work into a project, where you can try it and keep improving it. If you start a new chat instead, include your theme and party details. You don’t need to write the code yourself.\nBuild a birthday RSVP web app that will impress my friends. Use the party theme we chose, with a playful design that looks great on phones. Show the party date and time, and let guests enter a name and choose “Coming” or “Can’t make it.” Save responses in a database and give me a private, sign-in-protected host view to see them. Don’t show guest names or responses publicly. Use fictional details for now, and ask me about anything missing. Don’t publish or send invitations yet.\nGive Replit a little time to build, and answer any questions it asks. The first version gives you something real to try, not just a picture of an app.",
+      "url": "/learn/replit-101/build-and-publish-a-simple-app#2-ask-replit-to-build-it",
       "pageUrl": "/learn/replit-101/build-and-publish-a-simple-app",
       "sourcePath": "src/learn-content.ts#91a21c98ad3525889549"
     },
@@ -1087,9 +1077,9 @@
       "id": "91a21c98ad3525889549:003",
       "sourceId": "91a21c98ad3525889549",
       "title": "Build your first app",
-      "heading": "Try the first version",
-      "text": "Replit 101\nWhen the app is available, open Preview. Add an activity, mark it as chosen, and check that the list changes. A message saying the app is ready is your cue to test, not proof that every detail is right.",
-      "url": "/learn/replit-101/build-and-publish-a-simple-app#try-the-first-version",
+      "heading": "3. Try it as a guest, then as the host",
+      "text": "Replit 101\nOpen Preview and pretend you’ve just received the invitation. Does the page feel like your party? Can you find the RSVP button without hunting for it? Try these checks with made-up guest names before collecting real responses.\nSubmit a “Coming” response and check that you get a clear confirmation.\nTry “Can’t make it” with another test name, and check that an empty name cannot be submitted.\nSign in as the host and check that both responses appear. Refresh to make sure they were saved.\nOpen a signed-out or private browser window and verify that the guest list and host view are not accessible without signing in.\nTry the page at a phone-sized width: the text, form, and buttons should be easy to use.",
+      "url": "/learn/replit-101/build-and-publish-a-simple-app#3-try-it-as-a-guest-then-as-the-host",
       "pageUrl": "/learn/replit-101/build-and-publish-a-simple-app",
       "sourcePath": "src/learn-content.ts#91a21c98ad3525889549"
     },
@@ -1097,9 +1087,9 @@
       "id": "91a21c98ad3525889549:004",
       "sourceId": "91a21c98ad3525889549",
       "title": "Build your first app",
-      "heading": "Make one improvement",
-      "text": "Replit 101\nAsk for an improvement you can see and test. Keep the existing functionality so you can tell whether the change helped.\nKeep adding activities and marking them as chosen. Add a filter that shows only chosen activities. Don’t add accounts or publish the app.\nTry the filter with both chosen and unchosen activities. If it doesn’t work as expected, describe what you did, what happened, and what you wanted instead.",
-      "url": "/learn/replit-101/build-and-publish-a-simple-app#make-one-improvement",
+      "heading": "4. Give it your own finishing touch",
+      "text": "Replit 101\nNow for the fun part: make it feel like an invitation you’d be proud to send. Ask for one change at a time so you can see what improved. You can change the colors, make the title more playful, or add a small celebration after someone replies.\nMake the invitation feel more festive and match our party theme. Add a little confetti animation after a successful RSVP, respecting reduced-motion settings. Keep the form easy to use on a phone, and preserve saved responses and the private host view.\nTry submitting another test RSVP. The celebration should happen after the response is saved, not instead of saving it. If something doesn’t work, tell Replit what you tried and what happened.",
+      "url": "/learn/replit-101/build-and-publish-a-simple-app#4-give-it-your-own-finishing-touch",
       "pageUrl": "/learn/replit-101/build-and-publish-a-simple-app",
       "sourcePath": "src/learn-content.ts#91a21c98ad3525889549"
     },
@@ -1107,9 +1097,9 @@
       "id": "91a21c98ad3525889549:005",
       "sourceId": "91a21c98ad3525889549",
       "title": "Build your first app",
-      "heading": "Sharing is a separate decision",
-      "text": "Replit 101\nYou don’t need to publish to finish this lesson. Before sharing, review access and remove private information. A development preview is not the same as a finished release, and you should not assume its link is private. The Build course goes deeper into the app’s parts, testing, and publishing.",
-      "url": "/learn/replit-101/build-and-publish-a-simple-app#sharing-is-a-separate-decision",
+      "heading": "5. Get ready to share with your friends",
+      "text": "Replit 101\nWhen you’re happy with the app, review the party details and remove test responses before using it for real. Keep a child’s full name, photos, and home address off a public invitation page. Share any private location details separately with your guests. Test that only you can access the host view.\nYou can finish this lesson by testing in Preview. Publishing and sending the link are your next steps when you’re ready, not automatic actions.\nWhen you choose to go live, use Publish in the project and review the publishing settings and any costs.\nOpen the published URL on your phone and test an RSVP again. Confirm it appears in your private host view.\nShare the published link with the people you want to invite. A link can be forwarded, so don’t treat it as private access control.\nReplies in this app are stored in its database. They do not automatically update Google Calendar or appear in Gmail, so your Gmail Routine won’t see them unless you add that connection later.",
+      "url": "/learn/replit-101/build-and-publish-a-simple-app#5-get-ready-to-share-with-your-friends",
       "pageUrl": "/learn/replit-101/build-and-publish-a-simple-app",
       "sourcePath": "src/learn-content.ts#91a21c98ad3525889549"
     },
@@ -1118,7 +1108,7 @@
       "sourceId": "91a21c98ad3525889549",
       "title": "Build your first app",
       "heading": "Your turn",
-      "text": "Build a simple web app for planning a neighborhood gathering. Let me add an activity and mark it as chosen. Use sample information and store the list only in this browser. No accounts, invitations, or payments. Don’t publish it.\nI opened the app in Preview and tried adding and choosing an activity.\nI requested one improvement and tested the changed behavior.",
+      "text": "Help me check our birthday RSVP app before sharing it. Walk me through a test guest response, confirm it is saved, and help me verify that only the signed-in host can see the guest list. Don’t publish or send invitations yet.\nI submitted test RSVPs and checked the saved responses as the host.\nI checked the phone layout and verified that signed-out visitors cannot see the guest list.\nI know publishing and sharing the link are separate decisions.",
       "url": "/learn/replit-101/build-and-publish-a-simple-app#your-turn",
       "pageUrl": "/learn/replit-101/build-and-publish-a-simple-app",
       "sourcePath": "src/learn-content.ts#91a21c98ad3525889549"
