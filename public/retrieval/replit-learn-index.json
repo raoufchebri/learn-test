@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-21T15:55:42.899Z",
+  "generatedAt": "2026-09-21T15:56:37.161Z",
   "mode": "full",
-  "hash": "9658dcfb2b03e86aa170682486f5d4825313824ee8303715dc400cce6fd8d7ef",
+  "hash": "02464f866227bcc7aabf79d14b55f30cd842c44d0766387e579c810f4cfe57af",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "07ca5219c8b108771546",
@@ -85,13 +85,13 @@
     "d4a3cbdf743f453dbf6f",
     "d75b9f94b6aaba3e1a69",
     "d8722d7f4617e53c1a3e",
-    "ded09d76e4d7c2c1ec60",
     "e28443e057369f0026ce",
     "e67e1502420efa342222",
     "eabea78578bd867f3417",
     "f0f7e6fd18426a859c9f",
     "f4fbb3611e7f86a0ff44",
     "f88d7eedae2d65893065",
+    "f8e5847323cbf06cd39c",
     "fc4617ddc5906cf96a4a",
     "fe60ce3e2d9633fb259a"
   ],
@@ -107,6 +107,7 @@
     "853efb91e7a79fcdb489",
     "b719a2ab4f831ce451a0",
     "dd44c619746e2ac32b93",
+    "ded09d76e4d7c2c1ec60",
     "f0afa1289b6d6a708064",
     "f81b580c12d7c42ccb21"
   ],
@@ -192,12 +193,12 @@
     "src/learn-content.ts#d4a3cbdf743f453dbf6f",
     "src/learn-content.ts#d75b9f94b6aaba3e1a69",
     "src/learn-content.ts#d8722d7f4617e53c1a3e",
-    "src/learn-content.ts#ded09d76e4d7c2c1ec60",
     "src/learn-content.ts#e28443e057369f0026ce",
     "src/learn-content.ts#e67e1502420efa342222",
     "src/learn-content.ts#f0f7e6fd18426a859c9f",
     "src/learn-content.ts#f4fbb3611e7f86a0ff44",
     "src/learn-content.ts#f88d7eedae2d65893065",
+    "src/learn-content.ts#f8e5847323cbf06cd39c",
     "src/learn-content.ts#fc4617ddc5906cf96a4a",
     "src/learn-content.ts#fe60ce3e2d9633fb259a",
     "src/main.tsx#eabea78578bd867f3417"
@@ -5644,54 +5645,54 @@
       "sourcePath": "src/learn-content.ts#fc4617ddc5906cf96a4a"
     },
     {
-      "id": "ded09d76e4d7c2c1ec60:000",
-      "sourceId": "ded09d76e4d7c2c1ec60",
-      "title": "Skills",
+      "id": "f8e5847323cbf06cd39c:000",
+      "sourceId": "f8e5847323cbf06cd39c",
+      "title": "Using skills",
       "heading": "Overview",
       "text": "The prompt box\nSkills give Replit reusable instructions for a particular kind of task.\nYour prompt explains what you want, and context provides useful background. A skill adds instructions about how to approach the work. It can help Replit follow a consistent process or produce results in a particular style or format.\nReplit offers predefined skills you can use out of the box. You can also define custom skills for instructions you want to reuse. For now, let’s try a predefined one.\n",
-      "url": "/learn/the-prompt-box/skills",
-      "pageUrl": "/learn/the-prompt-box/skills",
-      "sourcePath": "src/learn-content.ts#ded09d76e4d7c2c1ec60"
+      "url": "/learn/the-prompt-box/using-skills",
+      "pageUrl": "/learn/the-prompt-box/using-skills",
+      "sourcePath": "src/learn-content.ts#f8e5847323cbf06cd39c"
     },
     {
-      "id": "ded09d76e4d7c2c1ec60:001",
-      "sourceId": "ded09d76e4d7c2c1ec60",
-      "title": "Skills",
+      "id": "f8e5847323cbf06cd39c:001",
+      "sourceId": "f8e5847323cbf06cd39c",
+      "title": "Using skills",
       "heading": "1. Open the skills menu",
       "text": "The prompt box\nClick the plus button in the prompt box, then choose Use a skill. Browse the predefined skills or use Search skills to find one.\nPrompt box plus menu with Use a skill selected, a Search skills field, and predefined skills including Ad Creative, AI SDR, and SEO Auditor.\nChoose + → Use a skill to browse predefined instructions. Personal details have been removed.\n/images/prompt-box/skills.webp",
-      "url": "/learn/the-prompt-box/skills#1-open-the-skills-menu",
-      "pageUrl": "/learn/the-prompt-box/skills",
-      "sourcePath": "src/learn-content.ts#ded09d76e4d7c2c1ec60"
+      "url": "/learn/the-prompt-box/using-skills#1-open-the-skills-menu",
+      "pageUrl": "/learn/the-prompt-box/using-skills",
+      "sourcePath": "src/learn-content.ts#f8e5847323cbf06cd39c"
     },
     {
-      "id": "ded09d76e4d7c2c1ec60:002",
-      "sourceId": "ded09d76e4d7c2c1ec60",
-      "title": "Skills",
+      "id": "f8e5847323cbf06cd39c:002",
+      "sourceId": "f8e5847323cbf06cd39c",
+      "title": "Using skills",
       "heading": "2. Select a predefined skill",
       "text": "The prompt box\nFor this example, select Ad Creative, which is shown in the menu. It provides instructions for creating advertising visuals. We’ll use a fictional community event for this exercise, without real names, photos, or addresses.",
-      "url": "/learn/the-prompt-box/skills#2-select-a-predefined-skill",
-      "pageUrl": "/learn/the-prompt-box/skills",
-      "sourcePath": "src/learn-content.ts#ded09d76e4d7c2c1ec60"
+      "url": "/learn/the-prompt-box/using-skills#2-select-a-predefined-skill",
+      "pageUrl": "/learn/the-prompt-box/using-skills",
+      "sourcePath": "src/learn-content.ts#f8e5847323cbf06cd39c"
     },
     {
-      "id": "ded09d76e4d7c2c1ec60:003",
-      "sourceId": "ded09d76e4d7c2c1ec60",
-      "title": "Skills",
+      "id": "f8e5847323cbf06cd39c:003",
+      "sourceId": "f8e5847323cbf06cd39c",
+      "title": "Using skills",
       "heading": "3. Add your request",
       "text": "The prompt box\nThe skill gives Replit a way to approach the task, but you still need to explain your goal. With Ad Creative selected, try this prompt:\nCreate a social media graphic for a fictional community picnic. Use a friendly illustrated park, a picnic table, and bright green and yellow colors. Include the headline “A day in the park” and leave room for a date and location. Don’t publish or send it anywhere.\nReview the result and ask for a change if needed. The skill helps guide the work; it doesn’t replace your instructions or guarantee a perfect result. Once you’ve selected the skill for your request, use the confirmation button below to unlock the quiz.",
-      "url": "/learn/the-prompt-box/skills#3-add-your-request",
-      "pageUrl": "/learn/the-prompt-box/skills",
-      "sourcePath": "src/learn-content.ts#ded09d76e4d7c2c1ec60"
+      "url": "/learn/the-prompt-box/using-skills#3-add-your-request",
+      "pageUrl": "/learn/the-prompt-box/using-skills",
+      "sourcePath": "src/learn-content.ts#f8e5847323cbf06cd39c"
     },
     {
-      "id": "ded09d76e4d7c2c1ec60:004",
-      "sourceId": "ded09d76e4d7c2c1ec60",
-      "title": "Skills",
+      "id": "f8e5847323cbf06cd39c:004",
+      "sourceId": "f8e5847323cbf06cd39c",
+      "title": "Using skills",
       "heading": "Predefined or custom?",
       "text": "The prompt box\nPredefined skills are ready to use. Custom skills let you define reusable instructions, such as a preferred report structure or a team’s writing guidelines. Both can help standardize repeated tasks without making you type the same instructions every time. A skill is not an account connection: it doesn’t grant access to an external service.",
-      "url": "/learn/the-prompt-box/skills#predefined-or-custom",
-      "pageUrl": "/learn/the-prompt-box/skills",
-      "sourcePath": "src/learn-content.ts#ded09d76e4d7c2c1ec60"
+      "url": "/learn/the-prompt-box/using-skills#predefined-or-custom",
+      "pageUrl": "/learn/the-prompt-box/using-skills",
+      "sourcePath": "src/learn-content.ts#f8e5847323cbf06cd39c"
     },
     {
       "id": "35572c47ce24a4720bb3:000",

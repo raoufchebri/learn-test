@@ -456,7 +456,7 @@ courseLessons['The prompt box'] = [
     ],
   },
   {
-    module: 'The prompt box', title: 'Skills', duration: '3 min', video: '', replitExample: '',
+    module: 'The prompt box', title: 'Using skills', duration: '3 min', video: '', replitExample: '',
     summary: 'Skills give Replit reusable instructions for a particular kind of task.',
     introduction: [
       'Your prompt explains what you want, and context provides useful background. A skill adds instructions about how to approach the work. It can help Replit follow a consistent process or produce results in a particular style or format.',
