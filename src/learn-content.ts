@@ -43,7 +43,7 @@ export function learnDisplayTitle(value: string) {
     'Add the birthday to your calendar': 'Use your tools',
     'Work effectively with Replit': 'Create a checklist',
     'Build and Publish a Simple App': 'Build your first app',
-    'Create a Design and Image': 'Explore design and create an image',
+    'Create a Design and Image': 'Explore different designs',
   };
   if (courseLabels[value]) return courseLabels[value];
   // Build is the course name in its welcome page, not the verb.
