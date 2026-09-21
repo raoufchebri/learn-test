@@ -455,6 +455,29 @@ courseLessons['The prompt box'] = [
       { prompt: 'What should you do when sharing a file or URL?', choices: ['Explain how Replit should use it and check that it could access the information', 'Assume every page can be read', 'Leave Replit to guess why you shared it'], answer: 0 },
     ],
   },
+  {
+    module: 'The prompt box', title: 'Tools and integrations', duration: '3 min', video: '', replitExample: '',
+    summary: 'Some tools are built into Replit. Others need a connection to an account you use.',
+    introduction: [
+      'Your prompt tells Replit what you want, and context helps it understand. Tools let it take the next step, such as looking up information or working with your calendar, rather than only writing a response.',
+    ],
+    sections: [
+      { heading: 'Built-in tools', body: 'Replit has built-in tools such as web search. When you ask it to search the web, it can use that tool to find information and bring sources back into the conversation. You don’t need to connect a separate search account.', prompt: 'Search the web for three outdoor Pokémon-themed birthday activities suitable for six-year-olds. Include links to the sources so I can review them.', afterPrompt: 'Read the suggestions and check the sources. This is the same kind of tool use you tried when researching your birthday-party checklist. You describe the goal; Replit uses an available tool to help.' },
+      { heading: 'Some tools need your account', body: 'Searching public web pages is different from reading your calendar or finding a document in your account. Replit needs an authorized connection before it can work with those services. That’s where integrations, also called connectors, come in.' },
+      { heading: 'Integrations connect your tools to Replit', body: 'An integration connects Replit to an external service. You sign in through the connection flow and review the permissions requested. Replit can then use the tools that connection makes available, within those permissions. In the first module, you connected Google Calendar before asking Replit to add the birthday event.' },
+      { heading: 'Ask naturally, connect when needed', body: 'You can describe the task in the prompt box without naming the underlying tool. If the task needs an integration that isn’t connected, Replit can ask you to connect it. You can also manage connections in Settings → Integrations, as we explored in the previous module.', items: [
+        'Check the account and permissions before connecting a service.',
+        'Remember that workspace connections don’t automatically carry over to another workspace.',
+        'Review the details before approving an action that sends, creates, changes, or deletes something.',
+      ] },
+      { heading: 'The distinction to remember', body: 'A tool is something Replit can use to do a task. An integration provides a connection to another service, often with your account’s permission. Some tools are ready to use, like web search; others become available after you connect a service, like Google Calendar.' },
+    ],
+    quiz: [
+      { prompt: 'Which task can use a built-in tool without connecting a separate account?', choices: ['Reading your private calendar', 'Searching public information on the web', 'Finding a private document in your external account'], answer: 1 },
+      { prompt: 'Why did you connect Google Calendar in the first module?', choices: ['To make every web search work', 'To share your password in the chat', 'To authorize Replit to work with your calendar within the granted permissions'], answer: 2 },
+      { prompt: 'What is the difference between a tool and an integration?', choices: ['A tool performs a task; an integration connects Replit to an external service', 'They are both names for a longer prompt', 'Every tool requires a separate sign-in'], answer: 0 },
+    ],
+  },
 ];
 
 courseLessons['Your workspace'] = [

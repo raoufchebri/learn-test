@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-21T15:52:24.158Z",
+  "generatedAt": "2026-09-21T15:52:56.278Z",
   "mode": "full",
-  "hash": "77ce97534b27d5dfeba82fc94d5444598796397cccfeff781db76f96f1418327",
+  "hash": "b855e0d236140135b4201ad02f0fb3b8002b44057893e3436bb8f14050ad7da8",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "07ca5219c8b108771546",
@@ -26,6 +26,7 @@
     "32d3a2e0a23310f193ae",
     "32d63e892d9dd47fd766",
     "34899b5f7a751d00aa8e",
+    "35572c47ce24a4720bb3",
     "3ae77425d4983305cff4",
     "3b030fdcf49b7a9447ff",
     "3dd1b775b44a9d208a44",
@@ -131,6 +132,7 @@
     "src/learn-content.ts#32d3a2e0a23310f193ae",
     "src/learn-content.ts#32d63e892d9dd47fd766",
     "src/learn-content.ts#34899b5f7a751d00aa8e",
+    "src/learn-content.ts#35572c47ce24a4720bb3",
     "src/learn-content.ts#3ae77425d4983305cff4",
     "src/learn-content.ts#3b030fdcf49b7a9447ff",
     "src/learn-content.ts#3dd1b775b44a9d208a44",
@@ -5638,6 +5640,66 @@
       "url": "/learn/the-prompt-box/prompting-and-context#share-what-is-useful-then-review-the-result",
       "pageUrl": "/learn/the-prompt-box/prompting-and-context",
       "sourcePath": "src/learn-content.ts#fc4617ddc5906cf96a4a"
+    },
+    {
+      "id": "35572c47ce24a4720bb3:000",
+      "sourceId": "35572c47ce24a4720bb3",
+      "title": "Tools and integrations",
+      "heading": "Overview",
+      "text": "The prompt box\nSome tools are built into Replit. Others need a connection to an account you use.\nYour prompt tells Replit what you want, and context helps it understand. Tools let it take the next step, such as looking up information or working with your calendar, rather than only writing a response.\n",
+      "url": "/learn/the-prompt-box/tools-and-integrations",
+      "pageUrl": "/learn/the-prompt-box/tools-and-integrations",
+      "sourcePath": "src/learn-content.ts#35572c47ce24a4720bb3"
+    },
+    {
+      "id": "35572c47ce24a4720bb3:001",
+      "sourceId": "35572c47ce24a4720bb3",
+      "title": "Tools and integrations",
+      "heading": "Built-in tools",
+      "text": "The prompt box\nReplit has built-in tools such as web search. When you ask it to search the web, it can use that tool to find information and bring sources back into the conversation. You don’t need to connect a separate search account.\nSearch the web for three outdoor Pokémon-themed birthday activities suitable for six-year-olds. Include links to the sources so I can review them.\nRead the suggestions and check the sources. This is the same kind of tool use you tried when researching your birthday-party checklist. You describe the goal; Replit uses an available tool to help.",
+      "url": "/learn/the-prompt-box/tools-and-integrations#built-in-tools",
+      "pageUrl": "/learn/the-prompt-box/tools-and-integrations",
+      "sourcePath": "src/learn-content.ts#35572c47ce24a4720bb3"
+    },
+    {
+      "id": "35572c47ce24a4720bb3:002",
+      "sourceId": "35572c47ce24a4720bb3",
+      "title": "Tools and integrations",
+      "heading": "Some tools need your account",
+      "text": "The prompt box\nSearching public web pages is different from reading your calendar or finding a document in your account. Replit needs an authorized connection before it can work with those services. That’s where integrations, also called connectors, come in.",
+      "url": "/learn/the-prompt-box/tools-and-integrations#some-tools-need-your-account",
+      "pageUrl": "/learn/the-prompt-box/tools-and-integrations",
+      "sourcePath": "src/learn-content.ts#35572c47ce24a4720bb3"
+    },
+    {
+      "id": "35572c47ce24a4720bb3:003",
+      "sourceId": "35572c47ce24a4720bb3",
+      "title": "Tools and integrations",
+      "heading": "Integrations connect your tools to Replit",
+      "text": "The prompt box\nAn integration connects Replit to an external service. You sign in through the connection flow and review the permissions requested. Replit can then use the tools that connection makes available, within those permissions. In the first module, you connected Google Calendar before asking Replit to add the birthday event.",
+      "url": "/learn/the-prompt-box/tools-and-integrations#integrations-connect-your-tools-to-replit",
+      "pageUrl": "/learn/the-prompt-box/tools-and-integrations",
+      "sourcePath": "src/learn-content.ts#35572c47ce24a4720bb3"
+    },
+    {
+      "id": "35572c47ce24a4720bb3:004",
+      "sourceId": "35572c47ce24a4720bb3",
+      "title": "Tools and integrations",
+      "heading": "Ask naturally, connect when needed",
+      "text": "The prompt box\nYou can describe the task in the prompt box without naming the underlying tool. If the task needs an integration that isn’t connected, Replit can ask you to connect it. You can also manage connections in Settings → Integrations, as we explored in the previous module.\nCheck the account and permissions before connecting a service.\nRemember that workspace connections don’t automatically carry over to another workspace.\nReview the details before approving an action that sends, creates, changes, or deletes something.",
+      "url": "/learn/the-prompt-box/tools-and-integrations#ask-naturally-connect-when-needed",
+      "pageUrl": "/learn/the-prompt-box/tools-and-integrations",
+      "sourcePath": "src/learn-content.ts#35572c47ce24a4720bb3"
+    },
+    {
+      "id": "35572c47ce24a4720bb3:005",
+      "sourceId": "35572c47ce24a4720bb3",
+      "title": "Tools and integrations",
+      "heading": "The distinction to remember",
+      "text": "The prompt box\nA tool is something Replit can use to do a task. An integration provides a connection to another service, often with your account’s permission. Some tools are ready to use, like web search; others become available after you connect a service, like Google Calendar.",
+      "url": "/learn/the-prompt-box/tools-and-integrations#the-distinction-to-remember",
+      "pageUrl": "/learn/the-prompt-box/tools-and-integrations",
+      "sourcePath": "src/learn-content.ts#35572c47ce24a4720bb3"
     },
     {
       "id": "4ccf1fa6fbf4bccd64db:000",
