@@ -404,3 +404,33 @@ const courseBriefs: Record<string, LessonBrief[]> = {
 export const courseLessons: Record<string, LearnLesson[]> = Object.fromEntries(
   Object.entries(courseBriefs).map(([module, briefs]) => [module, module === 'Replit 101' ? discoverLessons : briefs.map((brief) => guidedLesson(module, brief))]),
 );
+
+courseLessons['Your workspace'] = [
+  {
+    module: 'Your workspace',
+    title: 'What is a workspace?',
+    duration: '3 min',
+    video: '',
+    replitExample: '',
+    summary: 'When you log into Replit, your workspace is your starting point. It brings together your chats, projects, and routines in one place.',
+    introduction: [
+      'Think of your workspace as the area where you organize your work and build your projects. You can start a conversation, return to an app you’re building, or find a routine you’ve set up.',
+      'In Discover Replit, you used these different parts to plan a birthday party and build an invitation app. Your workspace is where that work lives.',
+    ],
+    sections: [
+      { heading: 'A place for your work', body: 'Your workspace brings together several things you’ve already tried:', items: [
+        'Chats: conversations where you explore ideas, ask questions, and get work done.',
+        'Projects: places where you build and keep developing apps and other creations.',
+        'Routines: recurring tasks you’ve set up to run on a schedule.',
+      ] },
+      { heading: 'Your personal workspace', body: 'A personal workspace is for your own work. Projects here belong to you, and you manage their sharing and visibility. Personal does not mean that everything you create must stay visible only to you: you can choose to share a project or publish an app.' },
+      { heading: 'A team workspace', body: 'A team workspace is a shared place for an organization’s work. Projects here belong to the team rather than your personal workspace. Who can see or work on a project depends on the team’s permissions and sharing settings, so not every team member necessarily has access to every project.' },
+      { heading: 'Choose where your work belongs', body: 'Use your personal workspace for your own projects and a team workspace for work that belongs to your team. Before starting a project, check which workspace you’re in. That choice helps determine who owns the project and how access is managed.' },
+    ],
+    quiz: [
+      { prompt: 'What does your workspace bring together?', choices: ['Only published apps', 'Your chats, projects, and routines', 'Only your account settings'], answer: 1 },
+      { prompt: 'Who can access a project in a team workspace?', choices: ['Every team member, without exception', 'Anyone on the internet', 'People allowed by the team’s permissions and sharing settings'], answer: 2 },
+      { prompt: 'What should you check before starting a project?', choices: ['Which workspace you’re in and where the work belongs', 'Whether you have already published an app', 'Whether you know how to write code'], answer: 0 },
+    ],
+  },
+];

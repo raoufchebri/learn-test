@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-21T15:38:15.182Z",
+  "generatedAt": "2026-09-21T15:39:14.701Z",
   "mode": "full",
-  "hash": "a225f4d8ccd9d947d45c2e1c2ab89ef3fde1f774b4ad894fe5943125b84eee45",
+  "hash": "34f612da2333406b84e9926cedac20674a664519b752d3696c93c8a0df3d6287",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "07ca5219c8b108771546",
@@ -29,6 +29,7 @@
     "3b030fdcf49b7a9447ff",
     "3dd1b775b44a9d208a44",
     "44942ce9ded7ce13448f",
+    "4ccf1fa6fbf4bccd64db",
     "500e7770e2d6398c6b7b",
     "501ee0090d79c578ac65",
     "526ea46c27ac8f1c0d94",
@@ -128,6 +129,7 @@
     "src/learn-content.ts#3b030fdcf49b7a9447ff",
     "src/learn-content.ts#3dd1b775b44a9d208a44",
     "src/learn-content.ts#44942ce9ded7ce13448f",
+    "src/learn-content.ts#4ccf1fa6fbf4bccd64db",
     "src/learn-content.ts#500e7770e2d6398c6b7b",
     "src/learn-content.ts#501ee0090d79c578ac65",
     "src/learn-content.ts#526ea46c27ac8f1c0d94",
@@ -5526,6 +5528,56 @@
       "url": "/learn/administer-replit/rollout-usage-and-audit-logs#try-a-small-version",
       "pageUrl": "/learn/administer-replit/rollout-usage-and-audit-logs",
       "sourcePath": "src/learn-content.ts#68ee614c666645019b3b"
+    },
+    {
+      "id": "4ccf1fa6fbf4bccd64db:000",
+      "sourceId": "4ccf1fa6fbf4bccd64db",
+      "title": "What is a Workspace?",
+      "heading": "Overview",
+      "text": "Your workspace\nWhen you log into Replit, your workspace is your starting point. It brings together your chats, projects, and routines in one place.\nThink of your workspace as the area where you organize your work and build your projects. You can start a conversation, return to an app you’re building, or find a routine you’ve set up.\nIn Discover Replit, you used these different parts to plan a birthday party and build an invitation app. Your workspace is where that work lives.\n",
+      "url": "/learn/your-workspace/what-is-a-workspace",
+      "pageUrl": "/learn/your-workspace/what-is-a-workspace",
+      "sourcePath": "src/learn-content.ts#4ccf1fa6fbf4bccd64db"
+    },
+    {
+      "id": "4ccf1fa6fbf4bccd64db:001",
+      "sourceId": "4ccf1fa6fbf4bccd64db",
+      "title": "What is a Workspace?",
+      "heading": "A place for your work",
+      "text": "Your workspace\nYour workspace brings together several things you’ve already tried:\nChats: conversations where you explore ideas, ask questions, and get work done.\nProjects: places where you build and keep developing apps and other creations.\nRoutines: recurring tasks you’ve set up to run on a schedule.",
+      "url": "/learn/your-workspace/what-is-a-workspace#a-place-for-your-work",
+      "pageUrl": "/learn/your-workspace/what-is-a-workspace",
+      "sourcePath": "src/learn-content.ts#4ccf1fa6fbf4bccd64db"
+    },
+    {
+      "id": "4ccf1fa6fbf4bccd64db:002",
+      "sourceId": "4ccf1fa6fbf4bccd64db",
+      "title": "What is a Workspace?",
+      "heading": "Your personal workspace",
+      "text": "Your workspace\nA personal workspace is for your own work. Projects here belong to you, and you manage their sharing and visibility. Personal does not mean that everything you create must stay visible only to you: you can choose to share a project or publish an app.",
+      "url": "/learn/your-workspace/what-is-a-workspace#your-personal-workspace",
+      "pageUrl": "/learn/your-workspace/what-is-a-workspace",
+      "sourcePath": "src/learn-content.ts#4ccf1fa6fbf4bccd64db"
+    },
+    {
+      "id": "4ccf1fa6fbf4bccd64db:003",
+      "sourceId": "4ccf1fa6fbf4bccd64db",
+      "title": "What is a Workspace?",
+      "heading": "A team workspace",
+      "text": "Your workspace\nA team workspace is a shared place for an organization’s work. Projects here belong to the team rather than your personal workspace. Who can see or work on a project depends on the team’s permissions and sharing settings, so not every team member necessarily has access to every project.",
+      "url": "/learn/your-workspace/what-is-a-workspace#a-team-workspace",
+      "pageUrl": "/learn/your-workspace/what-is-a-workspace",
+      "sourcePath": "src/learn-content.ts#4ccf1fa6fbf4bccd64db"
+    },
+    {
+      "id": "4ccf1fa6fbf4bccd64db:004",
+      "sourceId": "4ccf1fa6fbf4bccd64db",
+      "title": "What is a Workspace?",
+      "heading": "Choose where your work belongs",
+      "text": "Your workspace\nUse your personal workspace for your own projects and a team workspace for work that belongs to your team. Before starting a project, check which workspace you’re in. That choice helps determine who owns the project and how access is managed.",
+      "url": "/learn/your-workspace/what-is-a-workspace#choose-where-your-work-belongs",
+      "pageUrl": "/learn/your-workspace/what-is-a-workspace",
+      "sourcePath": "src/learn-content.ts#4ccf1fa6fbf4bccd64db"
     }
   ]
 }

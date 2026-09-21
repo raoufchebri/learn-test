@@ -61,7 +61,7 @@ const courseModules: CourseModule[] = [
     description: "See what Replit can do, then try the core outcomes through small, guided exercises.",
     lessons: courseLessons["Replit 101"],
   },
-  { pillar: "discover", title: "Your workspace", description: "Understand where your work lives and how to find your way around Replit.", lessons: [] },
+  { pillar: "discover", title: "Your workspace", description: "Understand where your work lives and how to find your way around Replit.", lessons: courseLessons["Your workspace"] },
   { pillar: "discover", title: "The prompt box", description: "Ask for what you need, add context, and explore models and modes.", lessons: [] },
   { pillar: "discover", title: "Chats and projects", description: "Understand the difference between chats and projects, including chats inside projects.", lessons: [] },
   { pillar: "discover", title: "Build and Design", description: "Explore building an app and shaping its design on Canvas.", lessons: [] },
@@ -1096,7 +1096,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
               onClick: () => navigate(lessonUrl(module, nextLesson)),
             } : lesson.title === 'You’ve discovered Replit' && LEARN_DEV_MODE ? {
               title: 'Your workspace',
-              onClick: () => navigate('/learn/your-workspace'),
+              onClick: () => navigate('/learn/your-workspace/what-is-a-workspace'),
             } : undefined}
           />
         ) : module && module.lessons.length === 0 && isAvailableModule(module) && canBrowseLessons ? (
