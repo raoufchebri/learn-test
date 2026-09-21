@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-21T14:59:45.844Z",
+  "generatedAt": "2026-09-21T15:03:16.596Z",
   "mode": "full",
-  "hash": "eb487812feb1c7d7a8dc255b240c2be4a5edeb24882d7e7b39c81e836dedc22a",
+  "hash": "01568187c47a00368b8751ef84a6d322f02d5f38079f86803842f7800309481a",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "07ca5219c8b108771546",
@@ -1180,7 +1180,7 @@
       "sourceId": "d46e7c337891ba07fd8b",
       "title": "Create assets",
       "heading": "Overview",
-      "text": "Replit 101\nYou’ve found a look you like. Now let’s add a little surprise: an original Pokémon-inspired creature hidden in one of the trees! We’ll generate its image on Canvas, then ask Replit to add it to the app. An asset is something you use in a design, such as an illustration, background, or icon.\nDescribe an image’s subject, style, and purpose\nRefine an image with a short follow-up\nTry the asset in your birthday app\n",
+      "text": "Replit 101\nYou’ve found a look you like. Now let’s add a little surprise: an original Pokémon-inspired creature hidden in one of the trees! We’ll generate its image on Canvas, then ask Replit to add it to the app. An asset is something you use in a design, such as an illustration, background, or icon.\nDescribe an image’s subject, style, and purpose\nChoose an image model and generate an asset\nTry the asset in your birthday app\n",
       "url": "/learn/replit-101/create-assets",
       "pageUrl": "/learn/replit-101/create-assets",
       "sourcePath": "src/learn-content.ts#d46e7c337891ba07fd8b"
@@ -1200,7 +1200,7 @@
       "sourceId": "d46e7c337891ba07fd8b",
       "title": "Create assets",
       "heading": "2. Create your hidden creature",
-      "text": "Replit 101\nLet’s invent a friendly little forest creature for our Pokémon-themed party. It should feel like a new discovery, not a copy of an existing character. Enter this prompt in the image-generation flow.\nCreate an original Pokémon-inspired forest creature called Mosskip: a tiny mint-green creature with leaf-shaped ears, an acorn cap, amber eyes, and a curled fern tail. Make it friendly and playful, with clean outlines that fit our illustrated park. Show the whole creature on a transparent background, with no text or scenery. Don’t copy an existing Pokémon.\nLook at the result. Can you recognize its face and shape when it’s small? Check that the background is actually transparent so it can sit among the trees without a visible box.",
+      "text": "Replit 101\nLet’s invent a friendly little forest creature for our Pokémon-themed party. Paste the prompt into the image frame. You can choose the image model from the dropdown at the top. For this example, we’re using Google’s Nano Banana, shown here as Nano Banana 2 Lite. Keep the square 1:1 shape and 1K size shown, then click the blue arrow to generate the image.\nCreate an original Pokémon-inspired forest creature called Mosskip: a tiny mint-green creature with leaf-shaped ears, an acorn cap, amber eyes, and a curled fern tail. Make it friendly and playful, with clean outlines that fit our illustrated park. Show the whole creature on a transparent background, with no text or scenery. Don’t copy an existing Pokémon.\nReview the image when it’s ready, including whether the background is transparent. Optionally, you can ask Replit to refine it or change anything you like. If you’re happy with it, go straight to adding it to the app.\nImage-generation frame with the Mosskip prompt, Nano Banana 2 Lite model selected, 1:1 aspect ratio, 1K size, and a blue generate arrow.\nPaste your prompt, choose a model, and generate. This example uses Nano Banana 2 Lite. The screenshot is cropped to remove personal details.\n/images/design-canvas/image-model-prompt.webp",
       "url": "/learn/replit-101/create-assets#2-create-your-hidden-creature",
       "pageUrl": "/learn/replit-101/create-assets",
       "sourcePath": "src/learn-content.ts#d46e7c337891ba07fd8b"
@@ -1209,9 +1209,9 @@
       "id": "d46e7c337891ba07fd8b:003",
       "sourceId": "d46e7c337891ba07fd8b",
       "title": "Create assets",
-      "heading": "3. Refine it if you like",
-      "text": "Replit 101\nMaybe you’d like a cheekier expression or a simpler shape. Keep what you like and ask for one small change.\nKeep Mosskip’s colors and leaf-shaped ears, but give it a cheeky smile and simplify the details so it’s easy to spot at a small size. Keep the background transparent.\nChoose your favorite version. Creating the image doesn’t automatically add it to your working app, so let’s do that next.",
-      "url": "/learn/replit-101/create-assets#3-refine-it-if-you-like",
+      "heading": "Meet Mosskip",
+      "text": "Replit 101\nHere’s the creature generated for our example, with its leaf-shaped ears, acorn cap, and curled fern tail. Your result may look a little different. If you like it, you’re ready to use it; refining it is optional.\nGenerated Mosskip creature with mint-green fur, leaf-shaped ears, an acorn cap, amber eyes, and a curled fern tail, shown on a checkerboard in Canvas.\nThe generated result in Canvas, cropped to remove personal details. This is a screenshot, not the transparent source asset; use the generated image itself when adding it to your app.\n/images/design-canvas/mosskip-result.webp",
+      "url": "/learn/replit-101/create-assets#meet-mosskip",
       "pageUrl": "/learn/replit-101/create-assets",
       "sourcePath": "src/learn-content.ts#d46e7c337891ba07fd8b"
     },
@@ -1219,9 +1219,9 @@
       "id": "d46e7c337891ba07fd8b:004",
       "sourceId": "d46e7c337891ba07fd8b",
       "title": "Create assets",
-      "heading": "4. Hide it in the app",
-      "text": "Replit 101\nIn your project chat, refer to the generated image and ask Replit to use it in the invitation. Our little surprise should be fun to discover without getting in the way of the RSVP.\nAdd the Mosskip image we just created to our birthday app, peeking out from behind one of the trees. When a guest taps it, show “You found Mosskip!” Make it a keyboard-accessible button too. Keep the Poké Ball, RSVP form, saved replies, and private host view working.\nOpen Preview and try finding Mosskip on both desktop and a phone-sized screen. Tap it, then try reaching it with the keyboard. Finally, submit a test RSVP to check that the invitation still works. You’ve created an asset and turned it into a little interactive surprise.",
-      "url": "/learn/replit-101/create-assets#4-hide-it-in-the-app",
+      "heading": "3. Add it to the app",
+      "text": "Replit 101\nIn your project chat, refer to the generated image and ask Replit to use it in the invitation. Creating the image doesn’t automatically add it to the working app, so this is where we put it to use.\nAdd the Mosskip image we just created to our birthday app, peeking out from behind one of the trees. When a guest taps it, show “You found Mosskip!” Make it a keyboard-accessible button too. Keep the Poké Ball, RSVP form, saved replies, and private host view working.\nOpen Preview and try finding Mosskip on both desktop and a phone-sized screen. Tap it, then try reaching it with the keyboard. Finally, submit a test RSVP to check that the invitation still works. You’ve created an asset and turned it into a little interactive surprise.",
+      "url": "/learn/replit-101/create-assets#3-add-it-to-the-app",
       "pageUrl": "/learn/replit-101/create-assets",
       "sourcePath": "src/learn-content.ts#d46e7c337891ba07fd8b"
     },
