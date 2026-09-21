@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-21T14:47:18.175Z",
+  "generatedAt": "2026-09-21T14:49:57.714Z",
   "mode": "full",
-  "hash": "b7eb8f8fd354f77624e0b800adef14fce1fa443017c131c2042df03faa77c0b6",
+  "hash": "05158361f8660dd4f038ebf895bb7a76e2ac789980e209dd52e1848a6bb6f9cb",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "07ca5219c8b108771546",
@@ -1018,7 +1018,7 @@
       "sourceId": "c29185cacb2ae6783540",
       "title": "Create a Routine",
       "heading": "5. Take a look inside your Routine",
-      "text": "Replit 101\nReplit will show you a proposal before the weekly check-in starts. Let’s take a moment to read it together. These details tell Replit what to do, when to do it, and how much it can spend on each run. If something doesn’t match what you had in mind, adjust it before confirming.\nName: a name such as “Birthday preparation check-in” helps you recognize this Routine later.\nInstructions: repeat the purchase review we just tried and update the checklist. Check that it uses the right list and does not buy anything or send messages. You can also ask to include RSVP replies if you want to track who’s coming.\nSchedule and time zone: our example is every Thursday morning. Check the exact time and time zone in the proposal and adjust them if needed.\nPer-run budget: this is the budget for Replit to carry out one check-in, not your party-shopping budget. It applies to each run, not to the entire series of weekly reviews. Review the amount before activating.\nExpected result: your updated checklist with links to the purchase confirmation emails, returned to this chat.",
+      "text": "Replit 101\nHere’s an example of the proposal Replit shows before the weekly check-in starts. Let’s read it together: the Title names your Routine, Schedule says when it runs, and Prompt contains the instructions it will follow. You can review these before choosing Create routine. This card is a proposal, not proof that the Routine is already active.\nTitle: the screenshot uses “Birthday preparation review.” Choose a name you’ll recognize later.\nSchedule: the example runs at 9 AM on Thursdays. The time-zone value is hidden in this image for privacy; check yours before confirming.\nPrompt: check that the instructions repeat your purchase review using the right checklist, without buying anything or sending messages. This example also mentions RSVP replies and other possible checklist sources. Your checklist is in this chat, so you don’t need to connect Notion or Google Drive.\nPer-run budget: no budget field is visible in this screenshot. Review the amount when it is presented during setup. It covers Replit carrying out one check-in, not shopping for party supplies or the entire series of weekly reviews.\nExpected result: your updated checklist with links to the purchase confirmation emails, returned to this chat.\nCreate routine: confirm when the details are right, or choose Not now if you’re only exploring.\nNew routine proposal showing the Title, Thursday 9 AM Schedule, Prompt, Not now, and Create routine controls. The time-zone value is redacted.\nReview the title, schedule, and instructions before creating the Routine. The time zone is redacted; no budget field is visible in this example.\n/images/routine-setup/routine-proposal.webp",
       "url": "/learn/replit-101/create-a-routine#5-take-a-look-inside-your-routine",
       "pageUrl": "/learn/replit-101/create-a-routine",
       "sourcePath": "src/learn-content.ts#c29185cacb2ae6783540"
