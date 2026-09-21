@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-21T15:41:38.946Z",
+  "generatedAt": "2026-09-21T15:44:44.707Z",
   "mode": "full",
-  "hash": "d5c7f84899aae94baa293e5e476ff7d2771280c71585191e49056e6d277a846d",
+  "hash": "73c194df97b68b0f6d75f5cee4068a9d9c0f477183e074972032605cc2fcdd52",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "07ca5219c8b108771546",
@@ -5595,9 +5595,9 @@
       "id": "56543b50474a4d45e587:001",
       "sourceId": "56543b50474a4d45e587",
       "title": "Create a new Workspace",
-      "heading": "1. Start creating a workspace",
-      "text": "Your workspace\nOpen the workspace menu in Replit and look for the option to create a new workspace.",
-      "url": "/learn/your-workspace/create-a-new-workspace#1-start-creating-a-workspace",
+      "heading": "1. Open your workspace menu",
+      "text": "Your workspace\nClick your current workspace name to open the workspace menu. You’ll see the workspaces you have access to and can switch between them. To start a new one, click Create workspace.\nWorkspace menu showing a personal workspace, example team workspaces, and the Create workspace button.\nOpen your workspace menu, then click Create workspace. Avatars and workspace names have been anonymized.\n/images/workspaces/workspace-menu.webp",
+      "url": "/learn/your-workspace/create-a-new-workspace#1-open-your-workspace-menu",
       "pageUrl": "/learn/your-workspace/create-a-new-workspace",
       "sourcePath": "src/learn-content.ts#56543b50474a4d45e587"
     },
@@ -5615,9 +5615,9 @@
       "id": "56543b50474a4d45e587:003",
       "sourceId": "56543b50474a4d45e587",
       "title": "Create a new Workspace",
-      "heading": "3. Finish setting it up",
-      "text": "Your workspace\nFollow the setup prompts for the workspace you chose. Review any plan or billing details shown before confirming. You can read through this lesson without creating a paid workspace.",
-      "url": "/learn/your-workspace/create-a-new-workspace#3-finish-setting-it-up",
+      "heading": "3. Set up your team workspace",
+      "text": "Your workspace\nThe example below shows the team workspace setup. Enter a workspace name and add team members’ email addresses if you want to invite them. Open Workspace region to review the available regions before creating the workspace.\nCreate a new workspace dialog with workspace name, team invitations, and the Workspace region menu showing Auto, North America, Europe (EU), and Asia. Explicit region choices are marked Pro.\nName your team workspace and choose its region. The menu notes that the region cannot be changed after creation and that guaranteed region selection requires Pro. Background details have been removed.\n/images/workspaces/workspace-region.webp",
+      "url": "/learn/your-workspace/create-a-new-workspace#3-set-up-your-team-workspace",
       "pageUrl": "/learn/your-workspace/create-a-new-workspace",
       "sourcePath": "src/learn-content.ts#56543b50474a4d45e587"
     },
@@ -5625,9 +5625,19 @@
       "id": "56543b50474a4d45e587:004",
       "sourceId": "56543b50474a4d45e587",
       "title": "Create a new Workspace",
-      "heading": "4. Check your new workspace",
-      "text": "Your workspace\nOnce setup is complete, check the active workspace before starting a chat or project. Use the workspace menu to return to your previous workspace whenever you need to.",
-      "url": "/learn/your-workspace/create-a-new-workspace#4-check-your-new-workspace",
+      "heading": "What does the region mean?",
+      "text": "Your workspace\nThe workspace region is the geographic location where your workspace’s data is stored. Consider it when you need your work stored in a particular part of the world. This storage setting alone does not establish where every AI request or connected service processes data; check the applicable terms before relying on it for a data-residency requirement.\nGeneration quality: a region is not a model-quality setting. Choosing a different region does not by itself select a more capable model.\nResponsiveness: distance can add network delay. As an illustration, a United States-to-Europe round trip might take around 200 milliseconds, while a nearby connection might take tens of milliseconds. Actual latency varies; these are not measured Replit response times or guarantees, and generation can take much longer.\nAuto: the menu says this usually selects the closest region to reduce latency. Explicit region choices are marked Pro, and the region cannot be changed after the workspace is created.",
+      "url": "/learn/your-workspace/create-a-new-workspace#what-does-the-region-mean",
+      "pageUrl": "/learn/your-workspace/create-a-new-workspace",
+      "sourcePath": "src/learn-content.ts#56543b50474a4d45e587"
+    },
+    {
+      "id": "56543b50474a4d45e587:005",
+      "sourceId": "56543b50474a4d45e587",
+      "title": "Create a new Workspace",
+      "heading": "4. Create and check your workspace",
+      "text": "Your workspace\nReview the name, invitations, region, and any plan or billing details before confirming creation. Once setup is complete, check that your new workspace is active. You can return to your previous workspace from the workspace menu. Then use the confirmation button below to unlock the quiz. Don’t create a paid workspace just to complete this exercise; you can still read the lesson without confirming completion.",
+      "url": "/learn/your-workspace/create-a-new-workspace#4-create-and-check-your-workspace",
       "pageUrl": "/learn/your-workspace/create-a-new-workspace",
       "sourcePath": "src/learn-content.ts#56543b50474a4d45e587"
     }

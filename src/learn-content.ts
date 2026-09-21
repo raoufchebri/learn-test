@@ -437,6 +437,7 @@ courseLessons['Your workspace'] = [
   {
     module: 'Your workspace',
     title: 'Create a new workspace',
+    activityConfirmation: 'I have created my workspace.',
     duration: '3 min',
     video: '',
     replitExample: '',
@@ -445,13 +446,18 @@ courseLessons['Your workspace'] = [
       'A new workspace gives you a separate place to organize your work. Choose a personal workspace when the work belongs to you, or a team workspace when it belongs to a team.',
     ],
     sections: [
-      { heading: '1. Start creating a workspace', body: 'Open the workspace menu in Replit and look for the option to create a new workspace.' },
+      { heading: '1. Open your workspace menu', body: 'Click your current workspace name to open the workspace menu. You’ll see the workspaces you have access to and can switch between them. To start a new one, click Create workspace.', image: { src: '/images/workspaces/workspace-menu.webp', alt: 'Workspace menu showing a personal workspace, example team workspaces, and the Create workspace button.', caption: 'Open your workspace menu, then click Create workspace. Avatars and workspace names have been anonymized.', source: '/images/workspaces/workspace-menu.webp' } },
       { heading: '2. Choose personal or team', body: 'Choose the kind of workspace you want to create:', items: [
         'Personal: another workspace for your own chats, projects, and routines.',
         'Team: a workspace for your team’s work, with access managed through permissions and sharing settings.',
       ] },
-      { heading: '3. Finish setting it up', body: 'Follow the setup prompts for the workspace you chose. Review any plan or billing details shown before confirming. You can read through this lesson without creating a paid workspace.' },
-      { heading: '4. Check your new workspace', body: 'Once setup is complete, check the active workspace before starting a chat or project. Use the workspace menu to return to your previous workspace whenever you need to.' },
+      { heading: '3. Set up your team workspace', body: 'The example below shows the team workspace setup. Enter a workspace name and add team members’ email addresses if you want to invite them. Open Workspace region to review the available regions before creating the workspace.', image: { src: '/images/workspaces/workspace-region.webp', alt: 'Create a new workspace dialog with workspace name, team invitations, and the Workspace region menu showing Auto, North America, Europe (EU), and Asia. Explicit region choices are marked Pro.', caption: 'Name your team workspace and choose its region. The menu notes that the region cannot be changed after creation and that guaranteed region selection requires Pro. Background details have been removed.', source: '/images/workspaces/workspace-region.webp' } },
+      { heading: 'What does the region mean?', body: 'The workspace region is the geographic location where your workspace’s data is stored. Consider it when you need your work stored in a particular part of the world. This storage setting alone does not establish where every AI request or connected service processes data; check the applicable terms before relying on it for a data-residency requirement.', items: [
+        'Generation quality: a region is not a model-quality setting. Choosing a different region does not by itself select a more capable model.',
+        'Responsiveness: distance can add network delay. As an illustration, a United States-to-Europe round trip might take around 200 milliseconds, while a nearby connection might take tens of milliseconds. Actual latency varies; these are not measured Replit response times or guarantees, and generation can take much longer.',
+        'Auto: the menu says this usually selects the closest region to reduce latency. Explicit region choices are marked Pro, and the region cannot be changed after the workspace is created.',
+      ] },
+      { heading: '4. Create and check your workspace', body: 'Review the name, invitations, region, and any plan or billing details before confirming creation. Once setup is complete, check that your new workspace is active. You can return to your previous workspace from the workspace menu. Then use the confirmation button below to unlock the quiz. Don’t create a paid workspace just to complete this exercise; you can still read the lesson without confirming completion.' },
     ],
     quiz: [
       { prompt: 'Which kind of workspace can you create?', choices: ['Only a team workspace', 'Another personal workspace or a team workspace', 'Only a workspace for published apps'], answer: 1 },
