@@ -416,7 +416,7 @@ courseLessons['Your workspace'] = [
     summary: 'When you log into Replit, your workspace is your starting point. It brings together your chats, projects, and routines in one place.',
     introduction: [
       'Think of your workspace as the area where you organize your work and build your projects. You can start a conversation, return to an app you’re building, or find a routine you’ve set up.',
-      'In the previous module, you used these different parts to plan a birthday party and build an invitation app. Your workspace is where that work lives.',
+      'When you planned the birthday party in the first module, you created a chat, a project, and a routine. All of those live in your workspace.',
     ],
     sections: [
       { heading: 'A place for your work', body: 'Your workspace brings together several things you’ve already tried:', items: [
