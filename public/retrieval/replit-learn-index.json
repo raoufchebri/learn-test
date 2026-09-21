@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-21T15:03:16.596Z",
+  "generatedAt": "2026-09-21T15:07:14.487Z",
   "mode": "full",
-  "hash": "01568187c47a00368b8751ef84a6d322f02d5f38079f86803842f7800309481a",
+  "hash": "feb3165226f52352438c720859107638d19c1d31af0c4e53801104d47f0069fe",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "07ca5219c8b108771546",
@@ -770,7 +770,7 @@
       "sourceId": "bd28a68246d15291632f",
       "title": "Start with a chat",
       "heading": "Let’s choose a theme together",
-      "text": "Replit 101\nRead Replit’s suggestions and pick a theme you like. Reply in the same chat so you can build on those ideas. Replace the bracketed text with your choice.\nLet’s go with [your chosen theme]. Suggest three simple activities that fit it.\nRead the activities and ask for a simpler option if you need one. You can keep the theme while refining the details.",
+      "text": "Replit 101\nRead Replit’s suggestions and explore the ideas you like. For the rest of this course, we’ll choose a Pokémon theme so our checklist, birthday app, and designs all follow the same story. Reply in the same chat to continue.\nLet’s go with a Pokémon theme. Suggest three simple activities that fit it.\nRead the activities and ask for a simpler option if you need one. You’re welcome to use your own theme, but the examples from here on will use Pokémon.",
       "url": "/learn/replit-101/from-conversation-to-outcome#let-s-choose-a-theme-together",
       "pageUrl": "/learn/replit-101/from-conversation-to-outcome",
       "sourcePath": "src/learn-content.ts#bd28a68246d15291632f"
@@ -1060,7 +1060,7 @@
       "sourceId": "91a21c98ad3525889549",
       "title": "Build your first app",
       "heading": "1. Imagine the invitation you’d love to share",
-      "text": "Replit 101\nLet’s say we chose a Pokémon theme for our birthday party. Imagine your friends opening the invitation, tapping a big Poké Ball, and choosing their favorite Pokémon as they RSVP. That’s the little app we’re going to build. You can use the same idea with your own theme, too.",
+      "text": "Replit 101\nWe chose a Pokémon theme earlier. Now imagine your friends opening the invitation, tapping a big Poké Ball, and choosing their favorite Pokémon as they RSVP. That’s the little app we’re going to build. You can use the same idea with your own theme, too.",
       "url": "/learn/replit-101/build-and-publish-a-simple-app#1-imagine-the-invitation-you-d-love-to-share",
       "pageUrl": "/learn/replit-101/build-and-publish-a-simple-app",
       "sourcePath": "src/learn-content.ts#91a21c98ad3525889549"
@@ -1220,7 +1220,7 @@
       "sourceId": "d46e7c337891ba07fd8b",
       "title": "Create assets",
       "heading": "3. Add it to the app",
-      "text": "Replit 101\nIn your project chat, refer to the generated image and ask Replit to use it in the invitation. Creating the image doesn’t automatically add it to the working app, so this is where we put it to use.\nAdd the Mosskip image we just created to our birthday app, peeking out from behind one of the trees. When a guest taps it, show “You found Mosskip!” Make it a keyboard-accessible button too. Keep the Poké Ball, RSVP form, saved replies, and private host view working.\nOpen Preview and try finding Mosskip on both desktop and a phone-sized screen. Tap it, then try reaching it with the keyboard. Finally, submit a test RSVP to check that the invitation still works. You’ve created an asset and turned it into a little interactive surprise.",
+      "text": "Replit 101\nIn your project chat, refer to the generated image and ask Replit to use it in the invitation. Creating the image doesn’t automatically add it to the working app, so this is where we put it to use.\nAdd the Mosskip image we just created to our birthday app, peeking out from behind one of the trees. When a guest taps it, show “You found Mosskip!” Make it a keyboard-accessible button too. Keep the Poké Ball, RSVP form, saved replies, and private host view working.\nOpen Preview and try finding Mosskip on both desktop and a phone-sized screen. Tap it, then try reaching it with the keyboard. Finally, submit a test RSVP to check that the invitation still works. You’ve created an asset and turned it into a little interactive surprise.\nMosskip revealed among the trees in the birthday app, with the message You found Mosskip!\nThe finished discovery interaction: Mosskip appears with “You found Mosskip!” The screenshot is cropped to remove personal details.\n/images/design-canvas/mosskip-found.webp",
       "url": "/learn/replit-101/create-assets#3-add-it-to-the-app",
       "pageUrl": "/learn/replit-101/create-assets",
       "sourcePath": "src/learn-content.ts#d46e7c337891ba07fd8b"
