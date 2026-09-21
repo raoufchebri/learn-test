@@ -5,6 +5,7 @@ import { BrowserRouter, useLocation, useNavigate } from "react-router-dom";
 import * as Icons from "lucide-react";
 import { appFoundationLessons, courseLessons, learnDisplayTitle, type LearnLesson } from "./learn-content";
 import { ReplitAccount } from "./replit-account";
+import { LEARN_DEV_MODE } from "./learn-mode";
 import { RecipeBuildProvider, RecipeBuildStep, RecipeBuildStatus, ProjectLessonStep, useRecipeActivity, RECIPE_PROMPT, RECIPE_DEMO } from "./recipe-build";
 import {
   ReplitPromptComposer,
@@ -139,11 +140,11 @@ const coursePillars: CoursePillar[] = pillarDefinitions.map((pillar) => ({
 const lessonUrl = (module: CourseModule, lesson: LearnLesson) =>
   `/learn/${learnSegment(module.title)}/${learnSegment(lesson.title)}`;
 
-const isAvailablePillar = (id: CoursePillarId) => id === 'discover' || id === 'build';
-const isAvailableModule = (module: CourseModule) => isAvailablePillar(module.pillar)
-  && coursePillars.find((pillar) => pillar.id === module.pillar)?.modules[0] === module;
+const isAvailablePillar = (id: CoursePillarId) => LEARN_DEV_MODE || id === 'discover' || id === 'build';
+const isAvailableModule = (module: CourseModule) => LEARN_DEV_MODE || (isAvailablePillar(module.pillar)
+  && coursePillars.find((pillar) => pillar.id === module.pillar)?.modules[0] === module);
 const availableLessonUrls = new Set(courseModules.filter(isAvailableModule)
-  .flatMap((module) => module.lessons.slice(0, module.pillar === 'discover' ? 2 : 3).map((lesson) => lessonUrl(module, lesson))));
+  .flatMap((module) => (LEARN_DEV_MODE ? module.lessons : module.lessons.slice(0, module.pillar === 'discover' ? 2 : 3)).map((lesson) => lessonUrl(module, lesson))));
 
 const askLearnPages: DocsSlashPage[] = [
   { label: "Welcome to Replit Learn", path: "/", section: "Learn" },
@@ -224,8 +225,8 @@ function LessonPage({
 }) {
   const recipe = useRecipeActivity();
   const recipeLesson = lesson.activity === "recipe-build";
-  const [entryOpened, setEntryOpened] = useState(!lesson.entryLink);
-  const [promptContinued, setPromptContinued] = useState(!lesson.promptGate);
+  const [entryOpened, setEntryOpened] = useState(LEARN_DEV_MODE || !lesson.entryLink);
+  const [promptContinued, setPromptContinued] = useState(LEARN_DEV_MODE || !lesson.promptGate);
   const [copiedPrompt, setCopiedPrompt] = useState('');
   const hasFrontendCheck = lesson.title === 'What Is Replit Building?';
   const hasCheckpoint = hasFrontendCheck || !!lesson.checkpoint;
@@ -239,9 +240,9 @@ function LessonPage({
   const [frontendReady, setFrontendReady] = useState(RECIPE_DEMO && hasFrontendCheck);
   const [frontendOpened, setFrontendOpened] = useState(RECIPE_DEMO && hasFrontendCheck);
   const frontendUnlockRef = useRef<HTMLButtonElement>(null);
-  const frontendVisible = !hasCheckpoint || frontendOpened;
+  const frontendVisible = LEARN_DEV_MODE || !hasCheckpoint || frontendOpened;
   useEffect(() => { setFrontendAnswers([]); setFrontendReady(RECIPE_DEMO && hasFrontendCheck); setFrontendOpened(RECIPE_DEMO && hasFrontendCheck); }, [lesson.title]);
-  const unlocked = lesson.testingUnlocked || (lesson.projectTask ? recipe.inspections[lesson.projectTask.id] === 'complete' : !recipeLesson || (!!recipe.build.replId && ['creating', 'complete'].includes(recipe.build.status)));
+  const unlocked = LEARN_DEV_MODE || lesson.testingUnlocked || (lesson.projectTask ? recipe.inspections[lesson.projectTask.id] === 'complete' : !recipeLesson || (!!recipe.build.replId && ['creating', 'complete'].includes(recipe.build.status)));
   const promptIndex = lesson.projectTask ? 0 : lesson.sections.findIndex((section) => !!section.prompt);
   const location = useLocation();
   const [unlockCelebration, setUnlockCelebration] = useState(false);
@@ -510,7 +511,7 @@ function LessonPage({
       </div>}
       {entryOpened && <>
       {lesson.sections.map((section, sectionIndex) => (
-        ((!promptContinued && sectionIndex > 0) || (!unlocked && sectionIndex > promptIndex) || (!frontendVisible && sectionIndex > checkpointIndex) || (hasFrontendCheck && sectionIndex > 5 && recipe.iteration !== 'complete')) ? null : <section className={`foundation-section ${((recipeLesson || lesson.projectTask) && sectionIndex > promptIndex) || (hasCheckpoint && sectionIndex > checkpointIndex) || (lesson.promptGate && sectionIndex > 0) ? "lesson-unlocked" : ""}`} id={section.id ?? learnSegment(section.heading)} key={section.heading}>
+        (!LEARN_DEV_MODE && ((!promptContinued && sectionIndex > 0) || (!unlocked && sectionIndex > promptIndex) || (!frontendVisible && sectionIndex > checkpointIndex) || (hasFrontendCheck && sectionIndex > 5 && recipe.iteration !== 'complete'))) ? null : <section className={`foundation-section ${((recipeLesson || lesson.projectTask) && sectionIndex > promptIndex) || (hasCheckpoint && sectionIndex > checkpointIndex) || (lesson.promptGate && sectionIndex > 0) ? "lesson-unlocked" : ""}`} id={section.id ?? learnSegment(section.heading)} key={section.heading}>
           <h2>{section.heading}</h2>
           <p>{section.body}</p>
           {section.prompt && <blockquote className="lesson-example-prompt"><p>{section.prompt}</p></blockquote>}
@@ -569,7 +570,7 @@ function LessonPage({
           </div>}
         </section>
       ))}
-      {promptContinued && unlocked && frontendVisible && (!hasFrontendCheck || recipe.iteration === 'complete') && <div className={recipeLesson ? "lesson-unlocked" : undefined}>
+      {promptContinued && unlocked && frontendVisible && (LEARN_DEV_MODE || !hasFrontendCheck || recipe.iteration === 'complete') && <div className={recipeLesson ? "lesson-unlocked" : undefined}>
       {lesson.replitExample && !recipeLesson && <section className="replit-example">
         <p className="eyebrow">IN REPLIT</p>
         <p>{lesson.replitExample}</p>
@@ -621,7 +622,7 @@ function LessonPage({
           </div>
         ))}
         {nextLesson && (
-          onComplete ? <div className={`recipe-unlock-action ${completed ? "is-open" : ""} ${unlockCelebration ? "is-unlocking" : ""}`}>
+          onComplete && !LEARN_DEV_MODE ? <div className={`recipe-unlock-action ${completed ? "is-open" : ""} ${unlockCelebration ? "is-unlocking" : ""}`}>
             <button ref={nextUnlockRef} className="recipe-create-button" disabled={!completed} onClick={nextLesson.onClick}>
               <LessonUnlockIcon />
               <span>{completed ? "Continue to " : "Unlock "}{learnDisplayTitle(nextLesson.title)}</span>
@@ -632,7 +633,7 @@ function LessonPage({
           </button>
         )}
         {!nextLesson && onComplete && <div className={`recipe-unlock-action ${completed ? 'is-open' : ''}`}>
-          <button ref={nextUnlockRef} className="recipe-create-button" disabled={!completed} onClick={() => window.location.assign('/')}><LessonUnlockIcon /><span>{completed ? 'Section complete · Explore courses' : 'Complete the activity and quiz'}</span></button>
+          <button ref={nextUnlockRef} className="recipe-create-button" disabled={!LEARN_DEV_MODE && !completed} onClick={() => window.location.assign('/')}><LessonUnlockIcon /><span>{LEARN_DEV_MODE ? 'Explore courses' : completed ? 'Section complete · Explore courses' : 'Complete the activity and quiz'}</span></button>
         </div>}
       </section>
       </div>}
@@ -808,14 +809,15 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
   const location = useLocation();
   const navigate = useNavigate();
   const { status: access, learnerName, learnerKey, retry } = useLessonSession();
+  const canBrowseLessons = LEARN_DEV_MODE || access === "signed-in";
   const [enteringCourse, setEnteringCourse] = useState<string | null>(null);
   const [entryRevealing, setEntryRevealing] = useState(false);
   const entryDestination = useRef<string | null>(null);
   const entryTimer = useRef<number | undefined>(undefined);
   useEffect(() => () => window.clearTimeout(entryTimer.current), []);
   useEffect(() => {
-    if (!enteringCourse || location.pathname !== entryDestination.current || access === 'checking') return;
-    if (access !== 'signed-in') {
+    if (!enteringCourse || location.pathname !== entryDestination.current || (!LEARN_DEV_MODE && access === 'checking')) return;
+    if (!canBrowseLessons) {
       setEnteringCourse(null); setEntryRevealing(false); entryDestination.current = null;
       window.clearTimeout(entryTimer.current); entryTimer.current = undefined;
       return;
@@ -825,7 +827,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
       setEnteringCourse(null); setEntryRevealing(false); entryDestination.current = null; entryTimer.current = undefined;
     }, window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 1200);
     return () => window.clearTimeout(entryTimer.current);
-  }, [location.pathname, access, enteringCourse]);
+  }, [location.pathname, access, enteringCourse, canBrowseLessons]);
   const enterCourse = (destination: string, title: string) => {
     if (entryTimer.current !== undefined) return;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -857,7 +859,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
   const dismissSignIn = () => { setPendingCourse(null); setInvitationOpen(false); };
   const signInDialog = useRef<HTMLDialogElement>(null);
   useEffect(() => {
-    if (access === 'signed-out' && location.pathname === '/' && !invitationShown.current) {
+    if (!LEARN_DEV_MODE && access === 'signed-out' && location.pathname === '/' && !invitationShown.current) {
       invitationShown.current = true;
       setInvitationOpen(true);
     }
@@ -870,7 +872,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
     }
   }, [pendingCourse, access, navigate]);
   useEffect(() => {
-    if (location.pathname.startsWith("/learn/") && (access === "signed-out" || access === "error")) {
+    if (!LEARN_DEV_MODE && location.pathname.startsWith("/learn/") && (access === "signed-out" || access === "error")) {
       setPendingCourse(location.pathname + location.search + location.hash);
       navigate("/", { replace: true });
     }
@@ -897,6 +899,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
   const firstApp = buildSequence.findIndex((entry) => entry.lesson.title === "What Is an App?");
   const sequence = firstApp >= 0 ? buildSequence.slice(firstApp) : [];
   const isLocked = (url: string) => {
+    if (LEARN_DEV_MODE) return false;
     if (url && !availableLessonUrls.has(url)) return true;
     if (url === '/learn/replit-101/from-conversation-to-outcome') return !completedLessons.includes('/learn/replit-101/what-you-can-do-with-replit');
     const index = sequence.findIndex((entry) => entry.url === url);
@@ -948,7 +951,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
   const startModule = (target: CourseModule) => {
     if (!isAvailableModule(target)) return;
     const destination = lessonUrl(target, target.lessons[0]);
-    if (access === "signed-in") enterCourse(destination, coursePillars.find((pillar) => pillar.id === target.pillar)?.title ?? target.title);
+    if (canBrowseLessons) enterCourse(destination, coursePillars.find((pillar) => pillar.id === target.pillar)?.title ?? target.title);
     else setPendingCourse(destination);
   };
   const startPillar = (pillar: CoursePillar) => {
@@ -956,7 +959,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
     if (firstModule) startModule(firstModule);
   };
   const nextLesson = module && lessonIndex >= 0 ? module.lessons[lessonIndex + 1] : undefined;
-  const showCourseNavigation = moduleIndex >= 0 && access === "signed-in";
+  const showCourseNavigation = moduleIndex >= 0 && canBrowseLessons;
   const activePillar = module ? coursePillars.find((pillar) => pillar.id === module.pillar) : undefined;
   const activeModuleGroupIndex = activePillar && module ? activePillar.modules.indexOf(module) : -1;
 
@@ -1037,7 +1040,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
                       </section>
                     );
                   })}
-                  {pillar.id === 'discover' && <section className="course-module-group">
+                  {!LEARN_DEV_MODE && pillar.id === 'discover' && <section className="course-module-group">
                     <div className="course-module-heading">
                       <b>02</b>
                       <strong>More to explore</strong>
@@ -1052,8 +1055,9 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
         </aside>
       </>}
       <div className="learn-main-column">
+        {LEARN_DEV_MODE && <p role="status" className="caption">Development mode: all courses and lessons are open. Account actions still require sign-in.</p>}
         {composer}
-        {lesson && module && access === "signed-in" && !currentLocked ? (
+        {lesson && module && canBrowseLessons && !currentLocked ? (
           <LessonPage
             key={currentUrl}
             completed={completedLessons.includes(currentUrl)}

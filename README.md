@@ -29,6 +29,22 @@ pnpm dev
 
 Open the URL Vite prints. Changes to `src/learn-content.ts` also regenerate the bundled Ask index before the browser reloads, so lesson content and Ask grounding stay aligned. In this mode, the interface is complete, but Worker-backed sign-in and Ask AI are unavailable.
 
+### Development and production course access
+
+`pnpm dev` enables development mode via Vite's compile-time `import.meta.env.DEV`.
+All course pillars, modules, lessons, lesson sections, and quizzes are open for
+review, including direct lesson URLs, without signing in or completing previous
+activities. A development-mode notice appears above the content. This does not
+mark activities complete, simulate an account, or bypass backend permissions:
+creating apps, project inspection, and account actions still require real sign-in.
+
+`pnpm build`, `pnpm preview`, and `pnpm dev:auth` use the production build and
+preserve the existing rollout limits, sign-in requirements, lesson prerequisites,
+and section/activity/quiz gates. To use open course browsing with a local backend,
+run `pnpm dev:auth` and `pnpm dev` in separate terminals, then browse Vite's URL.
+Vite proxies `/api` to the local Worker. There is no URL or local-storage switch
+that enables development access in a production build.
+
 For the full sign-in, Ask AI, and Replit MCP flow:
 
 ```bash
