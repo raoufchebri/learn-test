@@ -456,6 +456,26 @@ courseLessons['The prompt box'] = [
     ],
   },
   {
+    module: 'The prompt box', title: 'Skills', duration: '3 min', video: '', replitExample: '',
+    summary: 'Skills give Replit reusable instructions for a particular kind of task.',
+    introduction: [
+      'Your prompt explains what you want, and context provides useful background. A skill adds instructions about how to approach the work. It can help Replit follow a consistent process or produce results in a particular style or format.',
+      'Replit offers predefined skills you can use out of the box. You can also define custom skills for instructions you want to reuse. For now, let’s try a predefined one.',
+    ],
+    activityConfirmation: 'I have added a skill.',
+    sections: [
+      { heading: '1. Open the skills menu', body: 'Click the plus button in the prompt box, then choose Use a skill. Browse the predefined skills or use Search skills to find one.', image: { src: '/images/prompt-box/skills.webp', alt: 'Prompt box plus menu with Use a skill selected, a Search skills field, and predefined skills including Ad Creative, AI SDR, and SEO Auditor.', caption: 'Choose + → Use a skill to browse predefined instructions. Personal details have been removed.', source: '/images/prompt-box/skills.webp' } },
+      { heading: '2. Select a predefined skill', body: 'For this example, select Ad Creative, which is shown in the menu. It provides instructions for creating advertising visuals. We’ll use a fictional community event for this exercise, without real names, photos, or addresses.' },
+      { heading: '3. Add your request', body: 'The skill gives Replit a way to approach the task, but you still need to explain your goal. With Ad Creative selected, try this prompt:', prompt: 'Create a social media graphic for a fictional community picnic. Use a friendly illustrated park, a picnic table, and bright green and yellow colors. Include the headline “A day in the park” and leave room for a date and location. Don’t publish or send it anywhere.', afterPrompt: 'Review the result and ask for a change if needed. The skill helps guide the work; it doesn’t replace your instructions or guarantee a perfect result. Once you’ve selected the skill for your request, use the confirmation button below to unlock the quiz.' },
+      { heading: 'Predefined or custom?', body: 'Predefined skills are ready to use. Custom skills let you define reusable instructions, such as a preferred report structure or a team’s writing guidelines. Both can help standardize repeated tasks without making you type the same instructions every time. A skill is not an account connection: it doesn’t grant access to an external service.' },
+    ],
+    quiz: [
+      { prompt: 'What does a skill add?', choices: ['Reusable instructions for approaching a task', 'Automatic access to all your accounts', 'A guarantee that every result is correct'], answer: 0 },
+      { prompt: 'Where can you select a predefined skill?', choices: ['Delete workspace', 'The prompt box’s plus menu → Use a skill', 'The workspace region selector'], answer: 1 },
+      { prompt: 'What should you do after selecting a skill?', choices: ['Leave the goal unexplained', 'Assume it replaces your review', 'Describe your goal and review the result'], answer: 2 },
+    ],
+  },
+  {
     module: 'The prompt box', title: 'Tools and integrations', duration: '3 min', video: '', replitExample: '',
     summary: 'Some tools are built into Replit. Others need a connection to an account you use.',
     introduction: [
@@ -465,6 +485,7 @@ courseLessons['The prompt box'] = [
       { heading: 'Built-in tools', body: 'Replit has built-in tools such as web search. When you ask it to search the web, it can use that tool to find information and bring sources back into the conversation. You don’t need to connect a separate search account.', prompt: 'Search the web for three outdoor Pokémon-themed birthday activities suitable for six-year-olds. Include links to the sources so I can review them.', afterPrompt: 'Read the suggestions and check the sources. This is the same kind of tool use you tried when researching your birthday-party checklist. You describe the goal; Replit uses an available tool to help.' },
       { heading: 'Some tools need your account', body: 'Searching public web pages is different from reading your calendar or finding a document in your account. Replit needs an authorized connection before it can work with those services. That’s where integrations, also called connectors, come in.' },
       { heading: 'Integrations connect your tools to Replit', body: 'An integration connects Replit to an external service. You sign in through the connection flow and review the permissions requested. Replit can then use the tools that connection makes available, within those permissions. In the first module, you connected Google Calendar before asking Replit to add the birthday event.' },
+      { heading: 'Add an integration from the prompt box', body: 'Click the plus button, then choose Add an integration. Search for the service you need or browse the list. Select it and follow the connection steps if it isn’t connected yet. You can also open Manage integrations from this menu to review your connections.', image: { src: '/images/prompt-box/integrations-menu.webp', alt: 'Prompt box plus menu with Add an integration selected, a Search integrations field, a Manage integrations link, and available services.', caption: 'Choose + → Add an integration to find a service. Personal details have been removed.', source: '/images/prompt-box/integrations-menu.webp' } },
       { heading: 'Ask naturally, connect when needed', body: 'You can describe the task in the prompt box without naming the underlying tool. If the task needs an integration that isn’t connected, Replit can ask you to connect it. You can also manage connections in Settings → Integrations, as we explored in the previous module.', items: [
         'Check the account and permissions before connecting a service.',
         'Remember that workspace connections don’t automatically carry over to another workspace.',

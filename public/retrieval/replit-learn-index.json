@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-21T15:52:56.278Z",
+  "generatedAt": "2026-09-21T15:55:42.899Z",
   "mode": "full",
-  "hash": "b855e0d236140135b4201ad02f0fb3b8002b44057893e3436bb8f14050ad7da8",
+  "hash": "9658dcfb2b03e86aa170682486f5d4825313824ee8303715dc400cce6fd8d7ef",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "07ca5219c8b108771546",
@@ -85,6 +85,7 @@
     "d4a3cbdf743f453dbf6f",
     "d75b9f94b6aaba3e1a69",
     "d8722d7f4617e53c1a3e",
+    "ded09d76e4d7c2c1ec60",
     "e28443e057369f0026ce",
     "e67e1502420efa342222",
     "eabea78578bd867f3417",
@@ -191,6 +192,7 @@
     "src/learn-content.ts#d4a3cbdf743f453dbf6f",
     "src/learn-content.ts#d75b9f94b6aaba3e1a69",
     "src/learn-content.ts#d8722d7f4617e53c1a3e",
+    "src/learn-content.ts#ded09d76e4d7c2c1ec60",
     "src/learn-content.ts#e28443e057369f0026ce",
     "src/learn-content.ts#e67e1502420efa342222",
     "src/learn-content.ts#f0f7e6fd18426a859c9f",
@@ -5642,6 +5644,56 @@
       "sourcePath": "src/learn-content.ts#fc4617ddc5906cf96a4a"
     },
     {
+      "id": "ded09d76e4d7c2c1ec60:000",
+      "sourceId": "ded09d76e4d7c2c1ec60",
+      "title": "Skills",
+      "heading": "Overview",
+      "text": "The prompt box\nSkills give Replit reusable instructions for a particular kind of task.\nYour prompt explains what you want, and context provides useful background. A skill adds instructions about how to approach the work. It can help Replit follow a consistent process or produce results in a particular style or format.\nReplit offers predefined skills you can use out of the box. You can also define custom skills for instructions you want to reuse. For now, let’s try a predefined one.\n",
+      "url": "/learn/the-prompt-box/skills",
+      "pageUrl": "/learn/the-prompt-box/skills",
+      "sourcePath": "src/learn-content.ts#ded09d76e4d7c2c1ec60"
+    },
+    {
+      "id": "ded09d76e4d7c2c1ec60:001",
+      "sourceId": "ded09d76e4d7c2c1ec60",
+      "title": "Skills",
+      "heading": "1. Open the skills menu",
+      "text": "The prompt box\nClick the plus button in the prompt box, then choose Use a skill. Browse the predefined skills or use Search skills to find one.\nPrompt box plus menu with Use a skill selected, a Search skills field, and predefined skills including Ad Creative, AI SDR, and SEO Auditor.\nChoose + → Use a skill to browse predefined instructions. Personal details have been removed.\n/images/prompt-box/skills.webp",
+      "url": "/learn/the-prompt-box/skills#1-open-the-skills-menu",
+      "pageUrl": "/learn/the-prompt-box/skills",
+      "sourcePath": "src/learn-content.ts#ded09d76e4d7c2c1ec60"
+    },
+    {
+      "id": "ded09d76e4d7c2c1ec60:002",
+      "sourceId": "ded09d76e4d7c2c1ec60",
+      "title": "Skills",
+      "heading": "2. Select a predefined skill",
+      "text": "The prompt box\nFor this example, select Ad Creative, which is shown in the menu. It provides instructions for creating advertising visuals. We’ll use a fictional community event for this exercise, without real names, photos, or addresses.",
+      "url": "/learn/the-prompt-box/skills#2-select-a-predefined-skill",
+      "pageUrl": "/learn/the-prompt-box/skills",
+      "sourcePath": "src/learn-content.ts#ded09d76e4d7c2c1ec60"
+    },
+    {
+      "id": "ded09d76e4d7c2c1ec60:003",
+      "sourceId": "ded09d76e4d7c2c1ec60",
+      "title": "Skills",
+      "heading": "3. Add your request",
+      "text": "The prompt box\nThe skill gives Replit a way to approach the task, but you still need to explain your goal. With Ad Creative selected, try this prompt:\nCreate a social media graphic for a fictional community picnic. Use a friendly illustrated park, a picnic table, and bright green and yellow colors. Include the headline “A day in the park” and leave room for a date and location. Don’t publish or send it anywhere.\nReview the result and ask for a change if needed. The skill helps guide the work; it doesn’t replace your instructions or guarantee a perfect result. Once you’ve selected the skill for your request, use the confirmation button below to unlock the quiz.",
+      "url": "/learn/the-prompt-box/skills#3-add-your-request",
+      "pageUrl": "/learn/the-prompt-box/skills",
+      "sourcePath": "src/learn-content.ts#ded09d76e4d7c2c1ec60"
+    },
+    {
+      "id": "ded09d76e4d7c2c1ec60:004",
+      "sourceId": "ded09d76e4d7c2c1ec60",
+      "title": "Skills",
+      "heading": "Predefined or custom?",
+      "text": "The prompt box\nPredefined skills are ready to use. Custom skills let you define reusable instructions, such as a preferred report structure or a team’s writing guidelines. Both can help standardize repeated tasks without making you type the same instructions every time. A skill is not an account connection: it doesn’t grant access to an external service.",
+      "url": "/learn/the-prompt-box/skills#predefined-or-custom",
+      "pageUrl": "/learn/the-prompt-box/skills",
+      "sourcePath": "src/learn-content.ts#ded09d76e4d7c2c1ec60"
+    },
+    {
       "id": "35572c47ce24a4720bb3:000",
       "sourceId": "35572c47ce24a4720bb3",
       "title": "Tools and integrations",
@@ -5685,6 +5737,16 @@
       "id": "35572c47ce24a4720bb3:004",
       "sourceId": "35572c47ce24a4720bb3",
       "title": "Tools and integrations",
+      "heading": "Add an integration from the prompt box",
+      "text": "The prompt box\nClick the plus button, then choose Add an integration. Search for the service you need or browse the list. Select it and follow the connection steps if it isn’t connected yet. You can also open Manage integrations from this menu to review your connections.\nPrompt box plus menu with Add an integration selected, a Search integrations field, a Manage integrations link, and available services.\nChoose + → Add an integration to find a service. Personal details have been removed.\n/images/prompt-box/integrations-menu.webp",
+      "url": "/learn/the-prompt-box/tools-and-integrations#add-an-integration-from-the-prompt-box",
+      "pageUrl": "/learn/the-prompt-box/tools-and-integrations",
+      "sourcePath": "src/learn-content.ts#35572c47ce24a4720bb3"
+    },
+    {
+      "id": "35572c47ce24a4720bb3:005",
+      "sourceId": "35572c47ce24a4720bb3",
+      "title": "Tools and integrations",
       "heading": "Ask naturally, connect when needed",
       "text": "The prompt box\nYou can describe the task in the prompt box without naming the underlying tool. If the task needs an integration that isn’t connected, Replit can ask you to connect it. You can also manage connections in Settings → Integrations, as we explored in the previous module.\nCheck the account and permissions before connecting a service.\nRemember that workspace connections don’t automatically carry over to another workspace.\nReview the details before approving an action that sends, creates, changes, or deletes something.",
       "url": "/learn/the-prompt-box/tools-and-integrations#ask-naturally-connect-when-needed",
@@ -5692,7 +5754,7 @@
       "sourcePath": "src/learn-content.ts#35572c47ce24a4720bb3"
     },
     {
-      "id": "35572c47ce24a4720bb3:005",
+      "id": "35572c47ce24a4720bb3:006",
       "sourceId": "35572c47ce24a4720bb3",
       "title": "Tools and integrations",
       "heading": "The distinction to remember",
