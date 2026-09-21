@@ -406,6 +406,32 @@ export const courseLessons: Record<string, LearnLesson[]> = Object.fromEntries(
   Object.entries(courseBriefs).map(([module, briefs]) => [module, module === 'Replit 101' ? discoverLessons : briefs.map((brief) => guidedLesson(module, brief))]),
 );
 
+courseLessons['The prompt box'] = [
+  {
+    module: 'The prompt box', title: 'Get to know the prompt box', navigationTitle: 'Module overview',
+    duration: '2 min', video: '', replitExample: '',
+    summary: 'Now that you understand your workspace and how to connect your tools, let’s take a closer look at the prompt box.',
+    introduction: [
+      'You’ve already used the prompt box in our previous examples to plan a birthday party, ask for help, and start building an app. We used it to get things done, but haven’t explored its different parts yet.',
+      'In this module, we’ll look at the controls around your message, explore agent modes and model choices, and learn how to give Replit the context it needs.',
+    ],
+    sections: [
+      { heading: 'More than a place to type', body: 'The large text area is where you describe what you want. Around it are controls for adding context, choosing how Replit works, using voice input, and sending your request. You don’t need to use every control for every message.', image: { src: '/images/prompt-box/overview.webp', alt: 'Replit prompt box with a message area, plus button, selector showing Free, microphone, and send arrow.', caption: 'The prompt box you’ve been using, with its surrounding controls. The screenshot is cropped to remove the name and workspace details.', source: '/images/prompt-box/overview.webp' } },
+      { heading: 'What we’ll explore', body: 'We’ll take the prompt box one part at a time:', items: [
+        'Your prompt: describe your goal and the result you want.',
+        'Context: add files and other useful information to your request.',
+        'Agent modes: understand the different ways Replit can help with your task.',
+        'Model choices: understand the available options and when to use them.',
+        'Input controls: explore voice input and sending your message.',
+      ] },
+      { heading: 'Start with what you already know', body: 'Think back to your birthday-party prompt. You described what you wanted in your own words, reviewed the result, and followed up. That remains the foundation. Next, we’ll explore how the other controls can help you build on it.' },
+    ],
+    quiz: [
+      { prompt: 'What will you explore in this module?', choices: ['Only how to type a longer message', 'The prompt box’s controls, context, agent modes, and model choices', 'Only how to publish an app'], answer: 1 },
+    ],
+  },
+];
+
 courseLessons['Your workspace'] = [
   {
     module: 'Your workspace',
@@ -458,11 +484,46 @@ courseLessons['Your workspace'] = [
         'Auto: the menu says this usually selects the closest region to reduce latency. Explicit region choices are marked Pro, and the region cannot be changed after the workspace is created.',
       ] },
       { heading: '4. Create and check your workspace', body: 'Review the name, invitations, region, and any plan or billing details before confirming creation. Once setup is complete, check that your new workspace is active. You can return to your previous workspace from the workspace menu. Then use the confirmation button below to unlock the quiz. Don’t create a paid workspace just to complete this exercise; you can still read the lesson without confirming completion.' },
+      { heading: 'Manage your workspace', body: 'Open Settings and select Workspace overview to manage your workspace. Here you can review its name and, if you have permission, change it and select Save changes. The sidebar also takes you to collaborators and integrations, which we’ll explore next. Leave Delete workspace alone: it permanently removes the workspace and its data.', image: { src: '/images/workspaces/overview.webp', alt: 'Workspace overview in Settings, showing the workspace name, Save changes, an example workspace ID, and Delete workspace.', caption: 'Use Settings → Workspace overview to manage your workspace. Workspace names and the ID have been replaced with examples.', source: '/images/workspaces/overview.webp' } },
     ],
     quiz: [
       { prompt: 'Which kind of workspace can you create?', choices: ['Only a team workspace', 'Another personal workspace or a team workspace', 'Only a workspace for published apps'], answer: 1 },
       { prompt: 'What should you check before confirming setup?', choices: ['Any plan or billing details shown', 'Whether your first app is finished', 'Whether you have created a routine'], answer: 0 },
       { prompt: 'What should you check before starting work?', choices: ['That every team member can access every project', 'That your previous workspace has been deleted', 'Which workspace is currently active'], answer: 2 },
+    ],
+  },
+  {
+    module: 'Your workspace', title: 'Add collaborators', duration: '3 min', video: '', replitExample: '',
+    summary: 'Invite someone to your team workspace so you can work together.',
+    introduction: ['Collaborators can work with the projects shared with them in your workspace. Their role and the workspace’s permissions determine which projects they can see and what they can do. Joining a workspace does not necessarily give someone access to every project.'],
+    activityConfirmation: 'I added a collaborator.',
+    sections: [
+      { heading: '1. Open Workspace collaborators', body: 'Check that you’re in the right team workspace. Open Settings, then select Workspace collaborators. This page shows the people in your workspace and their roles.', image: { src: '/images/workspaces/collaborators.webp', alt: 'Workspace collaborators in Settings, with an Invite user button and sections for Members, Guests, and Viewers. Member details are anonymized.', caption: 'Settings → Workspace collaborators is where you manage access. Personal names, email addresses, and avatars have been removed or replaced.', source: '/images/workspaces/collaborators.webp' } },
+      { heading: '2. Invite a collaborator', body: 'Click Invite user and follow the invitation steps. Enter the intended person’s details, review the access you’re granting and any seat or billing information shown, then send the invitation. Only invite someone who should have access to your team’s work. If you can’t invite people, ask a workspace administrator.' },
+      { heading: '3. Check their access', body: 'Review the invitation or collaborator entry after sending it. An invitation may need to be accepted before the person joins. Check that their role and project access match what you intended, then use the button below to confirm that you’ve added or invited your collaborator and unlock the quiz.' },
+    ],
+    quiz: [
+      { prompt: 'Where do you invite someone to your workspace?', choices: ['Settings → Workspace collaborators → Invite user', 'Workspace overview → Delete workspace', 'The image-generation menu'], answer: 0 },
+      { prompt: 'What determines a collaborator’s project access?', choices: ['The workspace name', 'Their role and the workspace’s permissions and sharing settings', 'How many chats they start'], answer: 1 },
+      { prompt: 'What should you review before sending an invitation?', choices: ['Only the workspace’s icon', 'Nothing, invitations have no consequences', 'The recipient, access, and any seat or billing information shown'], answer: 2 },
+    ],
+  },
+  {
+    module: 'Your workspace', title: 'Manage integrations', duration: '3 min', video: '', replitExample: '',
+    summary: 'Connect tools to your workspace so Replit can help you work with information from other services.',
+    introduction: [
+      'In the first module, you connected tools while planning the birthday party. You can also find and manage integrations, sometimes called connectors, from your workspace settings.',
+      'A workspace integration is associated with that particular workspace. It can support work across that workspace, subject to its permissions. Two workspaces do not automatically share the same connections, even when you belong to both.',
+    ],
+    sections: [
+      { heading: '1. Open Integrations', body: 'Check your active workspace, open Settings, and select Integrations. Use All integrations to browse available tools or search for a service by name. Your integrations is where you can review connections for this workspace.', image: { src: '/images/workspaces/integrations.webp', alt: 'Integrations settings with All integrations and Your integrations tabs, search, and cards for GitHub, GitLab, Airtable, and Asana.', caption: 'Settings → Integrations lets you browse tools and review your workspace’s connections. The workspace name has been anonymized.', source: '/images/workspaces/integrations.webp' } },
+      { heading: '2. Connect a tool', body: 'Choose a service you need and follow its sign-in or setup flow. Check which external account you’re connecting and review the requested permissions before approving. Only connect accounts you’re authorized to use, and don’t paste passwords or access tokens into a chat.' },
+      { heading: '3. Keep workspace connections separate', body: 'A connection added here does not automatically appear in another workspace. If you switch workspaces and need the same service, check that workspace’s integrations and connect it there if needed. Access still depends on the connection’s permissions and the external account; connecting a service does not automatically give every collaborator access to all of its data.' },
+    ],
+    quiz: [
+      { prompt: 'Where is a workspace integration associated?', choices: ['With every workspace you belong to', 'With the workspace where it was connected', 'Only with the browser tab currently open'], answer: 1 },
+      { prompt: 'What should you do if you need the same service in another workspace?', choices: ['Assume the connection is already shared', 'Copy your password into a chat', 'Check that workspace’s integrations and connect it there if needed'], answer: 2 },
+      { prompt: 'What should you review before approving a connection?', choices: ['The external account and requested permissions', 'Only the service’s logo', 'The number of projects in your workspace'], answer: 0 },
     ],
   },
 ];

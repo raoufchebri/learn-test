@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-21T15:44:44.707Z",
+  "generatedAt": "2026-09-21T15:49:58.780Z",
   "mode": "full",
-  "hash": "73c194df97b68b0f6d75f5cee4068a9d9c0f477183e074972032605cc2fcdd52",
+  "hash": "dd1eeff3b0256045f06ab6d0b7cc5b8bad2acc7d8714bfeeacda7b994db2b6fd",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "07ca5219c8b108771546",
@@ -16,6 +16,7 @@
     "156b2fab25664454b8fd",
     "1bdd18bb32bdbd870b43",
     "1da46c3726c67c0355f3",
+    "2308c10f2a63989ef206",
     "23ca1ebf33aa112de505",
     "23f979373f8270d36a23",
     "29dbb2cafe4676e56b30",
@@ -84,7 +85,9 @@
     "d75b9f94b6aaba3e1a69",
     "d8722d7f4617e53c1a3e",
     "e28443e057369f0026ce",
+    "e67e1502420efa342222",
     "eabea78578bd867f3417",
+    "f0f7e6fd18426a859c9f",
     "f4fbb3611e7f86a0ff44",
     "f88d7eedae2d65893065",
     "fe60ce3e2d9633fb259a"
@@ -117,6 +120,7 @@
     "src/learn-content.ts#156b2fab25664454b8fd",
     "src/learn-content.ts#1bdd18bb32bdbd870b43",
     "src/learn-content.ts#1da46c3726c67c0355f3",
+    "src/learn-content.ts#2308c10f2a63989ef206",
     "src/learn-content.ts#23ca1ebf33aa112de505",
     "src/learn-content.ts#23f979373f8270d36a23",
     "src/learn-content.ts#29dbb2cafe4676e56b30",
@@ -185,6 +189,8 @@
     "src/learn-content.ts#d75b9f94b6aaba3e1a69",
     "src/learn-content.ts#d8722d7f4617e53c1a3e",
     "src/learn-content.ts#e28443e057369f0026ce",
+    "src/learn-content.ts#e67e1502420efa342222",
+    "src/learn-content.ts#f0f7e6fd18426a859c9f",
     "src/learn-content.ts#f4fbb3611e7f86a0ff44",
     "src/learn-content.ts#f88d7eedae2d65893065",
     "src/learn-content.ts#fe60ce3e2d9633fb259a",
@@ -5532,6 +5538,46 @@
       "sourcePath": "src/learn-content.ts#68ee614c666645019b3b"
     },
     {
+      "id": "2308c10f2a63989ef206:000",
+      "sourceId": "2308c10f2a63989ef206",
+      "title": "Get to know the prompt box",
+      "heading": "Overview",
+      "text": "The prompt box\nNow that you understand your workspace and how to connect your tools, let’s take a closer look at the prompt box.\nYou’ve already used the prompt box in our previous examples to plan a birthday party, ask for help, and start building an app. We used it to get things done, but haven’t explored its different parts yet.\nIn this module, we’ll look at the controls around your message, explore agent modes and model choices, and learn how to give Replit the context it needs.\n",
+      "url": "/learn/the-prompt-box/get-to-know-the-prompt-box",
+      "pageUrl": "/learn/the-prompt-box/get-to-know-the-prompt-box",
+      "sourcePath": "src/learn-content.ts#2308c10f2a63989ef206"
+    },
+    {
+      "id": "2308c10f2a63989ef206:001",
+      "sourceId": "2308c10f2a63989ef206",
+      "title": "Get to know the prompt box",
+      "heading": "More than a place to type",
+      "text": "The prompt box\nThe large text area is where you describe what you want. Around it are controls for adding context, choosing how Replit works, using voice input, and sending your request. You don’t need to use every control for every message.\nReplit prompt box with a message area, plus button, selector showing Free, microphone, and send arrow.\nThe prompt box you’ve been using, with its surrounding controls. The screenshot is cropped to remove the name and workspace details.\n/images/prompt-box/overview.webp",
+      "url": "/learn/the-prompt-box/get-to-know-the-prompt-box#more-than-a-place-to-type",
+      "pageUrl": "/learn/the-prompt-box/get-to-know-the-prompt-box",
+      "sourcePath": "src/learn-content.ts#2308c10f2a63989ef206"
+    },
+    {
+      "id": "2308c10f2a63989ef206:002",
+      "sourceId": "2308c10f2a63989ef206",
+      "title": "Get to know the prompt box",
+      "heading": "What we’ll explore",
+      "text": "The prompt box\nWe’ll take the prompt box one part at a time:\nYour prompt: describe your goal and the result you want.\nContext: add files and other useful information to your request.\nAgent modes: understand the different ways Replit can help with your task.\nModel choices: understand the available options and when to use them.\nInput controls: explore voice input and sending your message.",
+      "url": "/learn/the-prompt-box/get-to-know-the-prompt-box#what-we-ll-explore",
+      "pageUrl": "/learn/the-prompt-box/get-to-know-the-prompt-box",
+      "sourcePath": "src/learn-content.ts#2308c10f2a63989ef206"
+    },
+    {
+      "id": "2308c10f2a63989ef206:003",
+      "sourceId": "2308c10f2a63989ef206",
+      "title": "Get to know the prompt box",
+      "heading": "Start with what you already know",
+      "text": "The prompt box\nThink back to your birthday-party prompt. You described what you wanted in your own words, reviewed the result, and followed up. That remains the foundation. Next, we’ll explore how the other controls can help you build on it.",
+      "url": "/learn/the-prompt-box/get-to-know-the-prompt-box#start-with-what-you-already-know",
+      "pageUrl": "/learn/the-prompt-box/get-to-know-the-prompt-box",
+      "sourcePath": "src/learn-content.ts#2308c10f2a63989ef206"
+    },
+    {
       "id": "4ccf1fa6fbf4bccd64db:000",
       "sourceId": "4ccf1fa6fbf4bccd64db",
       "title": "What is a Workspace?",
@@ -5640,6 +5686,96 @@
       "url": "/learn/your-workspace/create-a-new-workspace#4-create-and-check-your-workspace",
       "pageUrl": "/learn/your-workspace/create-a-new-workspace",
       "sourcePath": "src/learn-content.ts#56543b50474a4d45e587"
+    },
+    {
+      "id": "56543b50474a4d45e587:006",
+      "sourceId": "56543b50474a4d45e587",
+      "title": "Create a new Workspace",
+      "heading": "Manage your workspace",
+      "text": "Your workspace\nOpen Settings and select Workspace overview to manage your workspace. Here you can review its name and, if you have permission, change it and select Save changes. The sidebar also takes you to collaborators and integrations, which we’ll explore next. Leave Delete workspace alone: it permanently removes the workspace and its data.\nWorkspace overview in Settings, showing the workspace name, Save changes, an example workspace ID, and Delete workspace.\nUse Settings → Workspace overview to manage your workspace. Workspace names and the ID have been replaced with examples.\n/images/workspaces/overview.webp",
+      "url": "/learn/your-workspace/create-a-new-workspace#manage-your-workspace",
+      "pageUrl": "/learn/your-workspace/create-a-new-workspace",
+      "sourcePath": "src/learn-content.ts#56543b50474a4d45e587"
+    },
+    {
+      "id": "e67e1502420efa342222:000",
+      "sourceId": "e67e1502420efa342222",
+      "title": "Add collaborators",
+      "heading": "Overview",
+      "text": "Your workspace\nInvite someone to your team workspace so you can work together.\nCollaborators can work with the projects shared with them in your workspace. Their role and the workspace’s permissions determine which projects they can see and what they can do. Joining a workspace does not necessarily give someone access to every project.\n",
+      "url": "/learn/your-workspace/add-collaborators",
+      "pageUrl": "/learn/your-workspace/add-collaborators",
+      "sourcePath": "src/learn-content.ts#e67e1502420efa342222"
+    },
+    {
+      "id": "e67e1502420efa342222:001",
+      "sourceId": "e67e1502420efa342222",
+      "title": "Add collaborators",
+      "heading": "1. Open Workspace collaborators",
+      "text": "Your workspace\nCheck that you’re in the right team workspace. Open Settings, then select Workspace collaborators. This page shows the people in your workspace and their roles.\nWorkspace collaborators in Settings, with an Invite user button and sections for Members, Guests, and Viewers. Member details are anonymized.\nSettings → Workspace collaborators is where you manage access. Personal names, email addresses, and avatars have been removed or replaced.\n/images/workspaces/collaborators.webp",
+      "url": "/learn/your-workspace/add-collaborators#1-open-workspace-collaborators",
+      "pageUrl": "/learn/your-workspace/add-collaborators",
+      "sourcePath": "src/learn-content.ts#e67e1502420efa342222"
+    },
+    {
+      "id": "e67e1502420efa342222:002",
+      "sourceId": "e67e1502420efa342222",
+      "title": "Add collaborators",
+      "heading": "2. Invite a collaborator",
+      "text": "Your workspace\nClick Invite user and follow the invitation steps. Enter the intended person’s details, review the access you’re granting and any seat or billing information shown, then send the invitation. Only invite someone who should have access to your team’s work. If you can’t invite people, ask a workspace administrator.",
+      "url": "/learn/your-workspace/add-collaborators#2-invite-a-collaborator",
+      "pageUrl": "/learn/your-workspace/add-collaborators",
+      "sourcePath": "src/learn-content.ts#e67e1502420efa342222"
+    },
+    {
+      "id": "e67e1502420efa342222:003",
+      "sourceId": "e67e1502420efa342222",
+      "title": "Add collaborators",
+      "heading": "3. Check their access",
+      "text": "Your workspace\nReview the invitation or collaborator entry after sending it. An invitation may need to be accepted before the person joins. Check that their role and project access match what you intended, then use the button below to confirm that you’ve added or invited your collaborator and unlock the quiz.",
+      "url": "/learn/your-workspace/add-collaborators#3-check-their-access",
+      "pageUrl": "/learn/your-workspace/add-collaborators",
+      "sourcePath": "src/learn-content.ts#e67e1502420efa342222"
+    },
+    {
+      "id": "f0f7e6fd18426a859c9f:000",
+      "sourceId": "f0f7e6fd18426a859c9f",
+      "title": "Manage integrations",
+      "heading": "Overview",
+      "text": "Your workspace\nConnect tools to your workspace so Replit can help you work with information from other services.\nIn the first module, you connected tools while planning the birthday party. You can also find and manage integrations, sometimes called connectors, from your workspace settings.\nA workspace integration is associated with that particular workspace. It can support work across that workspace, subject to its permissions. Two workspaces do not automatically share the same connections, even when you belong to both.\n",
+      "url": "/learn/your-workspace/manage-integrations",
+      "pageUrl": "/learn/your-workspace/manage-integrations",
+      "sourcePath": "src/learn-content.ts#f0f7e6fd18426a859c9f"
+    },
+    {
+      "id": "f0f7e6fd18426a859c9f:001",
+      "sourceId": "f0f7e6fd18426a859c9f",
+      "title": "Manage integrations",
+      "heading": "1. Open Integrations",
+      "text": "Your workspace\nCheck your active workspace, open Settings, and select Integrations. Use All integrations to browse available tools or search for a service by name. Your integrations is where you can review connections for this workspace.\nIntegrations settings with All integrations and Your integrations tabs, search, and cards for GitHub, GitLab, Airtable, and Asana.\nSettings → Integrations lets you browse tools and review your workspace’s connections. The workspace name has been anonymized.\n/images/workspaces/integrations.webp",
+      "url": "/learn/your-workspace/manage-integrations#1-open-integrations",
+      "pageUrl": "/learn/your-workspace/manage-integrations",
+      "sourcePath": "src/learn-content.ts#f0f7e6fd18426a859c9f"
+    },
+    {
+      "id": "f0f7e6fd18426a859c9f:002",
+      "sourceId": "f0f7e6fd18426a859c9f",
+      "title": "Manage integrations",
+      "heading": "2. Connect a tool",
+      "text": "Your workspace\nChoose a service you need and follow its sign-in or setup flow. Check which external account you’re connecting and review the requested permissions before approving. Only connect accounts you’re authorized to use, and don’t paste passwords or access tokens into a chat.",
+      "url": "/learn/your-workspace/manage-integrations#2-connect-a-tool",
+      "pageUrl": "/learn/your-workspace/manage-integrations",
+      "sourcePath": "src/learn-content.ts#f0f7e6fd18426a859c9f"
+    },
+    {
+      "id": "f0f7e6fd18426a859c9f:003",
+      "sourceId": "f0f7e6fd18426a859c9f",
+      "title": "Manage integrations",
+      "heading": "3. Keep workspace connections separate",
+      "text": "Your workspace\nA connection added here does not automatically appear in another workspace. If you switch workspaces and need the same service, check that workspace’s integrations and connect it there if needed. Access still depends on the connection’s permissions and the external account; connecting a service does not automatically give every collaborator access to all of its data.",
+      "url": "/learn/your-workspace/manage-integrations#3-keep-workspace-connections-separate",
+      "pageUrl": "/learn/your-workspace/manage-integrations",
+      "sourcePath": "src/learn-content.ts#f0f7e6fd18426a859c9f"
     }
   ]
 }
