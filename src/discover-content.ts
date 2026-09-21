@@ -41,6 +41,7 @@ export const discoverLessons: LearnLesson[] = [
   },
   {
     ...base, title: 'Connect your tools',
+    activityConfirmation: 'I have successfully connected my calendar to Replit.',
     summary: 'Connect Google Calendar to Replit so it can help with your schedule. In this lesson, you’ll use the Integrations page, sign in with Google, and review the calendar access you’re granting. You don’t need to connect Gmail or create an event yet.',
     outcomes: ['Find Google Calendar in the Integrations page', 'Sign in with the intended Google account', 'Review calendar permissions before allowing access'],
     sections: [

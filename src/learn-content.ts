@@ -66,6 +66,7 @@ export type LearnLesson = {
   openingImage?: { src: string; alt: string };
   entryLink?: string;
   promptGate?: boolean;
+  activityConfirmation?: string;
   introduction?: Array<string | { text: string; items: string[] }>;
   encouragement?: string;
   activity?: 'recipe-build';

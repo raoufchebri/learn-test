@@ -300,8 +300,14 @@ function LessonPage({
   }, [recipe.build.status, recipe.build.replId, recipeLesson, lesson, promptIndex]);
   const [answers, setAnswers] = useState<number[]>([]);
   const [practiceChecks, setPracticeChecks] = useState<number[]>([]);
+  const [confirmedActivity, setConfirmedActivity] = useState<string | null>(null);
+  const activityConfirmed = !lesson.activityConfirmation || confirmedActivity === lesson.title;
+  useEffect(() => {
+    setConfirmedActivity(null);
+    setUnlockCelebration(false);
+  }, [lesson.title]);
   const [copyStatus, setCopyStatus] = useState('Copy request');
-  const practiceDone = !lesson.practice || lesson.practice.checks.every((_, index) => practiceChecks.includes(index));
+  const practiceDone = activityConfirmed && (!lesson.practice || lesson.practice.checks.every((_, index) => practiceChecks.includes(index)));
   const quizPassed = practiceDone && lesson.quiz.length > 0 && lesson.quiz.every((question, index) => answers[index] === question.answer);
   const nextUnlockRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
@@ -591,7 +597,19 @@ function LessonPage({
           <span>{check}</span>
         </label>)}
       </section>}
-      <section className="lesson-quiz">
+      {lesson.activityConfirmation && <div className={`recipe-unlock-action activity-confirmation ${activityConfirmed ? 'is-open' : ''}`}>
+        <button type="button" className="recipe-create-button" disabled={activityConfirmed} aria-expanded={activityConfirmed} aria-controls="confirmed-activity-quiz" onClick={() => {
+          setConfirmedActivity(lesson.title);
+          setUnlockCelebration(true);
+          playUnlockChime();
+          unlockTimers.current.push(window.setTimeout(() => setUnlockCelebration(false), 2000));
+        }}>
+          {activityConfirmed ? <Icons.Check size={20} aria-hidden="true" /> : <LessonUnlockIcon />}
+          <span>{lesson.activityConfirmation}</span>
+        </button>
+        <small aria-live="polite">{activityConfirmed ? 'Success! Your quiz is unlocked.' : 'Confirm once you’re connected to unlock the quiz. This records your progress, not a live account check.'}</small>
+      </div>}
+      {activityConfirmed && <section className="lesson-quiz" id={lesson.activityConfirmation ? 'confirmed-activity-quiz' : undefined}>
         <div className="quiz-heading"><span>{lesson.quiz.length} {lesson.quiz.length === 1 ? 'question' : 'questions'}</span><p className="eyebrow">CHECK YOUR UNDERSTANDING</p></div>
         <h2>Quick check</h2>
         {lesson.quiz.map((question, questionIndex) => (
@@ -635,7 +653,7 @@ function LessonPage({
         {!nextLesson && onComplete && <div className={`recipe-unlock-action ${completed ? 'is-open' : ''}`}>
           <button ref={nextUnlockRef} className="recipe-create-button" disabled={!LEARN_DEV_MODE && !completed} onClick={() => window.location.assign('/')}><LessonUnlockIcon /><span>{LEARN_DEV_MODE ? 'Explore courses' : completed ? 'Section complete · Explore courses' : 'Complete the activity and quiz'}</span></button>
         </div>}
-      </section>
+      </section>}
       </div>}
       </>}
     </article>
