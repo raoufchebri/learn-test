@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-21T15:39:14.701Z",
+  "generatedAt": "2026-09-21T15:40:11.723Z",
   "mode": "full",
-  "hash": "34f612da2333406b84e9926cedac20674a664519b752d3696c93c8a0df3d6287",
+  "hash": "0e6a1e4a6e0bdc6155f70cb67773532f615cfa9c27f14094df14c6ec8ba1b8c5",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "07ca5219c8b108771546",
@@ -5534,7 +5534,7 @@
       "sourceId": "4ccf1fa6fbf4bccd64db",
       "title": "What is a Workspace?",
       "heading": "Overview",
-      "text": "Your workspace\nWhen you log into Replit, your workspace is your starting point. It brings together your chats, projects, and routines in one place.\nThink of your workspace as the area where you organize your work and build your projects. You can start a conversation, return to an app you’re building, or find a routine you’ve set up.\nIn Discover Replit, you used these different parts to plan a birthday party and build an invitation app. Your workspace is where that work lives.\n",
+      "text": "Your workspace\nWhen you log into Replit, your workspace is your starting point. It brings together your chats, projects, and routines in one place.\nThink of your workspace as the area where you organize your work and build your projects. You can start a conversation, return to an app you’re building, or find a routine you’ve set up.\nIn the previous module, you used these different parts to plan a birthday party and build an invitation app. Your workspace is where that work lives.\n",
       "url": "/learn/your-workspace/what-is-a-workspace",
       "pageUrl": "/learn/your-workspace/what-is-a-workspace",
       "sourcePath": "src/learn-content.ts#4ccf1fa6fbf4bccd64db"
