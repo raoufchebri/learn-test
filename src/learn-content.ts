@@ -64,6 +64,7 @@ export function learnDisplayTitle(value: string) {
 export type LearnLesson = {
   module: string;
   title: string;
+  navigationTitle?: string;
   duration: string;
   video: string;
   summary: string;

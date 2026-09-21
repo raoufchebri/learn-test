@@ -486,7 +486,7 @@ function LessonPage({
         </div>
       </div>
       <small className="caption lesson-video-caption-top">Video placeholder · This lesson will include its own walkthrough</small>
-      <p className="eyebrow">{learnDisplayTitle(lesson.module).toUpperCase()} / CHAPTER {chapter + 1} · {lesson.duration}</p>
+      <p className="eyebrow">{learnDisplayTitle(lesson.module).toUpperCase()} / {lesson.navigationTitle === 'Module overview' ? 'MODULE OVERVIEW' : `CHAPTER ${chapter + 1}`} · {lesson.duration}</p>
       <h1>{learnDisplayTitle(lesson.title)}</h1>
       {lesson.testingUnlocked && lesson.projectTask && <p className="caption">Testing access: this lesson is open for review. Project inspection still requires a completed app.</p>}
       <p className="intro">{lesson.summary}</p>
@@ -1061,7 +1061,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
                                 onClick={() => navigate(lessonUrl(targetModule, targetLesson))}
                                 key={targetLesson.title}
                               >
-                                <span>{learnDisplayTitle(targetLesson.title)}</span>
+                                <span>{targetLesson.navigationTitle ?? learnDisplayTitle(targetLesson.title)}</span>
                                 {locked ? <Icons.LockKeyhole size={16} aria-label="Locked" /> : <span className={`lesson-nav-state ${lessonComplete ? 'is-complete' : 'is-progress'}`} role="img" aria-label={lessonComplete ? 'Completed' : 'In progress'}><Icons.Check size={12} strokeWidth={2.5} aria-hidden="true" /></span>}
                               </button>
                             );

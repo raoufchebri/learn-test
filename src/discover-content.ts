@@ -6,6 +6,7 @@ const base = { module: 'Replit 101', duration: '4 min', video: '', replitExample
 export const discoverLessons: LearnLesson[] = [
   {
     ...base, title: 'What You Can Do with Replit',
+    navigationTitle: 'Module overview',
     summary: 'Welcome! Whether you’re new to Replit or have built a few projects with it, this is a place to discover what you can do. Replit helps you explore information, get work done, and turn your ideas into apps.',
     introduction: [
       { text: 'For example, you can:', items: ['Research an idea, compare options, and check sources.', 'Summarize notes or find information in tools you choose to connect.', 'Schedule recurring tasks, such as a weekly update.', 'Turn an idea into a web app you can try and improve.', 'Explore different designs and create visual assets, such as images.'] },
