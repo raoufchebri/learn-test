@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-21T15:40:48.766Z",
+  "generatedAt": "2026-09-21T15:41:38.946Z",
   "mode": "full",
-  "hash": "b719dbbb2cf81de6bc1fb460a9619ee087fb6bbaf66ffbf318b36bd939639022",
+  "hash": "d5c7f84899aae94baa293e5e476ff7d2771280c71585191e49056e6d277a846d",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "07ca5219c8b108771546",
@@ -33,6 +33,7 @@
     "500e7770e2d6398c6b7b",
     "501ee0090d79c578ac65",
     "526ea46c27ac8f1c0d94",
+    "56543b50474a4d45e587",
     "57c6cab2c754343ba6c4",
     "593c8565fe8ae981ec47",
     "59c35af496507448b972",
@@ -133,6 +134,7 @@
     "src/learn-content.ts#500e7770e2d6398c6b7b",
     "src/learn-content.ts#501ee0090d79c578ac65",
     "src/learn-content.ts#526ea46c27ac8f1c0d94",
+    "src/learn-content.ts#56543b50474a4d45e587",
     "src/learn-content.ts#57c6cab2c754343ba6c4",
     "src/learn-content.ts#593c8565fe8ae981ec47",
     "src/learn-content.ts#59c35af496507448b972",
@@ -5578,6 +5580,56 @@
       "url": "/learn/your-workspace/what-is-a-workspace#choose-where-your-work-belongs",
       "pageUrl": "/learn/your-workspace/what-is-a-workspace",
       "sourcePath": "src/learn-content.ts#4ccf1fa6fbf4bccd64db"
+    },
+    {
+      "id": "56543b50474a4d45e587:000",
+      "sourceId": "56543b50474a4d45e587",
+      "title": "Create a new Workspace",
+      "heading": "Overview",
+      "text": "Your workspace\nYou can create another personal workspace for your own work or a team workspace for work you’ll share with others.\nA new workspace gives you a separate place to organize your work. Choose a personal workspace when the work belongs to you, or a team workspace when it belongs to a team.\n",
+      "url": "/learn/your-workspace/create-a-new-workspace",
+      "pageUrl": "/learn/your-workspace/create-a-new-workspace",
+      "sourcePath": "src/learn-content.ts#56543b50474a4d45e587"
+    },
+    {
+      "id": "56543b50474a4d45e587:001",
+      "sourceId": "56543b50474a4d45e587",
+      "title": "Create a new Workspace",
+      "heading": "1. Start creating a workspace",
+      "text": "Your workspace\nOpen the workspace menu in Replit and look for the option to create a new workspace.",
+      "url": "/learn/your-workspace/create-a-new-workspace#1-start-creating-a-workspace",
+      "pageUrl": "/learn/your-workspace/create-a-new-workspace",
+      "sourcePath": "src/learn-content.ts#56543b50474a4d45e587"
+    },
+    {
+      "id": "56543b50474a4d45e587:002",
+      "sourceId": "56543b50474a4d45e587",
+      "title": "Create a new Workspace",
+      "heading": "2. Choose personal or team",
+      "text": "Your workspace\nChoose the kind of workspace you want to create:\nPersonal: another workspace for your own chats, projects, and routines.\nTeam: a workspace for your team’s work, with access managed through permissions and sharing settings.",
+      "url": "/learn/your-workspace/create-a-new-workspace#2-choose-personal-or-team",
+      "pageUrl": "/learn/your-workspace/create-a-new-workspace",
+      "sourcePath": "src/learn-content.ts#56543b50474a4d45e587"
+    },
+    {
+      "id": "56543b50474a4d45e587:003",
+      "sourceId": "56543b50474a4d45e587",
+      "title": "Create a new Workspace",
+      "heading": "3. Finish setting it up",
+      "text": "Your workspace\nFollow the setup prompts for the workspace you chose. Review any plan or billing details shown before confirming. You can read through this lesson without creating a paid workspace.",
+      "url": "/learn/your-workspace/create-a-new-workspace#3-finish-setting-it-up",
+      "pageUrl": "/learn/your-workspace/create-a-new-workspace",
+      "sourcePath": "src/learn-content.ts#56543b50474a4d45e587"
+    },
+    {
+      "id": "56543b50474a4d45e587:004",
+      "sourceId": "56543b50474a4d45e587",
+      "title": "Create a new Workspace",
+      "heading": "4. Check your new workspace",
+      "text": "Your workspace\nOnce setup is complete, check the active workspace before starting a chat or project. Use the workspace menu to return to your previous workspace whenever you need to.",
+      "url": "/learn/your-workspace/create-a-new-workspace#4-check-your-new-workspace",
+      "pageUrl": "/learn/your-workspace/create-a-new-workspace",
+      "sourcePath": "src/learn-content.ts#56543b50474a4d45e587"
     }
   ]
 }

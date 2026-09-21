@@ -434,4 +434,29 @@ courseLessons['Your workspace'] = [
       { prompt: 'What should you check before starting a project?', choices: ['Which workspace you’re in and where the work belongs', 'Whether you have already published an app', 'Whether you know how to write code'], answer: 0 },
     ],
   },
+  {
+    module: 'Your workspace',
+    title: 'Create a new workspace',
+    duration: '3 min',
+    video: '',
+    replitExample: '',
+    summary: 'You can create another personal workspace for your own work or a team workspace for work you’ll share with others.',
+    introduction: [
+      'A new workspace gives you a separate place to organize your work. Choose a personal workspace when the work belongs to you, or a team workspace when it belongs to a team.',
+    ],
+    sections: [
+      { heading: '1. Start creating a workspace', body: 'Open the workspace menu in Replit and look for the option to create a new workspace.' },
+      { heading: '2. Choose personal or team', body: 'Choose the kind of workspace you want to create:', items: [
+        'Personal: another workspace for your own chats, projects, and routines.',
+        'Team: a workspace for your team’s work, with access managed through permissions and sharing settings.',
+      ] },
+      { heading: '3. Finish setting it up', body: 'Follow the setup prompts for the workspace you chose. Review any plan or billing details shown before confirming. You can read through this lesson without creating a paid workspace.' },
+      { heading: '4. Check your new workspace', body: 'Once setup is complete, check the active workspace before starting a chat or project. Use the workspace menu to return to your previous workspace whenever you need to.' },
+    ],
+    quiz: [
+      { prompt: 'Which kind of workspace can you create?', choices: ['Only a team workspace', 'Another personal workspace or a team workspace', 'Only a workspace for published apps'], answer: 1 },
+      { prompt: 'What should you check before confirming setup?', choices: ['Any plan or billing details shown', 'Whether your first app is finished', 'Whether you have created a routine'], answer: 0 },
+      { prompt: 'What should you check before starting work?', choices: ['That every team member can access every project', 'That your previous workspace has been deleted', 'Which workspace is currently active'], answer: 2 },
+    ],
+  },
 ];
