@@ -38,6 +38,8 @@ const learnTitleTerms: Record<string, string> = {
 export function learnDisplayTitle(value: string) {
   const courseLabels: Record<string, string> = {
     'Replit 101': 'Discover Replit',
+    'Your workspace': 'Your workspace',
+    'Build and Design': 'Build and Design',
     'What You Can Do with Replit': 'Welcome to Replit',
     'From Conversation to Outcome': 'Start with a chat',
     'Add the birthday to your calendar': 'Use your tools',

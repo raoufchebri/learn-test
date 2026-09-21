@@ -175,4 +175,23 @@ export const discoverLessons: LearnLesson[] = [
       { prompt: 'What should you do after adding the creature?', choices: ['Assume the page still works', 'Remove the RSVP form', 'Test finding the creature and check that the RSVP still works'], answer: 2 },
     ],
   },
+  {
+    ...base, title: 'You’ve discovered Replit', duration: '2 min',
+    summary: 'Congratulations! You’ve gone from a birthday-party idea to a working app, and explored several ways Replit can help along the way.',
+    introduction: [
+      'You started with a chat, brainstormed a Pokémon-themed party, connected your calendar, created an event, researched a shopping checklist, and set up a weekly routine.',
+      'Then you built a birthday invitation app, explored different designs, and created Mosskip, turning a generated image into an interactive surprise.',
+      'You’ve discovered Replit at the surface level. You don’t need to remember every control yet. Next, we’ll take a closer look at the places and tools you’ve already used.',
+    ],
+    sections: [
+      { heading: 'Where we go next', body: 'We’ll explore four short modules, one at a time:', items: [
+        'Your workspace: understand where everything lives and how to find your work.',
+        'The prompt box: learn how to ask for what you need, add context, and choose models and modes.',
+        'Chats and projects: go deeper into when to use each, and how chats work inside projects.',
+        'Build and Design: explore how to build your app and develop its visual design.',
+      ] },
+      { heading: 'Start with your workspace', body: 'You’ve already moved between conversations, a project, and Canvas. Let’s start by understanding how those places fit together in your workspace.' },
+    ],
+    quiz: [],
+  },
 ];

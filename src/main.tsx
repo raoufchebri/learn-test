@@ -61,6 +61,10 @@ const courseModules: CourseModule[] = [
     description: "See what Replit can do, then try the core outcomes through small, guided exercises.",
     lessons: courseLessons["Replit 101"],
   },
+  { pillar: "discover", title: "Your workspace", description: "Understand where your work lives and how to find your way around Replit.", lessons: [] },
+  { pillar: "discover", title: "The prompt box", description: "Ask for what you need, add context, and explore models and modes.", lessons: [] },
+  { pillar: "discover", title: "Chats and projects", description: "Understand the difference between chats and projects, including chats inside projects.", lessons: [] },
+  { pillar: "discover", title: "Build and Design", description: "Explore building an app and shaping its design on Canvas.", lessons: [] },
   {
     pillar: "ai",
     title: "Work with Agent",
@@ -609,7 +613,10 @@ function LessonPage({
         </button>
         <small aria-live="polite">{activityConfirmed ? 'Success! Your quiz is unlocked.' : 'Confirm you’ve completed the activity to unlock the quiz. This records your progress; it doesn’t verify actions in Replit.'}</small>
       </div>}
-      {activityConfirmed && <section className="lesson-quiz" id={lesson.activityConfirmation ? 'confirmed-activity-quiz' : undefined}>
+      {lesson.quiz.length === 0 && nextLesson && <button className="next-lesson" onClick={nextLesson.onClick}>
+        <span>NEXT MODULE</span><strong>{learnDisplayTitle(nextLesson.title)}</strong><b>→</b>
+      </button>}
+      {activityConfirmed && lesson.quiz.length > 0 && <section className="lesson-quiz" id={lesson.activityConfirmation ? 'confirmed-activity-quiz' : undefined}>
         <div className="quiz-heading"><span>{lesson.quiz.length} {lesson.quiz.length === 1 ? 'question' : 'questions'}</span><p className="eyebrow">CHECK YOUR UNDERSTANDING</p></div>
         <h2>Quick check</h2>
         {lesson.quiz.map((question, questionIndex) => (
@@ -1019,7 +1026,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
                     const index = courseModules.indexOf(targetModule);
                     const moduleCurrent = moduleIndex === index;
                     const moduleMinutes = targetModule.lessons.reduce((total, targetLesson) => total + Number.parseInt(targetLesson.duration, 10), 0);
-                    const moduleProgress = pillar.id === "build" ? 100 * targetModule.lessons.filter((item) => completedLessons.includes(lessonUrl(targetModule, item))).length / targetModule.lessons.length : moduleGroupIndex < activeModuleGroupIndex
+                    const moduleProgress = targetModule.lessons.length === 0 ? 0 : pillar.id === "build" ? 100 * targetModule.lessons.filter((item) => completedLessons.includes(lessonUrl(targetModule, item))).length / targetModule.lessons.length : moduleGroupIndex < activeModuleGroupIndex
                       ? 100
                       : moduleCurrent
                         ? ((lessonIndex + 1) / targetModule.lessons.length) * 100
@@ -1029,13 +1036,18 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
                         <div className="course-module-heading">
                           <b>{String(moduleGroupIndex + 1).padStart(2, "0")}</b>
                           <strong>{learnDisplayTitle(targetModule.title)}</strong>
-                          <small>{isAvailableModule(targetModule) ? `${moduleMinutes} min` : 'Coming soon'}</small>
+                          <small>{targetModule.lessons.length > 0 && isAvailableModule(targetModule) ? `${moduleMinutes} min` : 'Coming soon'}</small>
                         </div>
                         <div
                           className="course-chapters"
                           id={`course-module-${index}`}
                           style={{ "--course-module-progress": `${moduleProgress}%` } as CSSProperties}
                         >
+                          {targetModule.lessons.length === 0 && isAvailableModule(targetModule) && <button
+                            className={moduleCurrent ? "active" : ""}
+                            aria-current={moduleCurrent ? "page" : undefined}
+                            onClick={() => navigate(`/learn/${learnSegment(targetModule.title)}`)}
+                          ><span>Module overview</span></button>}
                           {(isAvailableModule(targetModule) ? targetModule.lessons : []).map((targetLesson, chapterIndex) => {
                             const lessonActive = moduleCurrent && lessonIndex === chapterIndex;
                             const locked = isLocked(lessonUrl(targetModule, targetLesson));
@@ -1058,13 +1070,6 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
                       </section>
                     );
                   })}
-                  {!LEARN_DEV_MODE && pillar.id === 'discover' && <section className="course-module-group">
-                    <div className="course-module-heading">
-                      <b>02</b>
-                      <strong>More to explore</strong>
-                      <small>Coming soon</small>
-                    </div>
-                  </section>}
               </div>
             </section>
           );
@@ -1089,8 +1094,18 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
             } : nextLesson && availableLessonUrls.has(lessonUrl(module, nextLesson)) ? {
               title: nextLesson.title,
               onClick: () => navigate(lessonUrl(module, nextLesson)),
+            } : lesson.title === 'You’ve discovered Replit' && LEARN_DEV_MODE ? {
+              title: 'Your workspace',
+              onClick: () => navigate('/learn/your-workspace'),
             } : undefined}
           />
+        ) : module && module.lessons.length === 0 && isAvailableModule(module) && canBrowseLessons ? (
+          <article className="lesson-content learn-content-stage" key={module.title}>
+            <p className="eyebrow">UP NEXT</p>
+            <h1>{learnDisplayTitle(module.title)}</h1>
+            <p>{module.description}</p>
+            <p>The lessons in this module are coming soon.</p>
+          </article>
         ) : (
           <WelcomePage onStart={startPillar} learnerName={access === 'signed-in' ? learnerName : undefined} learnerKey={access === 'signed-in' ? learnerKey : undefined} />
         )}

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-21T15:07:14.487Z",
+  "generatedAt": "2026-09-21T15:38:15.182Z",
   "mode": "full",
-  "hash": "feb3165226f52352438c720859107638d19c1d31af0c4e53801104d47f0069fe",
+  "hash": "a225f4d8ccd9d947d45c2e1c2ab89ef3fde1f774b4ad894fe5943125b84eee45",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "07ca5219c8b108771546",
@@ -38,6 +38,7 @@
     "5e2fa0f01b2ffce683cf",
     "60a2a9f3e4c7a7ae922f",
     "68ee614c666645019b3b",
+    "6d3aff938c39dca0c873",
     "7246458a3d230b3db2c6",
     "7383119f922acf4aa3ce",
     "7af51a05c93d059bc6be",
@@ -136,6 +137,7 @@
     "src/learn-content.ts#5e2fa0f01b2ffce683cf",
     "src/learn-content.ts#60a2a9f3e4c7a7ae922f",
     "src/learn-content.ts#68ee614c666645019b3b",
+    "src/learn-content.ts#6d3aff938c39dca0c873",
     "src/learn-content.ts#7246458a3d230b3db2c6",
     "src/learn-content.ts#7383119f922acf4aa3ce",
     "src/learn-content.ts#7af51a05c93d059bc6be",
@@ -1224,6 +1226,36 @@
       "url": "/learn/replit-101/create-assets#3-add-it-to-the-app",
       "pageUrl": "/learn/replit-101/create-assets",
       "sourcePath": "src/learn-content.ts#d46e7c337891ba07fd8b"
+    },
+    {
+      "id": "6d3aff938c39dca0c873:000",
+      "sourceId": "6d3aff938c39dca0c873",
+      "title": "You’ve discovered Replit",
+      "heading": "Overview",
+      "text": "Replit 101\nCongratulations! You’ve gone from a birthday-party idea to a working app, and explored several ways Replit can help along the way.\nYou started with a chat, brainstormed a Pokémon-themed party, connected your calendar, created an event, researched a shopping checklist, and set up a weekly routine.\nThen you built a birthday invitation app, explored different designs, and created Mosskip, turning a generated image into an interactive surprise.\nYou’ve discovered Replit at the surface level. You don’t need to remember every control yet. Next, we’ll take a closer look at the places and tools you’ve already used.\n",
+      "url": "/learn/replit-101/you-ve-discovered-replit",
+      "pageUrl": "/learn/replit-101/you-ve-discovered-replit",
+      "sourcePath": "src/learn-content.ts#6d3aff938c39dca0c873"
+    },
+    {
+      "id": "6d3aff938c39dca0c873:001",
+      "sourceId": "6d3aff938c39dca0c873",
+      "title": "You’ve discovered Replit",
+      "heading": "Where we go next",
+      "text": "Replit 101\nWe’ll explore four short modules, one at a time:\nYour workspace: understand where everything lives and how to find your work.\nThe prompt box: learn how to ask for what you need, add context, and choose models and modes.\nChats and projects: go deeper into when to use each, and how chats work inside projects.\nBuild and Design: explore how to build your app and develop its visual design.",
+      "url": "/learn/replit-101/you-ve-discovered-replit#where-we-go-next",
+      "pageUrl": "/learn/replit-101/you-ve-discovered-replit",
+      "sourcePath": "src/learn-content.ts#6d3aff938c39dca0c873"
+    },
+    {
+      "id": "6d3aff938c39dca0c873:002",
+      "sourceId": "6d3aff938c39dca0c873",
+      "title": "You’ve discovered Replit",
+      "heading": "Start with your workspace",
+      "text": "Replit 101\nYou’ve already moved between conversations, a project, and Canvas. Let’s start by understanding how those places fit together in your workspace.",
+      "url": "/learn/replit-101/you-ve-discovered-replit#start-with-your-workspace",
+      "pageUrl": "/learn/replit-101/you-ve-discovered-replit",
+      "sourcePath": "src/learn-content.ts#6d3aff938c39dca0c873"
     },
     {
       "id": "1da46c3726c67c0355f3:000",
