@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-09T21:46:35.873Z",
+  "generatedAt": "2026-09-21T13:42:26.950Z",
   "mode": "full",
-  "hash": "7092bc26e54131657f5dc5cd764a60e3850d8446734153e46e56e13721119cdf",
+  "hash": "9a6aa29c2ab7e3463c873b0fbb8398723ee0c2277c91412eaf45e000bcb486da",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "07ca5219c8b108771546",
@@ -744,9 +744,9 @@
     {
       "id": "bd28a68246d15291632f:000",
       "sourceId": "bd28a68246d15291632f",
-      "title": "Start with a conversation",
+      "title": "Start with a chat",
       "heading": "Overview",
-      "text": "Replit 101\nWhen you open Replit’s home screen, you’ll see a large composer, also called the prompt box.\nIt’s one of the main ways you interact with Replit. Everything starts with a conversation where you explain what you want to achieve.\nIn this lesson, you’ll brainstorm birthday-party themes, choose one, and ask for a picture. Keep the same conversation open so you can build on your ideas.\nUse fictional details for this exercise. You don’t need to share a child’s name, photo, or exact location.\nWrite a prompt to brainstorm party themes\nChoose a theme with a follow-up\nAsk for an image to visualize your idea\n",
+      "text": "Replit 101\nWhen you open Replit’s home screen, you’ll see a large composer, also called the prompt box.\nIt’s one of the main ways you interact with Replit. Everything starts with a chat where you explain what you want to achieve.\nIn this lesson, you’ll brainstorm birthday-party themes, choose one, and ask for a picture. Keep the same chat open so you can build on your ideas.\nUse fictional details for this exercise. You don’t need to share a child’s name, photo, or exact location.\nWrite a prompt to brainstorm party themes\nChoose a theme with a follow-up\nAsk for an image to visualize your idea\n",
       "url": "/learn/replit-101/from-conversation-to-outcome",
       "pageUrl": "/learn/replit-101/from-conversation-to-outcome",
       "sourcePath": "src/learn-content.ts#bd28a68246d15291632f"
@@ -754,7 +754,7 @@
     {
       "id": "bd28a68246d15291632f:001",
       "sourceId": "bd28a68246d15291632f",
-      "title": "Start with a conversation",
+      "title": "Start with a chat",
       "heading": "Tell Replit what you have in mind",
       "text": "Replit 101\nWrite your request in the prompt box. That request is a prompt. Start with the goal and a few helpful details. You’re just asking for ideas for now. You’ll ask for the website later.\nI’m planning a birthday party for a six-year-old, with ten children in a park. Help me brainstorm four themes with simple activities.\nSend the prompt in Replit and read the suggestions. Notice how your details give the ideas a direction. The answer may differ from someone else’s, and that’s fine.",
       "url": "/learn/replit-101/from-conversation-to-outcome#tell-replit-what-you-have-in-mind",
@@ -764,9 +764,9 @@
     {
       "id": "bd28a68246d15291632f:002",
       "sourceId": "bd28a68246d15291632f",
-      "title": "Start with a conversation",
+      "title": "Start with a chat",
       "heading": "Let’s choose a theme together",
-      "text": "Replit 101\nRead Replit’s suggestions and pick a theme you like. Reply in the same conversation so you can build on those ideas. Replace the bracketed text with your choice.\nLet’s go with [your chosen theme]. Suggest three simple activities that fit it.\nRead the activities and ask for a simpler option if you need one. You can keep the theme while refining the details.",
+      "text": "Replit 101\nRead Replit’s suggestions and pick a theme you like. Reply in the same chat so you can build on those ideas. Replace the bracketed text with your choice.\nLet’s go with [your chosen theme]. Suggest three simple activities that fit it.\nRead the activities and ask for a simpler option if you need one. You can keep the theme while refining the details.",
       "url": "/learn/replit-101/from-conversation-to-outcome#let-s-choose-a-theme-together",
       "pageUrl": "/learn/replit-101/from-conversation-to-outcome",
       "sourcePath": "src/learn-content.ts#bd28a68246d15291632f"
@@ -774,9 +774,9 @@
     {
       "id": "bd28a68246d15291632f:003",
       "sourceId": "bd28a68246d15291632f",
-      "title": "Start with a conversation",
+      "title": "Start with a chat",
       "heading": "Picture the party",
-      "text": "Replit 101\nNow ask for a picture of the theme you chose. You don’t need to repeat the whole plan in the same conversation.\nCreate an image of what this birthday party could look like, with decorations and a picnic table in a park, using our chosen theme.\nLook at the picture. Does it fit your idea? You can ask for one change, such as different colors or simpler decorations. That’s a conversation: describe, review, and refine.",
+      "text": "Replit 101\nNow ask for a picture of the theme you chose. You don’t need to repeat the whole plan in the same chat.\nCreate an image of what this birthday party could look like, with decorations and a picnic table in a park, using our chosen theme.\nLook at the picture. Does it fit your idea? You can ask for one change, such as different colors or simpler decorations. That’s a chat: describe, review, and refine.",
       "url": "/learn/replit-101/from-conversation-to-outcome#picture-the-party",
       "pageUrl": "/learn/replit-101/from-conversation-to-outcome",
       "sourcePath": "src/learn-content.ts#bd28a68246d15291632f"
@@ -806,7 +806,7 @@
       "sourceId": "c16efe98d5781aa4f839",
       "title": "Connect your tools",
       "heading": "Connect deliberately",
-      "text": "Replit 101\nOpen Integrations in your Replit Workspace. Find the service you want, check the account and requested permissions, and connect only if you’re comfortable with that access. Then add the integration to your conversation and say which information to use. Connecting a tool does not describe the task for you.",
+      "text": "Replit 101\nOpen Integrations in your Replit Workspace. Find the service you want, check the account and requested permissions, and connect only if you’re comfortable with that access. Then add the integration to your chat and say which information to use. Connecting a tool does not describe the task for you.",
       "url": "/learn/replit-101/connect-your-tools#connect-deliberately",
       "pageUrl": "/learn/replit-101/connect-your-tools",
       "sourcePath": "src/learn-content.ts#c16efe98d5781aa4f839"
@@ -826,7 +826,7 @@
       "sourceId": "c16efe98d5781aa4f839",
       "title": "Connect your tools",
       "heading": "No account to connect? You can still practice",
-      "text": "Replit 101\nUse these sample notes instead: 12 guests, a budget of 120, an indoor room available, and no confirmed date. Paste those notes into the conversation and ask the same question. This practices using context without granting access to an account.",
+      "text": "Replit 101\nUse these sample notes instead: 12 guests, a budget of 120, an indoor room available, and no confirmed date. Paste those notes into the chat and ask the same question. This practices using context without granting access to an account.",
       "url": "/learn/replit-101/connect-your-tools#no-account-to-connect-you-can-still-practice",
       "pageUrl": "/learn/replit-101/connect-your-tools",
       "sourcePath": "src/learn-content.ts#c16efe98d5781aa4f839"
@@ -906,7 +906,7 @@
       "sourceId": "c29185cacb2ae6783540",
       "title": "Create a Routine",
       "heading": "Start with a task you already understand",
-      "text": "Replit 101\nYour gathering research was useful once. If you’re still planning, a weekly update could help you notice new activities. Keep the first Routine narrow: a few relevant updates, with sources, returned to your conversation.",
+      "text": "Replit 101\nYour gathering research was useful once. If you’re still planning, a weekly update could help you notice new activities. Keep the first Routine narrow: a few relevant updates, with sources, returned to your chat.",
       "url": "/learn/replit-101/create-a-routine#start-with-a-task-you-already-understand",
       "pageUrl": "/learn/replit-101/create-a-routine",
       "sourcePath": "src/learn-content.ts#c29185cacb2ae6783540"
@@ -926,7 +926,7 @@
       "sourceId": "c29185cacb2ae6783540",
       "title": "Create a Routine",
       "heading": "Review the proposal first",
-      "text": "Replit 101\nRoutines belong to a conversation, not a project. Use Power or Max when creating one. Ask for a proposal, then review the schedule, scope, and budget before confirming. You can finish this lesson by reviewing a proposal without enabling recurring work.",
+      "text": "Replit 101\nRoutines belong to a chat, not a project. Use Power or Max when creating one. Ask for a proposal, then review the schedule, scope, and budget before confirming. You can finish this lesson by reviewing a proposal without enabling recurring work.",
       "url": "/learn/replit-101/create-a-routine#review-the-proposal-first",
       "pageUrl": "/learn/replit-101/create-a-routine",
       "sourcePath": "src/learn-content.ts#c29185cacb2ae6783540"
@@ -936,7 +936,7 @@
       "sourceId": "c29185cacb2ae6783540",
       "title": "Create a Routine",
       "heading": "Know where the result goes",
-      "text": "Replit 101\nAn enabled Routine returns results to its conversation. Open Routines to inspect its schedule and activity. After a run, check one source just as you did with your first research answer. Turn off a test Routine when you no longer need it.",
+      "text": "Replit 101\nAn enabled Routine returns results to its chat. Open Routines to inspect its schedule and activity. After a run, check one source just as you did with your first research answer. Turn off a test Routine when you no longer need it.",
       "url": "/learn/replit-101/create-a-routine#know-where-the-result-goes",
       "pageUrl": "/learn/replit-101/create-a-routine",
       "sourcePath": "src/learn-content.ts#c29185cacb2ae6783540"
@@ -946,7 +946,7 @@
       "sourceId": "c29185cacb2ae6783540",
       "title": "Create a Routine",
       "heading": "Your turn",
-      "text": "Help me prepare a weekly Routine to find three affordable local activities for my neighborhood gathering. Return source links in this conversation. Ask me for the location, schedule, time zone, and budget. Show the proposal for review; don’t activate it yet.\nI reviewed a proposal, or wrote down the task, schedule, time zone, and budget I would choose.\nI know where to check the results and that activation is a separate decision.",
+      "text": "Help me prepare a weekly Routine to find three affordable local activities for my neighborhood gathering. Return source links in this chat. Ask me for the location, schedule, time zone, and budget. Show the proposal for review; don’t activate it yet.\nI reviewed a proposal, or wrote down the task, schedule, time zone, and budget I would choose.\nI know where to check the results and that activation is a separate decision.",
       "url": "/learn/replit-101/create-a-routine#your-turn",
       "pageUrl": "/learn/replit-101/create-a-routine",
       "sourcePath": "src/learn-content.ts#c29185cacb2ae6783540"
@@ -956,7 +956,7 @@
       "sourceId": "91a21c98ad3525889549",
       "title": "Build your first app",
       "heading": "Overview",
-      "text": "Replit 101\nYour conversation has helped you make a plan. Now you can turn part of that plan into something you can use: a small app for organizing gathering activities.\nDescribe one manageable first version\nTry the app in Preview\nRequest and test one improvement\n",
+      "text": "Replit 101\nYour chat has helped you make a plan. Now you can turn part of that plan into something you can use: a small app for organizing gathering activities.\nDescribe one manageable first version\nTry the app in Preview\nRequest and test one improvement\n",
       "url": "/learn/replit-101/build-and-publish-a-simple-app",
       "pageUrl": "/learn/replit-101/build-and-publish-a-simple-app",
       "sourcePath": "src/learn-content.ts#91a21c98ad3525889549"
@@ -976,7 +976,7 @@
       "sourceId": "91a21c98ad3525889549",
       "title": "Build your first app",
       "heading": "Ask Replit to build it",
-      "text": "Replit 101\nOpen a new conversation or continue your planning conversation. Say explicitly that you want a web app. Replit creates a project for the work and writes the files that make the app function. Building can take a few minutes; keep the conversation open and respond if it needs clarification.",
+      "text": "Replit 101\nOpen a new chat or continue your planning chat. Say explicitly that you want a web app. Replit creates a project for the work and writes the files that make the app function. Building can take a few minutes; keep the chat open and respond if it needs clarification.",
       "url": "/learn/replit-101/build-and-publish-a-simple-app#ask-replit-to-build-it",
       "pageUrl": "/learn/replit-101/build-and-publish-a-simple-app",
       "sourcePath": "src/learn-content.ts#91a21c98ad3525889549"

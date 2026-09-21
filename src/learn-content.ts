@@ -39,7 +39,7 @@ export function learnDisplayTitle(value: string) {
   const courseLabels: Record<string, string> = {
     'Replit 101': 'Discover Replit',
     'What You Can Do with Replit': 'Welcome to Replit',
-    'From Conversation to Outcome': 'Start with a conversation',
+    'From Conversation to Outcome': 'Start with a chat',
     'Build and Publish a Simple App': 'Build your first app',
     'Create a Design and Image': 'Explore design and create an image',
   };

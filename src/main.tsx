@@ -150,7 +150,7 @@ const askLearnPages: DocsSlashPage[] = [
   { label: "Welcome to Replit Learn", path: "/", section: "Learn" },
   ...courseModules.flatMap((module) =>
     module.lessons.map((lesson) => ({
-      label: lesson.title,
+      label: module.pillar === "discover" ? learnDisplayTitle(lesson.title) : lesson.title,
       path: lessonUrl(module, lesson),
       section: module.title,
     })),
