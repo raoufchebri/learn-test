@@ -735,12 +735,12 @@ function WelcomePage({ onStart, learnerName, learnerKey }: { onStart: (pillar: C
       <section className="learn-path-intro">
         <p className="eyebrow">CHOOSE A COURSE</p>
         <h3>Choose your next step.</h3>
-        <p>The first section of Replit 101 and App Foundations in Build are ready to explore. More sections and courses are coming soon.</p>
+        <p>{LEARN_DEV_MODE ? 'All courses and sections are open for development review.' : 'The first section of Replit 101 and App Foundations in Build are ready to explore. More sections and courses are coming soon.'}</p>
         <div className="learn-course-grid">
-          {(['discover', 'build', 'ai', 'design', 'admin'] as CoursePillarId[]).map((id, index) => {
+          {((LEARN_DEV_MODE ? ['discover', 'build', 'ai', 'operate', 'design', 'admin'] : ['discover', 'build', 'ai', 'design', 'admin']) as CoursePillarId[]).map((id, index) => {
             const pillar = coursePillars.find((entry) => entry.id === id)!;
             const available = isAvailablePillar(pillar.id);
-            const pillarLessonCount = pillar.modules[0]?.lessons.length ?? 0;
+            const pillarLessonCount = LEARN_DEV_MODE ? pillar.modules.reduce((count, module) => count + module.lessons.length, 0) : pillar.modules[0]?.lessons.length ?? 0;
             return (
               <button
                 className={`learn-course-card learn-course-card-${pillar.id} ${available ? '' : 'coming-soon'}`}
