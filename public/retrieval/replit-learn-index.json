@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-21T15:49:58.780Z",
+  "generatedAt": "2026-09-21T15:52:24.158Z",
   "mode": "full",
-  "hash": "dd1eeff3b0256045f06ab6d0b7cc5b8bad2acc7d8714bfeeacda7b994db2b6fd",
+  "hash": "77ce97534b27d5dfeba82fc94d5444598796397cccfeff781db76f96f1418327",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "07ca5219c8b108771546",
@@ -90,6 +90,7 @@
     "f0f7e6fd18426a859c9f",
     "f4fbb3611e7f86a0ff44",
     "f88d7eedae2d65893065",
+    "fc4617ddc5906cf96a4a",
     "fe60ce3e2d9633fb259a"
   ],
   "deletedSourceIds": [
@@ -193,6 +194,7 @@
     "src/learn-content.ts#f0f7e6fd18426a859c9f",
     "src/learn-content.ts#f4fbb3611e7f86a0ff44",
     "src/learn-content.ts#f88d7eedae2d65893065",
+    "src/learn-content.ts#fc4617ddc5906cf96a4a",
     "src/learn-content.ts#fe60ce3e2d9633fb259a",
     "src/main.tsx#eabea78578bd867f3417"
   ],
@@ -5576,6 +5578,66 @@
       "url": "/learn/the-prompt-box/get-to-know-the-prompt-box#start-with-what-you-already-know",
       "pageUrl": "/learn/the-prompt-box/get-to-know-the-prompt-box",
       "sourcePath": "src/learn-content.ts#2308c10f2a63989ef206"
+    },
+    {
+      "id": "fc4617ddc5906cf96a4a:000",
+      "sourceId": "fc4617ddc5906cf96a4a",
+      "title": "Prompting and context",
+      "heading": "Overview",
+      "text": "The prompt box\nTell Replit what you want to achieve, then give it the information it needs to help.\nThe prompt box lets you talk with Replit, which uses large language models, or LLMs, to understand your requests and generate responses. Replit also uses tools to do things like read files, explore web pages, and work on your app.\nThe clearer your goal and the more relevant information you provide, the better Replit can tailor its help. It doesn’t automatically know every detail you have in mind.\n",
+      "url": "/learn/the-prompt-box/prompting-and-context",
+      "pageUrl": "/learn/the-prompt-box/prompting-and-context",
+      "sourcePath": "src/learn-content.ts#fc4617ddc5906cf96a4a"
+    },
+    {
+      "id": "fc4617ddc5906cf96a4a:001",
+      "sourceId": "fc4617ddc5906cf96a4a",
+      "title": "Prompting and context",
+      "heading": "Your prompt tells Replit what you want",
+      "text": "The prompt box\nA prompt is the request you send. Explain what you want to achieve and what a useful result would look like. You don’t need technical language or a special formula.\nHelp me plan three simple outdoor activities for a Pokémon-themed birthday party for ten six-year-olds. Keep each activity under 15 minutes and return a short list of supplies for each.",
+      "url": "/learn/the-prompt-box/prompting-and-context#your-prompt-tells-replit-what-you-want",
+      "pageUrl": "/learn/the-prompt-box/prompting-and-context",
+      "sourcePath": "src/learn-content.ts#fc4617ddc5906cf96a4a"
+    },
+    {
+      "id": "fc4617ddc5906cf96a4a:002",
+      "sourceId": "fc4617ddc5906cf96a4a",
+      "title": "Prompting and context",
+      "heading": "Context helps Replit understand your request",
+      "text": "The prompt box\nContext is the information available to help Replit respond. It includes relevant details from your conversation, along with extra information you provide, such as notes, files, images, or links. In our birthday example, the children’s age, party theme, and number of guests are all context. Useful context matters more than simply adding more text.",
+      "url": "/learn/the-prompt-box/prompting-and-context#context-helps-replit-understand-your-request",
+      "pageUrl": "/learn/the-prompt-box/prompting-and-context",
+      "sourcePath": "src/learn-content.ts#fc4617ddc5906cf96a4a"
+    },
+    {
+      "id": "fc4617ddc5906cf96a4a:003",
+      "sourceId": "fc4617ddc5906cf96a4a",
+      "title": "Prompting and context",
+      "heading": "Add context in different ways",
+      "text": "The prompt box\nYou can give Replit context through the prompt box in several ways:\nText: explain your preferences, constraints, or background, or paste relevant notes directly into your message.\nFiles: attach a document or text file, such as a party checklist, and explain what you want Replit to use from it.\nImages: attach a screenshot or reference image and point out what matters, such as the layout or colors you like.\nLinks: paste an external URL and ask Replit to explore the page for information relevant to your task. Explain what it should look for.",
+      "url": "/learn/the-prompt-box/prompting-and-context#add-context-in-different-ways",
+      "pageUrl": "/learn/the-prompt-box/prompting-and-context",
+      "sourcePath": "src/learn-content.ts#fc4617ddc5906cf96a4a"
+    },
+    {
+      "id": "fc4617ddc5906cf96a4a:004",
+      "sourceId": "fc4617ddc5906cf96a4a",
+      "title": "Prompting and context",
+      "heading": "Tell Replit how to use what you add",
+      "text": "The prompt box\nAn attachment or link is more useful when you explain why you’re sharing it. For example, attach a fictional party checklist and send this follow-up in the same chat:\nUse the attached checklist to revise the activities. Reuse the supplies we already have, and list anything extra we would need separately. If the checklist is missing information, ask me rather than guessing.\nFor a link, you could ask Replit to read the park’s visitor page and check whether your planned activities follow its rules. Some pages require sign-in or block access. If Replit can’t read the page, provide the relevant text or an authorized file instead; don’t assume the link was read.",
+      "url": "/learn/the-prompt-box/prompting-and-context#tell-replit-how-to-use-what-you-add",
+      "pageUrl": "/learn/the-prompt-box/prompting-and-context",
+      "sourcePath": "src/learn-content.ts#fc4617ddc5906cf96a4a"
+    },
+    {
+      "id": "fc4617ddc5906cf96a4a:005",
+      "sourceId": "fc4617ddc5906cf96a4a",
+      "title": "Prompting and context",
+      "heading": "Share what is useful, then review the result",
+      "text": "The prompt box\nOnly share information you’re allowed to use. For this course, keep party details fictional and remove personal details from screenshots. Never include passwords or access tokens. Context helps Replit, but it doesn’t guarantee a correct answer: review the result and clarify anything it misunderstood.",
+      "url": "/learn/the-prompt-box/prompting-and-context#share-what-is-useful-then-review-the-result",
+      "pageUrl": "/learn/the-prompt-box/prompting-and-context",
+      "sourcePath": "src/learn-content.ts#fc4617ddc5906cf96a4a"
     },
     {
       "id": "4ccf1fa6fbf4bccd64db:000",

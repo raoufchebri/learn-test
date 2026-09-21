@@ -430,6 +430,31 @@ courseLessons['The prompt box'] = [
       { prompt: 'What will you explore in this module?', choices: ['Only how to type a longer message', 'The prompt box’s controls, context, agent modes, and model choices', 'Only how to publish an app'], answer: 1 },
     ],
   },
+  {
+    module: 'The prompt box', title: 'Prompting and context', duration: '4 min', video: '', replitExample: '',
+    summary: 'Tell Replit what you want to achieve, then give it the information it needs to help.',
+    introduction: [
+      'The prompt box lets you talk with Replit, which uses large language models, or LLMs, to understand your requests and generate responses. Replit also uses tools to do things like read files, explore web pages, and work on your app.',
+      'The clearer your goal and the more relevant information you provide, the better Replit can tailor its help. It doesn’t automatically know every detail you have in mind.',
+    ],
+    sections: [
+      { heading: 'Your prompt tells Replit what you want', body: 'A prompt is the request you send. Explain what you want to achieve and what a useful result would look like. You don’t need technical language or a special formula.', prompt: 'Help me plan three simple outdoor activities for a Pokémon-themed birthday party for ten six-year-olds. Keep each activity under 15 minutes and return a short list of supplies for each.' },
+      { heading: 'Context helps Replit understand your request', body: 'Context is the information available to help Replit respond. It includes relevant details from your conversation, along with extra information you provide, such as notes, files, images, or links. In our birthday example, the children’s age, party theme, and number of guests are all context. Useful context matters more than simply adding more text.' },
+      { heading: 'Add context in different ways', body: 'You can give Replit context through the prompt box in several ways:', items: [
+        'Text: explain your preferences, constraints, or background, or paste relevant notes directly into your message.',
+        'Files: attach a document or text file, such as a party checklist, and explain what you want Replit to use from it.',
+        'Images: attach a screenshot or reference image and point out what matters, such as the layout or colors you like.',
+        'Links: paste an external URL and ask Replit to explore the page for information relevant to your task. Explain what it should look for.',
+      ] },
+      { heading: 'Tell Replit how to use what you add', body: 'An attachment or link is more useful when you explain why you’re sharing it. For example, attach a fictional party checklist and send this follow-up in the same chat:', prompt: 'Use the attached checklist to revise the activities. Reuse the supplies we already have, and list anything extra we would need separately. If the checklist is missing information, ask me rather than guessing.', afterPrompt: 'For a link, you could ask Replit to read the park’s visitor page and check whether your planned activities follow its rules. Some pages require sign-in or block access. If Replit can’t read the page, provide the relevant text or an authorized file instead; don’t assume the link was read.' },
+      { heading: 'Share what is useful, then review the result', body: 'Only share information you’re allowed to use. For this course, keep party details fictional and remove personal details from screenshots. Never include passwords or access tokens. Context helps Replit, but it doesn’t guarantee a correct answer: review the result and clarify anything it misunderstood.' },
+    ],
+    quiz: [
+      { prompt: 'What is context?', choices: ['Only the last sentence you typed', 'Relevant information that helps Replit understand and respond to your request', 'A setting that guarantees every answer is correct'], answer: 1 },
+      { prompt: 'How can you add context?', choices: ['Only by writing a very long prompt', 'Only by connecting a calendar', 'Through text, files, images, and relevant links'], answer: 2 },
+      { prompt: 'What should you do when sharing a file or URL?', choices: ['Explain how Replit should use it and check that it could access the information', 'Assume every page can be read', 'Leave Replit to guess why you shared it'], answer: 0 },
+    ],
+  },
 ];
 
 courseLessons['Your workspace'] = [
