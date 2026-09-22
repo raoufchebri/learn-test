@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-22T16:30:57.432Z",
+  "generatedAt": "2026-09-22T16:37:32.031Z",
   "mode": "full",
-  "hash": "aacf3cd0e26d4a347170401e126aa436960a44aef8d2e32b46807ca81ed295e7",
+  "hash": "15a52f9c951c9de66bf7bbcb1924af1e40b8fbdeb2be29df2b3eb8dc9d90c63d",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "072878e974a6f3620e8f",
@@ -15,6 +15,7 @@
     "121dcafdbe08da48fc46",
     "1293ec6fc47ea554c652",
     "1403cb888a1c55c83733",
+    "14bd6691e8d36e30b261",
     "156b2fab25664454b8fd",
     "1bdd18bb32bdbd870b43",
     "1da46c3726c67c0355f3",
@@ -132,6 +133,7 @@
     "src/learn-content.ts#121dcafdbe08da48fc46",
     "src/learn-content.ts#1293ec6fc47ea554c652",
     "src/learn-content.ts#1403cb888a1c55c83733",
+    "src/learn-content.ts#14bd6691e8d36e30b261",
     "src/learn-content.ts#156b2fab25664454b8fd",
     "src/learn-content.ts#1bdd18bb32bdbd870b43",
     "src/learn-content.ts#1da46c3726c67c0355f3",
@@ -5656,11 +5658,31 @@
       "id": "855925249512818f233c:009",
       "sourceId": "855925249512818f233c",
       "title": "Build a picnic sign-up app",
-      "heading": "Submit your project for review",
-      "text": "Your capstone\nPublishing is optional. Below, connect Replit if needed, select your picnic app from your recent projects, and submit it. Agent reviews each requirement. The checklist shows green checks for passed items and red circled crosses for items needing work or more evidence, with a short explanation. All six requirements must pass to unlock the quiz. Use the feedback to improve your project and resubmit. Connection failures or incomplete reviews do not count as passing. This is an Agent assessment, not a substitute for your own testing.",
-      "url": "/learn/your-capstone/build-a-picnic-sign-up-app#submit-your-project-for-review",
+      "heading": "Ready for review?",
+      "text": "Your capstone\nPublishing is optional. When you’ve built and tested your app, continue to Review. There you’ll select your project, submit it, and see your results and next steps. You can return to these instructions at any time.",
+      "url": "/learn/your-capstone/build-a-picnic-sign-up-app#ready-for-review",
       "pageUrl": "/learn/your-capstone/build-a-picnic-sign-up-app",
       "sourcePath": "src/learn-content.ts#855925249512818f233c"
+    },
+    {
+      "id": "14bd6691e8d36e30b261:000",
+      "sourceId": "14bd6691e8d36e30b261",
+      "title": "Review",
+      "heading": "Overview",
+      "text": "Your capstone\nSubmit your picnic app, see what passed, and use the feedback to finish your capstone.\nSelect your project and ask Agent to review it. Your results are saved on this page so you can return after making improvements.\nIf all six requirements pass, you’ll see congratulations and unlock the final quiz. Otherwise, your action plan explains what needs attention and gives you exact prompts to try in your project. Make the changes, test them, then send it for review again.\n",
+      "url": "/learn/your-capstone/review",
+      "pageUrl": "/learn/your-capstone/review",
+      "sourcePath": "src/learn-content.ts#14bd6691e8d36e30b261"
+    },
+    {
+      "id": "14bd6691e8d36e30b261:001",
+      "sourceId": "14bd6691e8d36e30b261",
+      "title": "Review",
+      "heading": "How review works",
+      "text": "Your capstone\nGreen checks show passed requirements. Red circled crosses show confirmed gaps or requirements that could not be verified. Missing evidence does not necessarily mean a feature is broken. Agent reviews the available implementation and evidence; this is not a substitute for your own testing. Connection failures and incomplete reviews never count as passing. Publishing is not required.",
+      "url": "/learn/your-capstone/review#how-review-works",
+      "pageUrl": "/learn/your-capstone/review",
+      "sourcePath": "src/learn-content.ts#14bd6691e8d36e30b261"
     },
     {
       "id": "09e72e6653d69c149ff0:000",

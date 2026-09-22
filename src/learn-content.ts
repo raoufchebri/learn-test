@@ -414,7 +414,6 @@ courseLessons['Your capstone'] = [
       'You followed the birthday example from a conversation to a working invitation. This time, you’ll make the decisions. We’ll give you the steps and requirements, but you’ll write the prompts and guide Replit yourself.',
       'Your app should help guests see the picnic details, say whether they’re coming, and choose something to bring. Use fictional names and event details. Keep it small: no payments, real invitations, or complicated accounts are required.',
     ],
-    activityConfirmation: 'I have built and tested my picnic app.',
     sections: [
       { heading: 'Your brief', body: 'Build one web app with these essentials:', items: [
         'An event page with a picnic title, fictional date and location, and a short description.',
@@ -440,7 +439,20 @@ courseLessons['Your capstone'] = [
         'A brief note describing the context and tool or skill you used, the design you chose, and one improvement you requested.',
         'Your test results, including anything that still needs fixing.',
       ] },
-      { heading: 'Submit your project for review', body: 'Publishing is optional. Below, connect Replit if needed, select your picnic app from your recent projects, and submit it. Agent reviews each requirement. The checklist shows green checks for passed items and red circled crosses for items needing work or more evidence, with a short explanation. All six requirements must pass to unlock the quiz. Use the feedback to improve your project and resubmit. Connection failures or incomplete reviews do not count as passing. This is an Agent assessment, not a substitute for your own testing.' },
+      { heading: 'Ready for review?', body: 'Publishing is optional. When you’ve built and tested your app, continue to Review. There you’ll select your project, submit it, and see your results and next steps. You can return to these instructions at any time.' },
+    ],
+    quiz: [],
+  },
+  {
+    module: 'Your capstone', title: 'Review', duration: '5 min', video: '', replitExample: '',
+    summary: 'Submit your picnic app, see what passed, and use the feedback to finish your capstone.',
+    introduction: [
+      'Select your project and ask Agent to review it. Your results are saved on this page so you can return after making improvements.',
+      'If all six requirements pass, you’ll see congratulations and unlock the final quiz. Otherwise, your action plan explains what needs attention and gives you exact prompts to try in your project. Make the changes, test them, then send it for review again.',
+    ],
+    activityConfirmation: 'Submit my project for review.',
+    sections: [
+      { heading: 'How review works', body: 'Green checks show passed requirements. Red circled crosses show confirmed gaps or requirements that could not be verified. Missing evidence does not necessarily mean a feature is broken. Agent reviews the available implementation and evidence; this is not a substitute for your own testing. Connection failures and incomplete reviews never count as passing. Publishing is not required.' },
     ],
     quiz: [
       { prompt: 'What makes the capstone complete?', choices: ['Replit says the app is finished', 'You’ve built the required features, tested them, and prepared your hand-in record', 'You’ve generated an attractive image'], answer: 1 },

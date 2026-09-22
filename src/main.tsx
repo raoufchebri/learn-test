@@ -603,7 +603,7 @@ function LessonPage({
           <span>{check}</span>
         </label>)}
       </section>}
-      {lesson.module === 'Your capstone' && <CapstoneSubmission onValidated={(passed) => {
+      {lesson.module === 'Your capstone' && lesson.title === 'Review' && <CapstoneSubmission onValidated={(passed) => {
         setConfirmedActivity(passed ? lesson.title : null);
       }} />}
       {lesson.activityConfirmation && lesson.module !== 'Your capstone' && <div className={`recipe-unlock-action activity-confirmation ${activityConfirmed ? 'is-open' : ''}`}>
@@ -619,7 +619,7 @@ function LessonPage({
         <small aria-live="polite">{activityConfirmed ? 'Success! Your quiz is unlocked.' : 'Confirm you’ve completed the activity to unlock the quiz. This records your progress; it doesn’t verify actions in Replit.'}</small>
       </div>}
       {lesson.quiz.length === 0 && nextLesson && <button className="next-lesson" onClick={nextLesson.onClick}>
-        <span>NEXT MODULE</span><strong>{learnDisplayTitle(nextLesson.title)}</strong><b>→</b>
+        <span>{lesson.module === 'Your capstone' ? 'CONTINUE' : 'NEXT MODULE'}</span><strong>{learnDisplayTitle(nextLesson.title)}</strong><b>→</b>
       </button>}
       {activityConfirmed && lesson.quiz.length > 0 && <section className="lesson-quiz" id={lesson.activityConfirmation ? 'confirmed-activity-quiz' : undefined}>
         <div className="quiz-heading"><span>{lesson.quiz.length} {lesson.quiz.length === 1 ? 'question' : 'questions'}</span><p className="eyebrow">CHECK YOUR UNDERSTANDING</p></div>

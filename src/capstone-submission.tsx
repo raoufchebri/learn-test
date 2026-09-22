@@ -111,9 +111,9 @@ export function CapstoneSubmission({ onValidated }: { onValidated: (passed: bool
     finally { setBusy(false); }
   }
   return <section className="recipe-unlock-action activity-confirmation" aria-label="Submit your capstone">
-    <h2>Submit your picnic app</h2>
+    <h2>{submission?.passed ? "Your capstone is complete" : submission?.passed === false ? "Your review and next steps" : "Submit your picnic app"}</h2>
     {submission?.passed ? <div role="status">
-      <h3>Congratulations, you accomplished the task!</h3>
+      <h3>Congratulations, you’ve done this really well!</h3>
       <p>{submission.title} passed the review. Your submission is saved.</p>
       <button type="button" className="recipe-create-button" onClick={() => dialog.current?.showModal()}>View review checklist</button>
       <small>Reviewed {new Date(submission.checkedAt).toLocaleString()}. This is an Agent assessment of the project at submission time, not a guarantee or a new browser test.</small>
