@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-22T16:11:31.948Z",
+  "generatedAt": "2026-09-22T16:12:23.177Z",
   "mode": "full",
-  "hash": "c07de2ae34d46ad3263de2789642e62f8b8cd79e215e268b981ce09dab678276",
+  "hash": "3d16d9985f2ff10722e8504c961d083a91097821d01e90f4fd64a44779288de3",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "072878e974a6f3620e8f",
@@ -5595,13 +5595,23 @@
       "sourceId": "2a8689287cc3571bec63",
       "title": "Build your application",
       "heading": "Overview",
-      "text": "Build and Design\nBuild gives you the environment and tools to turn an idea into a working application.\nIn Build, you ask Agent to implement features, try them in the app preview, and refine the result. You can add the services your app needs instead of setting up every part yourself.\n",
+      "text": "Build and Design\nBuild turns your ideas into web apps, mobile apps, dashboards, slide decks, and more.\nIn Build, you ask Agent to implement features, try them in the app preview, and refine the result. You can add the services your app needs instead of setting up every part yourself.\n",
       "url": "/learn/build-and-design/build-your-application",
       "pageUrl": "/learn/build-and-design/build-your-application",
       "sourcePath": "src/learn-content.ts#2a8689287cc3571bec63"
     },
     {
       "id": "2a8689287cc3571bec63:001",
+      "sourceId": "2a8689287cc3571bec63",
+      "title": "Build your application",
+      "heading": "What you can build",
+      "text": "Build and Design\nProjects aren’t limited to one kind of application. Describe the result you want, for example:\nWeb apps and websites: an RSVP app, a portfolio, a booking service, or an online store.\nMobile apps: an app for phones, such as a companion app for event guests.\nDashboards: interactive charts and tables to explore data, track attendance, or monitor a business.\nSlides: a presentation to explain an idea, share a plan, or present your results.",
+      "url": "/learn/build-and-design/build-your-application#what-you-can-build",
+      "pageUrl": "/learn/build-and-design/build-your-application",
+      "sourcePath": "src/learn-content.ts#2a8689287cc3571bec63"
+    },
+    {
+      "id": "2a8689287cc3571bec63:002",
       "sourceId": "2a8689287cc3571bec63",
       "title": "Build your application",
       "heading": "Make the app work",
@@ -5611,7 +5621,7 @@
       "sourcePath": "src/learn-content.ts#2a8689287cc3571bec63"
     },
     {
-      "id": "2a8689287cc3571bec63:002",
+      "id": "2a8689287cc3571bec63:003",
       "sourceId": "2a8689287cc3571bec63",
       "title": "Build your application",
       "heading": "Databases: remember information",
@@ -5621,7 +5631,7 @@
       "sourcePath": "src/learn-content.ts#2a8689287cc3571bec63"
     },
     {
-      "id": "2a8689287cc3571bec63:003",
+      "id": "2a8689287cc3571bec63:004",
       "sourceId": "2a8689287cc3571bec63",
       "title": "Build your application",
       "heading": "Authentication: know who is signed in",
@@ -5631,7 +5641,7 @@
       "sourcePath": "src/learn-content.ts#2a8689287cc3571bec63"
     },
     {
-      "id": "2a8689287cc3571bec63:004",
+      "id": "2a8689287cc3571bec63:005",
       "sourceId": "2a8689287cc3571bec63",
       "title": "Build your application",
       "heading": "Secrets: protect sensitive configuration",
@@ -5641,7 +5651,7 @@
       "sourcePath": "src/learn-content.ts#2a8689287cc3571bec63"
     },
     {
-      "id": "2a8689287cc3571bec63:005",
+      "id": "2a8689287cc3571bec63:006",
       "sourceId": "2a8689287cc3571bec63",
       "title": "Build your application",
       "heading": "Security: review and test",
@@ -5651,7 +5661,7 @@
       "sourcePath": "src/learn-content.ts#2a8689287cc3571bec63"
     },
     {
-      "id": "2a8689287cc3571bec63:006",
+      "id": "2a8689287cc3571bec63:007",
       "sourceId": "2a8689287cc3571bec63",
       "title": "Build your application",
       "heading": "Preview, then publish",
@@ -5665,13 +5675,33 @@
       "sourceId": "3945d9557fa47a307782",
       "title": "Explore design",
       "heading": "Overview",
-      "text": "Build and Design\nUse Design when you want to explore how your application should look and feel.\nSelect Design in your project to open Canvas, an infinite board where you can arrange and compare frames. You’ve already used it to explore the birthday invitation and generate Mosskip.\n",
+      "text": "Build and Design\nUse Design to create visual concepts, explore variations, and generate images, videos, and other assets.\nSelect Design in your project to open Canvas, an infinite board where you can arrange and compare frames. You’ve already used it to explore the birthday invitation and generate Mosskip.\n",
       "url": "/learn/build-and-design/explore-design",
       "pageUrl": "/learn/build-and-design/explore-design",
       "sourcePath": "src/learn-content.ts#3945d9557fa47a307782"
     },
     {
       "id": "3945d9557fa47a307782:001",
+      "sourceId": "3945d9557fa47a307782",
+      "title": "Explore design",
+      "heading": "What you can create in Design",
+      "text": "Build and Design\nDesign is a place to explore visual ideas, not just adjust an existing app. You can:\nCreate designs: explore page layouts, app screens, landing pages, and other visual concepts.\nGenerate alternatives: ask for new versions, compare directions side by side, and refine the one you prefer.\nGenerate images: create illustrations and supporting assets, like Mosskip for the birthday invitation.\nGenerate videos and vector graphics: explore motion or create scalable visual assets using the available generation tools.",
+      "url": "/learn/build-and-design/explore-design#what-you-can-create-in-design",
+      "pageUrl": "/learn/build-and-design/explore-design",
+      "sourcePath": "src/learn-content.ts#3945d9557fa47a307782"
+    },
+    {
+      "id": "3945d9557fa47a307782:002",
+      "sourceId": "3945d9557fa47a307782",
+      "title": "Explore design",
+      "heading": "Generate, review, and iterate",
+      "text": "Build and Design\nOpen Generate in the Canvas toolbar to explore the available creation options. Describe what you want, review the output, and ask for changes. You can generate something new or keep improving an existing frame. Check any model options and generation costs shown before starting.",
+      "url": "/learn/build-and-design/explore-design#generate-review-and-iterate",
+      "pageUrl": "/learn/build-and-design/explore-design",
+      "sourcePath": "src/learn-content.ts#3945d9557fa47a307782"
+    },
+    {
+      "id": "3945d9557fa47a307782:003",
       "sourceId": "3945d9557fa47a307782",
       "title": "Explore design",
       "heading": "Canvas and frames",
@@ -5681,7 +5711,7 @@
       "sourcePath": "src/learn-content.ts#3945d9557fa47a307782"
     },
     {
-      "id": "3945d9557fa47a307782:002",
+      "id": "3945d9557fa47a307782:004",
       "sourceId": "3945d9557fa47a307782",
       "title": "Explore design",
       "heading": "Tell Agent what to change",
@@ -5691,7 +5721,7 @@
       "sourcePath": "src/learn-content.ts#3945d9557fa47a307782"
     },
     {
-      "id": "3945d9557fa47a307782:003",
+      "id": "3945d9557fa47a307782:005",
       "sourceId": "3945d9557fa47a307782",
       "title": "Explore design",
       "heading": "Explore before committing",
@@ -5701,7 +5731,7 @@
       "sourcePath": "src/learn-content.ts#3945d9557fa47a307782"
     },
     {
-      "id": "3945d9557fa47a307782:004",
+      "id": "3945d9557fa47a307782:006",
       "sourceId": "3945d9557fa47a307782",
       "title": "Explore design",
       "heading": "A design is not yet a working feature",

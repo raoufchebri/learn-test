@@ -431,9 +431,15 @@ courseLessons['Build and Design'] = [
   },
   {
     module: 'Build and Design', title: 'Build your application', duration: '4 min', video: '', replitExample: '',
-    summary: 'Build gives you the environment and tools to turn an idea into a working application.',
+    summary: 'Build turns your ideas into web apps, mobile apps, dashboards, slide decks, and more.',
     introduction: ['In Build, you ask Agent to implement features, try them in the app preview, and refine the result. You can add the services your app needs instead of setting up every part yourself.'],
     sections: [
+      { heading: 'What you can build', body: 'Projects aren’t limited to one kind of application. Describe the result you want, for example:', items: [
+        'Web apps and websites: an RSVP app, a portfolio, a booking service, or an online store.',
+        'Mobile apps: an app for phones, such as a companion app for event guests.',
+        'Dashboards: interactive charts and tables to explore data, track attendance, or monitor a business.',
+        'Slides: a presentation to explain an idea, share a plan, or present your results.',
+      ] },
       { heading: 'Make the app work', body: 'Describe the behavior you want, not just how it should look. For our birthday app, that means letting a guest submit an RSVP, saving it, and showing the host the responses. Try each feature in Preview and ask Agent to fix anything that doesn’t behave as expected.' },
       { heading: 'Databases: remember information', body: 'A database stores structured information your app needs to keep, such as RSVP answers. Ask Agent what needs to be stored and have it connect the app to the appropriate database. Not every app needs one.' },
       { heading: 'Authentication: know who is signed in', body: 'Authentication lets people sign in and identifies them to your app. Authorization is the separate question of what they’re allowed to do. For example, a host can sign in, but the app must also check that they’re allowed to see the guest list.' },
@@ -449,9 +455,16 @@ courseLessons['Build and Design'] = [
   },
   {
     module: 'Build and Design', title: 'Explore Design', duration: '3 min', video: '', replitExample: '',
-    summary: 'Use Design when you want to explore how your application should look and feel.',
+    summary: 'Use Design to create visual concepts, explore variations, and generate images, videos, and other assets.',
     introduction: ['Select Design in your project to open Canvas, an infinite board where you can arrange and compare frames. You’ve already used it to explore the birthday invitation and generate Mosskip.'],
     sections: [
+      { heading: 'What you can create in Design', body: 'Design is a place to explore visual ideas, not just adjust an existing app. You can:', items: [
+        'Create designs: explore page layouts, app screens, landing pages, and other visual concepts.',
+        'Generate alternatives: ask for new versions, compare directions side by side, and refine the one you prefer.',
+        'Generate images: create illustrations and supporting assets, like Mosskip for the birthday invitation.',
+        'Generate videos and vector graphics: explore motion or create scalable visual assets using the available generation tools.',
+      ] },
+      { heading: 'Generate, review, and iterate', body: 'Open Generate in the Canvas toolbar to explore the available creation options. Describe what you want, review the output, and ask for changes. You can generate something new or keep improving an existing frame. Check any model options and generation costs shown before starting.' },
       { heading: 'Canvas and frames', body: 'Think of Canvas as a large working area you can pan and zoom around. Frames are the individual items on that board. They can show design mockups, images, or project outputs such as apps and slides. You can keep several ideas side by side instead of replacing one idea every time.' },
       { heading: 'Tell Agent what to change', body: 'Select the frame you want to work on, then describe the change in chat. The selection gives Agent visual context. You can ask for a different layout, more readable text, or another visual direction.', prompt: 'Keep the Pokémon birthday theme, but make this invitation easier to use on a phone. Make the RSVP button more prominent and keep the party details easy to read.' },
       { heading: 'Explore before committing', body: 'Compare frames and use suggestions or visual editing to refine the direction you like. This is especially useful when you have specific interface requirements or want to see alternatives before building the full behavior.' },
