@@ -1,3 +1,5 @@
+.capstone-back-button { display: block; margin: 14px auto 0; padding: 8px; border: 0; background: transparent; color: inherit; font: inherit; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.capstone-back-button:disabled { opacity: .45; cursor: default; }
 .capstone-checklist { margin: 20px 0; text-align: left; }
 .capstone-project-modal .capstone-checklist-summary { font-size: 13px; font-weight: 600; margin: 0 0 12px; }
 .capstone-check-row { display: flex; gap: 12px; padding: 14px 0; border-top: 1px solid #8883; }

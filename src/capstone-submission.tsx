@@ -12,6 +12,7 @@ export function CapstoneSubmission({ onValidated }: { onValidated: (passed: bool
   const [message, setMessage] = useState("");
   const [authNeeded, setAuthNeeded] = useState(false);
   const [submission, setSubmission] = useState<Submission | null>(null);
+  const [step, setStep] = useState<"project" | "review">("project");
   const dialog = useRef<HTMLDialogElement>(null);
   const validated = useRef(onValidated);
   validated.current = onValidated;
@@ -20,6 +21,7 @@ export function CapstoneSubmission({ onValidated }: { onValidated: (passed: bool
     async function load() {
       setLoading(true);
       setSubmission(null); setSelected(""); setApps([]);
+      setStep("project");
       validated.current(false);
       try {
         const response = await fetch("/api/mcp/apps", { signal: controller.signal });
@@ -38,6 +40,7 @@ export function CapstoneSubmission({ onValidated }: { onValidated: (passed: bool
         if (controller.signal.aborted) return;
         if (result.submission) {
           setSubmission(result.submission); setSelected(result.submission.appId);
+          setStep("review");
           if (result.submission.passed === true) validated.current(true);
         }
       } catch { if (!controller.signal.aborted) setMessage("Couldn’t load projects. Refresh the page to try again."); }
@@ -89,10 +92,10 @@ export function CapstoneSubmission({ onValidated }: { onValidated: (passed: bool
     <dialog ref={dialog} className="learn-sign-in-modal capstone-project-modal" aria-labelledby="capstone-modal-title" aria-describedby="capstone-modal-description">
       <button type="button" className="modal-close" aria-label="Close project selection" onClick={() => dialog.current?.close()}><X size={20} /></button>
       <div className="capstone-modal-icon" aria-hidden="true">{submission?.passed ? <Check size={26} /> : <Folder size={26} />}</div>
-      <p className="signin-eyebrow">YOUR CAPSTONE</p>
-      <h2 id="capstone-modal-title">{submission?.passed ? "You did it!" : busy ? "Let’s check your work" : "Which project was it?"}</h2>
-      <p id="capstone-modal-description">{submission?.passed ? "Congratulations, you accomplished the task. Your submission is saved." : busy ? "Agent is reviewing your picnic app against the course requirements. This can take a moment." : "Pick the picnic app you built. We’ll take it from here."}</p>
-      {(selected || submission) && <div className="capstone-checklist" aria-label="Capstone requirements" aria-busy={busy}>
+      <p className="signin-eyebrow">{step === "project" ? "STEP 1 OF 2 · CHOOSE YOUR PROJECT" : "STEP 2 OF 2 · REVIEW YOUR WORK"}</p>
+      <h2 id="capstone-modal-title" tabIndex={-1}>{submission?.passed ? "You did it!" : step === "review" ? "Let’s check your work" : "Which project was it?"}</h2>
+      <p id="capstone-modal-description">{submission?.passed ? "Congratulations, you accomplished the task. Your submission is saved." : busy ? "Agent is reviewing your picnic app against the course requirements. This can take a moment." : step === "review" ? `Here’s what we’ll check in ${apps.find(app => app.id === selected)?.title ?? submission?.title ?? "your project"}.` : "Pick the picnic app you built to continue."}</p>
+      {step === "review" && <div className="capstone-checklist" aria-label="Capstone requirements" aria-busy={busy}>
         <p className="capstone-checklist-summary">{busy ? "Checking all six requirements…" : submission?.checks ? `${submission.checks.filter(item => item.status === "passed").length} of ${CAPSTONE_REQUIREMENTS.length} requirements passed` : "What we’ll check"}</p>
         {CAPSTONE_REQUIREMENTS.map(requirement => {
           const result = busy ? undefined : submission?.checks?.find(item => item.id === requirement.id);
@@ -105,18 +108,22 @@ export function CapstoneSubmission({ onValidated }: { onValidated: (passed: bool
         {submission && !submission.checks && <p>This earlier review has no item-level results saved.</p>}
       </div>}
       {submission?.passed ? <button type="button" className="capstone-review-button" onClick={() => dialog.current?.close()}>Continue learning <ArrowRight size={18} /></button> : <>
-        <div className="capstone-project-list" role="group" aria-label="Your recent projects" aria-busy={loading || busy}>
-          {apps.map((app) => <button type="button" className={`capstone-project-card ${selected === app.id ? "is-selected" : ""}`} key={app.id} aria-pressed={selected === app.id} disabled={busy} onClick={() => { setSelected(app.id); setSubmission(null); setMessage(""); }}>
+        {step === "project" && <div className="capstone-project-list" role="group" aria-label="Your recent projects" aria-busy={loading || busy}>
+          {apps.map((app) => <button type="button" className={`capstone-project-card ${selected === app.id ? "is-selected" : ""}`} key={app.id} disabled={busy} onClick={() => {
+            setSelected(app.id); setSubmission(null); setMessage(""); setStep("review");
+            requestAnimationFrame(() => { dialog.current?.scrollTo(0, 0); dialog.current?.querySelector<HTMLElement>("#capstone-modal-title")?.focus(); });
+          }}>
             <span className="capstone-project-symbol"><Folder size={21} aria-hidden="true" /></span>
             <span className="capstone-project-copy"><strong>{app.title}</strong><small>{app.url?.replace(/^https:\/\//, "") ?? "Replit project"}</small></span>
             <span className="capstone-project-check" aria-hidden="true">{selected === app.id && <Check size={14} />}</span>
           </button>)}
-        </div>
+        </div>}
         <p className="capstone-review-status" role="status">{loading ? "Loading your projects…" : message}</p>
         {submission?.passed === false && !busy && <p className="capstone-review-status" role="status">Not quite yet. Follow the checklist feedback above, improve your project, and submit again. “Not verified” means evidence was missing, not necessarily that the feature is broken.</p>}
-        {authNeeded ? <a className="signin-primary" href={`/api/auth/login?returnTo=${encodeURIComponent(window.location.pathname)}`}>Connect Replit <ArrowRight size={18} /></a> : <button type="button" className="capstone-review-button" disabled={loading || busy || !apps.some((app) => app.id === selected)} onClick={submit}>
+        {authNeeded ? <a className="signin-primary" href={`/api/auth/login?returnTo=${encodeURIComponent(window.location.pathname)}`}>Connect Replit <ArrowRight size={18} /></a> : step === "review" && <button type="button" className="capstone-review-button" disabled={loading || busy || !apps.some((app) => app.id === selected)} onClick={submit}>
           {busy ? <><LoaderCircle className="capstone-spinner" size={18} /> Reviewing project</> : <>Review my project <ArrowRight size={18} /></>}
         </button>}
+        {step === "review" && <button type="button" className="capstone-back-button" disabled={busy} onClick={() => { setStep("project"); setSubmission(null); setMessage(""); }}>Choose a different project</button>}
         <small className="capstone-review-note">Read-only Agent review. Nothing is published or changed. May use Agent capacity.</small>
       </>}
     </dialog>
