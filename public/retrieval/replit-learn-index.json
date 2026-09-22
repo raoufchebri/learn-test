@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-22T16:12:23.177Z",
+  "generatedAt": "2026-09-22T16:15:15.946Z",
   "mode": "full",
-  "hash": "3d16d9985f2ff10722e8504c961d083a91097821d01e90f4fd64a44779288de3",
+  "hash": "54ee8dd938e1c688607899f8034a4aedfef12818909c02a89da46da9938306c1",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "072878e974a6f3620e8f",
@@ -5595,7 +5595,7 @@
       "sourceId": "2a8689287cc3571bec63",
       "title": "Build your application",
       "heading": "Overview",
-      "text": "Build and Design\nBuild turns your ideas into web apps, mobile apps, dashboards, slide decks, and more.\nIn Build, you ask Agent to implement features, try them in the app preview, and refine the result. You can add the services your app needs instead of setting up every part yourself.\n",
+      "text": "Build and Design\nBuild turns your ideas into web apps, mobile apps, dashboards, slide decks, and more.\nRemember asking Replit to build the Pokémon birthday invitation? Build is where that request became a working app. You asked for features, tried them in Preview, and added Mosskip. Let’s name the tools behind that work without starting a new project.\n",
       "url": "/learn/build-and-design/build-your-application",
       "pageUrl": "/learn/build-and-design/build-your-application",
       "sourcePath": "src/learn-content.ts#2a8689287cc3571bec63"
@@ -5605,7 +5605,7 @@
       "sourceId": "2a8689287cc3571bec63",
       "title": "Build your application",
       "heading": "What you can build",
-      "text": "Build and Design\nProjects aren’t limited to one kind of application. Describe the result you want, for example:\nWeb apps and websites: an RSVP app, a portfolio, a booking service, or an online store.\nMobile apps: an app for phones, such as a companion app for event guests.\nDashboards: interactive charts and tables to explore data, track attendance, or monitor a business.\nSlides: a presentation to explain an idea, share a plan, or present your results.",
+      "text": "Build and Design\nProjects aren’t limited to one kind of application. Describe the result you want, for example:\nWeb apps and websites: the birthday invitation and RSVP form we already built.\nMobile apps: a possible companion app where party helpers could check the activity schedule.\nDashboards: a possible host dashboard showing RSVP totals and outstanding supplies.\nSlides: a possible slide deck explaining the party games to the adults helping out. These are ideas for extending the same party project, not things we’ve already built.",
       "url": "/learn/build-and-design/build-your-application#what-you-can-build",
       "pageUrl": "/learn/build-and-design/build-your-application",
       "sourcePath": "src/learn-content.ts#2a8689287cc3571bec63"
@@ -5645,7 +5645,7 @@
       "sourceId": "2a8689287cc3571bec63",
       "title": "Build your application",
       "heading": "Secrets: protect sensitive configuration",
-      "text": "Build and Design\nSecrets hold sensitive values such as API keys outside your source code. Use the project’s Secrets tool when a service needs credentials. Don’t paste credentials into chat, commit them to code, or expose them in the browser. Server-side code should use them only where needed.",
+      "text": "Build and Design\nIf you later add a service to send RSVP confirmation emails, it might require an API key. Secrets hold sensitive values like that outside your source code. Use the project’s Secrets tool when needed; don’t paste credentials into chat, commit them to code, or expose them in the browser. This is a possible extension, not something you need to add to the birthday app now.",
       "url": "/learn/build-and-design/build-your-application#secrets-protect-sensitive-configuration",
       "pageUrl": "/learn/build-and-design/build-your-application",
       "sourcePath": "src/learn-content.ts#2a8689287cc3571bec63"
@@ -5655,7 +5655,7 @@
       "sourceId": "2a8689287cc3571bec63",
       "title": "Build your application",
       "heading": "Security: review and test",
-      "text": "Build and Design\nReplit provides security tools to help you find issues in your project. Review findings, check access controls, and test that private information stays private. Platform protections do not replace your responsibility to configure and review your app safely.",
+      "text": "Build and Design\nFor the birthday app, a guest should not be able to open the host’s private RSVP list. Replit provides security tools to help find issues, but you still need to review findings and test access controls. Platform protections do not replace your responsibility to configure and review the app safely.",
       "url": "/learn/build-and-design/build-your-application#security-review-and-test",
       "pageUrl": "/learn/build-and-design/build-your-application",
       "sourcePath": "src/learn-content.ts#2a8689287cc3571bec63"
@@ -5685,7 +5685,7 @@
       "sourceId": "3945d9557fa47a307782",
       "title": "Explore design",
       "heading": "What you can create in Design",
-      "text": "Build and Design\nDesign is a place to explore visual ideas, not just adjust an existing app. You can:\nCreate designs: explore page layouts, app screens, landing pages, and other visual concepts.\nGenerate alternatives: ask for new versions, compare directions side by side, and refine the one you prefer.\nGenerate images: create illustrations and supporting assets, like Mosskip for the birthday invitation.\nGenerate videos and vector graphics: explore motion or create scalable visual assets using the available generation tools.",
+      "text": "Build and Design\nDesign is a place to explore visual ideas, not just adjust an existing app. You can:\nCreate designs: explore layouts for the birthday invitation, including its party details and RSVP button.\nGenerate alternatives: compare different invitation designs side by side, just as we did in the first module.\nGenerate images: create illustrations and supporting assets, like Mosskip for the birthday invitation.\nGenerate videos and vector graphics: you could create a short party teaser or a set of activity icons. These would be new additions, not steps we’ve already completed.",
       "url": "/learn/build-and-design/explore-design#what-you-can-create-in-design",
       "pageUrl": "/learn/build-and-design/explore-design",
       "sourcePath": "src/learn-content.ts#3945d9557fa47a307782"
@@ -5755,7 +5755,7 @@
       "sourceId": "909630f5bdb286971879",
       "title": "What is an artifact?",
       "heading": "One project, several outputs",
-      "text": "Build and Design\nA project could contain a birthday website, a companion mobile app, and a slide deck explaining the party plan. Each is a different artifact, but they belong to the same project.",
+      "text": "Build and Design\nWe already built one artifact: the birthday RSVP website. If we next ask Replit to create a slide deck explaining the party games, that would be a second artifact in the same project. A companion mobile app could be another. We haven’t built those extras yet.",
       "url": "/learn/build-and-design/what-is-an-artifact#one-project-several-outputs",
       "pageUrl": "/learn/build-and-design/what-is-an-artifact",
       "sourcePath": "src/learn-content.ts#909630f5bdb286971879"
@@ -5784,9 +5784,9 @@
       "id": "909630f5bdb286971879:004",
       "sourceId": "909630f5bdb286971879",
       "title": "What is an artifact?",
-      "heading": "Assets help make artifacts",
-      "text": "Build and Design\nMosskip’s image is an asset used by the birthday website. The website is the artifact. This distinction helps you explain what you want: a new image for an existing app is different from a new app inside the project.",
-      "url": "/learn/build-and-design/what-is-an-artifact#assets-help-make-artifacts",
+      "heading": "Two things we created: an image and a web app",
+      "text": "Build and Design\nRemember generating Mosskip, then asking Replit to add it to the invitation? Those are two useful outputs with different roles. Mosskip’s image is an asset; the birthday web app that uses it is an artifact. They live in the same project, but the image is not a second application. A party slide deck would be an example of a second artifact.",
+      "url": "/learn/build-and-design/what-is-an-artifact#two-things-we-created-an-image-and-a-web-app",
       "pageUrl": "/learn/build-and-design/what-is-an-artifact",
       "sourcePath": "src/learn-content.ts#909630f5bdb286971879"
     },
@@ -5795,7 +5795,7 @@
       "sourceId": "072878e974a6f3620e8f",
       "title": "What is a chat?",
       "heading": "Overview",
-      "text": "Chats and projects\nNow that you know how to use the prompt box, you’re ready to start a chat.\nA chat is a back-and-forth conversation between you and Replit. You describe what you need, Replit responds or takes action, and you follow up to clarify, explore, or improve the result.\nYou can brainstorm ideas, ask questions, research information, and get help with tasks. You don’t have to explain everything perfectly in your first message: the conversation lets you work things out together.\n",
+      "text": "Chats and projects\nNow that you know how to use the prompt box, you’re ready to start a chat.\nA chat is a back-and-forth conversation between you and Replit. You describe what you need, Replit responds or takes action, and you follow up to clarify, explore, or improve the result.\nThat’s what we did before building the birthday app: we brainstormed themes, chose Pokémon, researched supplies, and asked for help with Calendar and Gmail. The chat helped us plan and take actions before there was an application.\n",
       "url": "/learn/chats-and-projects/what-is-a-chat",
       "pageUrl": "/learn/chats-and-projects/what-is-a-chat",
       "sourcePath": "src/learn-content.ts#072878e974a6f3620e8f"
@@ -6094,9 +6094,9 @@
       "id": "fc4617ddc5906cf96a4a:001",
       "sourceId": "fc4617ddc5906cf96a4a",
       "title": "Prompting and context",
-      "heading": "Your prompt tells Replit what you want",
-      "text": "The prompt box\nA prompt is the request you send. Explain what you want to achieve and what a useful result would look like. You don’t need technical language or a special formula.\nHelp me plan three simple outdoor activities for a Pokémon-themed birthday party for ten six-year-olds. Keep each activity under 15 minutes and return a short list of supplies for each.",
-      "url": "/learn/the-prompt-box/prompting-and-context#your-prompt-tells-replit-what-you-want",
+      "heading": "Look back at our first prompt",
+      "text": "The prompt box\nIn the first module, we sent this request. The task was to brainstorm four themes. We didn’t need technical language or a special formula:\nI’m planning a birthday party for a six-year-old, with ten children in a park. Help me brainstorm four themes with simple activities.\n“A six-year-old,” “ten children,” and “in a park” were context: information that helped Replit tailor the ideas. Choosing Pokémon in the next message added more context to the same conversation.",
+      "url": "/learn/the-prompt-box/prompting-and-context#look-back-at-our-first-prompt",
       "pageUrl": "/learn/the-prompt-box/prompting-and-context",
       "sourcePath": "src/learn-content.ts#fc4617ddc5906cf96a4a"
     },
@@ -6115,7 +6115,7 @@
       "sourceId": "fc4617ddc5906cf96a4a",
       "title": "Prompting and context",
       "heading": "Add context in different ways",
-      "text": "The prompt box\nYou can give Replit context through the prompt box in several ways:\nText: explain your preferences, constraints, or background, or paste relevant notes directly into your message.\nFiles: attach a document or text file, such as a party checklist, and explain what you want Replit to use from it.\nImages: attach a screenshot or reference image and point out what matters, such as the layout or colors you like.\nLinks: paste an external URL and ask Replit to explore the page for information relevant to your task. Explain what it should look for.",
+      "text": "The prompt box\nYou can give Replit context through the prompt box in several ways:\nText: the age, guest count, park setting, and Pokémon theme from our birthday conversation.\nFiles: attach a document or text file, such as a party checklist, and explain what you want Replit to use from it.\nImages: attach the invitation screenshot and point out a layout you like, or refer to the generated Mosskip image when asking Replit to add it to the app.\nLinks: provide the park’s visitor-information page and ask Replit to check which party activities are allowed.",
       "url": "/learn/the-prompt-box/prompting-and-context#add-context-in-different-ways",
       "pageUrl": "/learn/the-prompt-box/prompting-and-context",
       "sourcePath": "src/learn-content.ts#fc4617ddc5906cf96a4a"
@@ -6165,7 +6165,7 @@
       "sourceId": "f8e5847323cbf06cd39c",
       "title": "Using skills",
       "heading": "2. Select a predefined skill",
-      "text": "The prompt box\nFor this example, select Ad Creative, which is shown in the menu. It provides instructions for creating advertising visuals. We’ll use a fictional community event for this exercise, without real names, photos, or addresses.",
+      "text": "The prompt box\nSelect Ad Creative, which is shown in the menu. It provides instructions for creating advertising visuals. We’ll apply it to a promotional-style graphic for our same fictional Pokémon birthday party, rather than switch to a new example.",
       "url": "/learn/the-prompt-box/using-skills#2-select-a-predefined-skill",
       "pageUrl": "/learn/the-prompt-box/using-skills",
       "sourcePath": "src/learn-content.ts#f8e5847323cbf06cd39c"
@@ -6175,7 +6175,7 @@
       "sourceId": "f8e5847323cbf06cd39c",
       "title": "Using skills",
       "heading": "3. Add your request",
-      "text": "The prompt box\nThe skill gives Replit a way to approach the task, but you still need to explain your goal. With Ad Creative selected, try this prompt:\nCreate a social media graphic for a fictional community picnic. Use a friendly illustrated park, a picnic table, and bright green and yellow colors. Include the headline “A day in the park” and leave room for a date and location. Don’t publish or send it anywhere.\nReview the result and ask for a change if needed. The skill helps guide the work; it doesn’t replace your instructions or guarantee a perfect result. Once you’ve selected the skill for your request, use the confirmation button below to unlock the quiz.",
+      "text": "The prompt box\nThe skill gives Replit a way to approach the task, but you still explain the goal. This is a new extension of our birthday example. With Ad Creative selected, try:\nCreate an invitation graphic for our fictional Pokémon-themed birthday party in a park. Keep the playful green woodland style of our RSVP app, with space for the party date and location. Use placeholders, not real names or addresses. Don’t publish or send it anywhere.\nReview the result and ask for a change if needed. The skill guides the work; your birthday details supply the context. Once you’ve selected the skill for your request, use the confirmation button below to unlock the quiz.",
       "url": "/learn/the-prompt-box/using-skills#3-add-your-request",
       "pageUrl": "/learn/the-prompt-box/using-skills",
       "sourcePath": "src/learn-content.ts#f8e5847323cbf06cd39c"
@@ -6184,8 +6184,18 @@
       "id": "f8e5847323cbf06cd39c:004",
       "sourceId": "f8e5847323cbf06cd39c",
       "title": "Using skills",
+      "heading": "Imagine a custom party-planning skill",
+      "text": "The prompt box\nYou could define a reusable skill called “Birthday party planner.” This is an example we’re inventing, not a predefined menu item. Its instructions could say:\nAsk for the age range, guest count, setting, and theme when they’re missing.\nSuggest simple activities and group the supplies into one checklist.\nUse fictional names and locations in practice materials.\nAsk before sending invitations or changing calendar events.",
+      "url": "/learn/the-prompt-box/using-skills#imagine-a-custom-party-planning-skill",
+      "pageUrl": "/learn/the-prompt-box/using-skills",
+      "sourcePath": "src/learn-content.ts#f8e5847323cbf06cd39c"
+    },
+    {
+      "id": "f8e5847323cbf06cd39c:005",
+      "sourceId": "f8e5847323cbf06cd39c",
+      "title": "Using skills",
       "heading": "Predefined or custom?",
-      "text": "The prompt box\nPredefined skills are ready to use. Custom skills let you define reusable instructions, such as a preferred report structure or a team’s writing guidelines. Both can help standardize repeated tasks without making you type the same instructions every time. A skill is not an account connection: it doesn’t grant access to an external service.",
+      "text": "The prompt box\nAd Creative is ready to select. Our imagined Birthday party planner would be a custom skill you define for repeated use. Neither replaces the specific details of this party, and neither grants access to Gmail or Calendar. Those account connections are integrations, which we’ll revisit next.",
       "url": "/learn/the-prompt-box/using-skills#predefined-or-custom",
       "pageUrl": "/learn/the-prompt-box/using-skills",
       "sourcePath": "src/learn-content.ts#f8e5847323cbf06cd39c"
@@ -6224,9 +6234,9 @@
       "id": "35572c47ce24a4720bb3:003",
       "sourceId": "35572c47ce24a4720bb3",
       "title": "Tools and integrations",
-      "heading": "Integrations connect your tools to Replit",
-      "text": "The prompt box\nAn integration connects Replit to an external service. You sign in through the connection flow and review the permissions requested. Replit can then use the tools that connection makes available, within those permissions. In the first module, you connected Google Calendar before asking Replit to add the birthday event.",
-      "url": "/learn/the-prompt-box/tools-and-integrations#integrations-connect-your-tools-to-replit",
+      "heading": "Remember Calendar and Gmail?",
+      "text": "The prompt box\nIn the first module, Google Calendar let Replit add our birthday event. The Gmail exercise checked purchase confirmations against our party checklist, with an optional weekly routine. Those were integrations: authorized connections to an account, unlike searching public websites. If you only read along earlier, you can still use those examples to understand the difference.",
+      "url": "/learn/the-prompt-box/tools-and-integrations#remember-calendar-and-gmail",
       "pageUrl": "/learn/the-prompt-box/tools-and-integrations",
       "sourcePath": "src/learn-content.ts#35572c47ce24a4720bb3"
     },
@@ -6315,7 +6325,7 @@
       "sourceId": "56543b50474a4d45e587",
       "title": "Create a new Workspace",
       "heading": "Overview",
-      "text": "Your workspace\nYou can create another personal workspace for your own work or a team workspace for work you’ll share with others.\nA new workspace gives you a separate place to organize your work. Choose a personal workspace when the work belongs to you, or a team workspace when it belongs to a team.\n",
+      "text": "Your workspace\nYou can create another personal workspace for your own work or a team workspace for work you’ll share with others.\nOur birthday chat, invitation project, and preparation routine live in a workspace. You could create another personal workspace for your own work, or a team workspace if you’re organizing events with others. Creating a new workspace does not automatically move the birthday work into it.\n",
       "url": "/learn/your-workspace/create-a-new-workspace",
       "pageUrl": "/learn/your-workspace/create-a-new-workspace",
       "sourcePath": "src/learn-content.ts#56543b50474a4d45e587"
@@ -6385,7 +6395,7 @@
       "sourceId": "e67e1502420efa342222",
       "title": "Add collaborators",
       "heading": "Overview",
-      "text": "Your workspace\nInvite someone to your team workspace so you can work together.\nCollaborators can work with the projects shared with them in your workspace. Their role and the workspace’s permissions determine which projects they can see and what they can do. Joining a workspace does not necessarily give someone access to every project.\n",
+      "text": "Your workspace\nImagine another organizer helping with the birthday invitation. Invite them to your team workspace so you can work together.\nCollaborators can work with the projects shared with them in your workspace. Their role and the workspace’s permissions determine which projects they can see and what they can do. Joining a workspace does not necessarily give someone access to every project.\n",
       "url": "/learn/your-workspace/add-collaborators",
       "pageUrl": "/learn/your-workspace/add-collaborators",
       "sourcePath": "src/learn-content.ts#e67e1502420efa342222"
@@ -6425,7 +6435,7 @@
       "sourceId": "f0f7e6fd18426a859c9f",
       "title": "Manage integrations",
       "heading": "Overview",
-      "text": "Your workspace\nConnect tools to your workspace so Replit can help you work with information from other services.\nIn the first module, you connected tools while planning the birthday party. You can also find and manage integrations, sometimes called connectors, from your workspace settings.\nA workspace integration is associated with that particular workspace. It can support work across that workspace, subject to its permissions. Two workspaces do not automatically share the same connections, even when you belong to both.\n",
+      "text": "Your workspace\nConnect tools to your workspace so Replit can help you work with information from other services.\nIn the first module, we used Google Calendar for the birthday event and Gmail for purchase confirmations in the preparation checklist. You can find and manage those integrations, sometimes called connectors, from your workspace settings.\nA workspace integration is associated with that particular workspace. It can support work across that workspace, subject to its permissions. Two workspaces do not automatically share the same connections, even when you belong to both.\n",
       "url": "/learn/your-workspace/manage-integrations",
       "pageUrl": "/learn/your-workspace/manage-integrations",
       "sourcePath": "src/learn-content.ts#f0f7e6fd18426a859c9f"

@@ -432,19 +432,19 @@ courseLessons['Build and Design'] = [
   {
     module: 'Build and Design', title: 'Build your application', duration: '4 min', video: '', replitExample: '',
     summary: 'Build turns your ideas into web apps, mobile apps, dashboards, slide decks, and more.',
-    introduction: ['In Build, you ask Agent to implement features, try them in the app preview, and refine the result. You can add the services your app needs instead of setting up every part yourself.'],
+    introduction: ['Remember asking Replit to build the Pokémon birthday invitation? Build is where that request became a working app. You asked for features, tried them in Preview, and added Mosskip. Let’s name the tools behind that work without starting a new project.'],
     sections: [
       { heading: 'What you can build', body: 'Projects aren’t limited to one kind of application. Describe the result you want, for example:', items: [
-        'Web apps and websites: an RSVP app, a portfolio, a booking service, or an online store.',
-        'Mobile apps: an app for phones, such as a companion app for event guests.',
-        'Dashboards: interactive charts and tables to explore data, track attendance, or monitor a business.',
-        'Slides: a presentation to explain an idea, share a plan, or present your results.',
+        'Web apps and websites: the birthday invitation and RSVP form we already built.',
+        'Mobile apps: a possible companion app where party helpers could check the activity schedule.',
+        'Dashboards: a possible host dashboard showing RSVP totals and outstanding supplies.',
+        'Slides: a possible slide deck explaining the party games to the adults helping out. These are ideas for extending the same party project, not things we’ve already built.',
       ] },
       { heading: 'Make the app work', body: 'Describe the behavior you want, not just how it should look. For our birthday app, that means letting a guest submit an RSVP, saving it, and showing the host the responses. Try each feature in Preview and ask Agent to fix anything that doesn’t behave as expected.' },
       { heading: 'Databases: remember information', body: 'A database stores structured information your app needs to keep, such as RSVP answers. Ask Agent what needs to be stored and have it connect the app to the appropriate database. Not every app needs one.' },
       { heading: 'Authentication: know who is signed in', body: 'Authentication lets people sign in and identifies them to your app. Authorization is the separate question of what they’re allowed to do. For example, a host can sign in, but the app must also check that they’re allowed to see the guest list.' },
-      { heading: 'Secrets: protect sensitive configuration', body: 'Secrets hold sensitive values such as API keys outside your source code. Use the project’s Secrets tool when a service needs credentials. Don’t paste credentials into chat, commit them to code, or expose them in the browser. Server-side code should use them only where needed.' },
-      { heading: 'Security: review and test', body: 'Replit provides security tools to help you find issues in your project. Review findings, check access controls, and test that private information stays private. Platform protections do not replace your responsibility to configure and review your app safely.' },
+      { heading: 'Secrets: protect sensitive configuration', body: 'If you later add a service to send RSVP confirmation emails, it might require an API key. Secrets hold sensitive values like that outside your source code. Use the project’s Secrets tool when needed; don’t paste credentials into chat, commit them to code, or expose them in the browser. This is a possible extension, not something you need to add to the birthday app now.' },
+      { heading: 'Security: review and test', body: 'For the birthday app, a guest should not be able to open the host’s private RSVP list. Replit provides security tools to help find issues, but you still need to review findings and test access controls. Platform protections do not replace your responsibility to configure and review the app safely.' },
       { heading: 'Preview, then publish', body: 'Test the working app in Preview before publishing it for others. Review any service and deployment costs before enabling them. If you have specific requirements for layout, colors, or the overall interface, Design gives you a place to explore those next.' },
     ],
     quiz: [
@@ -459,10 +459,10 @@ courseLessons['Build and Design'] = [
     introduction: ['Select Design in your project to open Canvas, an infinite board where you can arrange and compare frames. You’ve already used it to explore the birthday invitation and generate Mosskip.'],
     sections: [
       { heading: 'What you can create in Design', body: 'Design is a place to explore visual ideas, not just adjust an existing app. You can:', items: [
-        'Create designs: explore page layouts, app screens, landing pages, and other visual concepts.',
-        'Generate alternatives: ask for new versions, compare directions side by side, and refine the one you prefer.',
+        'Create designs: explore layouts for the birthday invitation, including its party details and RSVP button.',
+        'Generate alternatives: compare different invitation designs side by side, just as we did in the first module.',
         'Generate images: create illustrations and supporting assets, like Mosskip for the birthday invitation.',
-        'Generate videos and vector graphics: explore motion or create scalable visual assets using the available generation tools.',
+        'Generate videos and vector graphics: you could create a short party teaser or a set of activity icons. These would be new additions, not steps we’ve already completed.',
       ] },
       { heading: 'Generate, review, and iterate', body: 'Open Generate in the Canvas toolbar to explore the available creation options. Describe what you want, review the output, and ask for changes. You can generate something new or keep improving an existing frame. Check any model options and generation costs shown before starting.' },
       { heading: 'Canvas and frames', body: 'Think of Canvas as a large working area you can pan and zoom around. Frames are the individual items on that board. They can show design mockups, images, or project outputs such as apps and slides. You can keep several ideas side by side instead of replacing one idea every time.' },
@@ -484,10 +484,10 @@ courseLessons['Build and Design'] = [
       'Think of the project as the shared home for the work, and artifacts as the individual things it produces. A frame is how something is shown on Canvas; an artifact is a project output, not simply any frame or image.',
     ],
     sections: [
-      { heading: 'One project, several outputs', body: 'A project could contain a birthday website, a companion mobile app, and a slide deck explaining the party plan. Each is a different artifact, but they belong to the same project.' },
+      { heading: 'One project, several outputs', body: 'We already built one artifact: the birthday RSVP website. If we next ask Replit to create a slide deck explaining the party games, that would be a second artifact in the same project. A companion mobile app could be another. We haven’t built those extras yet.' },
       { heading: 'Shared infrastructure', body: 'Artifacts in the same project can use the shared backend, database, and reusable logic. For example, a website and mobile app could both use the same RSVP service instead of maintaining separate guest lists. You still need to connect each app to the right data and enforce permissions; not every artifact automatically uses every service.' },
       { heading: 'Shared does not mean identical', body: 'A website and mobile app can present the same information differently. A slide deck may not need a live database at all. Keeping them in one project gives related work a common home without requiring identical interfaces or behavior.' },
-      { heading: 'Assets help make artifacts', body: 'Mosskip’s image is an asset used by the birthday website. The website is the artifact. This distinction helps you explain what you want: a new image for an existing app is different from a new app inside the project.' },
+      { heading: 'Two things we created: an image and a web app', body: 'Remember generating Mosskip, then asking Replit to add it to the invitation? Those are two useful outputs with different roles. Mosskip’s image is an asset; the birthday web app that uses it is an artifact. They live in the same project, but the image is not a second application. A party slide deck would be an example of a second artifact.' },
     ],
     quiz: [
       { prompt: 'Which is an example of an artifact?', choices: ['A secret API key', 'A website built in a project', 'A single database field'], answer: 1 },
@@ -505,7 +505,7 @@ courseLessons['Chats and projects'] = [
     summary: 'Now that you know how to use the prompt box, you’re ready to start a chat.',
     introduction: [
       'A chat is a back-and-forth conversation between you and Replit. You describe what you need, Replit responds or takes action, and you follow up to clarify, explore, or improve the result.',
-      'You can brainstorm ideas, ask questions, research information, and get help with tasks. You don’t have to explain everything perfectly in your first message: the conversation lets you work things out together.',
+      'That’s what we did before building the birthday app: we brainstormed themes, chose Pokémon, researched supplies, and asked for help with Calendar and Gmail. The chat helped us plan and take actions before there was an application.',
     ],
     sections: [
       { heading: 'A conversation, not just one prompt', body: 'Think back to planning the birthday party. A chat might go like this:', items: [
@@ -631,13 +631,13 @@ courseLessons['The prompt box'] = [
       'The clearer your goal and the more relevant information you provide, the better Replit can tailor its help. It doesn’t automatically know every detail you have in mind.',
     ],
     sections: [
-      { heading: 'Your prompt tells Replit what you want', body: 'A prompt is the request you send. Explain what you want to achieve and what a useful result would look like. You don’t need technical language or a special formula.', prompt: 'Help me plan three simple outdoor activities for a Pokémon-themed birthday party for ten six-year-olds. Keep each activity under 15 minutes and return a short list of supplies for each.' },
+      { heading: 'Look back at our first prompt', body: 'In the first module, we sent this request. The task was to brainstorm four themes. We didn’t need technical language or a special formula:', prompt: 'I’m planning a birthday party for a six-year-old, with ten children in a park. Help me brainstorm four themes with simple activities.', afterPrompt: '“A six-year-old,” “ten children,” and “in a park” were context: information that helped Replit tailor the ideas. Choosing Pokémon in the next message added more context to the same conversation.' },
       { heading: 'Context helps Replit understand your request', body: 'Context is the information available to help Replit respond. It includes relevant details from your conversation, along with extra information you provide, such as notes, files, images, or links. In our birthday example, the children’s age, party theme, and number of guests are all context. Useful context matters more than simply adding more text.' },
       { heading: 'Add context in different ways', body: 'You can give Replit context through the prompt box in several ways:', items: [
-        'Text: explain your preferences, constraints, or background, or paste relevant notes directly into your message.',
+        'Text: the age, guest count, park setting, and Pokémon theme from our birthday conversation.',
         'Files: attach a document or text file, such as a party checklist, and explain what you want Replit to use from it.',
-        'Images: attach a screenshot or reference image and point out what matters, such as the layout or colors you like.',
-        'Links: paste an external URL and ask Replit to explore the page for information relevant to your task. Explain what it should look for.',
+        'Images: attach the invitation screenshot and point out a layout you like, or refer to the generated Mosskip image when asking Replit to add it to the app.',
+        'Links: provide the park’s visitor-information page and ask Replit to check which party activities are allowed.',
       ] },
       { heading: 'Tell Replit how to use what you add', body: 'An attachment or link is more useful when you explain why you’re sharing it. For example, attach a fictional party checklist and send this follow-up in the same chat:', prompt: 'Use the attached checklist to revise the activities. Reuse the supplies we already have, and list anything extra we would need separately. If the checklist is missing information, ask me rather than guessing.', afterPrompt: 'For a link, you could ask Replit to read the park’s visitor page and check whether your planned activities follow its rules. Some pages require sign-in or block access. If Replit can’t read the page, provide the relevant text or an authorized file instead; don’t assume the link was read.' },
       { heading: 'Share what is useful, then review the result', body: 'Only share information you’re allowed to use. For this course, keep party details fictional and remove personal details from screenshots. Never include passwords or access tokens. Context helps Replit, but it doesn’t guarantee a correct answer: review the result and clarify anything it misunderstood.' },
@@ -658,9 +658,15 @@ courseLessons['The prompt box'] = [
     activityConfirmation: 'I have added a skill.',
     sections: [
       { heading: '1. Open the skills menu', body: 'Click the plus button in the prompt box, then choose Use a skill. Browse the predefined skills or use Search skills to find one.', image: { src: '/images/prompt-box/skills.webp', alt: 'Prompt box plus menu with Use a skill selected, a Search skills field, and predefined skills including Ad Creative, AI SDR, and SEO Auditor.', caption: 'Choose + → Use a skill to browse predefined instructions. Personal details have been removed.', source: '/images/prompt-box/skills.webp' } },
-      { heading: '2. Select a predefined skill', body: 'For this example, select Ad Creative, which is shown in the menu. It provides instructions for creating advertising visuals. We’ll use a fictional community event for this exercise, without real names, photos, or addresses.' },
-      { heading: '3. Add your request', body: 'The skill gives Replit a way to approach the task, but you still need to explain your goal. With Ad Creative selected, try this prompt:', prompt: 'Create a social media graphic for a fictional community picnic. Use a friendly illustrated park, a picnic table, and bright green and yellow colors. Include the headline “A day in the park” and leave room for a date and location. Don’t publish or send it anywhere.', afterPrompt: 'Review the result and ask for a change if needed. The skill helps guide the work; it doesn’t replace your instructions or guarantee a perfect result. Once you’ve selected the skill for your request, use the confirmation button below to unlock the quiz.' },
-      { heading: 'Predefined or custom?', body: 'Predefined skills are ready to use. Custom skills let you define reusable instructions, such as a preferred report structure or a team’s writing guidelines. Both can help standardize repeated tasks without making you type the same instructions every time. A skill is not an account connection: it doesn’t grant access to an external service.' },
+      { heading: '2. Select a predefined skill', body: 'Select Ad Creative, which is shown in the menu. It provides instructions for creating advertising visuals. We’ll apply it to a promotional-style graphic for our same fictional Pokémon birthday party, rather than switch to a new example.' },
+      { heading: '3. Add your request', body: 'The skill gives Replit a way to approach the task, but you still explain the goal. This is a new extension of our birthday example. With Ad Creative selected, try:', prompt: 'Create an invitation graphic for our fictional Pokémon-themed birthday party in a park. Keep the playful green woodland style of our RSVP app, with space for the party date and location. Use placeholders, not real names or addresses. Don’t publish or send it anywhere.', afterPrompt: 'Review the result and ask for a change if needed. The skill guides the work; your birthday details supply the context. Once you’ve selected the skill for your request, use the confirmation button below to unlock the quiz.' },
+      { heading: 'Imagine a custom party-planning skill', body: 'You could define a reusable skill called “Birthday party planner.” This is an example we’re inventing, not a predefined menu item. Its instructions could say:', items: [
+        'Ask for the age range, guest count, setting, and theme when they’re missing.',
+        'Suggest simple activities and group the supplies into one checklist.',
+        'Use fictional names and locations in practice materials.',
+        'Ask before sending invitations or changing calendar events.',
+      ] },
+      { heading: 'Predefined or custom?', body: 'Ad Creative is ready to select. Our imagined Birthday party planner would be a custom skill you define for repeated use. Neither replaces the specific details of this party, and neither grants access to Gmail or Calendar. Those account connections are integrations, which we’ll revisit next.' },
     ],
     quiz: [
       { prompt: 'What does a skill add?', choices: ['Reusable instructions for approaching a task', 'Automatic access to all your accounts', 'A guarantee that every result is correct'], answer: 0 },
@@ -677,7 +683,7 @@ courseLessons['The prompt box'] = [
     sections: [
       { heading: 'Built-in tools', body: 'Replit has built-in tools such as web search. When you ask it to search the web, it can use that tool to find information and bring sources back into the conversation. You don’t need to connect a separate search account.', prompt: 'Search the web for three outdoor Pokémon-themed birthday activities suitable for six-year-olds. Include links to the sources so I can review them.', afterPrompt: 'Read the suggestions and check the sources. This is the same kind of tool use you tried when researching your birthday-party checklist. You describe the goal; Replit uses an available tool to help.' },
       { heading: 'Some tools need your account', body: 'Searching public web pages is different from reading your calendar or finding a document in your account. Replit needs an authorized connection before it can work with those services. That’s where integrations, also called connectors, come in.' },
-      { heading: 'Integrations connect your tools to Replit', body: 'An integration connects Replit to an external service. You sign in through the connection flow and review the permissions requested. Replit can then use the tools that connection makes available, within those permissions. In the first module, you connected Google Calendar before asking Replit to add the birthday event.' },
+      { heading: 'Remember Calendar and Gmail?', body: 'In the first module, Google Calendar let Replit add our birthday event. The Gmail exercise checked purchase confirmations against our party checklist, with an optional weekly routine. Those were integrations: authorized connections to an account, unlike searching public websites. If you only read along earlier, you can still use those examples to understand the difference.' },
       { heading: 'Add an integration from the prompt box', body: 'Click the plus button, then choose Add an integration. Search for the service you need or browse the list. Select it and follow the connection steps if it isn’t connected yet. You can also open Manage integrations from this menu to review your connections.', image: { src: '/images/prompt-box/integrations-menu.webp', alt: 'Prompt box plus menu with Add an integration selected, a Search integrations field, a Manage integrations link, and available services.', caption: 'Choose + → Add an integration to find a service. Personal details have been removed.', source: '/images/prompt-box/integrations-menu.webp' } },
       { heading: 'Ask naturally, connect when needed', body: 'You can describe the task in the prompt box without naming the underlying tool. If the task needs an integration that isn’t connected, Replit can ask you to connect it. You can also manage connections in Settings → Integrations, as we explored in the previous module.', items: [
         'Check the account and permissions before connecting a service.',
@@ -731,7 +737,7 @@ courseLessons['Your workspace'] = [
     replitExample: '',
     summary: 'You can create another personal workspace for your own work or a team workspace for work you’ll share with others.',
     introduction: [
-      'A new workspace gives you a separate place to organize your work. Choose a personal workspace when the work belongs to you, or a team workspace when it belongs to a team.',
+      'Our birthday chat, invitation project, and preparation routine live in a workspace. You could create another personal workspace for your own work, or a team workspace if you’re organizing events with others. Creating a new workspace does not automatically move the birthday work into it.',
     ],
     sections: [
       { heading: '1. Open your workspace menu', body: 'Click your current workspace name to open the workspace menu. You’ll see the workspaces you have access to and can switch between them. To start a new one, click Create workspace.', image: { src: '/images/workspaces/workspace-menu.webp', alt: 'Workspace menu showing a personal workspace, example team workspaces, and the Create workspace button.', caption: 'Open your workspace menu, then click Create workspace. Avatars and workspace names have been anonymized.', source: '/images/workspaces/workspace-menu.webp' } },
@@ -756,7 +762,7 @@ courseLessons['Your workspace'] = [
   },
   {
     module: 'Your workspace', title: 'Add collaborators', duration: '3 min', video: '', replitExample: '',
-    summary: 'Invite someone to your team workspace so you can work together.',
+    summary: 'Imagine another organizer helping with the birthday invitation. Invite them to your team workspace so you can work together.',
     introduction: ['Collaborators can work with the projects shared with them in your workspace. Their role and the workspace’s permissions determine which projects they can see and what they can do. Joining a workspace does not necessarily give someone access to every project.'],
     activityConfirmation: 'I added a collaborator.',
     sections: [
@@ -774,7 +780,7 @@ courseLessons['Your workspace'] = [
     module: 'Your workspace', title: 'Manage integrations', duration: '3 min', video: '', replitExample: '',
     summary: 'Connect tools to your workspace so Replit can help you work with information from other services.',
     introduction: [
-      'In the first module, you connected tools while planning the birthday party. You can also find and manage integrations, sometimes called connectors, from your workspace settings.',
+      'In the first module, we used Google Calendar for the birthday event and Gmail for purchase confirmations in the preparation checklist. You can find and manage those integrations, sometimes called connectors, from your workspace settings.',
       'A workspace integration is associated with that particular workspace. It can support work across that workspace, subject to its permissions. Two workspaces do not automatically share the same connections, even when you belong to both.',
     ],
     sections: [
