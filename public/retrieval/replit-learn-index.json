@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-22T16:16:20.976Z",
+  "generatedAt": "2026-09-22T16:23:03.295Z",
   "mode": "full",
-  "hash": "84a95201fcbbc60d788dcdb6b14e76cf3e287a9f3f2df88f6007b7c24f4bfd05",
+  "hash": "7a7c1690fc01bfbf63a31b52c253af3cf41be8a2dca1a73bc0a1ab770cf6c72c",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "072878e974a6f3620e8f",
@@ -5647,7 +5647,7 @@
       "sourceId": "855925249512818f233c",
       "title": "Build a picnic sign-up app",
       "heading": "7. Prepare your hand-in",
-      "text": "Your capstone\nKeep a short record of what you built so it can be reviewed later:\nYour project link, with access limited to the intended reviewer. A private project link may require an invitation.\nA screenshot of the event page and a screenshot of a successful fictional submission.\nA brief note describing the context and tool or skill you used, the design you chose, and one improvement you requested.\nYour test results, including anything that still needs fixing.",
+      "text": "Your capstone\nAsk Agent to keep a short capstone review note inside your project. Include your planning decisions, the extra context and tool or skill you used, both design directions, your chosen refinement, and actual test results. Agent will inspect the implementation and available evidence, not just accept a claim that everything works. Keep these supporting materials:\nYour project link, with access limited to the intended reviewer. A private project link may require an invitation.\nA screenshot of the event page and a screenshot of a successful fictional submission.\nA brief note describing the context and tool or skill you used, the design you chose, and one improvement you requested.\nYour test results, including anything that still needs fixing.",
       "url": "/learn/your-capstone/build-a-picnic-sign-up-app#7-prepare-your-hand-in",
       "pageUrl": "/learn/your-capstone/build-a-picnic-sign-up-app",
       "sourcePath": "src/learn-content.ts#855925249512818f233c"
@@ -5656,9 +5656,9 @@
       "id": "855925249512818f233c:009",
       "sourceId": "855925249512818f233c",
       "title": "Build a picnic sign-up app",
-      "heading": "Finish without publishing",
-      "text": "Your capstone\nPublishing is optional for this exercise. A public link is not proof that the app works, and it can expose anything the app displays. Keep all data fictional and review costs and access before publishing. This course does not collect your project link or automatically verify your app yet. Keep your hand-in record, then use the button below to confirm that you’ve completed the build and tests and unlock the quiz.",
-      "url": "/learn/your-capstone/build-a-picnic-sign-up-app#finish-without-publishing",
+      "heading": "Submit your project for review",
+      "text": "Your capstone\nPublishing is optional. Below, connect Replit if needed, select your picnic app from your recent projects, and submit it. The course asks Agent in that project to inspect the requirements and return only YES or NO. YES saves your successful submission and unlocks the quiz. NO means something is missing or could not be verified: review your work, fix it, and resubmit. Connection failures or unclear answers do not count as passing. This is an Agent assessment, not a substitute for your own testing.",
+      "url": "/learn/your-capstone/build-a-picnic-sign-up-app#submit-your-project-for-review",
       "pageUrl": "/learn/your-capstone/build-a-picnic-sign-up-app",
       "sourcePath": "src/learn-content.ts#855925249512818f233c"
     },

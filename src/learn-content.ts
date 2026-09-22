@@ -434,18 +434,18 @@ courseLessons['Your capstone'] = [
         'Refresh and verify that saved responses still exist. Ask Replit how to inspect the stored test records without exposing them publicly.',
         'Try a phone-sized layout and check the image, text, form labels, and buttons.',
       ] },
-      { heading: '7. Prepare your hand-in', body: 'Keep a short record of what you built so it can be reviewed later:', items: [
+      { heading: '7. Prepare your hand-in', body: 'Ask Agent to keep a short capstone review note inside your project. Include your planning decisions, the extra context and tool or skill you used, both design directions, your chosen refinement, and actual test results. Agent will inspect the implementation and available evidence, not just accept a claim that everything works. Keep these supporting materials:', items: [
         'Your project link, with access limited to the intended reviewer. A private project link may require an invitation.',
         'A screenshot of the event page and a screenshot of a successful fictional submission.',
         'A brief note describing the context and tool or skill you used, the design you chose, and one improvement you requested.',
         'Your test results, including anything that still needs fixing.',
       ] },
-      { heading: 'Finish without publishing', body: 'Publishing is optional for this exercise. A public link is not proof that the app works, and it can expose anything the app displays. Keep all data fictional and review costs and access before publishing. This course does not collect your project link or automatically verify your app yet. Keep your hand-in record, then use the button below to confirm that you’ve completed the build and tests and unlock the quiz.' },
+      { heading: 'Submit your project for review', body: 'Publishing is optional. Below, connect Replit if needed, select your picnic app from your recent projects, and submit it. The course asks Agent in that project to inspect the requirements and return only YES or NO. YES saves your successful submission and unlocks the quiz. NO means something is missing or could not be verified: review your work, fix it, and resubmit. Connection failures or unclear answers do not count as passing. This is an Agent assessment, not a substitute for your own testing.' },
     ],
     quiz: [
       { prompt: 'What makes the capstone complete?', choices: ['Replit says the app is finished', 'You’ve built the required features, tested them, and prepared your hand-in record', 'You’ve generated an attractive image'], answer: 1 },
       { prompt: 'How should you check that responses are saved?', choices: ['Only look at the success message', 'Assume storage works because the form is visible', 'Refresh and verify the stored test responses without exposing private data'], answer: 2 },
-      { prompt: 'Does the completion button automatically verify your app?', choices: ['No, it records your own confirmation', 'Yes, it tests every feature', 'Yes, as long as you publish'], answer: 0 },
+      { prompt: 'When does your capstone submission pass?', choices: ['When Agent returns YES after reviewing the selected project against all requirements', 'As soon as you click Submit', 'Whenever the app has a public link'], answer: 0 },
     ],
   },
 ];

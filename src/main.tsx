@@ -5,6 +5,7 @@ import { BrowserRouter, useLocation, useNavigate } from "react-router-dom";
 import * as Icons from "lucide-react";
 import { appFoundationLessons, courseLessons, learnDisplayTitle, type LearnLesson } from "./learn-content";
 import { ReplitAccount } from "./replit-account";
+import { CapstoneSubmission } from "./capstone-submission";
 import { LEARN_DEV_MODE } from "./learn-mode";
 import { RecipeBuildProvider, RecipeBuildStep, RecipeBuildStatus, ProjectLessonStep, useRecipeActivity, RECIPE_PROMPT, RECIPE_DEMO } from "./recipe-build";
 import {
@@ -602,7 +603,10 @@ function LessonPage({
           <span>{check}</span>
         </label>)}
       </section>}
-      {lesson.activityConfirmation && <div className={`recipe-unlock-action activity-confirmation ${activityConfirmed ? 'is-open' : ''}`}>
+      {lesson.module === 'Your capstone' && <CapstoneSubmission onValidated={(passed) => {
+        setConfirmedActivity(passed ? lesson.title : null);
+      }} />}
+      {lesson.activityConfirmation && lesson.module !== 'Your capstone' && <div className={`recipe-unlock-action activity-confirmation ${activityConfirmed ? 'is-open' : ''}`}>
         <button type="button" className="recipe-create-button" disabled={activityConfirmed} aria-expanded={activityConfirmed} aria-controls="confirmed-activity-quiz" onClick={() => {
           setConfirmedActivity(lesson.title);
           setUnlockCelebration(true);
