@@ -63,7 +63,7 @@ const courseModules: CourseModule[] = [
   },
   { pillar: "discover", title: "Your workspace", description: "Understand where your work lives and how to find your way around Replit.", lessons: courseLessons["Your workspace"] },
   { pillar: "discover", title: "The prompt box", description: "Ask for what you need, add context, and explore models and modes.", lessons: courseLessons["The prompt box"] },
-  { pillar: "discover", title: "Chats and projects", description: "Understand the difference between chats and projects, including chats inside projects.", lessons: [] },
+  { pillar: "discover", title: "Chats and projects", description: "Understand the difference between chats and projects, including chats inside projects.", lessons: courseLessons["Chats and projects"] },
   { pillar: "discover", title: "Build and Design", description: "Explore building an app and shaping its design on Canvas.", lessons: [] },
   {
     pillar: "ai",
@@ -1100,6 +1100,9 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
             } : lesson.title === 'Manage integrations' && LEARN_DEV_MODE ? {
               title: 'The prompt box',
               onClick: () => navigate('/learn/the-prompt-box/get-to-know-the-prompt-box'),
+            } : lesson.title === 'Tools and integrations' && LEARN_DEV_MODE ? {
+              title: 'Chats and projects',
+              onClick: () => navigate('/learn/chats-and-projects/what-is-a-chat'),
             } : undefined}
           />
         ) : module && module.lessons.length === 0 && isAvailableModule(module) && canBrowseLessons ? (

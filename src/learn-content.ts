@@ -406,6 +406,64 @@ export const courseLessons: Record<string, LearnLesson[]> = Object.fromEntries(
   Object.entries(courseBriefs).map(([module, briefs]) => [module, module === 'Replit 101' ? discoverLessons : briefs.map((brief) => guidedLesson(module, brief))]),
 );
 
+courseLessons['Chats and projects'] = [
+  {
+    module: 'Chats and projects', title: 'What is a chat?', duration: '3 min', video: '', replitExample: '',
+    summary: 'Now that you know how to use the prompt box, you’re ready to start a chat.',
+    introduction: [
+      'A chat is a back-and-forth conversation between you and Replit. You describe what you need, Replit responds or takes action, and you follow up to clarify, explore, or improve the result.',
+      'You can brainstorm ideas, ask questions, research information, and get help with tasks. You don’t have to explain everything perfectly in your first message: the conversation lets you work things out together.',
+    ],
+    sections: [
+      { heading: 'A conversation, not just one prompt', body: 'Think back to planning the birthday party. A chat might go like this:', items: [
+        'You: “Suggest three outdoor activities for a Pokémon-themed party for ten six-year-olds.”',
+        'Replit: “You could try a creature scavenger hunt, a beanbag target game, and a team relay.”',
+        'You: “Let’s use the scavenger hunt, but keep it in one area so the children stay together.”',
+        'Replit: “Use a small, clearly marked area and place picture clues within sight of the supervising adults.”',
+        'You: “Turn that into a checklist of supplies and setup steps.”',
+      ] },
+      { heading: 'Use tools, integrations, and skills', body: 'A chat can do more than answer from the model’s existing knowledge. Replit can search the web, work with available integrations you’ve authorized, and use skills to guide its approach. Which actions it can take depends on the tools and permissions available in that conversation.', items: [
+        'Ask it to research activity ideas and include sources you can check.',
+        'Use your connected calendar to review or create the party event.',
+        'Select a skill to give Replit reusable instructions for a particular kind of task.',
+      ] },
+      { heading: 'Keep the conversation going', body: 'Follow up in the same chat when you’re working on the same task. Refer to earlier suggestions, add useful context, and explain what you want changed. Review the result, especially before approving actions in connected services.', prompt: 'Let’s continue planning our Pokémon-themed birthday party. Summarize the decisions we’ve made so far, list anything we still need to decide, and ask me one useful question to help us move forward.' },
+      { heading: 'When you want to build something', body: 'A chat is useful for planning and getting work done. When you want to turn an idea into an application you can run, develop, and publish, you’ll work in a project. You’ll still talk with Replit, but the project provides a place for the app and the infrastructure behind it.' },
+    ],
+    quiz: [
+      { prompt: 'What is a chat?', choices: ['A single prompt you cannot follow up on', 'A back-and-forth conversation with Replit', 'Only a place to write code'], answer: 1 },
+      { prompt: 'What can Replit use in a chat?', choices: ['Only the words in your latest message', 'Every external account without permission', 'Available tools, authorized integrations, and skills'], answer: 2 },
+      { prompt: 'How can you improve a result?', choices: ['Follow up with useful context and explain what to change', 'Always start over without context', 'Assume the first response is final'], answer: 0 },
+    ],
+  },
+  {
+    module: 'Chats and projects', title: 'What is a project?', duration: '4 min', video: '', replitExample: '',
+    summary: 'A project takes the conversation further: it gives you a place to build, run, and publish an application.',
+    introduction: [
+      'You still chat with Replit to explain what you want, but a project is more than an advanced chat. It holds your app’s files and provides the development environment and access to the infrastructure your app needs.',
+      'In our birthday example, the chat helped you plan the party. The project held the invitation app, its RSVP experience, and the Mosskip image you added.',
+    ],
+    sections: [
+      { heading: 'A place for your application', body: 'Within a project, you can ask Replit to make changes, preview the result, and keep developing the same app. When you’re ready, you can publish it so others can use it. Publishing is also called deployment: making a running version of your application available beyond your development preview.' },
+      { heading: 'Build and Design', body: 'Projects let you work on both how an app functions and how it looks. Build is where you implement and test the working app. Design lets you explore its visual direction on Canvas. We’ll explore these in more detail in the next module.' },
+      { heading: 'The frontend: what people see and use', body: 'The frontend is the part of an app people interact with, usually in their browser. In the birthday app, that includes the invitation, RSVP fields, buttons, and the Mosskip discovery interaction.' },
+      { heading: 'The backend: work behind the scenes', body: 'The backend runs on a server rather than in the visitor’s browser. It can receive requests, check permissions, and read or save information. For example, a birthday app can use a backend to accept an RSVP and restrict the guest list to the host.' },
+      { heading: 'Data and storage: what the app keeps', body: 'An app may need to remember information or keep files. Different kinds of storage serve different purposes:', items: [
+        'A database stores structured information, such as guests’ names, RSVP answers, and attendance counts.',
+        'File storage keeps assets such as uploaded images and documents.',
+        'Your project also holds the code and assets used to build the app, such as the Mosskip image.',
+      ] },
+      { heading: 'The infrastructure supports the app', body: 'Infrastructure means the underlying services that let your app run, store information, and stay available to users. Replit brings these capabilities into the project workflow, so you can describe what the app needs instead of setting up every service yourself. Not every app needs a backend or database, and services and deployments can require setup or incur costs.' },
+      { heading: 'Keep talking, keep building', body: 'A project has chats too. You use them to ask for changes to the application, while the project holds the work those conversations produce. “Add Mosskip to our invitation” is a chat request; the updated invitation and its image are part of the project.' },
+    ],
+    quiz: [
+      { prompt: 'What makes a project more than a chat?', choices: ['It holds the app and provides the environment and infrastructure to develop it', 'It removes the need to review results', 'It is only a longer conversation'], answer: 0 },
+      { prompt: 'Which part is the frontend?', choices: ['A database storing RSVPs', 'The invitation and RSVP form a guest sees in their browser', 'A server checking the host’s permissions'], answer: 1 },
+      { prompt: 'Why might an app use a backend and database?', choices: ['Every app must have both', 'To choose the color of every button', 'To handle requests and save information such as RSVP responses'], answer: 2 },
+    ],
+  },
+];
+
 courseLessons['The prompt box'] = [
   {
     module: 'The prompt box', title: 'Get to know the prompt box', navigationTitle: 'Module overview',
