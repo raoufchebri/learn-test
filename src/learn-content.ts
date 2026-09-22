@@ -462,6 +462,27 @@ courseLessons['Your capstone'] = [
   },
 ];
 
+courseLessons['Your capstone'].push({
+  module: 'Your capstone', title: 'Congratulations', duration: '2 min', video: '', replitExample: '',
+  summary: 'Look back at what you’ve learned, then unlock your personalized Replit 101 certificate after passing the capstone review.',
+  introduction: [
+    'You started with an idea for a birthday party and learned how to turn a conversation into something people can use. In the capstone, you applied those ideas to your own picnic app.',
+    'Once your capstone passes review, celebrate what you’ve accomplished: you can plan, build, refine, and test an app with Replit. That’s a useful foundation for your next idea.',
+  ],
+  sections: [
+    { heading: 'What you’ve learned', body: 'You practiced the full journey:', items: [
+      'Discover Replit: brainstorm the birthday party, research supplies, and explore Calendar, Gmail, and routines.',
+      'Your workspace: organize your work, understand collaborator access, and manage integrations.',
+      'The prompt box: explain your goal, add useful context, and use skills and tools.',
+      'Chats and projects: plan through conversation, then build when you’re ready.',
+      'Build and Design: create a working app, compare designs, and understand artifacts and supporting assets like Mosskip.',
+      'Your capstone: build independently, test your app, and use review feedback to make improvements.',
+    ] },
+    { heading: 'Make it yours', body: 'After a successful capstone review, check the name below and select Unlock my certificate. You can print it or save it as a PDF using your browser’s print dialog. Then try your next idea: keep the scope small, provide useful context, and test what you build.' },
+  ],
+  quiz: [],
+});
+
 courseLessons['Build and Design'] = [
   {
     module: 'Build and Design', title: 'Explore your project', navigationTitle: 'Module overview',

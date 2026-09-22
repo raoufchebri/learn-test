@@ -6,6 +6,7 @@ import * as Icons from "lucide-react";
 import { appFoundationLessons, courseLessons, learnDisplayTitle, type LearnLesson } from "./learn-content";
 import { ReplitAccount } from "./replit-account";
 import { CapstoneSubmission } from "./capstone-submission";
+import { CourseCertificate } from "./course-certificate";
 import { LEARN_DEV_MODE } from "./learn-mode";
 import { RecipeBuildProvider, RecipeBuildStep, RecipeBuildStatus, ProjectLessonStep, useRecipeActivity, RECIPE_PROMPT, RECIPE_DEMO } from "./recipe-build";
 import {
@@ -603,6 +604,7 @@ function LessonPage({
           <span>{check}</span>
         </label>)}
       </section>}
+      {lesson.module === 'Your capstone' && lesson.title === 'Congratulations' && <CourseCertificate />}
       {lesson.module === 'Your capstone' && lesson.title === 'Review' && <CapstoneSubmission onValidated={(passed) => {
         setConfirmedActivity(passed ? lesson.title : null);
       }} />}

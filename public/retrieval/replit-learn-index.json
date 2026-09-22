@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-22T16:37:32.031Z",
+  "generatedAt": "2026-09-22T16:40:33.475Z",
   "mode": "full",
-  "hash": "15a52f9c951c9de66bf7bbcb1924af1e40b8fbdeb2be29df2b3eb8dc9d90c63d",
+  "hash": "4c59c23f18531bc52033089b40aadaf6423938c24782536fffe18e03fb6c504c",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "072878e974a6f3620e8f",
@@ -102,6 +102,7 @@
     "f4fbb3611e7f86a0ff44",
     "f88d7eedae2d65893065",
     "f8e5847323cbf06cd39c",
+    "f920144e883ec4f7b221",
     "fc4617ddc5906cf96a4a",
     "fe60ce3e2d9633fb259a"
   ],
@@ -219,6 +220,7 @@
     "src/learn-content.ts#f4fbb3611e7f86a0ff44",
     "src/learn-content.ts#f88d7eedae2d65893065",
     "src/learn-content.ts#f8e5847323cbf06cd39c",
+    "src/learn-content.ts#f920144e883ec4f7b221",
     "src/learn-content.ts#fc4617ddc5906cf96a4a",
     "src/learn-content.ts#fe60ce3e2d9633fb259a",
     "src/main.tsx#eabea78578bd867f3417"
@@ -5683,6 +5685,36 @@
       "url": "/learn/your-capstone/review#how-review-works",
       "pageUrl": "/learn/your-capstone/review",
       "sourcePath": "src/learn-content.ts#14bd6691e8d36e30b261"
+    },
+    {
+      "id": "f920144e883ec4f7b221:000",
+      "sourceId": "f920144e883ec4f7b221",
+      "title": "Congratulations",
+      "heading": "Overview",
+      "text": "Your capstone\nLook back at what you’ve learned, then unlock your personalized Replit 101 certificate after passing the capstone review.\nYou started with an idea for a birthday party and learned how to turn a conversation into something people can use. In the capstone, you applied those ideas to your own picnic app.\nOnce your capstone passes review, celebrate what you’ve accomplished: you can plan, build, refine, and test an app with Replit. That’s a useful foundation for your next idea.\n",
+      "url": "/learn/your-capstone/congratulations",
+      "pageUrl": "/learn/your-capstone/congratulations",
+      "sourcePath": "src/learn-content.ts#f920144e883ec4f7b221"
+    },
+    {
+      "id": "f920144e883ec4f7b221:001",
+      "sourceId": "f920144e883ec4f7b221",
+      "title": "Congratulations",
+      "heading": "What you’ve learned",
+      "text": "Your capstone\nYou practiced the full journey:\nDiscover Replit: brainstorm the birthday party, research supplies, and explore Calendar, Gmail, and routines.\nYour workspace: organize your work, understand collaborator access, and manage integrations.\nThe prompt box: explain your goal, add useful context, and use skills and tools.\nChats and projects: plan through conversation, then build when you’re ready.\nBuild and Design: create a working app, compare designs, and understand artifacts and supporting assets like Mosskip.\nYour capstone: build independently, test your app, and use review feedback to make improvements.",
+      "url": "/learn/your-capstone/congratulations#what-you-ve-learned",
+      "pageUrl": "/learn/your-capstone/congratulations",
+      "sourcePath": "src/learn-content.ts#f920144e883ec4f7b221"
+    },
+    {
+      "id": "f920144e883ec4f7b221:002",
+      "sourceId": "f920144e883ec4f7b221",
+      "title": "Congratulations",
+      "heading": "Make it yours",
+      "text": "Your capstone\nAfter a successful capstone review, check the name below and select Unlock my certificate. You can print it or save it as a PDF using your browser’s print dialog. Then try your next idea: keep the scope small, provide useful context, and test what you build.",
+      "url": "/learn/your-capstone/congratulations#make-it-yours",
+      "pageUrl": "/learn/your-capstone/congratulations",
+      "sourcePath": "src/learn-content.ts#f920144e883ec4f7b221"
     },
     {
       "id": "09e72e6653d69c149ff0:000",
