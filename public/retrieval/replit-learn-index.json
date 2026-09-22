@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-22T16:15:15.946Z",
+  "generatedAt": "2026-09-22T16:16:20.976Z",
   "mode": "full",
-  "hash": "54ee8dd938e1c688607899f8034a4aedfef12818909c02a89da46da9938306c1",
+  "hash": "84a95201fcbbc60d788dcdb6b14e76cf3e287a9f3f2df88f6007b7c24f4bfd05",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "072878e974a6f3620e8f",
@@ -55,6 +55,7 @@
     "7d986d37e042bf1e5be2",
     "82f15bcc1958ed4dd228",
     "842b42ebafbcff01ca47",
+    "855925249512818f233c",
     "870899af987996ac6cbb",
     "875f2ad42694a76d41e9",
     "88e1f5bb0f1f3a816ceb",
@@ -171,6 +172,7 @@
     "src/learn-content.ts#7d986d37e042bf1e5be2",
     "src/learn-content.ts#82f15bcc1958ed4dd228",
     "src/learn-content.ts#842b42ebafbcff01ca47",
+    "src/learn-content.ts#855925249512818f233c",
     "src/learn-content.ts#870899af987996ac6cbb",
     "src/learn-content.ts#875f2ad42694a76d41e9",
     "src/learn-content.ts#88e1f5bb0f1f3a816ceb",
@@ -5559,6 +5561,106 @@
       "url": "/learn/administer-replit/rollout-usage-and-audit-logs#try-a-small-version",
       "pageUrl": "/learn/administer-replit/rollout-usage-and-audit-logs",
       "sourcePath": "src/learn-content.ts#68ee614c666645019b3b"
+    },
+    {
+      "id": "855925249512818f233c:000",
+      "sourceId": "855925249512818f233c",
+      "title": "Build a picnic sign-up app",
+      "heading": "Overview",
+      "text": "Your capstone\nPut what you’ve learned into practice: plan and build a simple app for a fictional picnic in the park.\nYou followed the birthday example from a conversation to a working invitation. This time, you’ll make the decisions. We’ll give you the steps and requirements, but you’ll write the prompts and guide Replit yourself.\nYour app should help guests see the picnic details, say whether they’re coming, and choose something to bring. Use fictional names and event details. Keep it small: no payments, real invitations, or complicated accounts are required.\n",
+      "url": "/learn/your-capstone/build-a-picnic-sign-up-app",
+      "pageUrl": "/learn/your-capstone/build-a-picnic-sign-up-app",
+      "sourcePath": "src/learn-content.ts#855925249512818f233c"
+    },
+    {
+      "id": "855925249512818f233c:001",
+      "sourceId": "855925249512818f233c",
+      "title": "Build a picnic sign-up app",
+      "heading": "Your brief",
+      "text": "Your capstone\nBuild one web app with these essentials:\nAn event page with a picnic title, fictional date and location, and a short description.\nA sign-up form with a fictional guest name, attending or not attending, and a choice of contribution: snacks, drinks, games, or nothing.\nSaved responses that remain after refreshing the app, plus a clear success message after submission.\nA readable phone layout and one original image generated for the picnic.",
+      "url": "/learn/your-capstone/build-a-picnic-sign-up-app#your-brief",
+      "pageUrl": "/learn/your-capstone/build-a-picnic-sign-up-app",
+      "sourcePath": "src/learn-content.ts#855925249512818f233c"
+    },
+    {
+      "id": "855925249512818f233c:002",
+      "sourceId": "855925249512818f233c",
+      "title": "Build a picnic sign-up app",
+      "heading": "1. Start with a conversation",
+      "text": "Your capstone\nCheck your workspace, then start a chat. Ask Replit to help plan the picnic. Give it a guest count, a theme, and any constraints. Ask a follow-up, choose your direction, and have it summarize the decisions. This is the same process we used to choose the Pokémon birthday theme, but the choices are yours now.",
+      "url": "/learn/your-capstone/build-a-picnic-sign-up-app#1-start-with-a-conversation",
+      "pageUrl": "/learn/your-capstone/build-a-picnic-sign-up-app",
+      "sourcePath": "src/learn-content.ts#855925249512818f233c"
+    },
+    {
+      "id": "855925249512818f233c:003",
+      "sourceId": "855925249512818f233c",
+      "title": "Build a picnic sign-up app",
+      "heading": "2. Add useful context",
+      "text": "Your capstone\nGive Replit one extra piece of context: your own short planning notes, a reference image you’re allowed to use, or a public web page. Explain how to use it. For example, the notes could list supplies already available, or the image could show the visual style you want. Check that Replit could read the material rather than assuming it did.",
+      "url": "/learn/your-capstone/build-a-picnic-sign-up-app#2-add-useful-context",
+      "pageUrl": "/learn/your-capstone/build-a-picnic-sign-up-app",
+      "sourcePath": "src/learn-content.ts#855925249512818f233c"
+    },
+    {
+      "id": "855925249512818f233c:004",
+      "sourceId": "855925249512818f233c",
+      "title": "Build a picnic sign-up app",
+      "heading": "3. Use a tool or skill",
+      "text": "Your capstone\nChoose one small task that supports your plan. Ask Replit to search for picnic game ideas with sources, or select a predefined skill to help create the picnic graphic. If you already have an authorized Calendar connection, you could instead create a clearly labeled practice event after reviewing its details. You don’t need a new account connection, paid routine, or real invitation to finish the capstone.",
+      "url": "/learn/your-capstone/build-a-picnic-sign-up-app#3-use-a-tool-or-skill",
+      "pageUrl": "/learn/your-capstone/build-a-picnic-sign-up-app",
+      "sourcePath": "src/learn-content.ts#855925249512818f233c"
+    },
+    {
+      "id": "855925249512818f233c:005",
+      "sourceId": "855925249512818f233c",
+      "title": "Build a picnic sign-up app",
+      "heading": "4. Ask Replit to build it",
+      "text": "Your capstone\nIn the planning chat, ask Replit to build the picnic sign-up web app. Include the requirements above and refer to your decisions. Ask for shared persistent storage for the responses, not just temporary browser state. Keep the app unpublished while you work. Review any setup or cost prompts before proceeding.",
+      "url": "/learn/your-capstone/build-a-picnic-sign-up-app#4-ask-replit-to-build-it",
+      "pageUrl": "/learn/your-capstone/build-a-picnic-sign-up-app",
+      "sourcePath": "src/learn-content.ts#855925249512818f233c"
+    },
+    {
+      "id": "855925249512818f233c:006",
+      "sourceId": "855925249512818f233c",
+      "title": "Build a picnic sign-up app",
+      "heading": "5. Make the design your own",
+      "text": "Your capstone\nOpen Design and explore at least two visual directions for the event page. Choose one and ask Agent to refine it. Generate an original picnic image and ask Replit to use it in the app, just as you added Mosskip to the birthday invitation. Return to the working app and check that the form still works.",
+      "url": "/learn/your-capstone/build-a-picnic-sign-up-app#5-make-the-design-your-own",
+      "pageUrl": "/learn/your-capstone/build-a-picnic-sign-up-app",
+      "sourcePath": "src/learn-content.ts#855925249512818f233c"
+    },
+    {
+      "id": "855925249512818f233c:007",
+      "sourceId": "855925249512818f233c",
+      "title": "Build a picnic sign-up app",
+      "heading": "6. Test the app yourself",
+      "text": "Your capstone\nUse fictional test data and check each of these in Preview. If something fails, describe the problem to Replit, ask for a fix, and test again:\nSubmit an attending response with a contribution and check the success message.\nSubmit a not-attending response and verify that the app handles it sensibly.\nLeave the name empty and check that the form explains what is missing.\nRefresh and verify that saved responses still exist. Ask Replit how to inspect the stored test records without exposing them publicly.\nTry a phone-sized layout and check the image, text, form labels, and buttons.",
+      "url": "/learn/your-capstone/build-a-picnic-sign-up-app#6-test-the-app-yourself",
+      "pageUrl": "/learn/your-capstone/build-a-picnic-sign-up-app",
+      "sourcePath": "src/learn-content.ts#855925249512818f233c"
+    },
+    {
+      "id": "855925249512818f233c:008",
+      "sourceId": "855925249512818f233c",
+      "title": "Build a picnic sign-up app",
+      "heading": "7. Prepare your hand-in",
+      "text": "Your capstone\nKeep a short record of what you built so it can be reviewed later:\nYour project link, with access limited to the intended reviewer. A private project link may require an invitation.\nA screenshot of the event page and a screenshot of a successful fictional submission.\nA brief note describing the context and tool or skill you used, the design you chose, and one improvement you requested.\nYour test results, including anything that still needs fixing.",
+      "url": "/learn/your-capstone/build-a-picnic-sign-up-app#7-prepare-your-hand-in",
+      "pageUrl": "/learn/your-capstone/build-a-picnic-sign-up-app",
+      "sourcePath": "src/learn-content.ts#855925249512818f233c"
+    },
+    {
+      "id": "855925249512818f233c:009",
+      "sourceId": "855925249512818f233c",
+      "title": "Build a picnic sign-up app",
+      "heading": "Finish without publishing",
+      "text": "Your capstone\nPublishing is optional for this exercise. A public link is not proof that the app works, and it can expose anything the app displays. Keep all data fictional and review costs and access before publishing. This course does not collect your project link or automatically verify your app yet. Keep your hand-in record, then use the button below to confirm that you’ve completed the build and tests and unlock the quiz.",
+      "url": "/learn/your-capstone/build-a-picnic-sign-up-app#finish-without-publishing",
+      "pageUrl": "/learn/your-capstone/build-a-picnic-sign-up-app",
+      "sourcePath": "src/learn-content.ts#855925249512818f233c"
     },
     {
       "id": "09e72e6653d69c149ff0:000",

@@ -65,6 +65,7 @@ const courseModules: CourseModule[] = [
   { pillar: "discover", title: "The prompt box", description: "Ask for what you need, add context, and explore models and modes.", lessons: courseLessons["The prompt box"] },
   { pillar: "discover", title: "Chats and projects", description: "Understand the difference between chats and projects, including chats inside projects.", lessons: courseLessons["Chats and projects"] },
   { pillar: "discover", title: "Build and Design", description: "Explore building an app and shaping its design on Canvas.", lessons: courseLessons["Build and Design"] },
+  { pillar: "discover", title: "Your capstone", description: "Put it all together by building and testing your own picnic sign-up app.", lessons: courseLessons["Your capstone"] },
   {
     pillar: "ai",
     title: "Work with Agent",
@@ -1106,6 +1107,9 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
             } : lesson.title === 'From chat to project' && LEARN_DEV_MODE ? {
               title: 'Build and Design',
               onClick: () => navigate('/learn/build-and-design/explore-your-project'),
+            } : lesson.module === 'Build and Design' && lesson.title === 'What is an artifact?' && LEARN_DEV_MODE ? {
+              title: 'Your capstone',
+              onClick: () => navigate('/learn/your-capstone/build-a-picnic-sign-up-app'),
             } : undefined}
           />
         ) : module && module.lessons.length === 0 && isAvailableModule(module) && canBrowseLessons ? (

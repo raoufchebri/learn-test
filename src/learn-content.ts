@@ -406,6 +406,50 @@ export const courseLessons: Record<string, LearnLesson[]> = Object.fromEntries(
   Object.entries(courseBriefs).map(([module, briefs]) => [module, module === 'Replit 101' ? discoverLessons : briefs.map((brief) => guidedLesson(module, brief))]),
 );
 
+courseLessons['Your capstone'] = [
+  {
+    module: 'Your capstone', title: 'Build a picnic sign-up app', duration: '30 min', video: '', replitExample: '',
+    summary: 'Put what you’ve learned into practice: plan and build a simple app for a fictional picnic in the park.',
+    introduction: [
+      'You followed the birthday example from a conversation to a working invitation. This time, you’ll make the decisions. We’ll give you the steps and requirements, but you’ll write the prompts and guide Replit yourself.',
+      'Your app should help guests see the picnic details, say whether they’re coming, and choose something to bring. Use fictional names and event details. Keep it small: no payments, real invitations, or complicated accounts are required.',
+    ],
+    activityConfirmation: 'I have built and tested my picnic app.',
+    sections: [
+      { heading: 'Your brief', body: 'Build one web app with these essentials:', items: [
+        'An event page with a picnic title, fictional date and location, and a short description.',
+        'A sign-up form with a fictional guest name, attending or not attending, and a choice of contribution: snacks, drinks, games, or nothing.',
+        'Saved responses that remain after refreshing the app, plus a clear success message after submission.',
+        'A readable phone layout and one original image generated for the picnic.',
+      ] },
+      { heading: '1. Start with a conversation', body: 'Check your workspace, then start a chat. Ask Replit to help plan the picnic. Give it a guest count, a theme, and any constraints. Ask a follow-up, choose your direction, and have it summarize the decisions. This is the same process we used to choose the Pokémon birthday theme, but the choices are yours now.' },
+      { heading: '2. Add useful context', body: 'Give Replit one extra piece of context: your own short planning notes, a reference image you’re allowed to use, or a public web page. Explain how to use it. For example, the notes could list supplies already available, or the image could show the visual style you want. Check that Replit could read the material rather than assuming it did.' },
+      { heading: '3. Use a tool or skill', body: 'Choose one small task that supports your plan. Ask Replit to search for picnic game ideas with sources, or select a predefined skill to help create the picnic graphic. If you already have an authorized Calendar connection, you could instead create a clearly labeled practice event after reviewing its details. You don’t need a new account connection, paid routine, or real invitation to finish the capstone.' },
+      { heading: '4. Ask Replit to build it', body: 'In the planning chat, ask Replit to build the picnic sign-up web app. Include the requirements above and refer to your decisions. Ask for shared persistent storage for the responses, not just temporary browser state. Keep the app unpublished while you work. Review any setup or cost prompts before proceeding.' },
+      { heading: '5. Make the design your own', body: 'Open Design and explore at least two visual directions for the event page. Choose one and ask Agent to refine it. Generate an original picnic image and ask Replit to use it in the app, just as you added Mosskip to the birthday invitation. Return to the working app and check that the form still works.' },
+      { heading: '6. Test the app yourself', body: 'Use fictional test data and check each of these in Preview. If something fails, describe the problem to Replit, ask for a fix, and test again:', items: [
+        'Submit an attending response with a contribution and check the success message.',
+        'Submit a not-attending response and verify that the app handles it sensibly.',
+        'Leave the name empty and check that the form explains what is missing.',
+        'Refresh and verify that saved responses still exist. Ask Replit how to inspect the stored test records without exposing them publicly.',
+        'Try a phone-sized layout and check the image, text, form labels, and buttons.',
+      ] },
+      { heading: '7. Prepare your hand-in', body: 'Keep a short record of what you built so it can be reviewed later:', items: [
+        'Your project link, with access limited to the intended reviewer. A private project link may require an invitation.',
+        'A screenshot of the event page and a screenshot of a successful fictional submission.',
+        'A brief note describing the context and tool or skill you used, the design you chose, and one improvement you requested.',
+        'Your test results, including anything that still needs fixing.',
+      ] },
+      { heading: 'Finish without publishing', body: 'Publishing is optional for this exercise. A public link is not proof that the app works, and it can expose anything the app displays. Keep all data fictional and review costs and access before publishing. This course does not collect your project link or automatically verify your app yet. Keep your hand-in record, then use the button below to confirm that you’ve completed the build and tests and unlock the quiz.' },
+    ],
+    quiz: [
+      { prompt: 'What makes the capstone complete?', choices: ['Replit says the app is finished', 'You’ve built the required features, tested them, and prepared your hand-in record', 'You’ve generated an attractive image'], answer: 1 },
+      { prompt: 'How should you check that responses are saved?', choices: ['Only look at the success message', 'Assume storage works because the form is visible', 'Refresh and verify the stored test responses without exposing private data'], answer: 2 },
+      { prompt: 'Does the completion button automatically verify your app?', choices: ['No, it records your own confirmation', 'Yes, it tests every feature', 'Yes, as long as you publish'], answer: 0 },
+    ],
+  },
+];
+
 courseLessons['Build and Design'] = [
   {
     module: 'Build and Design', title: 'Explore your project', navigationTitle: 'Module overview',
