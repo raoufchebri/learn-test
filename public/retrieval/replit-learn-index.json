@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-22T16:09:37.780Z",
+  "generatedAt": "2026-09-22T16:11:31.948Z",
   "mode": "full",
-  "hash": "4aa376468f5948ec5273889f680af9ceb93fc09fd54a83c992e3c1bcf03d5b4e",
+  "hash": "c07de2ae34d46ad3263de2789642e62f8b8cd79e215e268b981ce09dab678276",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "072878e974a6f3620e8f",
@@ -5565,7 +5565,7 @@
       "sourceId": "09e72e6653d69c149ff0",
       "title": "Explore your project",
       "heading": "Overview",
-      "text": "Build and Design\nNow that you understand chats and projects and know how to create a project, let’s explore what you can do inside one.\nA project gives you two ways to develop your idea: Build and Design. Build helps you create a working application. Design helps you explore how it should look and feel.\nThese are two ways of working in the same project, not a permanent choice between separate places. You can explore a design, build its functionality, and keep improving both.\n",
+      "text": "Build and Design\nNow that you understand the difference between chats and projects, let’s dive a little deeper into projects.\nA project gives you a place to build apps, slide decks, dashboards, websites, and more. You can also explore and refine their designs before developing the finished result.\nEach of these things you build is called an artifact. Your birthday invitation app is one artifact; a slide deck or a companion mobile app could be another. One project can hold several related artifacts.\nBuild and Design are two ways of working within that project. Build turns your idea into a working result. Design gives you a canvas to explore how it should look and feel. You can move between them as your idea develops.\n",
       "url": "/learn/build-and-design/explore-your-project",
       "pageUrl": "/learn/build-and-design/explore-your-project",
       "sourcePath": "src/learn-content.ts#09e72e6653d69c149ff0"
@@ -5575,7 +5575,7 @@
       "sourceId": "09e72e6653d69c149ff0",
       "title": "Explore your project",
       "heading": "What we’ll explore",
-      "text": "Build and Design\nWe’ll look more closely at the project you’ve already started:\nBuild: the tools and services behind a working application, including databases, authentication, security, and secrets.\nDesign: an infinite canvas with frames you can create, compare, and refine with Agent.\nArtifacts: the things you build in a project, such as a website, mobile app, or slide deck.",
+      "text": "Build and Design\nThe next pages take these ideas one at a time:\nBuild your application: explore tools and services such as databases, authentication, security, and secrets.\nExplore Design: work with frames on an infinite canvas and ask Agent to refine them.\nWhat is an artifact?: understand your project’s outputs and how related artifacts can share data and backend logic.",
       "url": "/learn/build-and-design/explore-your-project#what-we-ll-explore",
       "pageUrl": "/learn/build-and-design/explore-your-project",
       "sourcePath": "src/learn-content.ts#09e72e6653d69c149ff0"

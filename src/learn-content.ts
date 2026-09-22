@@ -410,21 +410,23 @@ courseLessons['Build and Design'] = [
   {
     module: 'Build and Design', title: 'Explore your project', navigationTitle: 'Module overview',
     duration: '2 min', video: '', replitExample: '',
-    summary: 'Now that you understand chats and projects and know how to create a project, let’s explore what you can do inside one.',
+    summary: 'Now that you understand the difference between chats and projects, let’s dive a little deeper into projects.',
     introduction: [
-      'A project gives you two ways to develop your idea: Build and Design. Build helps you create a working application. Design helps you explore how it should look and feel.',
-      'These are two ways of working in the same project, not a permanent choice between separate places. You can explore a design, build its functionality, and keep improving both.',
+      'A project gives you a place to build apps, slide decks, dashboards, websites, and more. You can also explore and refine their designs before developing the finished result.',
+      'Each of these things you build is called an artifact. Your birthday invitation app is one artifact; a slide deck or a companion mobile app could be another. One project can hold several related artifacts.',
+      'Build and Design are two ways of working within that project. Build turns your idea into a working result. Design gives you a canvas to explore how it should look and feel. You can move between them as your idea develops.',
     ],
     sections: [
-      { heading: 'What we’ll explore', body: 'We’ll look more closely at the project you’ve already started:', items: [
-        'Build: the tools and services behind a working application, including databases, authentication, security, and secrets.',
-        'Design: an infinite canvas with frames you can create, compare, and refine with Agent.',
-        'Artifacts: the things you build in a project, such as a website, mobile app, or slide deck.',
+      { heading: 'What we’ll explore', body: 'The next pages take these ideas one at a time:', items: [
+        'Build your application: explore tools and services such as databases, authentication, security, and secrets.',
+        'Explore Design: work with frames on an infinite canvas and ask Agent to refine them.',
+        'What is an artifact?: understand your project’s outputs and how related artifacts can share data and backend logic.',
       ] },
       { heading: 'Keep the birthday app in mind', body: 'The RSVP form needs to work and save replies. The invitation also needs to look inviting and be easy to use. Build and Design help you develop these parts together.' },
     ],
     quiz: [
       { prompt: 'How do Build and Design relate?', choices: ['They are ways to work on the same project', 'You must permanently choose only one', 'Design automatically replaces the backend'], answer: 0 },
+      { prompt: 'What do we call an app, slide deck, or dashboard built in a project?', choices: ['A secret', 'An artifact', 'A workspace permission'], answer: 1 },
     ],
   },
   {
