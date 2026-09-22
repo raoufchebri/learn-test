@@ -485,6 +485,8 @@ courseLessons['Build and Design'] = [
 courseLessons['Chats and projects'] = [
   {
     module: 'Chats and projects', title: 'What is a chat?', duration: '3 min', video: '', replitExample: '',
+    copyPrompts: true,
+    activityConfirmation: 'I have started a chat.',
     summary: 'Now that you know how to use the prompt box, you’re ready to start a chat.',
     introduction: [
       'A chat is a back-and-forth conversation between you and Replit. You describe what you need, Replit responds or takes action, and you follow up to clarify, explore, or improve the result.',
@@ -503,7 +505,8 @@ courseLessons['Chats and projects'] = [
         'Use your connected calendar to review or create the party event.',
         'Select a skill to give Replit reusable instructions for a particular kind of task.',
       ] },
-      { heading: 'Keep the conversation going', body: 'Follow up in the same chat when you’re working on the same task. Refer to earlier suggestions, add useful context, and explain what you want changed. Review the result, especially before approving actions in connected services.', prompt: 'Let’s continue planning our Pokémon-themed birthday party. Summarize the decisions we’ve made so far, list anything we still need to decide, and ask me one useful question to help us move forward.' },
+      { heading: 'Try starting a chat', body: 'Open Replit and type a simple request in the prompt box, or copy this one and send it:', prompt: 'Suggest three simple outdoor activities for a Pokémon-themed birthday party for ten six-year-olds.', afterPrompt: 'Read the response, then try a follow-up such as “Make the first activity easier to set up.” Once you’ve sent your request, use the confirmation button below to unlock the quiz.' },
+      { heading: 'Keep the conversation going', body: 'Follow up in the same chat when you’re working on the same task. Refer to earlier suggestions, add useful context, and explain what you want changed. Review the result, especially before approving actions in connected services.' },
       { heading: 'When you want to build something', body: 'A chat is useful for planning and getting work done. When you want to turn an idea into an application you can run, develop, and publish, you’ll work in a project. You’ll still talk with Replit, but the project provides a place for the app and the infrastructure behind it.' },
     ],
     quiz: [
@@ -514,6 +517,8 @@ courseLessons['Chats and projects'] = [
   },
   {
     module: 'Chats and projects', title: 'What is a project?', duration: '4 min', video: '', replitExample: '',
+    copyPrompts: true,
+    activityConfirmation: 'I have asked Replit to build an app.',
     summary: 'A project takes the conversation further: it gives you a place to build, run, and publish an application.',
     introduction: [
       'You still chat with Replit to explain what you want, but a project is more than an advanced chat. It holds your app’s files and provides the development environment and access to the infrastructure your app needs.',
@@ -531,6 +536,7 @@ courseLessons['Chats and projects'] = [
       ] },
       { heading: 'The infrastructure supports the app', body: 'Infrastructure means the underlying services that let your app run, store information, and stay available to users. Replit brings these capabilities into the project workflow, so you can describe what the app needs instead of setting up every service yourself. Not every app needs a backend or database, and services and deployments can require setup or incur costs.' },
       { heading: 'Keep talking, keep building', body: 'A project has chats too. You use them to ask for changes to the application, while the project holds the work those conversations produce. “Add Mosskip to our invitation” is a chat request; the updated invitation and its image are part of the project.' },
+      { heading: 'Ask Replit to build an app', body: 'In Replit, describe something you want built. You can type your own request or copy this example. If you already asked Replit to build the birthday app in the first module, that counts: you don’t need to create a duplicate.', prompt: 'Build a simple Pokémon-themed birthday invitation web app with fictional party details and an RSVP form. Keep it unpublished so I can preview and test it first.', afterPrompt: 'Send the request and follow any project-creation prompt shown. Review any costs before approving paid services. Once you’ve asked Replit to build the app, use the confirmation button below to unlock the quiz. You don’t need to finish or publish the app to confirm this step.' },
     ],
     quiz: [
       { prompt: 'What makes a project more than a chat?', choices: ['It holds the app and provides the environment and infrastructure to develop it', 'It removes the need to review results', 'It is only a longer conversation'], answer: 0 },

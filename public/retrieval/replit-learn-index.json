@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-22T16:07:56.739Z",
+  "generatedAt": "2026-09-22T16:09:37.780Z",
   "mode": "full",
-  "hash": "71c4cc003108342b53db44d4068f0d8480a1db5f4d76f18510ca4a759591098e",
+  "hash": "4aa376468f5948ec5273889f680af9ceb93fc09fd54a83c992e3c1bcf03d5b4e",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "072878e974a6f3620e8f",
@@ -5794,14 +5794,24 @@
       "id": "072878e974a6f3620e8f:003",
       "sourceId": "072878e974a6f3620e8f",
       "title": "What is a chat?",
-      "heading": "Keep the conversation going",
-      "text": "Chats and projects\nFollow up in the same chat when you’re working on the same task. Refer to earlier suggestions, add useful context, and explain what you want changed. Review the result, especially before approving actions in connected services.\nLet’s continue planning our Pokémon-themed birthday party. Summarize the decisions we’ve made so far, list anything we still need to decide, and ask me one useful question to help us move forward.",
-      "url": "/learn/chats-and-projects/what-is-a-chat#keep-the-conversation-going",
+      "heading": "Try starting a chat",
+      "text": "Chats and projects\nOpen Replit and type a simple request in the prompt box, or copy this one and send it:\nSuggest three simple outdoor activities for a Pokémon-themed birthday party for ten six-year-olds.\nRead the response, then try a follow-up such as “Make the first activity easier to set up.” Once you’ve sent your request, use the confirmation button below to unlock the quiz.",
+      "url": "/learn/chats-and-projects/what-is-a-chat#try-starting-a-chat",
       "pageUrl": "/learn/chats-and-projects/what-is-a-chat",
       "sourcePath": "src/learn-content.ts#072878e974a6f3620e8f"
     },
     {
       "id": "072878e974a6f3620e8f:004",
+      "sourceId": "072878e974a6f3620e8f",
+      "title": "What is a chat?",
+      "heading": "Keep the conversation going",
+      "text": "Chats and projects\nFollow up in the same chat when you’re working on the same task. Refer to earlier suggestions, add useful context, and explain what you want changed. Review the result, especially before approving actions in connected services.",
+      "url": "/learn/chats-and-projects/what-is-a-chat#keep-the-conversation-going",
+      "pageUrl": "/learn/chats-and-projects/what-is-a-chat",
+      "sourcePath": "src/learn-content.ts#072878e974a6f3620e8f"
+    },
+    {
+      "id": "072878e974a6f3620e8f:005",
       "sourceId": "072878e974a6f3620e8f",
       "title": "What is a chat?",
       "heading": "When you want to build something",
@@ -5887,6 +5897,16 @@
       "heading": "Keep talking, keep building",
       "text": "Chats and projects\nA project has chats too. You use them to ask for changes to the application, while the project holds the work those conversations produce. “Add Mosskip to our invitation” is a chat request; the updated invitation and its image are part of the project.",
       "url": "/learn/chats-and-projects/what-is-a-project#keep-talking-keep-building",
+      "pageUrl": "/learn/chats-and-projects/what-is-a-project",
+      "sourcePath": "src/learn-content.ts#5ee9751c225ad1f30a51"
+    },
+    {
+      "id": "5ee9751c225ad1f30a51:008",
+      "sourceId": "5ee9751c225ad1f30a51",
+      "title": "What is a project?",
+      "heading": "Ask Replit to build an app",
+      "text": "Chats and projects\nIn Replit, describe something you want built. You can type your own request or copy this example. If you already asked Replit to build the birthday app in the first module, that counts: you don’t need to create a duplicate.\nBuild a simple Pokémon-themed birthday invitation web app with fictional party details and an RSVP form. Keep it unpublished so I can preview and test it first.\nSend the request and follow any project-creation prompt shown. Review any costs before approving paid services. Once you’ve asked Replit to build the app, use the confirmation button below to unlock the quiz. You don’t need to finish or publish the app to confirm this step.",
+      "url": "/learn/chats-and-projects/what-is-a-project#ask-replit-to-build-an-app",
       "pageUrl": "/learn/chats-and-projects/what-is-a-project",
       "sourcePath": "src/learn-content.ts#5ee9751c225ad1f30a51"
     },
