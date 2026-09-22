@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { ArrowRight, Check, Folder, LoaderCircle, X } from "lucide-react";
 
 type App = { id: string; title: string; url?: string };
 type Submission = { appId: string; title: string; passed: boolean; checkedAt: string };
@@ -10,6 +11,7 @@ export function CapstoneSubmission({ onValidated }: { onValidated: (passed: bool
   const [message, setMessage] = useState("");
   const [authNeeded, setAuthNeeded] = useState(false);
   const [submission, setSubmission] = useState<Submission | null>(null);
+  const dialog = useRef<HTMLDialogElement>(null);
   const validated = useRef(onValidated);
   validated.current = onValidated;
   useEffect(() => {
@@ -77,18 +79,32 @@ export function CapstoneSubmission({ onValidated }: { onValidated: (passed: bool
       <p>Agent answered YES for {submission.title}. Your submission is saved.</p>
       <small>Reviewed {new Date(submission.checkedAt).toLocaleString()}. This is an Agent assessment of the project at submission time, not a guarantee or a new browser test.</small>
     </div> : <>
-      <p>Select your project, then submit it for a read-only Agent review. This sends the course requirements to Agent in that project and may use Agent capacity. It does not publish or change your app.</p>
-      <label htmlFor="capstone-project">Your recent Replit projects</label>
-      <select id="capstone-project" value={selected} disabled={loading || busy} onChange={(event) => { setSelected(event.target.value); setSubmission(null); setMessage(""); }}>
-        <option value="">Select the picnic project</option>
-        {apps.map((app) => <option key={app.id} value={app.id}>{app.title}</option>)}
-      </select>
-      <button type="button" className="recipe-create-button" disabled={loading || busy || !apps.some((app) => app.id === selected)} onClick={submit}>
-        {busy ? "Checking your project…" : "I have built and tested my picnic app. Submit for review"}
+      <p>Ready to show what you’ve made? Choose your project and let Agent check your work.</p>
+      <button type="button" className="recipe-create-button" onClick={() => dialog.current?.showModal()}>
+        I’ve built my picnic app <ArrowRight size={18} aria-hidden="true" />
       </button>
-      {submission?.passed === false && <p role="status">Agent answered NO. At least one requirement is missing or could not be verified. Review the checklist and your project notes, make improvements, then submit again.</p>}
     </>}
-    <p role="status">{loading ? "Loading your projects…" : message}</p>
-    {authNeeded && <a href={`/api/auth/login?returnTo=${encodeURIComponent(window.location.pathname)}`}>Connect Replit</a>}
+    <dialog ref={dialog} className="learn-sign-in-modal capstone-project-modal" aria-labelledby="capstone-modal-title" aria-describedby="capstone-modal-description">
+      <button type="button" className="modal-close" aria-label="Close project selection" onClick={() => dialog.current?.close()}><X size={20} /></button>
+      <div className="capstone-modal-icon" aria-hidden="true">{submission?.passed ? <Check size={26} /> : <Folder size={26} />}</div>
+      <p className="signin-eyebrow">YOUR CAPSTONE</p>
+      <h2 id="capstone-modal-title">{submission?.passed ? "You did it!" : busy ? "Let’s check your work" : "Which project was it?"}</h2>
+      <p id="capstone-modal-description">{submission?.passed ? "Congratulations, you accomplished the task. Your submission is saved." : busy ? "Agent is reviewing your picnic app against the course requirements. This can take a moment." : "Pick the picnic app you built. We’ll take it from here."}</p>
+      {submission?.passed ? <button type="button" className="capstone-review-button" onClick={() => dialog.current?.close()}>Continue learning <ArrowRight size={18} /></button> : <>
+        <div className="capstone-project-list" role="group" aria-label="Your recent projects" aria-busy={loading || busy}>
+          {apps.map((app) => <button type="button" className={`capstone-project-card ${selected === app.id ? "is-selected" : ""}`} key={app.id} aria-pressed={selected === app.id} disabled={busy} onClick={() => { setSelected(app.id); setSubmission(null); setMessage(""); }}>
+            <span className="capstone-project-symbol"><Folder size={21} aria-hidden="true" /></span>
+            <span className="capstone-project-copy"><strong>{app.title}</strong><small>{app.url?.replace(/^https:\/\//, "") ?? "Replit project"}</small></span>
+            <span className="capstone-project-check" aria-hidden="true">{selected === app.id && <Check size={14} />}</span>
+          </button>)}
+        </div>
+        <p className="capstone-review-status" role="status">{loading ? "Loading your projects…" : message}</p>
+        {submission?.passed === false && <p className="capstone-review-status" role="status">Not quite yet. Agent answered NO: something is missing or could not be verified. Check the requirements, improve your project, and try again.</p>}
+        {authNeeded ? <a className="signin-primary" href={`/api/auth/login?returnTo=${encodeURIComponent(window.location.pathname)}`}>Connect Replit <ArrowRight size={18} /></a> : <button type="button" className="capstone-review-button" disabled={loading || busy || !apps.some((app) => app.id === selected)} onClick={submit}>
+          {busy ? <><LoaderCircle className="capstone-spinner" size={18} /> Reviewing project</> : <>Review my project <ArrowRight size={18} /></>}
+        </button>}
+        <small className="capstone-review-note">Read-only Agent review. Nothing is published or changed. May use Agent capacity.</small>
+      </>}
+    </dialog>
   </section>;
 }
