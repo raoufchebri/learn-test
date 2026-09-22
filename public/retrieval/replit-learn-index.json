@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-22T16:23:03.295Z",
+  "generatedAt": "2026-09-22T16:30:57.432Z",
   "mode": "full",
-  "hash": "7a7c1690fc01bfbf63a31b52c253af3cf41be8a2dca1a73bc0a1ab770cf6c72c",
+  "hash": "aacf3cd0e26d4a347170401e126aa436960a44aef8d2e32b46807ca81ed295e7",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "072878e974a6f3620e8f",
@@ -5657,7 +5657,7 @@
       "sourceId": "855925249512818f233c",
       "title": "Build a picnic sign-up app",
       "heading": "Submit your project for review",
-      "text": "Your capstone\nPublishing is optional. Below, connect Replit if needed, select your picnic app from your recent projects, and submit it. The course asks Agent in that project to inspect the requirements and return only YES or NO. YES saves your successful submission and unlocks the quiz. NO means something is missing or could not be verified: review your work, fix it, and resubmit. Connection failures or unclear answers do not count as passing. This is an Agent assessment, not a substitute for your own testing.",
+      "text": "Your capstone\nPublishing is optional. Below, connect Replit if needed, select your picnic app from your recent projects, and submit it. Agent reviews each requirement. The checklist shows green checks for passed items and red circled crosses for items needing work or more evidence, with a short explanation. All six requirements must pass to unlock the quiz. Use the feedback to improve your project and resubmit. Connection failures or incomplete reviews do not count as passing. This is an Agent assessment, not a substitute for your own testing.",
       "url": "/learn/your-capstone/build-a-picnic-sign-up-app#submit-your-project-for-review",
       "pageUrl": "/learn/your-capstone/build-a-picnic-sign-up-app",
       "sourcePath": "src/learn-content.ts#855925249512818f233c"

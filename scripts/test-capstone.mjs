@@ -8,7 +8,9 @@ try {
   const env = { AUTH_SESSIONS: { idFromName: id => id, get: id => new AuthSessionStore({ storage: {
     get: async () => records.get(id), put: async (_, value) => records.set(id, value), delete: async () => records.delete(id),
   } }) } };
-  let answer = "YES";
+  const ids = ["event", "form", "storage", "design", "process", "testing"];
+  const review = (status = "passed") => JSON.stringify({ checks: ids.map(id => ({ id, status, feedback: "Evidence or next step." })) });
+  let answer = review();
   let calls = 0;
   globalThis.fetch = async (_, options) => {
     const rpc = JSON.parse(options.body);
@@ -28,14 +30,19 @@ try {
   assert.equal(calls, 0);
   const success = await (await request()).json();
   assert.equal(success.submission.passed, true);
+  assert.equal(success.submission.checks.length, 6);
   assert.equal((await (await request("GET")).json()).submission.appId, "picnic");
-  answer = "NO";
+  answer = review("needs_work");
   assert.equal((await (await request()).json()).submission.passed, false);
-  for (answer of ["YES, everything works", "yes", '{"answer":"YES"}', "NO\nYES", ""]) {
+  answer = JSON.stringify({ checks: ids.map((id, index) => ({ id, status: index === 0 ? "unverified" : "passed", feedback: "Check evidence." })) });
+  assert.equal((await (await request()).json()).submission.passed, false);
+  for (answer of ["YES", "YES, everything works", "yes", '{"answer":"YES"}', "NO\nYES", "", '{"checks":[]}',
+    JSON.stringify({ checks: ids.map(() => ({ id: "event", status: "passed", feedback: "OK" })) }),
+    review("unexpected"), JSON.stringify({ checks: ids.map(id => ({ id, status: "passed", feedback: "" })) })]) {
     assert.notEqual((await request()).status, 200);
     assert.equal((await (await request("GET")).json()).submission.passed, false);
   }
   answer = "BUSY";
   assert.equal((await request()).status, 409);
-  console.log("PASS: auth, origin, project access, strict verdicts, persisted YES/NO, ambiguous answers fail closed, busy recovery.");
+  console.log("PASS: auth, origin, project access, persisted checklists, mixed and unverified results, duplicate/missing/invalid checks fail closed, busy recovery.");
 } finally { globalThis.fetch = original; }

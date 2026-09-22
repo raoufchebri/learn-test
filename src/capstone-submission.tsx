@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check, Folder, LoaderCircle, X } from "lucide-react";
+import { CAPSTONE_REQUIREMENTS, type CapstoneCheck } from "./capstone-rubric";
 
 type App = { id: string; title: string; url?: string };
-type Submission = { appId: string; title: string; passed: boolean; checkedAt: string };
+type Submission = { appId: string; title: string; passed: boolean; checks?: CapstoneCheck[]; checkedAt: string };
 export function CapstoneSubmission({ onValidated }: { onValidated: (passed: boolean) => void }) {
   const [apps, setApps] = useState<App[]>([]);
   const [selected, setSelected] = useState("");
@@ -60,7 +61,7 @@ export function CapstoneSubmission({ onValidated }: { onValidated: (passed: bool
           authentication_required: "Sign in to Replit, then submit again.",
           reauth_required: "Reconnect Replit, then submit again.",
           invalid_project: "This project is no longer in your available recent projects. Refresh and select it again.",
-          inconclusive_review: "Agent didn’t return a clear YES or NO. Nothing was validated. Try again.",
+          inconclusive_review: "Agent didn’t return a complete checklist. Nothing was validated. Try again.",
         };
         if (response.status === 401) setAuthNeeded(true);
         setMessage(errors[data.error] ?? "The review couldn’t finish. Nothing was validated. Try again.");
@@ -76,7 +77,8 @@ export function CapstoneSubmission({ onValidated }: { onValidated: (passed: bool
     <h2>Submit your picnic app</h2>
     {submission?.passed ? <div role="status">
       <h3>Congratulations, you accomplished the task!</h3>
-      <p>Agent answered YES for {submission.title}. Your submission is saved.</p>
+      <p>{submission.title} passed the review. Your submission is saved.</p>
+      <button type="button" className="recipe-create-button" onClick={() => dialog.current?.showModal()}>View review checklist</button>
       <small>Reviewed {new Date(submission.checkedAt).toLocaleString()}. This is an Agent assessment of the project at submission time, not a guarantee or a new browser test.</small>
     </div> : <>
       <p>Ready to show what you’ve made? Choose your project and let Agent check your work.</p>
@@ -90,6 +92,18 @@ export function CapstoneSubmission({ onValidated }: { onValidated: (passed: bool
       <p className="signin-eyebrow">YOUR CAPSTONE</p>
       <h2 id="capstone-modal-title">{submission?.passed ? "You did it!" : busy ? "Let’s check your work" : "Which project was it?"}</h2>
       <p id="capstone-modal-description">{submission?.passed ? "Congratulations, you accomplished the task. Your submission is saved." : busy ? "Agent is reviewing your picnic app against the course requirements. This can take a moment." : "Pick the picnic app you built. We’ll take it from here."}</p>
+      {(selected || submission) && <div className="capstone-checklist" aria-label="Capstone requirements" aria-busy={busy}>
+        <p className="capstone-checklist-summary">{busy ? "Checking all six requirements…" : submission?.checks ? `${submission.checks.filter(item => item.status === "passed").length} of ${CAPSTONE_REQUIREMENTS.length} requirements passed` : "What we’ll check"}</p>
+        {CAPSTONE_REQUIREMENTS.map(requirement => {
+          const result = busy ? undefined : submission?.checks?.find(item => item.id === requirement.id);
+          const label = result?.status === "passed" ? "Passed" : result?.status === "needs_work" ? "Needs work" : result?.status === "unverified" ? "Not verified" : busy ? "Reviewing" : "Not checked";
+          return <div key={requirement.id} className={`capstone-check-row ${result?.status ?? "pending"}`}>
+            <span className="capstone-check-icon" aria-hidden="true">{result?.status === "passed" ? <Check size={15} /> : result ? <X size={15} /> : busy ? <LoaderCircle className="capstone-spinner" size={15} /> : <span>·</span>}</span>
+            <div><strong>{requirement.title}</strong><span className="capstone-check-label">{label}</span><p>{result?.feedback ?? requirement.detail}</p></div>
+          </div>;
+        })}
+        {submission && !submission.checks && <p>This earlier review has no item-level results saved.</p>}
+      </div>}
       {submission?.passed ? <button type="button" className="capstone-review-button" onClick={() => dialog.current?.close()}>Continue learning <ArrowRight size={18} /></button> : <>
         <div className="capstone-project-list" role="group" aria-label="Your recent projects" aria-busy={loading || busy}>
           {apps.map((app) => <button type="button" className={`capstone-project-card ${selected === app.id ? "is-selected" : ""}`} key={app.id} aria-pressed={selected === app.id} disabled={busy} onClick={() => { setSelected(app.id); setSubmission(null); setMessage(""); }}>
@@ -99,7 +113,7 @@ export function CapstoneSubmission({ onValidated }: { onValidated: (passed: bool
           </button>)}
         </div>
         <p className="capstone-review-status" role="status">{loading ? "Loading your projects…" : message}</p>
-        {submission?.passed === false && <p className="capstone-review-status" role="status">Not quite yet. Agent answered NO: something is missing or could not be verified. Check the requirements, improve your project, and try again.</p>}
+        {submission?.passed === false && !busy && <p className="capstone-review-status" role="status">Not quite yet. Follow the checklist feedback above, improve your project, and submit again. “Not verified” means evidence was missing, not necessarily that the feature is broken.</p>}
         {authNeeded ? <a className="signin-primary" href={`/api/auth/login?returnTo=${encodeURIComponent(window.location.pathname)}`}>Connect Replit <ArrowRight size={18} /></a> : <button type="button" className="capstone-review-button" disabled={loading || busy || !apps.some((app) => app.id === selected)} onClick={submit}>
           {busy ? <><LoaderCircle className="capstone-spinner" size={18} /> Reviewing project</> : <>Review my project <ArrowRight size={18} /></>}
         </button>}

@@ -440,12 +440,12 @@ courseLessons['Your capstone'] = [
         'A brief note describing the context and tool or skill you used, the design you chose, and one improvement you requested.',
         'Your test results, including anything that still needs fixing.',
       ] },
-      { heading: 'Submit your project for review', body: 'Publishing is optional. Below, connect Replit if needed, select your picnic app from your recent projects, and submit it. The course asks Agent in that project to inspect the requirements and return only YES or NO. YES saves your successful submission and unlocks the quiz. NO means something is missing or could not be verified: review your work, fix it, and resubmit. Connection failures or unclear answers do not count as passing. This is an Agent assessment, not a substitute for your own testing.' },
+      { heading: 'Submit your project for review', body: 'Publishing is optional. Below, connect Replit if needed, select your picnic app from your recent projects, and submit it. Agent reviews each requirement. The checklist shows green checks for passed items and red circled crosses for items needing work or more evidence, with a short explanation. All six requirements must pass to unlock the quiz. Use the feedback to improve your project and resubmit. Connection failures or incomplete reviews do not count as passing. This is an Agent assessment, not a substitute for your own testing.' },
     ],
     quiz: [
       { prompt: 'What makes the capstone complete?', choices: ['Replit says the app is finished', 'You’ve built the required features, tested them, and prepared your hand-in record', 'You’ve generated an attractive image'], answer: 1 },
       { prompt: 'How should you check that responses are saved?', choices: ['Only look at the success message', 'Assume storage works because the form is visible', 'Refresh and verify the stored test responses without exposing private data'], answer: 2 },
-      { prompt: 'When does your capstone submission pass?', choices: ['When Agent returns YES after reviewing the selected project against all requirements', 'As soon as you click Submit', 'Whenever the app has a public link'], answer: 0 },
+      { prompt: 'When does your capstone submission pass?', choices: ['When all six requirements pass the selected project’s review', 'As soon as you click Submit', 'Whenever the app has a public link'], answer: 0 },
     ],
   },
 ];

@@ -1,4 +1,4 @@
-import { CAPSTONE_REVIEW, capstoneVerdict } from "../src/capstone-rubric";
+import { CAPSTONE_REVIEW, parseCapstoneReview, type CapstoneCheck } from "../src/capstone-rubric";
 import { createRemoteJWKSet, jwtVerify } from "jose";
 import { RECIPE_PROMPT, type RecipeBuild } from "../src/recipe-activity";
 
@@ -44,7 +44,7 @@ type AuthSession = {
 };
 
 type BuildRecord = RecipeBuild & { kind: "recipe-build"; startedAt: number; turnId?: string };
-type CapstoneRecord = { kind: "capstone"; appId: string; title: string; url?: string; passed: boolean; checkedAt: string; rubricVersion: number };
+type CapstoneRecord = { kind: "capstone"; appId: string; title: string; url?: string; passed: boolean; checks?: CapstoneCheck[]; checkedAt: string; rubricVersion: number };
 type StoredRecord = OAuthClientRecord | PendingAuthorization | AuthSession | BuildRecord | CapstoneRecord;
 
 type DurableObjectStorageLike = {
@@ -1081,9 +1081,9 @@ async function capstoneResponse(request: Request, env: Env): Promise<Response> {
     const app = apps.find((candidate) => candidate.id === appId);
     if (!app) return json({ error: "invalid_project" }, { status: 403 });
     const answer = await askMcpQuestion(env, authorized.mcpAccess.accessToken, appId, CAPSTONE_REVIEW);
-    const passed = capstoneVerdict(answer);
-    if (passed === null) return json({ error: "inconclusive_review" }, { status: 502 });
-    const submission: CapstoneRecord = { kind: "capstone", appId, title: app.title, url: app.url, passed, checkedAt: new Date().toISOString(), rubricVersion: 1 };
+    const review = parseCapstoneReview(answer);
+    if (!review) return json({ error: "inconclusive_review" }, { status: 502 });
+    const submission: CapstoneRecord = { kind: "capstone", appId, title: app.title, url: app.url, ...review, checkedAt: new Date().toISOString(), rubricVersion: 2 };
     await putRecord(env, key, submission);
     return json({ submission });
   } catch (error) {
