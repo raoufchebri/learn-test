@@ -540,11 +540,11 @@ courseLessons['Chats and projects'] = [
   },
   {
     module: 'Chats and projects', title: 'Chat versus project', duration: '3 min', video: '', replitExample: '',
-    summary: 'Choose a chat to explore and get tasks done. Choose a project when you want to build something you can keep developing and publish.',
-    introduction: ['You don’t need to choose perfectly at the start. A chat can help you work out the idea before you move into a project. Both can use integrations, and projects have chats too.'],
+    summary: 'Start by telling Replit what you want to achieve. Your intent guides whether the work stays in a chat or develops into a project.',
+    introduction: ['You don’t need to decide between a chat and a project before you begin. The way you interact is the same: have a conversation with Replit. Ask questions, explore an idea, or describe something you want built. These are the basic differences in how that work is organized.'],
     sections: [
-      { heading: 'Stay in a chat for questions and tasks', body: 'Use a chat to brainstorm, research, ask follow-up questions, work with connected tools, or set up a routine. A chat can also produce useful files, such as a document, image, or spreadsheet. Our party ideas, shopping checklist, calendar event, and weekly routine all fit here.' },
-      { heading: 'Use a project for a lasting build', body: 'Use a project for an app, website, dashboard, slide deck, or a larger design task. It gives the work a structured place with files, build tools, and outputs you can keep developing. Our birthday invitation became a project because we wanted a working RSVP app, not just a description of one.' },
+      { heading: 'When you ask for ideas, answers, or tasks', body: 'The work can stay in a chat when you’re brainstorming, researching, asking follow-up questions, working with connected tools, or setting up a routine. A chat can also produce useful files, such as a document, image, or spreadsheet. Our party ideas, shopping checklist, calendar event, and weekly routine all fit here.' },
+      { heading: 'When you ask Replit to build something', body: 'Asking for an app, website, dashboard, slide deck, or a larger design task gives the work a different direction. Replit can move it into a project, with files, build tools, and outputs you can keep developing. Our birthday invitation became a project because we asked for a working RSVP app, not just a description of one. You continue talking with Replit inside the project.' },
       { heading: 'The practical differences', body: 'Here are the differences to remember:', items: [
         'Conversation: a standalone chat is one thread. A project holds the build and can contain chats and multiple outputs.',
         'Outputs: chats can create files such as images and documents. Projects can also produce working apps and other builds.',
@@ -552,11 +552,11 @@ courseLessons['Chats and projects'] = [
         'Routines: schedule recurring tasks from a chat, rather than a project.',
         'Integrations: both can work with available connections, subject to permissions.',
       ] },
-      { heading: 'Ask what you need next', body: 'If you need an answer, a plan, or a completed task, a chat may be enough. If you want an application or another build that you can run, refine, and share, use a project. You can begin with a conversation and move into a project once the direction is clear.' },
+      { heading: 'Describe the outcome, not the container', body: 'You can say “Help me plan the party” and later “Build an RSVP app from this plan.” You don’t need to know the project terminology first. Your request to build gives Replit the direction to move the work into a project, with any creation prompt shown along the way. The change follows what you ask for, not how long the conversation has become.' },
     ],
     quiz: [
-      { prompt: 'Where would you brainstorm party activities and research supplies?', choices: ['A chat', 'Only inside a deployed app', 'Only in a database'], answer: 0 },
-      { prompt: 'Where would you build and publish the RSVP app?', choices: ['In a calendar event', 'In a project', 'In a standalone chat without a project'], answer: 1 },
+      { prompt: 'What should you focus on when you start?', choices: ['Explaining what you want to achieve', 'Choosing all the app infrastructure first', 'Learning every project term before asking a question'], answer: 0 },
+      { prompt: 'What gives Replit the direction to turn the party plan into a project?', choices: ['The conversation becoming longer', 'Asking it to build a working RSVP app', 'Asking one more question about party supplies'], answer: 1 },
       { prompt: 'Which statement is correct?', choices: ['Only projects can use integrations', 'Chats cannot create files', 'Both chats and projects can use available integrations'], answer: 2 },
     ],
   },

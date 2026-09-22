@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-22T16:05:56.851Z",
+  "generatedAt": "2026-09-22T16:07:56.739Z",
   "mode": "full",
-  "hash": "d8a079e3ff1517fb844b813b492e00c9a9e3219bc48a872b6f46ff10472c30ab",
+  "hash": "71c4cc003108342b53db44d4068f0d8480a1db5f4d76f18510ca4a759591098e",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "072878e974a6f3620e8f",
@@ -5895,7 +5895,7 @@
       "sourceId": "88e1f5bb0f1f3a816ceb",
       "title": "Chat versus project",
       "heading": "Overview",
-      "text": "Chats and projects\nChoose a chat to explore and get tasks done. Choose a project when you want to build something you can keep developing and publish.\nYou don’t need to choose perfectly at the start. A chat can help you work out the idea before you move into a project. Both can use integrations, and projects have chats too.\n",
+      "text": "Chats and projects\nStart by telling Replit what you want to achieve. Your intent guides whether the work stays in a chat or develops into a project.\nYou don’t need to decide between a chat and a project before you begin. The way you interact is the same: have a conversation with Replit. Ask questions, explore an idea, or describe something you want built. These are the basic differences in how that work is organized.\n",
       "url": "/learn/chats-and-projects/chat-versus-project",
       "pageUrl": "/learn/chats-and-projects/chat-versus-project",
       "sourcePath": "src/learn-content.ts#88e1f5bb0f1f3a816ceb"
@@ -5904,9 +5904,9 @@
       "id": "88e1f5bb0f1f3a816ceb:001",
       "sourceId": "88e1f5bb0f1f3a816ceb",
       "title": "Chat versus project",
-      "heading": "Stay in a chat for questions and tasks",
-      "text": "Chats and projects\nUse a chat to brainstorm, research, ask follow-up questions, work with connected tools, or set up a routine. A chat can also produce useful files, such as a document, image, or spreadsheet. Our party ideas, shopping checklist, calendar event, and weekly routine all fit here.",
-      "url": "/learn/chats-and-projects/chat-versus-project#stay-in-a-chat-for-questions-and-tasks",
+      "heading": "When you ask for ideas, answers, or tasks",
+      "text": "Chats and projects\nThe work can stay in a chat when you’re brainstorming, researching, asking follow-up questions, working with connected tools, or setting up a routine. A chat can also produce useful files, such as a document, image, or spreadsheet. Our party ideas, shopping checklist, calendar event, and weekly routine all fit here.",
+      "url": "/learn/chats-and-projects/chat-versus-project#when-you-ask-for-ideas-answers-or-tasks",
       "pageUrl": "/learn/chats-and-projects/chat-versus-project",
       "sourcePath": "src/learn-content.ts#88e1f5bb0f1f3a816ceb"
     },
@@ -5914,9 +5914,9 @@
       "id": "88e1f5bb0f1f3a816ceb:002",
       "sourceId": "88e1f5bb0f1f3a816ceb",
       "title": "Chat versus project",
-      "heading": "Use a project for a lasting build",
-      "text": "Chats and projects\nUse a project for an app, website, dashboard, slide deck, or a larger design task. It gives the work a structured place with files, build tools, and outputs you can keep developing. Our birthday invitation became a project because we wanted a working RSVP app, not just a description of one.",
-      "url": "/learn/chats-and-projects/chat-versus-project#use-a-project-for-a-lasting-build",
+      "heading": "When you ask Replit to build something",
+      "text": "Chats and projects\nAsking for an app, website, dashboard, slide deck, or a larger design task gives the work a different direction. Replit can move it into a project, with files, build tools, and outputs you can keep developing. Our birthday invitation became a project because we asked for a working RSVP app, not just a description of one. You continue talking with Replit inside the project.",
+      "url": "/learn/chats-and-projects/chat-versus-project#when-you-ask-replit-to-build-something",
       "pageUrl": "/learn/chats-and-projects/chat-versus-project",
       "sourcePath": "src/learn-content.ts#88e1f5bb0f1f3a816ceb"
     },
@@ -5934,9 +5934,9 @@
       "id": "88e1f5bb0f1f3a816ceb:004",
       "sourceId": "88e1f5bb0f1f3a816ceb",
       "title": "Chat versus project",
-      "heading": "Ask what you need next",
-      "text": "Chats and projects\nIf you need an answer, a plan, or a completed task, a chat may be enough. If you want an application or another build that you can run, refine, and share, use a project. You can begin with a conversation and move into a project once the direction is clear.",
-      "url": "/learn/chats-and-projects/chat-versus-project#ask-what-you-need-next",
+      "heading": "Describe the outcome, not the container",
+      "text": "Chats and projects\nYou can say “Help me plan the party” and later “Build an RSVP app from this plan.” You don’t need to know the project terminology first. Your request to build gives Replit the direction to move the work into a project, with any creation prompt shown along the way. The change follows what you ask for, not how long the conversation has become.",
+      "url": "/learn/chats-and-projects/chat-versus-project#describe-the-outcome-not-the-container",
       "pageUrl": "/learn/chats-and-projects/chat-versus-project",
       "sourcePath": "src/learn-content.ts#88e1f5bb0f1f3a816ceb"
     },
