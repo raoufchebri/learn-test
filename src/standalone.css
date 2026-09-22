@@ -1,3 +1,11 @@
+.capstone-action-plan { width: 100%; text-align: left; margin: 20px 0; }
+.capstone-action-card { padding: 20px; margin: 16px 0; border: 1px solid #8884; border-radius: 16px; }
+.capstone-action-card h4 { margin: 0 0 8px; font-size: 17px; }
+.capstone-action-card p { font-size: 14px; line-height: 1.65; overflow-wrap: anywhere; }
+.capstone-action-plan > small { display: block; margin-top: 14px; line-height: 1.5; opacity: .7; }
+.capstone-action-plan .capstone-review-button { text-decoration: none; box-sizing: border-box; }
+.capstone-fix-prompt { margin-top: 12px; padding: 12px; border-radius: 12px; background: #8881; border: 1px solid #8883; }
+.capstone-fix-prompt button { margin-top: 10px; padding: 7px 12px; border-radius: 8px; border: 1px solid #8885; background: transparent; color: inherit; font: inherit; font-size: 12px; cursor: pointer; }
 .capstone-back-button { display: block; margin: 14px auto 0; padding: 8px; border: 0; background: transparent; color: inherit; font: inherit; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .capstone-back-button:disabled { opacity: .45; cursor: default; }
 .capstone-checklist { margin: 20px 0; text-align: left; }

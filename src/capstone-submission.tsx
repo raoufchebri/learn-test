@@ -3,7 +3,39 @@ import { ArrowRight, Check, Folder, LoaderCircle, X } from "lucide-react";
 import { CAPSTONE_REQUIREMENTS, type CapstoneCheck } from "./capstone-rubric";
 
 type App = { id: string; title: string; url?: string };
-type Submission = { appId: string; title: string; passed: boolean; checks?: CapstoneCheck[]; checkedAt: string };
+type Submission = { appId: string; title: string; url?: string; passed: boolean; checks?: CapstoneCheck[]; checkedAt: string };
+function improvementPrompt(check: CapstoneCheck) {
+  const requirement = CAPSTONE_REQUIREMENTS.find(item => item.id === check.id);
+  return check.prompt ?? `Help me address this capstone requirement: ${requirement?.detail ?? check.id} The review said: ${check.feedback} Inspect what already works, help me resolve the gap, and show me how to test it with fictional data. Do not invent test results or publish anything.`;
+}
+
+function CapstoneActionPlan({ submission, projectUrl }: { submission: Submission; projectUrl?: string }) {
+  const [copied, setCopied] = useState("");
+  const fixes = submission.checks?.filter(check => check.status !== "passed") ?? [];
+  return <section className="capstone-action-plan" aria-labelledby="capstone-action-title">
+    <p className="eyebrow">YOUR NEXT STEPS</p>
+    <h3 id="capstone-action-title">Let’s improve {submission.title}</h3>
+    <p>Your review is saved here. Work through these actions in your existing project, one at a time. Test each change, then return here for another review.</p>
+    {fixes.length === 0 && <p>This earlier review did not save detailed feedback. Recheck the project to get an actionable checklist.</p>}
+    {fixes.map((check, index) => <article className="capstone-action-card" key={check.id}>
+      <h4>{index + 1}. {CAPSTONE_REQUIREMENTS.find(item => item.id === check.id)?.title}</h4>
+      <span className="capstone-check-label">{check.status === "unverified" ? "More evidence needed" : "Needs work"}</span>
+      <p><strong>What needs attention:</strong> {check.feedback}</p>
+      <p><strong>Next action:</strong> {check.status === "unverified" ? "Ask Agent to inspect and test this requirement first. Record the actual result; only change the app if a gap is found." : "Paste this request into your project’s Agent, review the proposed fix, then test the updated feature."}</p>
+      <div className="capstone-fix-prompt">
+        <strong>Try this prompt</strong>
+        <p>{improvementPrompt(check)}</p>
+        <button type="button" onClick={async () => {
+          try { await navigator.clipboard.writeText(improvementPrompt(check)); setCopied(`Copied prompt ${index + 1}.`); }
+          catch { setCopied("Couldn’t copy automatically. Select the prompt text and copy it manually."); }
+        }}>Copy prompt</button>
+      </div>
+    </article>)}
+    <p role="status">{copied}</p>
+    {projectUrl && <a className="capstone-review-button" href={projectUrl} target="_blank" rel="noopener noreferrer">Let’s work some more on the project <ArrowRight size={18} /></a>}
+    <small>Prompts are suggestions based on the review, not a guarantee of passing. Nothing is sent to Agent until you paste and submit it.</small>
+  </section>;
+}
 export function CapstoneSubmission({ onValidated }: { onValidated: (passed: boolean) => void }) {
   const [apps, setApps] = useState<App[]>([]);
   const [selected, setSelected] = useState("");
@@ -13,6 +45,8 @@ export function CapstoneSubmission({ onValidated }: { onValidated: (passed: bool
   const [authNeeded, setAuthNeeded] = useState(false);
   const [submission, setSubmission] = useState<Submission | null>(null);
   const [step, setStep] = useState<"project" | "review">("project");
+  const [copyMessage, setCopyMessage] = useState("");
+  const projectUrl = submission?.url ?? apps.find(app => app.id === selected)?.url;
   const dialog = useRef<HTMLDialogElement>(null);
   const validated = useRef(onValidated);
   validated.current = onValidated;
@@ -84,9 +118,9 @@ export function CapstoneSubmission({ onValidated }: { onValidated: (passed: bool
       <button type="button" className="recipe-create-button" onClick={() => dialog.current?.showModal()}>View review checklist</button>
       <small>Reviewed {new Date(submission.checkedAt).toLocaleString()}. This is an Agent assessment of the project at submission time, not a guarantee or a new browser test.</small>
     </div> : <>
-      <p>Ready to show what you’ve made? Choose your project and let Agent check your work.</p>
+      {submission?.passed === false ? <CapstoneActionPlan submission={submission} projectUrl={projectUrl} /> : <p>Ready to show what you’ve made? Choose your project and let Agent check your work.</p>}
       <button type="button" className="recipe-create-button" onClick={() => dialog.current?.showModal()}>
-        I’ve built my picnic app <ArrowRight size={18} aria-hidden="true" />
+        {submission?.passed === false ? "I’ve made changes. Open my review" : "I’ve built my picnic app"} <ArrowRight size={18} aria-hidden="true" />
       </button>
     </>}
     <dialog ref={dialog} className="learn-sign-in-modal capstone-project-modal" aria-labelledby="capstone-modal-title" aria-describedby="capstone-modal-description">
@@ -102,10 +136,21 @@ export function CapstoneSubmission({ onValidated }: { onValidated: (passed: bool
           const label = result?.status === "passed" ? "Passed" : result?.status === "needs_work" ? "Needs work" : result?.status === "unverified" ? "Not verified" : busy ? "Reviewing" : "Not checked";
           return <div key={requirement.id} className={`capstone-check-row ${result?.status ?? "pending"}`}>
             <span className="capstone-check-icon" aria-hidden="true">{result?.status === "passed" ? <Check size={15} /> : result ? <X size={15} /> : busy ? <LoaderCircle className="capstone-spinner" size={15} /> : <span>·</span>}</span>
-            <div><strong>{requirement.title}</strong><span className="capstone-check-label">{label}</span><p>{result?.feedback ?? requirement.detail}</p></div>
+            <div><strong>{requirement.title}</strong><span className="capstone-check-label">{label}</span><p>{result?.feedback ?? requirement.detail}</p>
+              {result && result.status !== "passed" && <div className="capstone-fix-prompt">
+                <strong>Try this prompt</strong>
+                <p>{result.prompt ?? `Help me address this capstone requirement: ${requirement.detail} The review said: ${result.feedback} Inspect what already works, help me resolve the gap, and show me how to test it with fictional data. Do not invent test results or publish anything.`}</p>
+                <button type="button" onClick={async () => {
+                  const prompt = result.prompt ?? `Help me address this capstone requirement: ${requirement.detail} The review said: ${result.feedback} Inspect what already works, help me resolve the gap, and show me how to test it with fictional data. Do not invent test results or publish anything.`;
+                  try { await navigator.clipboard.writeText(prompt); setCopyMessage(`Copied prompt for ${requirement.title}.`); }
+                  catch { setCopyMessage("Couldn’t copy automatically. Select the prompt text and copy it manually."); }
+                }}>Copy prompt</button>
+              </div>}
+            </div>
           </div>;
         })}
         {submission && !submission.checks && <p>This earlier review has no item-level results saved.</p>}
+        <span role="status">{copyMessage}</span>
       </div>}
       {submission?.passed ? <button type="button" className="capstone-review-button" onClick={() => dialog.current?.close()}>Continue learning <ArrowRight size={18} /></button> : <>
         {step === "project" && <div className="capstone-project-list" role="group" aria-label="Your recent projects" aria-busy={loading || busy}>
@@ -120,8 +165,14 @@ export function CapstoneSubmission({ onValidated }: { onValidated: (passed: bool
         </div>}
         <p className="capstone-review-status" role="status">{loading ? "Loading your projects…" : message}</p>
         {submission?.passed === false && !busy && <p className="capstone-review-status" role="status">Not quite yet. Follow the checklist feedback above, improve your project, and submit again. “Not verified” means evidence was missing, not necessarily that the feature is broken.</p>}
-        {authNeeded ? <a className="signin-primary" href={`/api/auth/login?returnTo=${encodeURIComponent(window.location.pathname)}`}>Connect Replit <ArrowRight size={18} /></a> : step === "review" && <button type="button" className="capstone-review-button" disabled={loading || busy || !apps.some((app) => app.id === selected)} onClick={submit}>
-          {busy ? <><LoaderCircle className="capstone-spinner" size={18} /> Reviewing project</> : <>Review my project <ArrowRight size={18} /></>}
+        {submission?.passed === false && !busy && <button type="button" className="capstone-back-button" onClick={() => {
+          dialog.current?.close();
+          requestAnimationFrame(() => document.getElementById("capstone-action-title")?.scrollIntoView({ block: "start" }));
+        }}>View my action plan on the capstone page</button>}
+        {submission?.passed === false && !busy && projectUrl && <a className="signin-primary" href={projectUrl} target="_blank" rel="noopener noreferrer">Let’s work some more on the project <ArrowRight size={18} /></a>}
+        {submission?.passed === false && !busy && <small className="capstone-review-note">Paste a suggested prompt into your project’s Agent, make the improvement, and test it. Return here when you’re ready to recheck.{!projectUrl && " Open your project from Replit to continue working."}</small>}
+        {authNeeded ? <a className="signin-primary" href={`/api/auth/login?returnTo=${encodeURIComponent(window.location.pathname)}`}>Connect Replit <ArrowRight size={18} /></a> : step === "review" && <button type="button" className={submission?.passed === false && !busy ? "capstone-back-button" : "capstone-review-button"} disabled={loading || busy || !apps.some((app) => app.id === selected)} onClick={submit}>
+          {busy ? <><LoaderCircle className="capstone-spinner" size={18} /> Reviewing project</> : submission?.passed === false ? "I’ve made changes. Recheck my project" : <>Review my project <ArrowRight size={18} /></>}
         </button>}
         {step === "review" && <button type="button" className="capstone-back-button" disabled={busy} onClick={() => { setStep("project"); setSubmission(null); setMessage(""); }}>Choose a different project</button>}
         <small className="capstone-review-note">Read-only Agent review. Nothing is published or changed. May use Agent capacity.</small>
