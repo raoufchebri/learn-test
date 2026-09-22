@@ -406,6 +406,82 @@ export const courseLessons: Record<string, LearnLesson[]> = Object.fromEntries(
   Object.entries(courseBriefs).map(([module, briefs]) => [module, module === 'Replit 101' ? discoverLessons : briefs.map((brief) => guidedLesson(module, brief))]),
 );
 
+courseLessons['Build and Design'] = [
+  {
+    module: 'Build and Design', title: 'Explore your project', navigationTitle: 'Module overview',
+    duration: '2 min', video: '', replitExample: '',
+    summary: 'Now that you understand chats and projects and know how to create a project, let’s explore what you can do inside one.',
+    introduction: [
+      'A project gives you two ways to develop your idea: Build and Design. Build helps you create a working application. Design helps you explore how it should look and feel.',
+      'These are two ways of working in the same project, not a permanent choice between separate places. You can explore a design, build its functionality, and keep improving both.',
+    ],
+    sections: [
+      { heading: 'What we’ll explore', body: 'We’ll look more closely at the project you’ve already started:', items: [
+        'Build: the tools and services behind a working application, including databases, authentication, security, and secrets.',
+        'Design: an infinite canvas with frames you can create, compare, and refine with Agent.',
+        'Artifacts: the things you build in a project, such as a website, mobile app, or slide deck.',
+      ] },
+      { heading: 'Keep the birthday app in mind', body: 'The RSVP form needs to work and save replies. The invitation also needs to look inviting and be easy to use. Build and Design help you develop these parts together.' },
+    ],
+    quiz: [
+      { prompt: 'How do Build and Design relate?', choices: ['They are ways to work on the same project', 'You must permanently choose only one', 'Design automatically replaces the backend'], answer: 0 },
+    ],
+  },
+  {
+    module: 'Build and Design', title: 'Build your application', duration: '4 min', video: '', replitExample: '',
+    summary: 'Build gives you the environment and tools to turn an idea into a working application.',
+    introduction: ['In Build, you ask Agent to implement features, try them in the app preview, and refine the result. You can add the services your app needs instead of setting up every part yourself.'],
+    sections: [
+      { heading: 'Make the app work', body: 'Describe the behavior you want, not just how it should look. For our birthday app, that means letting a guest submit an RSVP, saving it, and showing the host the responses. Try each feature in Preview and ask Agent to fix anything that doesn’t behave as expected.' },
+      { heading: 'Databases: remember information', body: 'A database stores structured information your app needs to keep, such as RSVP answers. Ask Agent what needs to be stored and have it connect the app to the appropriate database. Not every app needs one.' },
+      { heading: 'Authentication: know who is signed in', body: 'Authentication lets people sign in and identifies them to your app. Authorization is the separate question of what they’re allowed to do. For example, a host can sign in, but the app must also check that they’re allowed to see the guest list.' },
+      { heading: 'Secrets: protect sensitive configuration', body: 'Secrets hold sensitive values such as API keys outside your source code. Use the project’s Secrets tool when a service needs credentials. Don’t paste credentials into chat, commit them to code, or expose them in the browser. Server-side code should use them only where needed.' },
+      { heading: 'Security: review and test', body: 'Replit provides security tools to help you find issues in your project. Review findings, check access controls, and test that private information stays private. Platform protections do not replace your responsibility to configure and review your app safely.' },
+      { heading: 'Preview, then publish', body: 'Test the working app in Preview before publishing it for others. Review any service and deployment costs before enabling them. If you have specific requirements for layout, colors, or the overall interface, Design gives you a place to explore those next.' },
+    ],
+    quiz: [
+      { prompt: 'Which service could keep RSVP answers between visits?', choices: ['The color picker', 'A database', 'The frame border'], answer: 1 },
+      { prompt: 'Where should a private API key go?', choices: ['In a public screenshot', 'In browser code', 'In the project’s Secrets tool, used safely by server-side code'], answer: 2 },
+      { prompt: 'Does signing in automatically mean someone should see every guest list?', choices: ['No, the app must also check their permission', 'Yes, authentication gives unlimited access', 'Yes, if the page looks private'], answer: 0 },
+    ],
+  },
+  {
+    module: 'Build and Design', title: 'Explore Design', duration: '3 min', video: '', replitExample: '',
+    summary: 'Use Design when you want to explore how your application should look and feel.',
+    introduction: ['Select Design in your project to open Canvas, an infinite board where you can arrange and compare frames. You’ve already used it to explore the birthday invitation and generate Mosskip.'],
+    sections: [
+      { heading: 'Canvas and frames', body: 'Think of Canvas as a large working area you can pan and zoom around. Frames are the individual items on that board. They can show design mockups, images, or project outputs such as apps and slides. You can keep several ideas side by side instead of replacing one idea every time.' },
+      { heading: 'Tell Agent what to change', body: 'Select the frame you want to work on, then describe the change in chat. The selection gives Agent visual context. You can ask for a different layout, more readable text, or another visual direction.', prompt: 'Keep the Pokémon birthday theme, but make this invitation easier to use on a phone. Make the RSVP button more prominent and keep the party details easy to read.' },
+      { heading: 'Explore before committing', body: 'Compare frames and use suggestions or visual editing to refine the direction you like. This is especially useful when you have specific interface requirements or want to see alternatives before building the full behavior.' },
+      { heading: 'A design is not yet a working feature', body: 'A mockup can look like a real app without saving information or connecting to services. Once you’re happy with the design, build it into a working app and test the functionality. A beautifully designed RSVP form still needs logic and storage to save a reply.' },
+    ],
+    quiz: [
+      { prompt: 'What is Canvas?', choices: ['Only a list of saved files', 'An infinite board for arranging and working with frames', 'A database for RSVP answers'], answer: 1 },
+      { prompt: 'How can you give Agent context for a visual change?', choices: ['Select the relevant frame and explain the change', 'Delete all other frames first', 'Assume Agent knows which frame you mean'], answer: 0 },
+      { prompt: 'Does a design mockup automatically save form submissions?', choices: ['Yes, if it has a submit button', 'Yes, if it looks finished', 'No, the working functionality must be built and tested'], answer: 2 },
+    ],
+  },
+  {
+    module: 'Build and Design', title: 'What is an artifact?', duration: '3 min', video: '', replitExample: '',
+    summary: 'An artifact is an output you build inside a project, such as a website, mobile app, or slide deck.',
+    introduction: [
+      'You don’t need to build several things before the word applies. Your birthday website is already an artifact. A project can hold one artifact or several related ones.',
+      'Think of the project as the shared home for the work, and artifacts as the individual things it produces. A frame is how something is shown on Canvas; an artifact is a project output, not simply any frame or image.',
+    ],
+    sections: [
+      { heading: 'One project, several outputs', body: 'A project could contain a birthday website, a companion mobile app, and a slide deck explaining the party plan. Each is a different artifact, but they belong to the same project.' },
+      { heading: 'Shared infrastructure', body: 'Artifacts in the same project can use the shared backend, database, and reusable logic. For example, a website and mobile app could both use the same RSVP service instead of maintaining separate guest lists. You still need to connect each app to the right data and enforce permissions; not every artifact automatically uses every service.' },
+      { heading: 'Shared does not mean identical', body: 'A website and mobile app can present the same information differently. A slide deck may not need a live database at all. Keeping them in one project gives related work a common home without requiring identical interfaces or behavior.' },
+      { heading: 'Assets help make artifacts', body: 'Mosskip’s image is an asset used by the birthday website. The website is the artifact. This distinction helps you explain what you want: a new image for an existing app is different from a new app inside the project.' },
+    ],
+    quiz: [
+      { prompt: 'Which is an example of an artifact?', choices: ['A secret API key', 'A website built in a project', 'A single database field'], answer: 1 },
+      { prompt: 'What can related artifacts in one project share?', choices: ['Backend services, data, and reusable logic when connected appropriately', 'Every user’s private information without permission', 'Only the project name'], answer: 0 },
+      { prompt: 'How do Mosskip and the birthday website differ?', choices: ['Neither belongs to the project', 'You need multiple websites before one is an artifact', 'The image is an asset; the website is an artifact'], answer: 2 },
+    ],
+  },
+];
+
 courseLessons['Chats and projects'] = [
   {
     module: 'Chats and projects', title: 'What is a chat?', duration: '3 min', video: '', replitExample: '',
