@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check, Folder, LoaderCircle, X } from "lucide-react";
 import { CAPSTONE_REQUIREMENTS, type CapstoneCheck } from "./capstone-rubric";
+import { LessonPrompt } from "./lesson-prompt";
 
 type App = { id: string; title: string; url?: string };
 type Submission = { appId: string; title: string; url?: string; passed: boolean; checks?: CapstoneCheck[]; checkedAt: string };
@@ -10,28 +11,19 @@ function improvementPrompt(check: CapstoneCheck) {
 }
 
 function CapstoneActionPlan({ submission, projectUrl }: { submission: Submission; projectUrl?: string }) {
-  const [copied, setCopied] = useState("");
   const fixes = submission.checks?.filter(check => check.status !== "passed") ?? [];
   return <section className="capstone-action-plan" aria-labelledby="capstone-action-title">
     <p className="eyebrow">YOUR NEXT STEPS</p>
     <h3 id="capstone-action-title">Let’s improve {submission.title}</h3>
     <p>Your review is saved here. Work through these actions in your existing project, one at a time. Test each change, then return here for another review.</p>
     {fixes.length === 0 && <p>This earlier review did not save detailed feedback. Recheck the project to get an actionable checklist.</p>}
-    {fixes.map((check, index) => <article className="capstone-action-card" key={check.id}>
-      <h4>{index + 1}. {CAPSTONE_REQUIREMENTS.find(item => item.id === check.id)?.title}</h4>
+    {fixes.map((check, index) => <section className="foundation-section" key={check.id}>
+      <h2>{index + 1}. {CAPSTONE_REQUIREMENTS.find(item => item.id === check.id)?.title}</h2>
       <span className="capstone-check-label">{check.status === "unverified" ? "More evidence needed" : "Needs work"}</span>
       <p><strong>What needs attention:</strong> {check.feedback}</p>
       <p><strong>Next action:</strong> {check.status === "unverified" ? "Ask Agent to inspect and test this requirement first. Record the actual result; only change the app if a gap is found." : "Paste this request into your project’s Agent, review the proposed fix, then test the updated feature."}</p>
-      <div className="capstone-fix-prompt">
-        <strong>Try this prompt</strong>
-        <p>{improvementPrompt(check)}</p>
-        <button type="button" onClick={async () => {
-          try { await navigator.clipboard.writeText(improvementPrompt(check)); setCopied(`Copied prompt ${index + 1}.`); }
-          catch { setCopied("Couldn’t copy automatically. Select the prompt text and copy it manually."); }
-        }}>Copy prompt</button>
-      </div>
-    </article>)}
-    <p role="status">{copied}</p>
+      <LessonPrompt key={improvementPrompt(check)} prompt={improvementPrompt(check)} copyable />
+    </section>)}
     {projectUrl && <a className="capstone-review-button" href={projectUrl} target="_blank" rel="noopener noreferrer">Let’s work some more on the project <ArrowRight size={18} /></a>}
     <small>Prompts are suggestions based on the review, not a guarantee of passing. Nothing is sent to Agent until you paste and submit it.</small>
   </section>;
@@ -45,7 +37,6 @@ export function CapstoneSubmission({ onValidated }: { onValidated: (passed: bool
   const [authNeeded, setAuthNeeded] = useState(false);
   const [submission, setSubmission] = useState<Submission | null>(null);
   const [step, setStep] = useState<"project" | "review">("project");
-  const [copyMessage, setCopyMessage] = useState("");
   const projectUrl = submission?.url ?? apps.find(app => app.id === selected)?.url;
   const dialog = useRef<HTMLDialogElement>(null);
   const validated = useRef(onValidated);
@@ -137,20 +128,11 @@ export function CapstoneSubmission({ onValidated }: { onValidated: (passed: bool
           return <div key={requirement.id} className={`capstone-check-row ${result?.status ?? "pending"}`}>
             <span className="capstone-check-icon" aria-hidden="true">{result?.status === "passed" ? <Check size={15} /> : result ? <X size={15} /> : busy ? <LoaderCircle className="capstone-spinner" size={15} /> : <span>·</span>}</span>
             <div><strong>{requirement.title}</strong><span className="capstone-check-label">{label}</span><p>{result?.feedback ?? requirement.detail}</p>
-              {result && result.status !== "passed" && <div className="capstone-fix-prompt">
-                <strong>Try this prompt</strong>
-                <p>{result.prompt ?? `Help me address this capstone requirement: ${requirement.detail} The review said: ${result.feedback} Inspect what already works, help me resolve the gap, and show me how to test it with fictional data. Do not invent test results or publish anything.`}</p>
-                <button type="button" onClick={async () => {
-                  const prompt = result.prompt ?? `Help me address this capstone requirement: ${requirement.detail} The review said: ${result.feedback} Inspect what already works, help me resolve the gap, and show me how to test it with fictional data. Do not invent test results or publish anything.`;
-                  try { await navigator.clipboard.writeText(prompt); setCopyMessage(`Copied prompt for ${requirement.title}.`); }
-                  catch { setCopyMessage("Couldn’t copy automatically. Select the prompt text and copy it manually."); }
-                }}>Copy prompt</button>
-              </div>}
+              {result && result.status !== "passed" && <LessonPrompt key={improvementPrompt(result)} prompt={improvementPrompt(result)} copyable />}
             </div>
           </div>;
         })}
         {submission && !submission.checks && <p>This earlier review has no item-level results saved.</p>}
-        <span role="status">{copyMessage}</span>
       </div>}
       {submission?.passed ? <button type="button" className="capstone-review-button" onClick={() => dialog.current?.close()}>Continue learning <ArrowRight size={18} /></button> : <>
         {step === "project" && <div className="capstone-project-list" role="group" aria-label="Your recent projects" aria-busy={loading || busy}>

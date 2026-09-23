@@ -14,13 +14,8 @@
   body:has(.course-certificate) .course-certificate { position: absolute; inset: 0 auto auto 0; width: 100%; box-sizing: border-box; margin: 0; break-inside: avoid; print-color-adjust: exact; }
 }
 .capstone-action-plan { width: 100%; text-align: left; margin: 20px 0; }
-.capstone-action-card { padding: 20px; margin: 16px 0; border: 1px solid #8884; border-radius: 16px; }
-.capstone-action-card h4 { margin: 0 0 8px; font-size: 17px; }
-.capstone-action-card p { font-size: 14px; line-height: 1.65; overflow-wrap: anywhere; }
 .capstone-action-plan > small { display: block; margin-top: 14px; line-height: 1.5; opacity: .7; }
 .capstone-action-plan .capstone-review-button { text-decoration: none; box-sizing: border-box; }
-.capstone-fix-prompt { margin-top: 12px; padding: 12px; border-radius: 12px; background: #8881; border: 1px solid #8883; }
-.capstone-fix-prompt button { margin-top: 10px; padding: 7px 12px; border-radius: 8px; border: 1px solid #8885; background: transparent; color: inherit; font: inherit; font-size: 12px; cursor: pointer; }
 .capstone-back-button { display: block; margin: 14px auto 0; padding: 8px; border: 0; background: transparent; color: inherit; font: inherit; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .capstone-back-button:disabled { opacity: .45; cursor: default; }
 .capstone-checklist { margin: 20px 0; text-align: left; }
@@ -31,7 +26,7 @@
 .needs_work .capstone-check-icon, .unverified .capstone-check-icon { background: #fce6e4; border-color: #e8aaa4; color: #a52a23; }
 .capstone-check-row strong { display: block; font-size: 14px; }
 .capstone-check-label { display: block; font-size: 11px; font-weight: 600; margin-top: 3px; opacity: .7; }
-.capstone-project-modal .capstone-check-row p { margin: 6px 0 0; font-size: 13px; line-height: 1.5; opacity: .8; overflow-wrap: anywhere; }
+.capstone-project-modal .capstone-check-row > div > p { margin: 6px 0 0; font-size: 13px; line-height: 1.5; opacity: .8; overflow-wrap: anywhere; }
 .learn-sign-in-modal.capstone-project-modal { width: min(540px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); overflow-y: auto; text-align: left; }
 .capstone-modal-icon { display: grid; place-items: center; width: 56px; height: 56px; margin: 0 auto 20px; border-radius: 18px; background: #e8dccd; color: #77553a; }
 .capstone-project-modal h2, .capstone-project-modal .signin-eyebrow, .capstone-project-modal #capstone-modal-description { text-align: center; }

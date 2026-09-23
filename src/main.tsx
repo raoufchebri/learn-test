@@ -7,6 +7,7 @@ import { appFoundationLessons, courseLessons, learnDisplayTitle, type LearnLesso
 import { ReplitAccount } from "./replit-account";
 import { CapstoneSubmission } from "./capstone-submission";
 import { CourseCertificate } from "./course-certificate";
+import { LessonPrompt } from "./lesson-prompt";
 import { LEARN_DEV_MODE } from "./learn-mode";
 import { RecipeBuildProvider, RecipeBuildStep, RecipeBuildStatus, ProjectLessonStep, useRecipeActivity, RECIPE_PROMPT, RECIPE_DEMO } from "./recipe-build";
 import {
@@ -234,7 +235,6 @@ function LessonPage({
   const recipeLesson = lesson.activity === "recipe-build";
   const [entryOpened, setEntryOpened] = useState(LEARN_DEV_MODE || !lesson.entryLink);
   const [promptContinued, setPromptContinued] = useState(LEARN_DEV_MODE || !lesson.promptGate);
-  const [copiedPrompt, setCopiedPrompt] = useState('');
   const hasFrontendCheck = lesson.title === 'What Is Replit Building?';
   const hasCheckpoint = hasFrontendCheck || !!lesson.checkpoint;
   const checkpointIndex = lesson.checkpoint?.afterSection ?? 2;
@@ -527,11 +527,7 @@ function LessonPage({
         (!LEARN_DEV_MODE && ((!promptContinued && sectionIndex > 0) || (!unlocked && sectionIndex > promptIndex) || (!frontendVisible && sectionIndex > checkpointIndex) || (hasFrontendCheck && sectionIndex > 5 && recipe.iteration !== 'complete'))) ? null : <section className={`foundation-section ${((recipeLesson || lesson.projectTask) && sectionIndex > promptIndex) || (hasCheckpoint && sectionIndex > checkpointIndex) || (lesson.promptGate && sectionIndex > 0) ? "lesson-unlocked" : ""}`} id={section.id ?? learnSegment(section.heading)} key={section.heading}>
           <h2>{section.heading}</h2>
           <p>{section.body}</p>
-          {section.prompt && <blockquote className="lesson-example-prompt"><p>{section.prompt}</p></blockquote>}
-          {(lesson.promptGate || lesson.copyPrompts) && section.prompt && <div className="practice-actions"><button type="button" onClick={async () => {
-            try { await navigator.clipboard.writeText(section.prompt!); setCopiedPrompt(section.prompt!); }
-            catch { setCopiedPrompt('failed'); }
-          }}>{copiedPrompt === section.prompt ? 'Copied' : 'Copy prompt'}</button><span role="status">{copiedPrompt === 'failed' ? 'Select the prompt above and copy it manually.' : 'Paste it into Replit and send it there.'}</span></div>}
+          {section.prompt && <LessonPrompt key={section.prompt} prompt={section.prompt} copyable={Boolean(lesson.promptGate || lesson.copyPrompts)} />}
           {lesson.promptGate && sectionIndex === 0 && <div className={`recipe-unlock-action ${promptContinued ? 'is-open' : ''}`}><button className="recipe-create-button" disabled={promptContinued} onClick={() => {
             setPromptContinued(true); setUnlockCelebration(true);
             if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) playUnlockChime();
