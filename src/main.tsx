@@ -887,7 +887,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
   const dismissSignIn = () => { setPendingCourse(null); setInvitationOpen(false); };
   const signInDialog = useRef<HTMLDialogElement>(null);
   useEffect(() => {
-    if (!LEARN_DEV_MODE && access === 'signed-out' && location.pathname === '/' && !invitationShown.current) {
+    if (access === 'signed-out' && location.pathname === '/' && !invitationShown.current) {
       invitationShown.current = true;
       setInvitationOpen(true);
     }
