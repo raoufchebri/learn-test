@@ -67,6 +67,7 @@ export type LearnLesson = {
   navigationTitle?: string;
   duration: string;
   video: string;
+  audio?: string;
   summary: string;
   openingImage?: { src: string; alt: string };
   entryLink?: string;

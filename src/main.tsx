@@ -488,6 +488,13 @@ function LessonPage({
         </div>
       </div>
       <small className="caption lesson-video-caption-top">Video placeholder · This lesson will include its own walkthrough</small>
+      {lesson.audio && <section className="lesson-narration" aria-label="Lesson narration">
+        <div className="lesson-narration-label"><Icons.Headphones size={21} aria-hidden="true" /><div><strong>Listen to this lesson</strong><small>AI narration · Follow along with the text below</small></div></div>
+        <audio key={lesson.audio} controls preload="metadata" aria-label={`Listen to ${learnDisplayTitle(lesson.title)}`}>
+          <source src={lesson.audio} type="audio/mpeg" />
+          Your browser does not support audio playback. <a href={lesson.audio}>Download the narration</a>.
+        </audio>
+      </section>}
       <p className="eyebrow">{learnDisplayTitle(lesson.module).toUpperCase()} / {lesson.navigationTitle === 'Module overview' ? 'MODULE OVERVIEW' : `CHAPTER ${chapter + 1}`} · {lesson.duration}</p>
       <h1>{learnDisplayTitle(lesson.title)}</h1>
       {lesson.testingUnlocked && lesson.projectTask && <p className="caption">Testing access: this lesson is open for review. Project inspection still requires a completed app.</p>}
