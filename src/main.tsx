@@ -8,6 +8,7 @@ import { ReplitAccount } from "./replit-account";
 import { CapstoneSubmission } from "./capstone-submission";
 import { CourseCertificate } from "./course-certificate";
 import { LessonPrompt } from "./lesson-prompt";
+import { useLessonNarration } from "./lesson-narration";
 import { LEARN_DEV_MODE } from "./learn-mode";
 import { RecipeBuildProvider, RecipeBuildStep, RecipeBuildStatus, ProjectLessonStep, useRecipeActivity, RECIPE_PROMPT, RECIPE_DEMO } from "./recipe-build";
 import {
@@ -374,6 +375,7 @@ function LessonPage({
     }, reduced ? 250 : 1100);
     return () => window.clearTimeout(reveal);
   }, [quizPassed, completed, unlocked]);
+  const narration = useLessonNarration(lesson.audioTimings);
   const [videoFloating, setVideoFloating] = useState(false);
   const [videoReturning, setVideoReturning] = useState(false);
   const [videoDismissed, setVideoDismissed] = useState(false);
@@ -490,19 +492,20 @@ function LessonPage({
       <small className="caption lesson-video-caption-top">Video placeholder · This lesson will include its own walkthrough</small>
       {lesson.audio && <section className="lesson-narration" aria-label="Lesson narration">
         <div className="lesson-narration-label"><Icons.Headphones size={21} aria-hidden="true" /><div><strong>Listen to this lesson</strong><small>AI narration · Follow along with the text below</small></div></div>
-        <audio key={lesson.audio} controls preload="metadata" aria-label={`Listen to ${learnDisplayTitle(lesson.title)}`}>
+        <audio key={lesson.audio} ref={narration.audioRef} {...narration.audioEvents} controls preload="metadata" aria-label={`Listen to ${learnDisplayTitle(lesson.title)}`}>
           <source src={lesson.audio} type="audio/mpeg" />
           Your browser does not support audio playback. <a href={lesson.audio}>Download the narration</a>.
         </audio>
+        {narration.timingError && <small>Word highlighting is unavailable. You can still listen and read along.</small>}
       </section>}
       <p className="eyebrow">{learnDisplayTitle(lesson.module).toUpperCase()} / {lesson.navigationTitle === 'Module overview' ? 'MODULE OVERVIEW' : `CHAPTER ${chapter + 1}`} · {lesson.duration}</p>
-      <h1>{learnDisplayTitle(lesson.title)}</h1>
+      <h1>{narration.renderText(learnDisplayTitle(lesson.title))}</h1>
       {lesson.testingUnlocked && lesson.projectTask && <p className="caption">Testing access: this lesson is open for review. Project inspection still requires a completed app.</p>}
-      <p className="intro">{lesson.summary}</p>
+      <p className="intro">{narration.renderText(lesson.summary)}</p>
       {lesson.openingImage && <figure className="lesson-app-screenshot"><img src={lesson.openingImage.src} alt={lesson.openingImage.alt} /><figcaption>Replit home · Personal details replaced for this example.</figcaption></figure>}
       {lesson.introduction?.map((paragraph) => typeof paragraph === 'string'
-        ? <p className="lesson-introduction-copy" key={paragraph}>{paragraph}</p>
-        : <div className="lesson-introduction-copy" key={paragraph.text}><p>{paragraph.text}</p><ul>{paragraph.items.map((item) => <li key={item}>{item}</li>)}</ul></div>)}
+        ? <p className="lesson-introduction-copy" key={paragraph}>{narration.renderText(paragraph)}</p>
+        : <div className="lesson-introduction-copy" key={paragraph.text}><p>{narration.renderText(paragraph.text)}</p><ul>{paragraph.items.map((item) => <li key={item}>{narration.renderText(item)}</li>)}</ul></div>)}
       {lesson.title === 'What Is Replit Building?' && <RecipeProjectLink />}
       {lesson.encouragement && (
         <aside className="lesson-encouragement">

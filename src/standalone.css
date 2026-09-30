@@ -1,3 +1,4 @@
+.narration-word.is-speaking { background: #ffe0ac; color: #302114; border-radius: 3px; box-shadow: 0 0 0 2px #ffe0ac; }
 .lesson-narration { margin: 24px 0 32px; padding: 20px; border: 1px solid #8884; border-radius: 16px; background: #88808; }
 .lesson-narration-label { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
 .lesson-narration-label strong { display: block; font-size: 16px; }

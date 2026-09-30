@@ -6,7 +6,8 @@ const base = { module: 'Replit 101', duration: '4 min', video: '', replitExample
 export const discoverLessons: LearnLesson[] = [
   {
     ...base, title: 'What You Can Do with Replit',
-    audio: '/audio/replit-101-intro-jessica.mp3',
+    audio: '/audio/replit-101-jessica-synced.mp3',
+    audioTimings: '/audio/replit-101-jessica-timings.json',
     navigationTitle: 'Module overview',
     summary: 'Welcome! Whether you’re new to Replit or have built a few projects with it, this is a place to discover what you can do. Replit helps you explore information, get work done, and turn your ideas into apps.',
     introduction: [
