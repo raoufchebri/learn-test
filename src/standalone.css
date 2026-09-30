@@ -1,5 +1,5 @@
 /* Paint-only emphasis: changing font weight here reflows words and lines. */
-.narration-word.is-speaking { background: #d8edff; color: #163d60; text-shadow: .25px 0 currentColor, -.25px 0 currentColor; border-radius: 3px; box-shadow: 0 0 0 2px #d8edff; }
+.narration-word.is-speaking { background: #fff0a6; color: #493a12; text-shadow: .25px 0 currentColor, -.25px 0 currentColor; border-radius: 3px; box-shadow: 0 0 0 2px #fff0a6; }
 .narration-follow { display: flex; align-items: center; gap: 8px; margin-top: 14px; font-size: 13px; cursor: pointer; }
 .narration-follow input { accent-color: #3673a5; }
 .lesson-narration { margin: 24px 0 32px; padding: 20px; border: 1px solid #8884; border-radius: 16px; background: #88808; }
