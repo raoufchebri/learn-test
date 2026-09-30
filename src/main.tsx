@@ -148,11 +148,10 @@ const coursePillars: CoursePillar[] = pillarDefinitions.map((pillar) => ({
 const lessonUrl = (module: CourseModule, lesson: LearnLesson) =>
   `/learn/${learnSegment(module.title)}/${learnSegment(lesson.title)}`;
 
-const isAvailablePillar = (id: CoursePillarId) => LEARN_DEV_MODE || id === 'discover' || id === 'build';
-const isAvailableModule = (module: CourseModule) => LEARN_DEV_MODE || (isAvailablePillar(module.pillar)
-  && coursePillars.find((pillar) => pillar.id === module.pillar)?.modules[0] === module);
+const isAvailablePillar = (id: CoursePillarId) => LEARN_DEV_MODE || id === 'discover';
+const isAvailableModule = (module: CourseModule) => isAvailablePillar(module.pillar);
 const availableLessonUrls = new Set(courseModules.filter(isAvailableModule)
-  .flatMap((module) => (LEARN_DEV_MODE ? module.lessons : module.lessons.slice(0, module.pillar === 'discover' ? 2 : 3)).map((lesson) => lessonUrl(module, lesson))));
+  .flatMap((module) => module.lessons.map((lesson) => lessonUrl(module, lesson))));
 
 const askLearnPages: DocsSlashPage[] = [
   { label: "Welcome to Replit Learn", path: "/", section: "Learn" },
@@ -616,7 +615,7 @@ function LessonPage({
         </button>
         <small aria-live="polite">{activityConfirmed ? 'Success! Your quiz is unlocked.' : 'Confirm you’ve completed the activity to unlock the quiz. This records your progress; it doesn’t verify actions in Replit.'}</small>
       </div>}
-      {lesson.quiz.length === 0 && nextLesson && <button className="next-lesson" onClick={nextLesson.onClick}>
+      {lesson.quiz.length === 0 && nextLesson && <button className="next-lesson" onClick={() => { onComplete?.(); nextLesson.onClick(); }}>
         <span>{lesson.module === 'Your capstone' ? 'CONTINUE' : 'NEXT MODULE'}</span><strong>{learnDisplayTitle(nextLesson.title)}</strong><b>→</b>
       </button>}
       {activityConfirmed && lesson.quiz.length > 0 && <section className="lesson-quiz" id={lesson.activityConfirmation ? 'confirmed-activity-quiz' : undefined}>
@@ -763,12 +762,12 @@ function WelcomePage({ onStart, learnerName, learnerKey }: { onStart: (pillar: C
       <section className="learn-path-intro">
         <p className="eyebrow">CHOOSE A COURSE</p>
         <h3>Choose your next step.</h3>
-        <p>{LEARN_DEV_MODE ? 'All courses and sections are open for development review.' : 'The first section of Replit 101 and App Foundations in Build are ready to explore. More sections and courses are coming soon.'}</p>
+        <p>Start with Replit 101 and work through each lesson in order. Other courses are coming soon.</p>
         <div className="learn-course-grid">
           {((LEARN_DEV_MODE ? ['discover', 'build', 'ai', 'operate', 'design', 'admin'] : ['discover', 'build', 'ai', 'design', 'admin']) as CoursePillarId[]).map((id, index) => {
             const pillar = coursePillars.find((entry) => entry.id === id)!;
             const available = isAvailablePillar(pillar.id);
-            const pillarLessonCount = LEARN_DEV_MODE ? pillar.modules.reduce((count, module) => count + module.lessons.length, 0) : pillar.modules[0]?.lessons.length ?? 0;
+            const pillarLessonCount = pillar.modules.reduce((count, module) => count + module.lessons.length, 0);
             return (
               <button
                 className={`learn-course-card learn-course-card-${pillar.id} ${available ? '' : 'coming-soon'}`}
@@ -923,13 +922,25 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
     : -1;
   const lesson = module && lessonIndex >= 0 ? module.lessons[lessonIndex] : undefined;
   const [completedLessons, setCompletedLessons] = useState<string[]>([]);
-  const buildSequence = courseModules.filter((entry) => entry.pillar === "build").flatMap((entry) => entry.lessons.map((item) => ({ module: entry, lesson: item, url: lessonUrl(entry, item) })));
-  const firstApp = buildSequence.findIndex((entry) => entry.lesson.title === "What Is an App?");
-  const sequence = firstApp >= 0 ? buildSequence.slice(firstApp) : [];
+  const sequence = courseModules.filter(isAvailableModule).flatMap((entry) => entry.lessons.map((item) => ({ module: entry, lesson: item, url: lessonUrl(entry, item) })));
+  const [progressOwner, setProgressOwner] = useState<string | undefined>();
+  useEffect(() => {
+    setCompletedLessons([]);
+    setProgressOwner(undefined);
+    if (!learnerKey) return;
+    try {
+      const saved = JSON.parse(localStorage.getItem(`replit-101-progress:v1:${learnerKey}`) ?? '[]');
+      if (Array.isArray(saved)) setCompletedLessons(saved.filter((url): url is string => typeof url === 'string' && availableLessonUrls.has(url)));
+    } catch { /* Start fresh if local progress is unavailable. */ }
+    setProgressOwner(learnerKey);
+  }, [learnerKey]);
+  useEffect(() => {
+    if (!learnerKey || progressOwner !== learnerKey) return;
+    try { localStorage.setItem(`replit-101-progress:v1:${learnerKey}`, JSON.stringify(completedLessons)); } catch { /* In-memory progress still works. */ }
+  }, [completedLessons, learnerKey, progressOwner]);
   const isLocked = (url: string) => {
     if (LEARN_DEV_MODE) return false;
     if (url && !availableLessonUrls.has(url)) return true;
-    if (url === '/learn/replit-101/from-conversation-to-outcome') return !completedLessons.includes('/learn/replit-101/what-you-can-do-with-replit');
     const index = sequence.findIndex((entry) => entry.url === url);
     return index > 0 && sequence.slice(0, index).some((entry) => !completedLessons.includes(entry.url));
   };
@@ -937,13 +948,12 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
   const sequenceIndex = sequence.findIndex((entry) => entry.url === currentUrl);
   const currentLocked = isLocked(currentUrl);
   useEffect(() => {
-    if (access === "signed-in" && currentLocked) {
+    if (access === "signed-in" && progressOwner === learnerKey && currentLocked) {
       if (!availableLessonUrls.has(currentUrl)) { navigate('/', { replace: true }); return; }
-      if (currentUrl === '/learn/replit-101/from-conversation-to-outcome') { navigate('/learn/replit-101/what-you-can-do-with-replit', { replace: true }); return; }
       const available = sequence.find((entry) => !completedLessons.includes(entry.url));
       if (available) navigate(available.url, { replace: true });
     }
-  }, [access, currentLocked, currentUrl, completedLessons, navigate]);
+  }, [access, currentLocked, currentUrl, completedLessons, navigate, progressOwner, learnerKey]);
 
   useEffect(() => {
     if (location.pathname === "/") {
@@ -1029,11 +1039,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
                     const index = courseModules.indexOf(targetModule);
                     const moduleCurrent = moduleIndex === index;
                     const moduleMinutes = targetModule.lessons.reduce((total, targetLesson) => total + Number.parseInt(targetLesson.duration, 10), 0);
-                    const moduleProgress = targetModule.lessons.length === 0 ? 0 : pillar.id === "build" ? 100 * targetModule.lessons.filter((item) => completedLessons.includes(lessonUrl(targetModule, item))).length / targetModule.lessons.length : moduleGroupIndex < activeModuleGroupIndex
-                      ? 100
-                      : moduleCurrent
-                        ? ((lessonIndex + 1) / targetModule.lessons.length) * 100
-                        : 0;
+                    const moduleProgress = targetModule.lessons.length === 0 ? 0 : 100 * targetModule.lessons.filter((item) => completedLessons.includes(lessonUrl(targetModule, item))).length / targetModule.lessons.length;
                     return (
                       <section className={`course-module-group ${moduleCurrent ? "current" : ""}`} key={targetModule.title}>
                         <div className="course-module-heading">
