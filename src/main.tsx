@@ -496,6 +496,10 @@ function LessonPage({
           <source src={lesson.audio} type="audio/mpeg" />
           Your browser does not support audio playback. <a href={lesson.audio}>Download the narration</a>.
         </audio>
+        {lesson.audioTimings && <label className="narration-follow">
+          <input type="checkbox" checked={narration.followNarration} onChange={event => narration.setFollowNarration(event.target.checked)} />
+          Follow narration automatically
+        </label>}
         {narration.timingError && <small>Word highlighting is unavailable. You can still listen and read along.</small>}
       </section>}
       <p className="eyebrow">{learnDisplayTitle(lesson.module).toUpperCase()} / {lesson.navigationTitle === 'Module overview' ? 'MODULE OVERVIEW' : `CHAPTER ${chapter + 1}`} · {lesson.duration}</p>

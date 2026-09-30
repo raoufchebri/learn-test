@@ -8,6 +8,35 @@ export function useLessonNarration(timingsUrl?: string) {
   const [time, setTime] = useState(-1);
   const [playing, setPlaying] = useState(false);
   const [timingError, setTimingError] = useState(false);
+  const [followNarration, setFollowNarration] = useState(true);
+  const lastScroll = useRef(0);
+  const activeWord = blocks.flatMap((block, blockIndex) =>
+    block.words.map((word, wordIndex) => ({ ...word, id: `${blockIndex}:${wordIndex}` }))
+  ).find(word => time >= word.start && time < word.end)?.id;
+  useEffect(() => {
+    if (!playing || !followNarration || !activeWord) return;
+    const lesson = audioRef.current?.closest("article");
+    const word = lesson?.querySelector<HTMLElement>(".narration-word.is-speaking");
+    if (!word) return;
+    const rect = word.getBoundingClientRect();
+    let top = 120;
+    let bottom = window.innerHeight - 96;
+    // Honor the lesson pane as well as the browser viewport on split layouts.
+    for (let parent = word.parentElement; parent; parent = parent.parentElement) {
+      if (/(auto|scroll|hidden)/.test(getComputedStyle(parent).overflowY)) {
+        const bounds = parent.getBoundingClientRect();
+        top = Math.max(top, bounds.top + 32);
+        bottom = Math.min(bottom, bounds.bottom - 48);
+      }
+    }
+    if (rect.top >= top && rect.bottom <= bottom) return;
+    if (performance.now() - lastScroll.current < 1000) return;
+    lastScroll.current = performance.now();
+    word.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+      block: "center", inline: "nearest",
+    });
+  }, [activeWord, playing, followNarration]);
   useEffect(() => {
     setBlocks([]); setTime(-1); setPlaying(false); setTimingError(false);
     if (!timingsUrl) return;
@@ -46,7 +75,7 @@ export function useLessonNarration(timingsUrl?: string) {
     });
   };
   return {
-    audioRef, renderText, timingError,
+    audioRef, renderText, timingError, followNarration, setFollowNarration,
     audioEvents: {
       onPlay: () => setPlaying(true),
       onPause: () => { setPlaying(false); setTime(audioRef.current?.currentTime ?? -1); },
