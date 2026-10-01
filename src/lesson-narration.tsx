@@ -18,8 +18,10 @@ export function useLessonNarration(timingsUrl?: string) {
     const lesson = audioRef.current?.closest("article");
     const word = lesson?.querySelector<HTMLElement>(".narration-word.is-speaking");
     if (!word) return;
+    if (word.closest(".lesson-sticky-header")) return;
     const rect = word.getBoundingClientRect();
-    let top = 120;
+    const headerBottom = lesson?.querySelector(".lesson-sticky-header")?.getBoundingClientRect().bottom ?? 0;
+    let top = Math.max(48, headerBottom + 24);
     let bottom = window.innerHeight - 96;
     // Honor the lesson pane as well as the browser viewport on split layouts.
     for (let parent = word.parentElement; parent; parent = parent.parentElement) {
@@ -32,9 +34,10 @@ export function useLessonNarration(timingsUrl?: string) {
     if (rect.top >= top && rect.bottom <= bottom) return;
     if (performance.now() - lastScroll.current < 1000) return;
     lastScroll.current = performance.now();
+    word.style.scrollMarginTop = `${top + 24}px`;
     word.scrollIntoView({
       behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
-      block: "center", inline: "nearest",
+      block: "start", inline: "nearest",
     });
   }, [activeWord, playing, followNarration]);
   useEffect(() => {

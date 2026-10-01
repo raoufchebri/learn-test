@@ -1,7 +1,15 @@
 /* Video-led lesson layout. Course gates and real assistant behavior are unchanged. */
+.lesson-sticky-header { position: sticky; top: 0; z-index: 25; padding-top: 8px; padding-bottom: 6px; background: var(--replit-off-white); border-bottom: 1px solid var(--replit-light-silver); }
+.lesson-sticky-header .lesson-video-shell { max-width: calc(55dvh * 1.77778); margin-inline: auto; }
+.lesson-content.learn-content-stage { overflow: visible; }
 .lesson-heading-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 4px 0 8px; }
 .learn-page:not(.welcome-mode) .lesson-heading-row h1 { margin: 0; font-size: 28px; line-height: 1.2; }
 .lesson-heading-row .narration-follow { margin: 0 0 0 auto; font-size: 12px; white-space: nowrap; }
+.lesson-reading-toggle { display: inline-flex; align-items: center; gap: 2px; margin-left: auto; padding: 3px; border: 1px solid var(--replit-light-silver); border-radius: 9px; background: #88808; }
+.lesson-reading-toggle button { display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 6px 8px; font: inherit; font-size: 11px; color: inherit; border: 0; border-radius: 6px; background: transparent; cursor: pointer; }
+.lesson-reading-toggle button[aria-pressed="true"] { background: var(--replit-off-white); box-shadow: 0 1px 3px #0002; font-weight: 600; }
+.lesson-reading-toggle button:hover { background: #8881; }
+.lesson-reading-toggle button:focus-visible { outline: 2px solid #ca9d1c; outline-offset: 2px; }
 .narration-test-toggle { display: inline-flex; align-items: center; gap: 5px; padding: 6px 8px; border: 1px solid var(--replit-light-silver); border-radius: 8px; color: inherit; background: transparent; font: inherit; font-size: 11px; cursor: pointer; }
 .narration-test-toggle:focus-visible { outline: 2px solid #ca9d1c; outline-offset: 2px; }
 .lesson-video-caption-top { display: block; font-size: 11px; opacity: .65; margin: 5px 0 8px; }

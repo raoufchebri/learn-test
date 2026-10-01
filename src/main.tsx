@@ -377,6 +377,9 @@ function LessonPage({
     return () => window.clearTimeout(reveal);
   }, [quizPassed, completed, unlocked]);
   const narration = useLessonNarration(lesson.audioTimings);
+  const [readingView, setReadingView] = useState<"transcript" | "text">("transcript");
+  const showTranscript = readingView === "transcript" && narration.blocks.length > 0;
+  const readingText = (text: string) => readingView === "transcript" ? narration.renderText(text) : text;
   const [narrationPlaybackError, setNarrationPlaybackError] = useState(false);
   const [videoFloating, setVideoFloating] = useState(false);
   const [videoReturning, setVideoReturning] = useState(false);
@@ -416,7 +419,8 @@ function LessonPage({
       frame = window.requestAnimationFrame(() => {
         const videoRect = videoAnchor.getBoundingClientRect();
         const chatVideoSlot = chatOpen && window.innerWidth >= 1600;
-        const canFloat = !chatOpen || chatVideoSlot;
+        // Sticky lesson media replaces the former floating corner player.
+        const canFloat = false;
         const rightOffset = chatVideoSlot ? 458 : 18;
         if (canFloat && !videoFloatingRef.current && videoRect.top < -24) {
           const targetWidth = chatVideoSlot ? 260 : Math.min(340, window.innerWidth - 36);
@@ -462,6 +466,7 @@ function LessonPage({
   return (
     <article className="lesson-content learn-content-stage" id="overview" key={lesson.title}>
       {unlockCelebration && createPortal(<div className="lesson-confetti" aria-hidden="true">{Array.from({ length: 64 }, (_, i) => <i key={i} style={{ left: `${(i * 37) % 100}%`, background: ["#e89a58", "#91bca5", "#a299cf", "#edc76b", "#88b9ce"][i % 5], animationDelay: `${(i % 8) * 35}ms`, "--drift": `${((i * 19) % 160) - 80}px` } as CSSProperties} />)}</div>, document.body)}
+      <div className="lesson-sticky-header">
       <div className="lesson-video-shell" ref={videoAnchorRef}>
         <div
           className={`lesson-video lesson-video-embed ${videoFloating && !videoDismissed ? "floating" : ""} ${videoReturning ? "returning" : ""}`}
@@ -493,7 +498,7 @@ function LessonPage({
       </div>
       <small className="caption lesson-video-caption-top">Video placeholder · This lesson will include its own walkthrough</small>
       <p className="eyebrow">{learnDisplayTitle(lesson.module).toUpperCase()} / {lesson.navigationTitle === 'Module overview' ? 'MODULE OVERVIEW' : `CHAPTER ${chapter + 1}`} · {lesson.duration}</p>
-      <div className="lesson-heading-row"><h1>{narration.renderText(learnDisplayTitle(lesson.title))}</h1>
+      <div className="lesson-heading-row"><h1>{readingText(learnDisplayTitle(lesson.title))}</h1>
         {lesson.audio && <button className="narration-test-toggle" type="button"
           aria-label={narration.playing ? "Pause test narration" : "Play test narration"}
           title="Test narration only. The video is still a placeholder."
@@ -508,9 +513,16 @@ function LessonPage({
           }}>
           {narration.playing ? <Icons.Pause size={14} /> : <Icons.Play size={14} />} <span>Test audio</span>
         </button>}
-        {lesson.audioTimings && <label className="narration-follow">
-          <input type="checkbox" checked={narration.followNarration} onChange={event => narration.setFollowNarration(event.target.checked)} /> Follow narration
-        </label>}
+        {lesson.audioTimings && <div className="lesson-reading-toggle" role="group" aria-label="Reading view">
+          <button type="button" aria-pressed={readingView === "transcript"} title="Timestamped transcript follows narration"
+            onClick={() => { setReadingView("transcript"); narration.setFollowNarration(true); }}>
+            <Icons.ListVideo size={15} aria-hidden="true" /><span>Transcript</span>
+          </button>
+          <button type="button" aria-pressed={readingView === "text"} title="Read and skim without automatic scrolling"
+            onClick={() => { setReadingView("text"); narration.setFollowNarration(false); }}>
+            <Icons.AlignLeft size={15} aria-hidden="true" /><span>Text</span>
+          </button>
+        </div>}
       </div>
       {lesson.audio && <>
         <audio key={lesson.audio} ref={narration.audioRef} {...narration.audioEvents} hidden preload="metadata" onError={() => setNarrationPlaybackError(true)}>
@@ -519,8 +531,9 @@ function LessonPage({
         {narrationPlaybackError && <small role="alert">Narration couldn’t play. Try the test button again or refresh the page.</small>}
         {narration.timingError && <small role="status">Timing unavailable. Read the lesson below while listening.</small>}
       </>}
+      </div>
       {lesson.testingUnlocked && lesson.projectTask && <p className="caption">Testing access: this lesson is open for review. Project inspection still requires a completed app.</p>}
-      {narration.blocks.length > 0 ? <section className="lesson-transcript" aria-label="Lesson transcript">
+      {showTranscript ? <section className="lesson-transcript" aria-label="Lesson transcript">
         {narration.blocks.slice(1).map(block => {
           const start = block.words[0]?.start ?? 0;
           const end = block.words.at(-1)?.end ?? start;
@@ -531,11 +544,11 @@ function LessonPage({
             <p>{narration.renderText(block.text)}</p>
           </div>;
         })}
-      </section> : <p className="intro">{narration.renderText(lesson.summary)}</p>}
+      </section> : <p className="intro">{readingText(lesson.summary)}</p>}
       {lesson.openingImage && <figure className="lesson-app-screenshot"><img src={lesson.openingImage.src} alt={lesson.openingImage.alt} /><figcaption>Replit home · Personal details replaced for this example.</figcaption></figure>}
-      {narration.blocks.length === 0 && lesson.introduction?.map((paragraph) => typeof paragraph === 'string'
-        ? <p className="lesson-introduction-copy" key={paragraph}>{narration.renderText(paragraph)}</p>
-        : <div className="lesson-introduction-copy" key={paragraph.text}><p>{narration.renderText(paragraph.text)}</p><ul>{paragraph.items.map((item) => <li key={item}>{narration.renderText(item)}</li>)}</ul></div>)}
+      {!showTranscript && lesson.introduction?.map((paragraph) => typeof paragraph === 'string'
+        ? <p className="lesson-introduction-copy" key={paragraph}>{readingText(paragraph)}</p>
+        : <div className="lesson-introduction-copy" key={paragraph.text}><p>{readingText(paragraph.text)}</p><ul>{paragraph.items.map((item) => <li key={item}>{readingText(item)}</li>)}</ul></div>)}
       {lesson.title === 'What Is Replit Building?' && <RecipeProjectLink />}
       {lesson.encouragement && (
         <aside className="lesson-encouragement">
