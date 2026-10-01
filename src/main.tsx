@@ -414,7 +414,7 @@ function LessonPage({
       frame = window.requestAnimationFrame(() => {
         const videoRect = videoAnchor.getBoundingClientRect();
         const chatVideoSlot = chatOpen && window.innerWidth >= 1600;
-        const canFloat = !lesson.audio && (!chatOpen || chatVideoSlot);
+        const canFloat = !chatOpen || chatVideoSlot;
         const rightOffset = chatVideoSlot ? 458 : 18;
         if (canFloat && !videoFloatingRef.current && videoRect.top < -24) {
           const targetWidth = chatVideoSlot ? 260 : Math.min(340, window.innerWidth - 36);
