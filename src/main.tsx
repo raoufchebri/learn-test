@@ -524,11 +524,11 @@ function LessonPage({
         </button>}
         {lesson.audioTimings && <div className="lesson-reading-toggle" role="group" aria-label="Reading view">
           <button type="button" aria-pressed={readingView === "transcript"} title="Timestamped transcript follows narration"
-            onClick={() => { setReadingView("transcript"); narration.setFollowNarration(true); }}>
+            onClick={() => { setQuizMode(false); setReadingView("transcript"); narration.setFollowNarration(true); }}>
             <Icons.ListVideo size={15} aria-hidden="true" /><span>Transcript</span>
           </button>
           <button type="button" aria-pressed={readingView === "text"} title="Read and skim without automatic scrolling"
-            onClick={() => { setReadingView("text"); narration.setFollowNarration(false); }}>
+            onClick={() => { setQuizMode(false); setReadingView("text"); narration.setFollowNarration(false); }}>
             <Icons.AlignLeft size={15} aria-hidden="true" /><span>Text</span>
           </button>
         </div>}
