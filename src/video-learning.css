@@ -21,8 +21,8 @@
 .lesson-assistant-welcome h3 { font-size: 16px; }
 .lesson-assistant-welcome p { font-size: 14px; line-height: 1.65; }
 @media (min-width: 1100px) {
-  /* A useful-sized video, with compact controls leaving room for reading. */
-  .lesson-video-shell { width: min(100%, clamp(410px, calc(88.889dvh - 160px), 660px)); margin: 0 auto; }
+  /* One shared measure for the video, heading, and transcript. */
+  .lesson-video-shell { width: 100%; margin: 0; }
   .lesson-content.learn-content-stage > .eyebrow { margin: 8px 0 0; }
   .learn-page:not(.welcome-mode) .course-nav { width: 220px; padding: 62px 14px 0; }
   .learn-page .course-module-heading { gap: 8px; }
@@ -31,8 +31,8 @@
   .learn-page .course-module-group > .course-chapters button { font-size: 12px; }
   .learn-page:not(.welcome-mode) { padding-left: 244px; padding-right: 24px; padding-top: 12px; }
   .learn-with-ask .learn-page:not(.welcome-mode) { display: block; margin: 0 320px 0 0; max-width: none; padding: 12px 24px 100px 244px; }
-  .learn-page:not(.welcome-mode) .learn-main-column { width: 100%; max-width: 880px; margin: 0 auto; }
-  .learn-page:not(.welcome-mode) .lesson-content.learn-content-stage { max-width: 880px; }
+  .learn-page:not(.welcome-mode) .learn-main-column { width: 100%; max-width: clamp(410px, calc(88.889dvh - 160px), 660px); margin: 0 auto; }
+  .learn-page:not(.welcome-mode) .lesson-content.learn-content-stage { width: 100%; max-width: none; margin: 0; }
   .learn-with-ask .learn-page.course-nav-collapsed:not(.welcome-mode) { padding-left: 88px; }
   .ask-chat-blade.standalone-ask-blade { width: 320px; padding-top: 20px; }
   .standalone-ask-blade .ask-conversation-view > header { flex-wrap: wrap; gap: 8px; }
