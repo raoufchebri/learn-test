@@ -9,6 +9,7 @@ import { CapstoneSubmission } from "./capstone-submission";
 import { CourseCertificate } from "./course-certificate";
 import { LessonPrompt } from "./lesson-prompt";
 import { useLessonNarration } from "./lesson-narration";
+import { LessonQuizCard } from "./lesson-quiz-card";
 import { LEARN_DEV_MODE } from "./learn-mode";
 import { RecipeBuildProvider, RecipeBuildStep, RecipeBuildStatus, ProjectLessonStep, useRecipeActivity, RECIPE_PROMPT, RECIPE_DEMO } from "./recipe-build";
 import {
@@ -377,6 +378,14 @@ function LessonPage({
     return () => window.clearTimeout(reveal);
   }, [quizPassed, completed, unlocked]);
   const narration = useLessonNarration(lesson.audioTimings);
+  const [quizMode, setQuizMode] = useState(false);
+  const quizCardRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!quizMode) return;
+    narration.audioRef.current?.pause();
+    window.scrollTo({ top: 0, behavior: "instant" });
+    quizCardRef.current?.focus({ preventScroll: true });
+  }, [quizMode]);
   const [readingView, setReadingView] = useState<"transcript" | "text">("transcript");
   const showTranscript = readingView === "transcript" && narration.blocks.length > 0;
   const readingText = (text: string) => readingView === "transcript" ? narration.renderText(text) : text;
@@ -464,7 +473,7 @@ function LessonPage({
   }, [lesson.title, chatOpen]);
 
   return (
-    <article className="lesson-content learn-content-stage" id="overview" key={lesson.title}>
+    <article className={`lesson-content learn-content-stage ${quizMode ? 'quiz-mode' : ''}`} id="overview" key={lesson.title}>
       {unlockCelebration && createPortal(<div className="lesson-confetti" aria-hidden="true">{Array.from({ length: 64 }, (_, i) => <i key={i} style={{ left: `${(i * 37) % 100}%`, background: ["#e89a58", "#91bca5", "#a299cf", "#edc76b", "#88b9ce"][i % 5], animationDelay: `${(i % 8) * 35}ms`, "--drift": `${((i * 19) % 160) - 80}px` } as CSSProperties} />)}</div>, document.body)}
       <div className="lesson-sticky-header">
       <div className="lesson-video-shell" ref={videoAnchorRef}>
@@ -532,6 +541,7 @@ function LessonPage({
         {narration.timingError && <small role="status">Timing unavailable. Read the lesson below while listening.</small>}
       </>}
       </div>
+      <div className="lesson-reading-body" hidden={quizMode}>
       {lesson.testingUnlocked && lesson.projectTask && <p className="caption">Testing access: this lesson is open for review. Project inspection still requires a completed app.</p>}
       {showTranscript ? <section className="lesson-transcript" aria-label="Lesson transcript">
         {narration.blocks.slice(1).map(block => {
@@ -671,53 +681,18 @@ function LessonPage({
       {lesson.quiz.length === 0 && nextLesson && <button className="next-lesson" onClick={() => { onComplete?.(); nextLesson.onClick(); }}>
         <span>{lesson.module === 'Your capstone' ? 'CONTINUE' : 'NEXT MODULE'}</span><strong>{learnDisplayTitle(nextLesson.title)}</strong><b>→</b>
       </button>}
-      {activityConfirmed && lesson.quiz.length > 0 && <section className="lesson-quiz" id={lesson.activityConfirmation ? 'confirmed-activity-quiz' : undefined}>
-        <div className="quiz-heading"><span>{lesson.quiz.length} {lesson.quiz.length === 1 ? 'question' : 'questions'}</span><p className="eyebrow">CHECK YOUR UNDERSTANDING</p></div>
-        <h2>Quick check</h2>
-        {lesson.quiz.map((question, questionIndex) => (
-          <div className="quiz-question" key={question.prompt}>
-            <h3>{questionIndex + 1}. {question.prompt}</h3>
-            {question.choices.map((choice, choiceIndex) => (
-              <button
-                className={`${answers[questionIndex] === choiceIndex ? "selected" : ""} ${answers[questionIndex] === choiceIndex && choiceIndex === question.answer ? "correct" : ""}`}
-                onClick={() => setAnswers((current) => {
-                  const next = [...current];
-                  next[questionIndex] = choiceIndex;
-                  return next;
-                })}
-                key={choice}
-              >
-                <span>{String.fromCharCode(65 + choiceIndex)}</span>
-                {choice}
-                {answers[questionIndex] === choiceIndex && <i>{choiceIndex === question.answer ? "✓" : "Selected"}</i>}
-              </button>
-            ))}
-            {answers[questionIndex] !== undefined && (
-              <p className={answers[questionIndex] === question.answer ? "quiz-feedback success" : "quiz-feedback retry"}>
-                {answers[questionIndex] === question.answer
-                  ? question.feedback ?? "✦ That’s the idea. Nice work."
-                  : "Not quite, and that’s okay. Revisit the idea above, then try another answer."}
-              </p>
-            )}
-          </div>
-        ))}
-        {nextLesson && (
-          onComplete && !LEARN_DEV_MODE ? <div className={`recipe-unlock-action ${completed ? "is-open" : ""} ${unlockCelebration ? "is-unlocking" : ""}`}>
-            <button ref={nextUnlockRef} className="recipe-create-button" disabled={!completed} onClick={nextLesson.onClick}>
-              <LessonUnlockIcon />
-              <span>{completed ? "Continue to " : "Unlock "}{learnDisplayTitle(nextLesson.title)}</span>
-            </button>
-            {!completed && <small>{lesson.practice ? 'Complete your activity checks and answer every question correctly to unlock the next lesson.' : 'Answer every question correctly to unlock the next lesson.'}</small>}
-          </div> : <button className="next-lesson" onClick={nextLesson.onClick}>
-            <span>CONTINUE</span><strong>{learnDisplayTitle(nextLesson.title)}</strong><b>→</b>
-          </button>
-        )}
-        {!nextLesson && onComplete && <div className={`recipe-unlock-action ${completed ? 'is-open' : ''}`}>
-          <button ref={nextUnlockRef} className="recipe-create-button" disabled={!LEARN_DEV_MODE && !completed} onClick={() => window.location.assign('/')}><LessonUnlockIcon /><span>{LEARN_DEV_MODE ? 'Explore courses' : completed ? 'Section complete · Explore courses' : 'Complete the activity and quiz'}</span></button>
-        </div>}
-      </section>}
+      {activityConfirmed && lesson.quiz.length > 0 && <div className="lesson-quiz-entry" id={lesson.activityConfirmation ? 'confirmed-activity-quiz' : undefined}>
+        <p>Ready to check what you’ve learned?</p>
+        <button type="button" className="recipe-create-button" disabled={!practiceDone} onClick={() => setQuizMode(true)}>Take the quiz →</button>
+        {!practiceDone && <small>Complete the activity checks above first.</small>}
+      </div>}
       </div>}
       </>}
+      </div>
+      {quizMode && <div ref={quizCardRef} tabIndex={-1} className="lesson-quiz-stage">
+        <LessonQuizCard lesson={lesson} answers={answers} completed={completed} next={nextLesson} onBack={() => setQuizMode(false)}
+          onAnswer={(index, answer) => setAnswers(current => { const next = [...current]; next[index] = answer; return next; })} />
+      </div>}
     </article>
   );
 }
