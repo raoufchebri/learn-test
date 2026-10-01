@@ -75,7 +75,7 @@ export function useLessonNarration(timingsUrl?: string) {
     });
   };
   return {
-    audioRef, renderText, timingError, followNarration, setFollowNarration, blocks, time,
+    audioRef, renderText, timingError, followNarration, setFollowNarration, blocks, time, playing,
     seek: (seconds: number) => { if (audioRef.current) { audioRef.current.currentTime = seconds; setTime(seconds); } },
     audioEvents: {
       onPlay: () => setPlaying(true),

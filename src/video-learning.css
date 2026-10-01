@@ -1,13 +1,15 @@
 /* Video-led lesson layout. Course gates and real assistant behavior are unchanged. */
-.lesson-heading-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin: 8px 0 14px; }
+.lesson-heading-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 4px 0 8px; }
 .learn-page:not(.welcome-mode) .lesson-heading-row h1 { margin: 0; font-size: 28px; line-height: 1.2; }
-.lesson-heading-row .narration-follow { margin: 0; font-size: 12px; white-space: nowrap; }
-.lesson-video-caption-top { display: block; font-size: 11px; opacity: .65; margin: 8px 0 14px; }
-.transcript-preview-player { display: grid; grid-template-columns: 1fr; gap: 5px; padding: 10px 12px; border: 1px solid var(--replit-light-silver); border-radius: 8px; margin-bottom: 18px; }
+.lesson-heading-row .narration-follow { margin: 0 0 0 auto; font-size: 12px; white-space: nowrap; }
+.narration-test-toggle { display: inline-flex; align-items: center; gap: 5px; padding: 6px 8px; border: 1px solid var(--replit-light-silver); border-radius: 8px; color: inherit; background: transparent; font: inherit; font-size: 11px; cursor: pointer; }
+.narration-test-toggle:focus-visible { outline: 2px solid #ca9d1c; outline-offset: 2px; }
+.lesson-video-caption-top { display: block; font-size: 11px; opacity: .65; margin: 5px 0 8px; }
+.transcript-preview-player { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 2px 12px; padding: 6px 10px; border: 1px solid var(--replit-light-silver); border-radius: 8px; margin-bottom: 8px; }
 .transcript-preview-player > span { display: flex; align-items: center; gap: 7px; font-size: 12px; }
 .transcript-preview-player audio { width: 100%; height: 32px; min-width: 0; }
-.transcript-preview-player small { font-size: 11px; opacity: .65; }
-.lesson-transcript { margin: 16px 0 28px; }
+.transcript-preview-player small { grid-column: 1 / -1; font-size: 11px; opacity: .65; }
+.lesson-transcript { margin: 8px 0 28px; }
 .transcript-row { display: grid; grid-template-columns: 48px minmax(0,1fr); gap: 12px; padding: 12px 14px; border-left: 3px solid transparent; border-radius: 4px; }
 .transcript-row.is-current { background: #fff0a629; border-left-color: #ca9d1c; }
 .transcript-row > p { margin: 0; font-size: 16px; line-height: 1.65; }
@@ -19,13 +21,16 @@
 .lesson-assistant-welcome h3 { font-size: 16px; }
 .lesson-assistant-welcome p { font-size: 14px; line-height: 1.65; }
 @media (min-width: 1100px) {
+  /* A useful-sized video, with compact controls leaving room for reading. */
+  .lesson-video-shell { width: min(100%, clamp(410px, calc(88.889dvh - 160px), 660px)); margin: 0 auto; }
+  .lesson-content.learn-content-stage > .eyebrow { margin: 8px 0 0; }
   .learn-page:not(.welcome-mode) .course-nav { width: 220px; padding: 62px 14px 0; }
   .learn-page .course-module-heading { gap: 8px; }
   .learn-page .course-module-heading > strong { font-size: 13px; }
   .learn-page .course-module-heading > small { font-size: 10px; white-space: nowrap; }
   .learn-page .course-module-group > .course-chapters button { font-size: 12px; }
-  .learn-page:not(.welcome-mode) { padding-left: 244px; padding-right: 24px; }
-  .learn-with-ask .learn-page:not(.welcome-mode) { display: block; margin: 0 320px 0 0; max-width: none; padding: 20px 24px 100px 244px; }
+  .learn-page:not(.welcome-mode) { padding-left: 244px; padding-right: 24px; padding-top: 12px; }
+  .learn-with-ask .learn-page:not(.welcome-mode) { display: block; margin: 0 320px 0 0; max-width: none; padding: 12px 24px 100px 244px; }
   .learn-page:not(.welcome-mode) .learn-main-column { width: 100%; max-width: 880px; margin: 0 auto; }
   .learn-page:not(.welcome-mode) .lesson-content.learn-content-stage { max-width: 880px; }
   .learn-with-ask .learn-page.course-nav-collapsed:not(.welcome-mode) { padding-left: 88px; }
@@ -35,6 +40,7 @@
   .learn-with-ask .lesson-video-embed.floating { right: 338px; width: 260px; }
 }
 @media (max-width: 600px) {
+  .transcript-preview-player { grid-template-columns: minmax(0,1fr); }
   .transcript-row { grid-template-columns: 36px minmax(0,1fr); gap: 8px; padding: 10px 6px; }
   .transcript-row > p { font-size: 16px; }
 }

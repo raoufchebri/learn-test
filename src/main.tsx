@@ -377,6 +377,7 @@ function LessonPage({
     return () => window.clearTimeout(reveal);
   }, [quizPassed, completed, unlocked]);
   const narration = useLessonNarration(lesson.audioTimings);
+  const [narrationPlaybackError, setNarrationPlaybackError] = useState(false);
   const [videoFloating, setVideoFloating] = useState(false);
   const [videoReturning, setVideoReturning] = useState(false);
   const [videoDismissed, setVideoDismissed] = useState(false);
@@ -493,18 +494,31 @@ function LessonPage({
       <small className="caption lesson-video-caption-top">Video placeholder · This lesson will include its own walkthrough</small>
       <p className="eyebrow">{learnDisplayTitle(lesson.module).toUpperCase()} / {lesson.navigationTitle === 'Module overview' ? 'MODULE OVERVIEW' : `CHAPTER ${chapter + 1}`} · {lesson.duration}</p>
       <div className="lesson-heading-row"><h1>{narration.renderText(learnDisplayTitle(lesson.title))}</h1>
+        {lesson.audio && <button className="narration-test-toggle" type="button"
+          aria-label={narration.playing ? "Pause test narration" : "Play test narration"}
+          title="Test narration only. The video is still a placeholder."
+          onClick={async () => {
+            const audio = narration.audioRef.current;
+            if (!audio) return;
+            if (!audio.paused) audio.pause();
+            else {
+              setNarrationPlaybackError(false);
+              try { await audio.play(); } catch { setNarrationPlaybackError(true); }
+            }
+          }}>
+          {narration.playing ? <Icons.Pause size={14} /> : <Icons.Play size={14} />} <span>Test audio</span>
+        </button>}
         {lesson.audioTimings && <label className="narration-follow">
           <input type="checkbox" checked={narration.followNarration} onChange={event => narration.setFollowNarration(event.target.checked)} /> Follow narration
         </label>}
       </div>
-      {lesson.audio && <div className="transcript-preview-player">
-        <span><Icons.Headphones size={15} aria-hidden="true" /> Narration preview · Jessica</span>
-        <audio key={lesson.audio} ref={narration.audioRef} {...narration.audioEvents} controls preload="metadata" aria-label={`Listen to ${learnDisplayTitle(lesson.title)}`}>
+      {lesson.audio && <>
+        <audio key={lesson.audio} ref={narration.audioRef} {...narration.audioEvents} hidden preload="metadata" onError={() => setNarrationPlaybackError(true)}>
           <source src={lesson.audio} type="audio/mpeg" />
         </audio>
-        <small>Transcript follows this recording, not the placeholder video.</small>
+        {narrationPlaybackError && <small role="alert">Narration couldn’t play. Try the test button again or refresh the page.</small>}
         {narration.timingError && <small role="status">Timing unavailable. Read the lesson below while listening.</small>}
-      </div>}
+      </>}
       {lesson.testingUnlocked && lesson.projectTask && <p className="caption">Testing access: this lesson is open for review. Project inspection still requires a completed app.</p>}
       {narration.blocks.length > 0 ? <section className="lesson-transcript" aria-label="Lesson transcript">
         {narration.blocks.slice(1).map(block => {
