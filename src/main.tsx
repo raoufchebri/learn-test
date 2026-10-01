@@ -19,6 +19,7 @@ import {
 import "./styles.css";
 import "./layout-overrides.css";
 import "./standalone.css";
+import "./video-learning.css";
 
 type Theme = "light" | "dark";
 type Palette = "neutral" | "replit" | "silver";
@@ -490,27 +491,35 @@ function LessonPage({
         </div>
       </div>
       <small className="caption lesson-video-caption-top">Video placeholder · This lesson will include its own walkthrough</small>
-      {lesson.audio && <section className="lesson-narration" aria-label="Lesson narration">
-        <div className="lesson-narration-header">
-          <div className="lesson-narration-label"><span className="lesson-narration-icon"><Icons.Headphones size={20} aria-hidden="true" /></span><div><strong>Listen to this lesson</strong><small>Jessica · AI narration</small></div></div>
-          {lesson.audioTimings && <label className="narration-follow">
-            <input type="checkbox" checked={narration.followNarration} onChange={event => narration.setFollowNarration(event.target.checked)} />
-            Auto-scroll
-          </label>}
-        </div>
+      <p className="eyebrow">{learnDisplayTitle(lesson.module).toUpperCase()} / {lesson.navigationTitle === 'Module overview' ? 'MODULE OVERVIEW' : `CHAPTER ${chapter + 1}`} · {lesson.duration}</p>
+      <div className="lesson-heading-row"><h1>{narration.renderText(learnDisplayTitle(lesson.title))}</h1>
+        {lesson.audioTimings && <label className="narration-follow">
+          <input type="checkbox" checked={narration.followNarration} onChange={event => narration.setFollowNarration(event.target.checked)} /> Follow narration
+        </label>}
+      </div>
+      {lesson.audio && <div className="transcript-preview-player">
+        <span><Icons.Headphones size={15} aria-hidden="true" /> Narration preview · Jessica</span>
         <audio key={lesson.audio} ref={narration.audioRef} {...narration.audioEvents} controls preload="metadata" aria-label={`Listen to ${learnDisplayTitle(lesson.title)}`}>
           <source src={lesson.audio} type="audio/mpeg" />
-          Your browser does not support audio playback. <a href={lesson.audio}>Download the narration</a>.
         </audio>
-        <small className="lesson-narration-hint">Follow the yellow highlight as you listen.</small>
-        {narration.timingError && <small>Word highlighting is unavailable. You can still listen and read along.</small>}
-      </section>}
-      <p className="eyebrow">{learnDisplayTitle(lesson.module).toUpperCase()} / {lesson.navigationTitle === 'Module overview' ? 'MODULE OVERVIEW' : `CHAPTER ${chapter + 1}`} · {lesson.duration}</p>
-      <h1>{narration.renderText(learnDisplayTitle(lesson.title))}</h1>
+        <small>Transcript follows this recording, not the placeholder video.</small>
+        {narration.timingError && <small role="status">Timing unavailable. Read the lesson below while listening.</small>}
+      </div>}
       {lesson.testingUnlocked && lesson.projectTask && <p className="caption">Testing access: this lesson is open for review. Project inspection still requires a completed app.</p>}
-      <p className="intro">{narration.renderText(lesson.summary)}</p>
+      {narration.blocks.length > 0 ? <section className="lesson-transcript" aria-label="Lesson transcript">
+        {narration.blocks.slice(1).map(block => {
+          const start = block.words[0]?.start ?? 0;
+          const end = block.words.at(-1)?.end ?? start;
+          return <div key={block.text} className={`transcript-row ${narration.time >= start && narration.time < end ? 'is-current' : ''}`}>
+            <button className="transcript-time" type="button" aria-label={`Jump to ${Math.floor(start / 60)} minutes ${Math.floor(start % 60)} seconds`} onClick={() => narration.seek(start)}>
+              {Math.floor(start / 60)}:{String(Math.floor(start % 60)).padStart(2, '0')}
+            </button>
+            <p>{narration.renderText(block.text)}</p>
+          </div>;
+        })}
+      </section> : <p className="intro">{narration.renderText(lesson.summary)}</p>}
       {lesson.openingImage && <figure className="lesson-app-screenshot"><img src={lesson.openingImage.src} alt={lesson.openingImage.alt} /><figcaption>Replit home · Personal details replaced for this example.</figcaption></figure>}
-      {lesson.introduction?.map((paragraph) => typeof paragraph === 'string'
+      {narration.blocks.length === 0 && lesson.introduction?.map((paragraph) => typeof paragraph === 'string'
         ? <p className="lesson-introduction-copy" key={paragraph}>{narration.renderText(paragraph)}</p>
         : <div className="lesson-introduction-copy" key={paragraph.text}><p>{narration.renderText(paragraph.text)}</p><ul>{paragraph.items.map((item) => <li key={item}>{narration.renderText(item)}</li>)}</ul></div>)}
       {lesson.title === 'What Is Replit Building?' && <RecipeProjectLink />}
@@ -1167,7 +1176,8 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
 
 function EmptyLessonChat() {
   const { build } = useRecipeActivity();
-  return build.status === 'idle' ? <p className="caption">Your app’s build updates will appear here after you create it in “What is an app?”</p> : <RecipeBuildStatus />;
+  const location = useLocation();
+  return location.pathname.startsWith('/learn/app-foundations/') && build.status !== 'idle' ? <RecipeBuildStatus /> : <div className="lesson-assistant-welcome"><Icons.Sparkles size={20} /><h3>Learn at your own pace</h3><p>Ask about the lesson, get an example, or work through something you’re unsure about.</p><p className="caption">Try “Explain this more simply” or “How can I use this for my birthday app?”</p></div>;
 }
 
 function RecipeProjectPreview() {
@@ -1203,7 +1213,8 @@ function AskConversationView({
   return (
     <section ref={view} className="ask-conversation-view" aria-label="Ask AI conversation" aria-live="polite">
       <header>
-        <button type="button" onClick={onBack}><Icons.ArrowLeft size={15} /> Back to Learn</button>
+        <strong className="lesson-assistant-title"><Icons.Sparkles size={16} /> Lesson assistant</strong>
+        <button type="button" onClick={onBack} aria-label="Close lesson assistant"><Icons.X size={16} /></button>
         <button type="button" onClick={() => onModeChange(mode === "split" ? "focus" : "split")}>
           {mode === "split" ? <><Icons.Maximize2 size={14} /> Focus</> : <><Icons.Columns2 size={14} /> Split view</>}
         </button>
@@ -1394,7 +1405,14 @@ function App() {
   const [askTurns, setAskTurns] = useState<AskTurn[]>([]);
   const [askViewMode, setAskViewMode] = useState<AskViewMode>("split");
   const [chatDismissedOn, setChatDismissedOn] = useState<string | null>(null);
-  const showLessonChat = askTurns.length > 0 || (['/learn/app-foundations/what-is-replit-building', '/learn/app-foundations/projects-code-files'].includes(location.pathname) && chatDismissedOn !== location.pathname);
+  const [wideLessonLayout, setWideLessonLayout] = useState(() => window.innerWidth >= 1100);
+  useEffect(() => {
+    const query = window.matchMedia('(min-width: 1100px)');
+    const update = () => setWideLessonLayout(query.matches);
+    query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
+  }, []);
+  const showLessonChat = askTurns.length > 0 || (wideLessonLayout && location.pathname.startsWith('/learn/') && chatDismissedOn !== location.pathname);
   const closeLessonChat = () => { setAskTurns([]); setChatDismissedOn(location.pathname); };
   useEffect(() => { setChatDismissedOn(null); }, [location.pathname]);
   const [selectedAskAppId, setSelectedAskAppId] = useState("");
