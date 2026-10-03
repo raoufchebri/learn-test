@@ -9,6 +9,7 @@ import { CapstoneSubmission } from "./capstone-submission";
 import { CourseCertificate } from "./course-certificate";
 import { LessonPrompt } from "./lesson-prompt";
 import { useLessonNarration } from "./lesson-narration";
+import { buildEstimatedTranscript, formatTimestamp } from "./lesson-transcript";
 import { LessonQuizCard } from "./lesson-quiz-card";
 import { LEARN_DEV_MODE } from "./learn-mode";
 import { RecipeBuildProvider, RecipeBuildStep, RecipeBuildStatus, ProjectLessonStep, useRecipeActivity, RECIPE_PROMPT, RECIPE_DEMO } from "./recipe-build";
@@ -377,17 +378,34 @@ function LessonPage({
     }, reduced ? 250 : 1100);
     return () => window.clearTimeout(reveal);
   }, [quizPassed, completed, unlocked]);
-  const narration = useLessonNarration(lesson.audioTimings);
+  const transcriptLesson = courseModules.some(entry => entry.pillar === "discover" && entry.title === lesson.module);
+  const estimatedTranscript = useMemo(
+    () => transcriptLesson && !lesson.audioTimings ? buildEstimatedTranscript(lesson, learnDisplayTitle(lesson.title)) : undefined,
+    [lesson, transcriptLesson],
+  );
+  const narration = useLessonNarration(lesson.audioTimings, estimatedTranscript);
   const [quizMode, setQuizMode] = useState(false);
   const quizCardRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!quizMode) return;
-    narration.audioRef.current?.pause();
+    narration.pause();
     window.scrollTo({ top: 0, behavior: "instant" });
     quizCardRef.current?.focus({ preventScroll: true });
   }, [quizMode]);
   const [readingView, setReadingView] = useState<"transcript" | "text">("transcript");
-  const showTranscript = readingView === "transcript" && narration.blocks.length > 0;
+  const hasTranscript = narration.blocks.length > 0;
+  const transcriptView = readingView === "transcript" && hasTranscript;
+  // The narrated overview keeps its audio-aligned list; other lessons get inline rows.
+  const showTranscript = transcriptView && !!lesson.audioTimings;
+  const transcriptRow = (text: string | undefined, node: ReactNode, extraClass = "") => {
+    const timing = text && transcriptView && !lesson.audioTimings ? narration.timeFor(text) : undefined;
+    if (!timing) return node;
+    const current = narration.time >= timing.start && narration.time < timing.end;
+    return <div key={text} className={`transcript-row ${extraClass} ${current ? "is-current" : ""}`}>
+      <button className="transcript-time" type="button" aria-label={`Jump to ${formatTimestamp(timing.start)}`} onClick={() => narration.seek(timing.start)}>{formatTimestamp(timing.start)}</button>
+      {node}
+    </div>;
+  };
   const readingText = (text: string) => readingView === "transcript" ? narration.renderText(text) : text;
   const [narrationPlaybackError, setNarrationPlaybackError] = useState(false);
   const [videoFloating, setVideoFloating] = useState(false);
@@ -427,10 +445,11 @@ function LessonPage({
       window.cancelAnimationFrame(frame);
       frame = window.requestAnimationFrame(() => {
         const videoRect = videoAnchor.getBoundingClientRect();
-        const chatVideoSlot = chatOpen && window.innerWidth >= 1600;
+        const chatVideoSlot = chatOpen;
         // Sticky lesson media replaces the former floating corner player.
-        const canFloat = false;
-        const rightOffset = chatVideoSlot ? 458 : 18;
+        // Text mode scrolls the whole page and docks the video; Transcript keeps it sticky.
+        const canFloat = readingView === 'text' && !quizMode;
+        const rightOffset = chatVideoSlot ? 338 : 18;
         if (canFloat && !videoFloatingRef.current && videoRect.top < -24) {
           const targetWidth = chatVideoSlot ? 260 : Math.min(340, window.innerWidth - 36);
           setVideoMotion({
@@ -470,10 +489,10 @@ function LessonPage({
       window.removeEventListener("scroll", updateVideoPosition);
       window.removeEventListener("resize", updateVideoPosition);
     };
-  }, [lesson.title, chatOpen]);
+  }, [lesson.title, chatOpen, readingView, quizMode]);
 
   return (
-    <article className={`lesson-content learn-content-stage ${quizMode ? 'quiz-mode' : ''}`} id="overview" key={lesson.title}>
+    <article className={`lesson-content learn-content-stage reading-${readingView} ${quizMode ? 'quiz-mode' : ''}`} id="overview" key={lesson.title}>
       {unlockCelebration && createPortal(<div className="lesson-confetti" aria-hidden="true">{Array.from({ length: 64 }, (_, i) => <i key={i} style={{ left: `${(i * 37) % 100}%`, background: ["#e89a58", "#91bca5", "#a299cf", "#edc76b", "#88b9ce"][i % 5], animationDelay: `${(i % 8) * 35}ms`, "--drift": `${((i * 19) % 160) - 80}px` } as CSSProperties} />)}</div>, document.body)}
       <div className="lesson-sticky-header">
       <div className="lesson-video-shell" ref={videoAnchorRef}>
@@ -522,7 +541,13 @@ function LessonPage({
           }}>
           {narration.playing ? <Icons.Pause size={14} /> : <Icons.Play size={14} />} <span>Test audio</span>
         </button>}
-        {lesson.audioTimings && <div className="lesson-reading-toggle" role="group" aria-label="Reading view">
+        {!lesson.audio && hasTranscript && <button className="narration-test-toggle" type="button"
+          aria-label={narration.playing ? "Pause highlight preview" : "Preview highlighting"}
+          title="Estimated timing. This lesson has no narration audio yet."
+          onClick={narration.togglePreview}>
+          {narration.playing ? <Icons.Pause size={14} /> : <Icons.Play size={14} />} <span>Preview</span>
+        </button>}
+        {hasTranscript && <div className="lesson-reading-toggle" role="group" aria-label="Reading view">
           <button type="button" aria-pressed={readingView === "transcript"} title="Timestamped transcript follows narration"
             onClick={() => { setQuizMode(false); setReadingView("transcript"); narration.setFollowNarration(true); }}>
             <Icons.ListVideo size={15} aria-hidden="true" /><span>Transcript</span>
@@ -554,16 +579,18 @@ function LessonPage({
             <p>{narration.renderText(block.text)}</p>
           </div>;
         })}
-      </section> : <p className="intro">{readingText(lesson.summary)}</p>}
+      </section> : transcriptRow(lesson.summary, <p className="intro">{readingText(lesson.summary)}</p>)}
       {lesson.openingImage && <figure className="lesson-app-screenshot"><img src={lesson.openingImage.src} alt={lesson.openingImage.alt} /><figcaption>Replit home · Personal details replaced for this example.</figcaption></figure>}
       {!showTranscript && lesson.introduction?.map((paragraph) => typeof paragraph === 'string'
-        ? <p className="lesson-introduction-copy" key={paragraph}>{readingText(paragraph)}</p>
-        : <div className="lesson-introduction-copy" key={paragraph.text}><p>{readingText(paragraph.text)}</p><ul>{paragraph.items.map((item) => <li key={item}>{readingText(item)}</li>)}</ul></div>)}
+        ? transcriptRow(paragraph, <p className="lesson-introduction-copy" key={paragraph}>{readingText(paragraph)}</p>)
+        : transcriptView && !lesson.audioTimings
+          ? <div className="transcript-group" key={paragraph.text}>{transcriptRow(paragraph.text, <p>{readingText(paragraph.text)}</p>)}{paragraph.items.map((item) => transcriptRow(item, <p key={item}>{readingText(item)}</p>, "is-item"))}</div>
+          : <div className="lesson-introduction-copy" key={paragraph.text}><p>{readingText(paragraph.text)}</p><ul>{paragraph.items.map((item) => <li key={item}>{readingText(item)}</li>)}</ul></div>)}
       {lesson.title === 'What Is Replit Building?' && <RecipeProjectLink />}
       {lesson.encouragement && (
         <aside className="lesson-encouragement">
           <Icons.Sparkles size={18} aria-hidden="true" />
-          <p>{lesson.encouragement}</p>
+          <p>{readingText(lesson.encouragement)}</p>
         </aside>
       )}
       {lesson.outcomes && (
@@ -587,8 +614,8 @@ function LessonPage({
       {entryOpened && <>
       {lesson.sections.map((section, sectionIndex) => (
         (!LEARN_DEV_MODE && ((!promptContinued && sectionIndex > 0) || (!unlocked && sectionIndex > promptIndex) || (!frontendVisible && sectionIndex > checkpointIndex) || (hasFrontendCheck && sectionIndex > 5 && recipe.iteration !== 'complete'))) ? null : <section className={`foundation-section ${((recipeLesson || lesson.projectTask) && sectionIndex > promptIndex) || (hasCheckpoint && sectionIndex > checkpointIndex) || (lesson.promptGate && sectionIndex > 0) ? "lesson-unlocked" : ""}`} id={section.id ?? learnSegment(section.heading)} key={section.heading}>
-          <h2>{section.heading}</h2>
-          <p>{section.body}</p>
+          <h2>{readingText(section.heading)}</h2>
+          {transcriptRow(section.body, <p>{readingText(section.body)}</p>)}
           {section.prompt && <LessonPrompt key={section.prompt} prompt={section.prompt} copyable={Boolean(lesson.promptGate || lesson.copyPrompts)} />}
           {lesson.promptGate && sectionIndex === 0 && <div className={`recipe-unlock-action ${promptContinued ? 'is-open' : ''}`}><button className="recipe-create-button" disabled={promptContinued} onClick={() => {
             setPromptContinued(true); setUnlockCelebration(true);
@@ -603,8 +630,10 @@ function LessonPage({
             <p>You asked for a personal recipe app where you can add, edit, and find recipes. Each recipe needs a name, ingredients, and instructions.</p>
             <p>That means an interface with forms and buttons, app logic that responds when you use them, and storage that keeps your recipes in this browser. For this first version, all three work in the browser. No sign-in or separate backend is needed.</p>
             <p>Let’s explore the building blocks this prompt describes.</p>
-          </> : <p>{section.afterPrompt}</p>)}
-          {section.items && <ul className="lesson-points">{section.items.map((item) => <li key={item}>{item}</li>)}</ul>}
+          </> : transcriptRow(section.afterPrompt, <p>{readingText(section.afterPrompt)}</p>))}
+          {section.items && (transcriptView && !lesson.audioTimings
+            ? <div className="transcript-group">{section.items.map((item) => transcriptRow(item, <p key={item}>{readingText(item)}</p>, "is-item"))}</div>
+            : <ul className="lesson-points">{section.items.map((item) => <li key={item}>{readingText(item)}</li>)}</ul>)}
           {hasCheckpoint && sectionIndex === checkpointIndex && <div className="lesson-quiz" aria-label="Lesson checkpoint">
             <h3>Try these two ideas</h3>
             {frontendQuestions.map((question, index) => <div className="quiz-question" key={question.prompt}>

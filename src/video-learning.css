@@ -73,4 +73,12 @@ html { scrollbar-gutter: stable; }
   .transcript-preview-player { grid-template-columns: minmax(0,1fr); }
   .transcript-row { grid-template-columns: 36px minmax(0,1fr); gap: 8px; padding: 10px 6px; }
   .transcript-row > p { font-size: 16px; }
-}
+}/* Inline transcript rows for lessons without a recorded narration. */
+.foundation-section > .transcript-row, .lesson-reading-body > .transcript-row { margin-inline: -14px; }
+.transcript-group { margin: 4px 0 8px; }
+.transcript-group .transcript-row { margin-inline: -14px; }
+.transcript-row.is-item > p { position: relative; padding-left: 16px; }
+.transcript-row.is-item > p::before { content: "•"; position: absolute; left: 2px; opacity: .55; }
+.transcript-row > .intro, .transcript-row > .lesson-introduction-copy { margin: 0; }
+/* Text mode: full-page scroll; the video docks top right instead of sticking. */
+.reading-text .lesson-sticky-header { position: static; border-bottom: 0; }

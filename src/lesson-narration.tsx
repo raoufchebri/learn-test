@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+import type { TimedBlock } from "./lesson-transcript";
 
-type TimedBlock = { text: string; words: { start: number; end: number }[] };
-
-export function useLessonNarration(timingsUrl?: string) {
+/**
+ * Drives transcript highlighting. Uses real audio timings when a lesson has
+ * narration; otherwise runs a silent preview clock over estimated timings.
+ */
+export function useLessonNarration(timingsUrl?: string, estimatedBlocks?: TimedBlock[]) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [blocks, setBlocks] = useState<TimedBlock[]>([]);
   const [time, setTime] = useState(-1);
@@ -10,12 +13,16 @@ export function useLessonNarration(timingsUrl?: string) {
   const [timingError, setTimingError] = useState(false);
   const [followNarration, setFollowNarration] = useState(true);
   const lastScroll = useRef(0);
+  const timeRef = useRef(-1);
+  timeRef.current = time;
+  const duration = blocks.at(-1)?.words.at(-1)?.end ?? 0;
+  const estimated = !timingsUrl && blocks.length > 0;
   const activeWord = blocks.flatMap((block, blockIndex) =>
     block.words.map((word, wordIndex) => ({ ...word, id: `${blockIndex}:${wordIndex}` }))
   ).find(word => time >= word.start && time < word.end)?.id;
   useEffect(() => {
     if (!playing || !followNarration || !activeWord) return;
-    const lesson = audioRef.current?.closest("article");
+    const lesson = audioRef.current?.closest("article") ?? document.querySelector("article.lesson-content");
     const word = lesson?.querySelector<HTMLElement>(".narration-word.is-speaking");
     if (!word) return;
     if (word.closest(".lesson-sticky-header")) return;
@@ -42,7 +49,10 @@ export function useLessonNarration(timingsUrl?: string) {
   }, [activeWord, playing, followNarration]);
   useEffect(() => {
     setBlocks([]); setTime(-1); setPlaying(false); setTimingError(false);
-    if (!timingsUrl) return;
+    if (!timingsUrl) {
+      if (estimatedBlocks?.length) setBlocks(estimatedBlocks);
+      return;
+    }
     const controller = new AbortController();
     fetch(timingsUrl, { signal: controller.signal })
       .then(response => { if (!response.ok) throw new Error(); return response.json(); })
@@ -55,19 +65,27 @@ export function useLessonNarration(timingsUrl?: string) {
       })
       .catch(() => { if (!controller.signal.aborted) setTimingError(true); });
     return () => controller.abort();
-  }, [timingsUrl]);
+  }, [timingsUrl, estimatedBlocks]);
   useEffect(() => {
     if (!playing) return;
     let frame = 0;
-    const tick = () => {
-      setTime(audioRef.current?.currentTime ?? -1);
+    let last = performance.now();
+    const tick = (now: number) => {
+      if (audioRef.current) setTime(audioRef.current.currentTime);
+      else {
+        const next = Math.max(0, timeRef.current) + (now - last) / 1000;
+        if (next >= duration) { setPlaying(false); setTime(-1); return; }
+        setTime(next);
+      }
+      last = now;
       frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [playing]);
+  }, [playing, duration]);
+  const blockFor = (text: string) => blocks.find(item => item.text.toLowerCase() === text.trim().toLowerCase());
   const renderText = (text: string) => {
-    const block = blocks.find(item => item.text.toLowerCase() === text.toLowerCase());
+    const block = blockFor(text);
     if (!block) return text;
     let wordIndex = 0;
     return text.split(/(\s+)/).map((part, index) => {
@@ -77,9 +95,20 @@ export function useLessonNarration(timingsUrl?: string) {
       return <span key={index} className={active ? "narration-word is-speaking" : "narration-word"}>{part}</span>;
     });
   };
+  const timeFor = (text: string) => {
+    const block = blockFor(text);
+    const start = block?.words[0]?.start;
+    if (start === undefined) return undefined;
+    return { start, end: block!.words.at(-1)!.end };
+  };
   return {
-    audioRef, renderText, timingError, followNarration, setFollowNarration, blocks, time, playing,
-    seek: (seconds: number) => { if (audioRef.current) { audioRef.current.currentTime = seconds; setTime(seconds); } },
+    audioRef, renderText, timeFor, timingError, followNarration, setFollowNarration, blocks, time, playing, estimated,
+    seek: (seconds: number) => {
+      if (audioRef.current) audioRef.current.currentTime = seconds;
+      setTime(seconds);
+    },
+    pause: () => { if (audioRef.current) audioRef.current.pause(); else setPlaying(false); },
+    togglePreview: () => setPlaying(current => !current),
     audioEvents: {
       onPlay: () => setPlaying(true),
       onPause: () => { setPlaying(false); setTime(audioRef.current?.currentTime ?? -1); },
