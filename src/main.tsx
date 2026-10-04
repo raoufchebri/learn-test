@@ -627,7 +627,7 @@ function WelcomePage({ onStart, learnerName, learnerKey }: { onStart: (pillar: C
       <div className="lesson-video welcome-video">
         <div className="welcome-video-frame">
           <iframe
-            src="https://www.youtube-nocookie.com/embed/pajkCpfpcP4"
+            src="https://www.youtube-nocookie.com/embed/jb8Qh6lxTaw"
             title="Replit Design overview"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
