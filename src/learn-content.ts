@@ -96,7 +96,7 @@ export type LearnLesson = {
   practice?: { prompt: string; checks: string[] };
   checkpoint?: { afterSection: number; questions: QuizQuestion[] };
   outcomes?: string[];
-  sections: Array<{ heading: string; id?: string; body: string; prompt?: string; afterPrompt?: string; items?: string[]; image?: { src: string; alt: string; caption: string; source?: string }; exchange?: ChatExchangeExample; diagram?: 'recipe-architecture' | 'recipe-iteration' }>;
+  sections: Array<{ heading: string; id?: string; body: string; link?: { href: string; label: string }; prompt?: string; afterPrompt?: string; items?: string[]; image?: { src: string; alt: string; caption: string; source?: string }; exchange?: ChatExchangeExample; diagram?: 'recipe-architecture' | 'recipe-iteration' }>;
   replitExample: string;
   quiz: QuizQuestion[];
 };
