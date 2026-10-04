@@ -1022,7 +1022,7 @@
 .recipe-build-step h3 { margin: 8px 0; }
 .recipe-build-step small { display: block; font-size: 13px; line-height: 1.6; opacity: .8; }
 .recipe-build-step button, .recipe-build-status button { cursor: pointer; padding: 10px 14px; margin-top: 12px; border: 1px solid var(--replit-light-silver); border-radius: 7px; background: transparent; color: inherit; font: inherit; font-size: 14px; }
-.recipe-create-button { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 12px; max-width: 100%; margin: 12px 0 0; padding: 16px 26px; border: 1px solid var(--replit-light-silver); border-radius: 999px; background: transparent; color: var(--replit-off-black); text-decoration: none; font-size: 16px; font-weight: 500; transition: background .2s ease, border-color .2s ease; }
+.recipe-create-button { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 12px; max-width: 100%; margin: 12px 0 0; padding: 16px 26px; border: 1px solid var(--replit-light-silver); border-radius: 999px; background: transparent; color: var(--replit-off-black); text-decoration: none; font-size: 16px; font-weight: 500; transition: background .4s ease, border-color .4s ease, color .4s ease; }
 .recipe-create-button:not(:disabled):hover { background: var(--replit-off-white); border-color: var(--replit-medium-gray); }
 .recipe-create-button:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
 .recipe-create-button:disabled { opacity: .65; cursor: default; }

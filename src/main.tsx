@@ -297,15 +297,22 @@ function LessonPage({
   }, [recipe.iteration, hasFrontendCheck]);
   const unlockTimers = useRef<number[]>([]);
   // Unlock a step once: celebrate and save it. Already-unlocked steps (stored or this visit) do nothing.
-  const unlockStep = (id?: string, alwaysChime = false, confetti = false) => {
-    if (id && isUnlocked(id)) return;
-    revealAnimating.current = true;
-    if (id) { setSessionUnlocks((current) => [...current, id]); onUnlock?.(id); }
+  // Celebrate an unlock: the lock opens, the sound plays, and optionally confetti.
+  const celebrateUnlock = (alwaysChime = false, confetti = false) => {
     setUnlockCelebration(true);
     if (confetti) setConfettiBurst((burst) => burst + 1);
     if (alwaysChime || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) playUnlockChime();
     unlockTimers.current.push(window.setTimeout(() => setUnlockCelebration(false), 2000));
   };
+  // quiet saves the unlock now and leaves the celebration for later (after an answer streams in).
+  const unlockStep = (id?: string, alwaysChime = false, confetti = false, quiet = false) => {
+    if (id && isUnlocked(id)) return;
+    revealAnimating.current = true;
+    if (id) { setSessionUnlocks((current) => [...current, id]); onUnlock?.(id); }
+    if (!quiet) celebrateUnlock(alwaysChime, confetti);
+  };
+  // Sections waiting to celebrate once their answer finishes streaming (value: whether to add confetti).
+  const pendingCelebrations = useRef(new Map<number, boolean>());
   const inspectedBefore = useRef(unlocked);
   useEffect(() => {
     const justInspected = !inspectedBefore.current && unlocked;
@@ -511,24 +518,32 @@ function LessonPage({
             const copyPrompt = async () => {
               try { await navigator.clipboard.writeText(section.prompt!); setPromptCopy((current) => ({ ...current, [sectionIndex]: "copied" })); }
               catch { setPromptCopy((current) => ({ ...current, [sectionIndex]: "failed" })); }
-              unlockStep(promptUnlock.id);
               const reveal = revealUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex);
               if (reveal && !isUnlocked(reveal.id)) {
+                // Sequence: the answer streams first; when it ends, the button turns green, the sound
+                // (and, for the lesson's first answer only, confetti) plays, and the next block fades in.
+                pendingCelebrations.current.set(sectionIndex, reveal.id === revealUnlocks[0]?.id);
                 setStreamingSections((current) => [...current, sectionIndex]);
-                // Confetti only for the lesson's first example answer; later ones just play the unlock sound.
-                unlockStep(reveal.id, false, reveal.id === revealUnlocks[0]?.id);
-              }
+                unlockStep(promptUnlock.id, false, false, true);
+                unlockStep(reveal.id, false, false, true);
+              } else unlockStep(promptUnlock.id);
             };
             return <>
               <div className={`lesson-chat-thread ${holdingSection === sectionIndex ? 'is-streaming' : ''}`} role="group" aria-label="Chat in Replit">
                 <PromptBubble prompt={section.prompt} done={done} status={copy} onCopy={copyPrompt} />
                 {section.exchange && done && revealed && <ChatExchange exchange={section.exchange} stream={streamingSections.includes(sectionIndex)}
-                  onDone={() => setStreamDone((current) => current.includes(sectionIndex) ? current : [...current, sectionIndex])} />}
+                  onDone={() => {
+                    setStreamDone((current) => current.includes(sectionIndex) ? current : [...current, sectionIndex]);
+                    const confetti = pendingCelebrations.current.get(sectionIndex);
+                    if (confetti === undefined) return;
+                    pendingCelebrations.current.delete(sectionIndex);
+                    celebrateUnlock(false, confetti);
+                  }} />}
               </div>
               {/* Unlock button under each chat: stays in place and turns green with a check once unlocked. */}
-              {revealUnlock && <div className={`recipe-unlock-action reveal-unlock ${done && revealed ? 'is-open' : ''}`}>
+              {revealUnlock && <div className={`recipe-unlock-action reveal-unlock ${done && revealed && holdingSection !== sectionIndex ? 'is-open' : ''}`}>
                 <button type="button" className="recipe-create-button" onClick={() => void copyPrompt()}>
-                  {done && revealed ? <Icons.Check size={20} aria-hidden="true" /> : <LessonUnlockIcon />}<span>Click on the prompt to copy it</span>
+                  {done && revealed && holdingSection !== sectionIndex ? <Icons.Check size={20} aria-hidden="true" /> : <LessonUnlockIcon />}<span>Click on the prompt to copy it</span>
                 </button>
               </div>}
             </>;
