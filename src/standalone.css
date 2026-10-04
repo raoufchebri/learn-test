@@ -899,7 +899,11 @@
 .learn-dock-icon:hover, .learn-dock-icon[aria-expanded="true"] { background: var(--replit-light-gray); color: var(--replit-off-black); }
 .learn-dock-icon:focus-visible { outline: 2px solid var(--replit-off-black); outline-offset: 2px; }
 .app-shell .learn-account-panel { width: 200px; padding: 6px; }
-.learn-account-panel .learn-sign-out { width: 100%; }
+/* Account menu: a compact menu with one plain item, not a wide card with a framed button. */
+.app-shell .learn-settings-panel.learn-account-panel { width: auto; min-width: 160px; padding: 6px; border-radius: 12px; }
+.learn-account-panel .learn-sign-out { width: 100%; padding: 9px 12px; border: 0; border-radius: 8px; font-size: 14px; white-space: nowrap; }
+.learn-account-panel .learn-sign-out:hover { background: var(--replit-light-gray); }
+.learn-account-panel p[role="alert"] { margin: 6px 8px 4px; font-size: 13px; }
 .app-shell .learn-settings-dock-toggle { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--replit-light-silver); background: var(--replit-off-white); overflow: hidden; padding: 0; }
 .learn-settings-dock-toggle img { width: 100%; height: 100%; object-fit: cover; }
 /* Initials avatar: the button itself is one plain-colored circle. No border, ring, shadow, or inner shape. */
@@ -1171,3 +1175,8 @@
 .lesson-chat-thread { transition: border-bottom-color .6s ease; }
 .lesson-chat-thread.is-streaming { border-bottom-color: transparent; }
 @media (prefers-reduced-motion: reduce) { .reveal-unlock.is-fading-out, .fade-in-step { animation: none; } .lesson-chat-thread { transition: none; } }
+
+/* Narrow screens: start the page below the theme, light/dark and avatar icons so the course navigation bar isn't covered. */
+@media (max-width: 820px) {
+  .app-shell .learn-page { padding-top: 72px; }
+}
