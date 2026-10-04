@@ -142,6 +142,22 @@ function ApprovalCard({ spec, approved, onApprove }: { spec: ApprovalSpec; appro
   const nudge = mode ? `For this lesson, choose ${accepted.join(" or ")}, then continue.` : `For this lesson, select ${accepted[0]}, then click Submit.`;
   const selected = approved && !(choice && accepted.includes(choice)) ? accepted[0] : choice;
   const submit = () => { if (choice && accepted.includes(choice)) { setHint(""); onApprove(); } else setHint(nudge); };
+  // "routine": Replit's New routine card. Create routine unlocks the next step; this example creates nothing real.
+  if (spec.kind === "routine" && spec.routine) {
+    const routine = spec.routine;
+    return <div className={`chat-reply-approval is-routine fade-in-step ${approved ? "is-approved" : ""}`} role="group" aria-label={spec.question}>
+      <strong>{spec.question}</strong>
+      <p className="chat-reply-approval-text">{routine.subtitle}</p>
+      <span className="routine-label">Title</span><div className="routine-field">{routine.title}</div>
+      <span className="routine-label">Schedule</span><div className="routine-field">{routine.schedule}</div>
+      <span className="routine-label">Prompt</span><div className="routine-field routine-prompt" tabIndex={0}>{routine.prompt}</div>
+      <div className="chat-reply-approval-actions">
+        <button type="button" disabled={approved} onClick={() => setHint(`This example card doesn’t create anything. Click ${accepted[0]} to continue.`)}>Not now</button>
+        <button type="button" disabled={approved} onClick={() => { setHint(""); onApprove(); }}>{accepted[0]} <Icons.Check size={15} aria-hidden="true" /></button>
+      </div>
+      <p className="chat-reply-approval-hint" role="status">{approved ? <><Icons.Check size={14} aria-hidden="true" /> Routine created</> : hint || <><Icons.LockKeyhole size={14} aria-hidden="true" /> Review the card, then click {accepted[0]} to continue.</>}</p>
+    </div>;
+  }
   return <div className={`chat-reply-approval fade-in-step ${mode ? "is-mode" : ""} ${approved ? "is-approved" : ""}`} role="group" aria-label={spec.question}>
     {mode ? <p className="chat-reply-approval-text">{spec.question}</p> : <strong>{spec.question}</strong>}
     <div className="chat-reply-approval-options">{spec.options.map((option, index) => <label key={option}>

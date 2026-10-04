@@ -1226,3 +1226,9 @@
 .chat-reply-table th { font-weight: 600; background: var(--replit-off-white); }
 .chat-reply-table tr:last-child td { border-bottom: 0; }
 .reveal-unlock.is-choosing .recipe-create-button { cursor: default; }
+/* New routine card variant. */
+.chat-reply-approval.is-routine .routine-label { display: block; margin: 10px 0 4px; font-size: 13px; color: var(--replit-medium-gray); }
+.chat-reply-approval.is-routine .routine-field { padding: 9px 12px; border: 1px solid var(--replit-light-silver); border-radius: 8px; background: #fff; font-size: 15px; color: var(--replit-off-black); }
+.chat-reply-approval.is-routine .routine-prompt { max-height: 110px; overflow-y: auto; font-size: 14px; line-height: 1.5; }
+.chat-reply-approval.is-routine .chat-reply-approval-actions { margin-top: 16px; }
+.chat-reply-approval.is-routine .chat-reply-approval-actions button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
