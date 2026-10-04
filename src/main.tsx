@@ -815,14 +815,14 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
     setProgressOwner(undefined);
     if (!learnerKey) return;
     try {
-      const saved = JSON.parse(localStorage.getItem(`replit-101-progress:v1:${learnerKey}`) ?? '[]');
+      const saved = JSON.parse(localStorage.getItem(`replit-101-progress:v2:${learnerKey}`) ?? '[]');
       if (Array.isArray(saved)) setCompletedLessons(saved.filter((url): url is string => typeof url === 'string' && availableLessonUrls.has(url)));
     } catch { /* Start fresh if local progress is unavailable. */ }
     setProgressOwner(learnerKey);
   }, [learnerKey]);
   useEffect(() => {
     if (!learnerKey || progressOwner !== learnerKey) return;
-    try { localStorage.setItem(`replit-101-progress:v1:${learnerKey}`, JSON.stringify(completedLessons)); } catch { /* In-memory progress still works. */ }
+    try { localStorage.setItem(`replit-101-progress:v2:${learnerKey}`, JSON.stringify(completedLessons)); } catch { /* In-memory progress still works. */ }
   }, [completedLessons, learnerKey, progressOwner]);
   const isLocked = (url: string) => {
     if (LEARN_DEV_MODE) return false;
