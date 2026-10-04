@@ -1028,7 +1028,8 @@
 .recipe-create-button:disabled { opacity: .65; cursor: default; }
 .is-open .recipe-create-button:disabled { opacity: 1; }
 .recipe-unlock-action.is-open .recipe-create-button { background: #23734d; border-color: #23734d; color: #fff; }
-.activity-confirmation:not(.is-open) .recipe-create-button { background: var(--replit-light-gray); color: var(--replit-off-black); cursor: pointer; }
+/* Same look as the other unlock buttons: outlined until confirmed, then green with a check. */
+.activity-confirmation:not(.is-open) .recipe-create-button { cursor: pointer; }
 .activity-confirmation small { text-align: center; }
 .lesson-lock-icon { display: flex; flex-shrink: 0; }
 .unlock-sparkles { position: absolute; inset: 0; pointer-events: none; }
