@@ -595,6 +595,28 @@ function LessonConfetti({ onDone }: { onDone: () => void }) {
   } as CSSProperties} /></i>)}</div>, document.body);
 }
 
+const AVATAR_GRADIENTS = [
+  ["#f4a261", "#e76f51"], ["#8ecae6", "#3a86c8"], ["#a7c957", "#4f9d69"], ["#cdb4db", "#8e6fc1"],
+  ["#ffcf77", "#e9a23b"], ["#f7a1b8", "#d45d84"], ["#90e0d3", "#2a9d8f"], ["#b8c0ff", "#6c74e0"],
+];
+
+// Initials from first and last name, else from the username's word parts (RaoufChebri1 → RC).
+function avatarInitials(username: string, first?: string, last?: string) {
+  const fromName = `${first?.trim()[0] ?? ""}${last?.trim()[0] ?? ""}`;
+  if (fromName.length === 2) return fromName.toUpperCase();
+  const parts = username.replace(/[0-9]+/g, " ").split(/[\s._-]+|(?=[A-Z])/).filter(Boolean);
+  const fromUsername = parts.length > 1 ? `${parts[0][0]}${parts[1][0]}` : username.slice(0, 2);
+  return (fromName.length === 1 ? fromName + (parts[1]?.[0] ?? "") : fromUsername).toUpperCase();
+}
+
+// Fallback avatar when Replit doesn't share a profile picture: initials on a gradient picked from the username.
+function InitialsAvatar({ username, first, last }: { username: string; first?: string; last?: string }) {
+  let hash = 0;
+  for (const char of username) hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
+  const [from, to] = AVATAR_GRADIENTS[hash % AVATAR_GRADIENTS.length];
+  return <span className="initials-avatar" style={{ background: `linear-gradient(135deg, ${from}, ${to})` }}>{avatarInitials(username, first, last)}</span>;
+}
+
 function playUnlockChime() {
   try {
     const audio = new AudioContext();
@@ -1064,6 +1086,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
           <p id="learn-sign-in-description">Sign in to explore, try something new, and build along with each lesson.</p>
           {access === "checking" ? <p role="status">Checking your sign-in…</p> : access === "error" ? <><p>Your sign-in could not be checked.</p><button onClick={retry}>Try again</button></> : <>
             <a className="signin-primary" href="/api/auth/login?returnTo=%2F">Continue with Replit <Icons.ArrowRight size={18} /></a>
+            <p className="signin-create">New to Replit? <a href="https://replit.com/signup" target="_blank" rel="noopener noreferrer">Create a free account</a>, then come back and continue.</p>
             <button className="signin-browse" onClick={dismissSignIn}>Explore courses first</button>
             <small className="signin-note">Browse freely. Sign in when you’re ready to start a lesson.</small>
           </>}
@@ -1160,6 +1183,7 @@ function LearnSettingsDock({
   const [authenticated, setAuthenticated] = useState<boolean | null>(null);
   const [avatar, setAvatar] = useState<string | undefined>();
   const [username, setUsername] = useState("");
+  const [displayName, setDisplayName] = useState<{ first?: string; last?: string }>({});
   const [signingOut, setSigningOut] = useState(false);
   const [signOutError, setSignOutError] = useState('');
   const dock = useRef<HTMLElement>(null);
@@ -1168,8 +1192,8 @@ function LearnSettingsDock({
     let active = true;
     const updateFromSession = () => {
       fetch("/api/auth/session", { credentials: "same-origin", headers: { accept: "application/json" } })
-        .then((response) => response.ok ? response.json() as Promise<{ authenticated?: boolean; user?: { username?: string; profileImageUrl?: string } }> : Promise.reject())
-        .then((session) => { if (active) { setAuthenticated(session.authenticated === true); setAvatar(session.user?.profileImageUrl); setUsername(session.user?.username ?? ""); } })
+        .then((response) => response.ok ? response.json() as Promise<{ authenticated?: boolean; user?: { username?: string; firstName?: string; lastName?: string; profileImageUrl?: string } }> : Promise.reject())
+        .then((session) => { if (active) { setAuthenticated(session.authenticated === true); setAvatar(session.user?.profileImageUrl); setUsername(session.user?.username ?? ""); setDisplayName({ first: session.user?.firstName, last: session.user?.lastName }); } })
         .catch(() => { if (active) setAuthenticated(false); });
     };
     const updateFromEvent = (event: Event) => {
@@ -1281,7 +1305,7 @@ function LearnSettingsDock({
 
       <div className="learn-settings-dock-row">
         <button className="learn-settings-dock-toggle" type="button" onClick={() => setOpen((value) => !value)} aria-label="Learn settings" aria-haspopup="dialog" aria-controls="learn-settings-panel" aria-expanded={open}>
-          {avatar ? <img src={avatar} alt="" /> : username ? <span>{username.slice(0, 2).toUpperCase()}</span> : <Icons.UserRound size={18} />}
+          {avatar ? <img src={avatar} alt="" /> : username ? <InitialsAvatar username={username} first={displayName.first} last={displayName.last} /> : <Icons.UserRound size={18} />}
         </button>
       </div>
     </aside>
