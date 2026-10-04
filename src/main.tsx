@@ -422,10 +422,10 @@ function LessonPage({
             </div>
           </div>}
           {recipeLesson && section.id === "a-few-building-blocks-make-it-work" && <p>In the next lesson, you’ll explore what Replit is doing while your app builds. After that, you’ll look inside its project, code, and files.</p>}
-          {section.image && (
+          {section.image && isUnlocked(promptUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex)?.id) && (
             <figure className="lesson-app-screenshot">
               <ZoomableImage src={section.image.src} alt={section.image.alt} lazy />
-              <figcaption>{section.image.caption} <a href={section.image.source} target="_blank" rel="noreferrer">Source</a></figcaption>
+              <figcaption>{section.image.caption}{section.image.source && <> <a href={section.image.source} target="_blank" rel="noreferrer">Source</a></>}</figcaption>
             </figure>
           )}
           {section.diagram === 'recipe-architecture' && <AppArchitectureMap />}

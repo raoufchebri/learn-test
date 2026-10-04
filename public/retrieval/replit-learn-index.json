@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-10-04T11:49:57.754Z",
+  "generatedAt": "2026-10-04T12:12:52.431Z",
   "mode": "full",
-  "hash": "f57b68580a9d00380e47c9501d19ec35071e9079dcd4e05e201cc3cd3b26996a",
+  "hash": "683774f84221622db6a1d178d62c12608100298ef8cde57d81e86034688b5b5f",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "072878e974a6f3620e8f",
@@ -801,7 +801,7 @@
       "sourceId": "bd28a68246d15291632f",
       "title": "Start with a chat",
       "heading": "Tell Replit what you have in mind",
-      "text": "Replit 101\nWrite your request in the prompt box. That request is a prompt. Start with the goal and a few helpful details. You’re just asking for ideas for now. You’ll ask for the website later.\nI’m planning a birthday party for a six-year-old, with ten children in a park. Help me brainstorm four themes with simple activities.\nSend the prompt in Replit and read the suggestions. Notice how your details give the ideas a direction. The answer may differ from someone else’s, and that’s fine.",
+      "text": "Replit 101\nWrite your request in the prompt box. That request is a prompt. Start with the goal and a few helpful details. You’re just asking for ideas for now. You’ll ask for the website later.\nI’m planning a birthday party for a six-year-old, with ten children in a park. Help me brainstorm four themes with simple activities.\nPaste the prompt in Replit and send it. Replit thinks about your question first, then shares an answer. Read the suggestions and notice how your details give the ideas a direction. Your answer may differ from the example below, and that’s fine.\nA Replit chat. The prompt asks for four birthday party themes for ten six-year-olds in a park. Above the answer, a short grey line shows Replit thinking. The answer lists Jungle Safari, Pirate Treasure Hunt, Superhero Training Camp, and Bugs and Butterflies, each with simple activities.\nExample answer. The short grey line above the answer is Replit thinking about your question before it replies.\n",
       "url": "/learn/replit-101/from-conversation-to-outcome#tell-replit-what-you-have-in-mind",
       "pageUrl": "/learn/replit-101/from-conversation-to-outcome",
       "sourcePath": "src/learn-content.ts#bd28a68246d15291632f"
