@@ -1,6 +1,6 @@
 import { CAPSTONE_REVIEW, parseCapstoneReview, type CapstoneCheck } from "../src/capstone-rubric";
 import { createRemoteJWKSet, jwtVerify } from "jose";
-import { neon } from "@neondatabase/serverless";
+import { neon, type NeonQueryFunction } from "@neondatabase/serverless";
 import { RECIPE_PROMPT, type RecipeBuild } from "../src/recipe-activity";
 
 type StoredUser = {
@@ -1093,6 +1093,112 @@ function sameOrigin(request: Request): boolean {
   return !origin || origin === new URL(request.url).origin;
 }
 
+// ---- Learner progress (Neon). Pages are addressed by url_path; the page ID is that path without "/learn/". ----
+
+const pageIdFromPath = (value: unknown) => typeof value === "string" && /^\/learn\/[a-z0-9-]+\/[a-z0-9-]+$/.test(value) ? value.slice("/learn/".length) : undefined;
+
+async function progressContext(request: Request, env: Env, write: boolean) {
+  if (write && !sameOrigin(request)) return { error: json({ error: "Invalid request origin" }, { status: 403 }) };
+  if (!env.NEON_DATABASE_URL) return { error: json({ error: "Progress storage is not configured" }, { status: 503 }) };
+  const auth = await authenticatedSession(request, env);
+  if (!auth) return { error: json({ error: "Sign in required" }, { status: 401 }) };
+  const sql = neon(env.NEON_DATABASE_URL);
+  const u = auth.user;
+  // Sessions created before sign-ins were recorded may not have a users row yet.
+  await sql`INSERT INTO users (id, username, first_name, email, email_verified, profile_image_url)
+            VALUES (${u.id}, ${u.username}, ${u.firstName ?? null}, ${u.email ?? null}, ${u.emailVerified}, ${u.profileImageUrl ?? null})
+            ON CONFLICT (id) DO NOTHING`;
+  return { sql, userId: u.id };
+}
+
+async function readJson(request: Request): Promise<Record<string, unknown>> {
+  try { const body = await request.json(); return body && typeof body === "object" ? body as Record<string, unknown> : {}; } catch { return {}; }
+}
+
+async function progressSnapshot(sql: NeonQueryFunction<false, false>, userId: string) {
+  const completed = await sql`SELECT p.url_path FROM user_page_progress u JOIN pages p ON p.id = u.page_id
+                              WHERE u.user_id = ${userId} AND u.completed_at IS NOT NULL AND p.archived_at IS NULL` as Array<{ url_path: string }>;
+  const last = await sql`SELECT s.course_id, p.url_path FROM user_course_state s JOIN pages p ON p.id = s.last_page_id WHERE s.user_id = ${userId}` as Array<{ course_id: string; url_path: string }>;
+  return { completed: completed.map((row) => row.url_path), lastPages: Object.fromEntries(last.map((row) => [row.course_id, row.url_path])) };
+}
+
+async function getProgress(request: Request, env: Env): Promise<Response> {
+  const ctx = await progressContext(request, env, false);
+  if ("error" in ctx) return ctx.error!;
+  return json(await progressSnapshot(ctx.sql, ctx.userId));
+}
+
+async function markPageSeen(request: Request, env: Env): Promise<Response> {
+  const ctx = await progressContext(request, env, true);
+  if ("error" in ctx) return ctx.error!;
+  const pageId = pageIdFromPath((await readJson(request)).page);
+  if (!pageId) return json({ error: "Unknown page" }, { status: 400 });
+  const rows = await ctx.sql`
+    WITH target AS (
+      SELECT p.id, m.course_id FROM pages p JOIN modules m ON m.id = p.module_id JOIN courses c ON c.id = m.course_id
+      WHERE p.id = ${pageId} AND p.archived_at IS NULL AND c.published
+    ), seen AS (
+      INSERT INTO user_page_progress (user_id, page_id) SELECT ${ctx.userId}, id FROM target
+      ON CONFLICT (user_id, page_id) DO UPDATE SET last_seen_at = now() RETURNING page_id
+    )
+    INSERT INTO user_course_state (user_id, course_id, last_page_id) SELECT ${ctx.userId}, course_id, id FROM target
+    ON CONFLICT (user_id, course_id) DO UPDATE SET last_page_id = EXCLUDED.last_page_id, updated_at = now()
+    RETURNING course_id` as Array<{ course_id: string }>;
+  if (!rows.length) return json({ error: "Unknown page" }, { status: 404 });
+  return json({ ok: true });
+}
+
+async function completePage(request: Request, env: Env): Promise<Response> {
+  const ctx = await progressContext(request, env, true);
+  if ("error" in ctx) return ctx.error!;
+  const pageId = pageIdFromPath((await readJson(request)).page);
+  if (!pageId) return json({ error: "Unknown page" }, { status: 400 });
+  // A page can only be completed when every earlier page in its course is already complete.
+  const [check] = await ctx.sql`
+    WITH target AS (
+      SELECT p.id, m.course_id, m.position AS mpos, p.position AS ppos
+      FROM pages p JOIN modules m ON m.id = p.module_id JOIN courses c ON c.id = m.course_id
+      WHERE p.id = ${pageId} AND p.archived_at IS NULL AND c.published
+    )
+    SELECT (SELECT count(*) FROM target)::int AS found,
+           (SELECT count(*) FROM pages p JOIN modules m ON m.id = p.module_id, target t
+            WHERE m.course_id = t.course_id AND p.archived_at IS NULL AND m.archived_at IS NULL
+              AND (m.position, p.position) < (t.mpos, t.ppos)
+              AND NOT EXISTS (SELECT 1 FROM user_page_progress u WHERE u.user_id = ${ctx.userId} AND u.page_id = p.id AND u.completed_at IS NOT NULL))::int AS missing` as Array<{ found: number; missing: number }>;
+  if (!check?.found) return json({ error: "Unknown page" }, { status: 404 });
+  if (check.missing > 0) return json({ error: "Complete the earlier lessons first" }, { status: 409 });
+  await ctx.sql`INSERT INTO user_page_progress (user_id, page_id, completed_at) VALUES (${ctx.userId}, ${pageId}, now())
+                ON CONFLICT (user_id, page_id) DO UPDATE SET completed_at = COALESCE(user_page_progress.completed_at, now()), last_seen_at = now()`;
+  return json(await progressSnapshot(ctx.sql, ctx.userId));
+}
+
+// One-time copy of progress saved in the browser. Only an in-order run of completed pages is accepted per course.
+async function importProgress(request: Request, env: Env): Promise<Response> {
+  const ctx = await progressContext(request, env, true);
+  if ("error" in ctx) return ctx.error!;
+  const raw = (await readJson(request)).pages;
+  const claimed = new Set((Array.isArray(raw) ? raw : []).slice(0, 500).map(pageIdFromPath).filter((id): id is string => !!id));
+  const ordered = await ctx.sql`
+    SELECT p.id, m.course_id, (u.completed_at IS NOT NULL) AS done
+    FROM pages p JOIN modules m ON m.id = p.module_id JOIN courses c ON c.id = m.course_id
+    LEFT JOIN user_page_progress u ON u.page_id = p.id AND u.user_id = ${ctx.userId}
+    WHERE c.published AND p.archived_at IS NULL AND m.archived_at IS NULL
+    ORDER BY c.position, m.position, p.position` as Array<{ id: string; course_id: string; done: boolean }>;
+  const toAdd: string[] = [];
+  const blocked = new Set<string>();
+  for (const page of ordered) {
+    if (blocked.has(page.course_id)) continue;
+    if (page.done) continue;
+    if (claimed.has(page.id)) toAdd.push(page.id); else blocked.add(page.course_id);
+  }
+  if (toAdd.length) {
+    await ctx.sql`INSERT INTO user_page_progress (user_id, page_id, completed_at)
+                  SELECT ${ctx.userId}, unnest(${toAdd}::text[]), now()
+                  ON CONFLICT (user_id, page_id) DO UPDATE SET completed_at = COALESCE(user_page_progress.completed_at, now())`;
+  }
+  return json({ imported: toAdd.length, ...(await progressSnapshot(ctx.sql, ctx.userId)) });
+}
+
 async function logout(request: Request, env: Env): Promise<Response> {
   if (!sameOrigin(request)) return json({ error: "Invalid request origin" }, { status: 403 });
   const id = cookieValue(request, SESSION_COOKIE);
@@ -1146,6 +1252,10 @@ async function route(request: Request, env: Env, ctx?: ExecutionContext): Promis
   if (pathname === "/api/auth/callback" && request.method === "GET") return finishLogin(request, env, ctx);
   if (pathname === "/api/auth/session" && request.method === "GET") return sessionResponse(request, env);
   if (pathname === "/api/auth/logout" && request.method === "POST") return logout(request, env);
+  if (pathname === "/api/progress" && request.method === "GET") return getProgress(request, env);
+  if (pathname === "/api/progress/seen" && request.method === "POST") return markPageSeen(request, env);
+  if (pathname === "/api/progress/complete" && request.method === "POST") return completePage(request, env);
+  if (pathname === "/api/progress/import" && request.method === "POST") return importProgress(request, env);
   if (pathname === "/api/mcp/apps" && request.method === "GET") return mcpAppsResponse(request, env);
   if (pathname === "/api/activities/capstone" && ["GET", "POST"].includes(request.method)) return capstoneResponse(request, env);
   if (pathname === "/api/activities/recipe" && ["GET", "POST"].includes(request.method)) return recipeBuildResponse(request, env);

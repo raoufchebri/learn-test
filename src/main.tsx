@@ -10,6 +10,7 @@ import { CourseCertificate } from "./course-certificate";
 import { LessonPrompt } from "./lesson-prompt";
 import { LessonQuizCard } from "./lesson-quiz-card";
 import { LEARN_DEV_MODE } from "./learn-mode";
+import { courseModules, coursePillars, learnSegment, lessonUrl, isAvailablePillar, isAvailableModule, availableLessonUrls, type CourseModule, type CoursePillar, type CoursePillarId } from "./course-structure";
 import { RecipeBuildProvider, RecipeBuildStep, RecipeBuildStatus, ProjectLessonStep, useRecipeActivity, RECIPE_PROMPT, RECIPE_DEMO } from "./recipe-build";
 import {
   ReplitPromptComposer,
@@ -35,125 +36,6 @@ type AskTurn = {
   recipeBuild?: boolean;
   simulatedIteration?: boolean;
 };
-type CourseModule = {
-  pillar: CoursePillarId;
-  title: string;
-  description: string;
-  lessons: LearnLesson[];
-};
-
-type CoursePillarId = "discover" | "ai" | "operate" | "design" | "build" | "admin";
-
-type CoursePillar = {
-  id: CoursePillarId;
-  title: string;
-  description: string;
-  modules: CourseModule[];
-};
-
-function learnSegment(value: string) {
-  return value
-    .toLowerCase()
-    .replace(/&/g, "and")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-}
-
-const courseModules: CourseModule[] = [
-  {
-    pillar: "discover",
-    title: "Replit 101",
-    description: "See what Replit can do, then try the core outcomes through small, guided exercises.",
-    lessons: courseLessons["Replit 101"],
-  },
-  { pillar: "discover", title: "Your workspace", description: "Understand where your work lives and how to find your way around Replit.", lessons: courseLessons["Your workspace"] },
-  { pillar: "discover", title: "The prompt box", description: "Ask for what you need, add context, and explore models and modes.", lessons: courseLessons["The prompt box"] },
-  { pillar: "discover", title: "Chats and projects", description: "Understand the difference between chats and projects, including chats inside projects.", lessons: courseLessons["Chats and projects"] },
-  { pillar: "discover", title: "Build and Design", description: "Explore building an app and shaping its design on Canvas.", lessons: courseLessons["Build and Design"] },
-  { pillar: "discover", title: "Your capstone", description: "Put it all together by building and testing your own picnic sign-up app.", lessons: courseLessons["Your capstone"] },
-  {
-    pillar: "ai",
-    title: "Work with Agent",
-    description: "Direct Agent with clear outcomes, useful context, and the right working mode.",
-    lessons: courseLessons["Work with Agent"],
-  },
-  {
-    pillar: "ai",
-    title: "AI Foundations",
-    description: "Understand the models, inputs, and evaluation practices behind AI-powered apps.",
-    lessons: courseLessons["AI Foundations"],
-  },
-  {
-    pillar: "ai",
-    title: "Agent Foundations",
-    description: "Understand how agents use context, tools, and human direction to complete work.",
-    lessons: courseLessons["Agent Foundations"],
-  },
-  {
-    pillar: "operate",
-    title: "Operate with Replit",
-    description: "Use conversations, context, integrations, Routines, Reps, and Nexus to move work forward.",
-    lessons: courseLessons["Operate with Replit"],
-  },
-  {
-    pillar: "design",
-    title: "Design with Agent",
-    description: "Turn product ideas into clear, useful interfaces.",
-    lessons: courseLessons["Design with Agent"],
-  },
-  {
-    pillar: "build",
-    title: "App Foundations",
-    description: "Understand the core parts of software without needing to write code manually.",
-    lessons: appFoundationLessons.filter((lesson) => lesson.title !== 'Welcome to Build'),
-  },
-  {
-    pillar: "build",
-    title: "Build with Agent",
-    description: "Turn a prototype into a working, tested, published app.",
-    lessons: courseLessons["Build with Agent"],
-  },
-  {
-    pillar: "build",
-    title: "Secure and Monitor",
-    description: "Protect your app, then observe and respond once it is live.",
-    lessons: courseLessons["Secure and Monitor"],
-  },
-  {
-    pillar: "build",
-    title: "Grow and Scale",
-    description: "Find more people, improve the product experience, and serve growing demand.",
-    lessons: courseLessons["Grow and Scale"],
-  },
-  {
-    pillar: "admin",
-    title: "Administer Replit",
-    description: "Configure, govern, secure, and roll out Replit across an organization.",
-    lessons: courseLessons["Administer Replit"],
-  },
-];
-
-const pillarDefinitions: Array<Omit<CoursePillar, "modules">> = [
-  { id: "discover", title: "Replit 101", description: "See what Replit can do, then try the essentials one friendly step at a time." },
-  { id: "ai", title: "AI 101", description: "Understand AI and learn how to guide Agent with clear goals, useful context, and thoughtful checks." },
-  { id: "operate", title: "Operate", description: "Turn conversations, connected tools, and agent workflows into useful outcomes." },
-  { id: "design", title: "Design", description: "Shape an idea into a clear app experience—even if you do not call yourself a designer." },
-  { id: "build", title: "Build", description: "Take an app from the first working version to something secure, published, and ready to grow." },
-  { id: "admin", title: "Admin", description: "Help an organization adopt Replit safely, confidently, and at its own pace." },
-];
-
-const coursePillars: CoursePillar[] = pillarDefinitions.map((pillar) => ({
-  ...pillar,
-  modules: courseModules.filter((module) => module.pillar === pillar.id),
-}));
-
-const lessonUrl = (module: CourseModule, lesson: LearnLesson) =>
-  `/learn/${learnSegment(module.title)}/${learnSegment(lesson.title)}`;
-
-const isAvailablePillar = (id: CoursePillarId) => LEARN_DEV_MODE || id === 'discover';
-const isAvailableModule = (module: CourseModule) => isAvailablePillar(module.pillar);
-const availableLessonUrls = new Set(courseModules.filter(isAvailableModule)
-  .flatMap((module) => module.lessons.map((lesson) => lessonUrl(module, lesson))));
 
 const askLearnPages: DocsSlashPage[] = [
   { label: "Welcome to Replit Learn", path: "/", section: "Learn" },
@@ -889,6 +771,38 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
     } catch { /* Start fresh if local progress is unavailable. */ }
     setProgressOwner(learnerKey);
   }, [learnerKey]);
+  // The database is the source of truth when it's reachable; browser storage is the instant first paint and the fallback.
+  const [serverProgress, setServerProgress] = useState(false);
+  useEffect(() => {
+    setServerProgress(false);
+    if (!learnerKey || progressOwner !== learnerKey) return;
+    let active = true;
+    const local = (() => { try { const saved = JSON.parse(localStorage.getItem(`replit-101-progress:v2:${learnerKey}`) ?? '[]'); return Array.isArray(saved) ? saved.filter((url): url is string => typeof url === 'string' && availableLessonUrls.has(url)) : []; } catch { return []; } })();
+    const post = (path: string, body: unknown) => fetch(path, { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+    (async () => {
+      try {
+        const response = await fetch('/api/progress', { credentials: 'same-origin', headers: { accept: 'application/json' } });
+        if (!response.ok) return;
+        let snapshot = await response.json() as { completed?: string[] };
+        if (local.some((url) => !snapshot.completed?.includes(url))) {
+          const imported = await post('/api/progress/import', { pages: local });
+          if (imported.ok) snapshot = await imported.json() as { completed?: string[] };
+        }
+        if (!active || !Array.isArray(snapshot.completed)) return;
+        setCompletedLessons(snapshot.completed.filter((url) => availableLessonUrls.has(url)));
+        setServerProgress(true);
+      } catch { /* Keep browser progress when the server is unreachable. */ }
+    })();
+    return () => { active = false; };
+  }, [learnerKey, progressOwner]);
+  const recordCompletion = (url: string) => {
+    setCompletedLessons((current) => current.includes(url) ? current : [...current, url]);
+    if (!serverProgress) return;
+    fetch('/api/progress/complete', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ page: url }) })
+      .then((response) => response.ok ? response.json() as Promise<{ completed?: string[] }> : undefined)
+      .then((snapshot) => { if (snapshot?.completed) setCompletedLessons((current) => [...new Set([...current, ...snapshot.completed!.filter((entry) => availableLessonUrls.has(entry))])]); })
+      .catch(() => { /* Browser storage still has it; the next sign-in imports it. */ });
+  };
   useEffect(() => {
     if (!learnerKey || progressOwner !== learnerKey) return;
     try { localStorage.setItem(`replit-101-progress:v2:${learnerKey}`, JSON.stringify(completedLessons)); } catch { /* In-memory progress still works. */ }
@@ -912,6 +826,11 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
   const currentUrl = module && lesson ? lessonUrl(module, lesson) : "";
   const sequenceIndex = sequence.findIndex((entry) => entry.url === currentUrl);
   const currentLocked = isLocked(currentUrl);
+  // Last page seen: recorded whenever a learner opens a page they're allowed to see.
+  useEffect(() => {
+    if (!serverProgress || !currentUrl || currentLocked || !availableLessonUrls.has(currentUrl)) return;
+    fetch('/api/progress/seen', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ page: currentUrl }) }).catch(() => undefined);
+  }, [serverProgress, currentUrl, currentLocked]);
   useEffect(() => {
     if (access === "signed-in" && progressOwner === learnerKey && currentLocked) {
       if (!availableLessonUrls.has(currentUrl)) { navigate('/', { replace: true }); return; }
@@ -1058,7 +977,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
           <LessonPage
             key={currentUrl}
             completed={completedLessons.includes(currentUrl)}
-            onComplete={sequenceIndex >= 0 || module.pillar === 'discover' ? () => setCompletedLessons((current) => current.includes(currentUrl) ? current : [...current, currentUrl]) : undefined}
+            onComplete={sequenceIndex >= 0 || module.pillar === 'discover' ? () => recordCompletion(currentUrl) : undefined}
             chatOpen={chatOpen}
             lesson={lesson}
             chapter={lessonIndex}

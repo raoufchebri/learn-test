@@ -15,7 +15,9 @@
     "generate:learn-index": "node scripts/generate-learn-index.mjs",
     "upsert:learn-index": "node scripts/upsert-rag-manifest.mjs public/retrieval/replit-learn-index.json",
     "typecheck": "tsc --noEmit",
-    "db:migrate": "node scripts/db-migrate.mjs"
+    "db:migrate": "node scripts/db-migrate.mjs",
+    "db:sync-catalog": "node scripts/db-sync-catalog.mjs",
+    "test:progress": "node scripts/test-progress.mjs replit_learn_session"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.2.0",
