@@ -127,13 +127,17 @@ function PromptBubble({ prompt, done, status, onCopy }: { prompt: string; done: 
 // With stream, the thinking line shimmers briefly and the answer appears a few words at a time, like Replit's chat.
 function ChatExchange({ exchange, stream = false, onDone }: { exchange: ChatExchangeExample; stream?: boolean; onDone?: () => void }) {
   type Part = { text: string; bold?: boolean };
+  type Block = { kind: "p" | "li" | "tools" | "image"; parts: Part[] };
   const blocks = useMemo(() => {
-    const list: Array<{ kind: "p" | "li"; parts: Part[] }> = [];
+    const list: Block[] = [];
     if (exchange.intro) list.push({ kind: "p", parts: [{ text: exchange.intro }] });
-    exchange.items.forEach((item) => list.push({ kind: "li", parts: [{ text: item.label, bold: true }, { text: `${exchange.labelSeparator}${item.text}` }] }));
+    if (exchange.tools) list.push({ kind: "tools", parts: [{ text: exchange.tools }] });
+    if (exchange.imageCard) list.push({ kind: "image", parts: [{ text: "image" }] });
+    (exchange.items ?? []).forEach((item) => list.push({ kind: "li", parts: [{ text: item.label, bold: true }, { text: `${exchange.labelSeparator ?? ": "}${item.text}` }] }));
     if (exchange.outro) list.push({ kind: "p", parts: [{ text: exchange.outro }] });
     if (exchange.question) list.push({ kind: "p", parts: [{ text: exchange.question, bold: true }] });
-    return list.map((block) => ({ ...block, parts: block.parts.map((part) => ({ ...part, tokens: part.text.split(/(\s+)/).filter(Boolean) })) }));
+    // The image card counts as a few "words" so it appears as one piece mid-stream.
+    return list.map((block) => ({ ...block, parts: block.parts.map((part) => ({ ...part, tokens: block.kind === "image" ? ["", "", "", "", "", ""] : part.text.split(/(\s+)/).filter(Boolean) })) }));
   }, [exchange]);
   const total = blocks.reduce((sum, block) => sum + block.parts.reduce((count, part) => count + part.tokens.length, 0), 0);
   const animate = stream && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -145,25 +149,31 @@ function ChatExchange({ exchange, stream = false, onDone }: { exchange: ChatExch
     const start = window.setTimeout(() => {
       setThinking(false);
       interval = window.setInterval(() => setShown((value) => { const next = value + 3; if (next >= total) window.clearInterval(interval); return Math.min(next, total); }), 40);
-    }, 1000);
+    }, exchange.thinking ? 1000 : 600);
     return () => { window.clearTimeout(start); window.clearInterval(interval); };
   }, [animate, total]);
   // Tell the lesson when the answer is fully shown, so the next content can fade in.
   useEffect(() => { if (!thinking && shown >= total) onDone?.(); }, [thinking, shown, total]);
   let budget = shown;
   const rendered = blocks.map((block) => {
-    const parts = block.parts.map((part) => { const take = Math.max(0, Math.min(part.tokens.length, budget)); budget -= take; return { ...part, visible: part.tokens.slice(0, take).join("") }; });
-    return { kind: block.kind, parts, empty: parts.every((part) => !part.visible) };
+    const parts = block.parts.map((part) => { const take = Math.max(0, Math.min(part.tokens.length, budget)); budget -= take; return { ...part, visible: part.tokens.slice(0, take).join(""), complete: take === part.tokens.length }; });
+    return { kind: block.kind, parts, empty: block.kind === "image" ? !parts.every((part) => part.complete) : parts.every((part) => !part.visible), done: parts.every((part) => part.complete) };
   });
   const content = (block: typeof rendered[number]) => block.parts.map((part, index) => part.visible ? (part.bold ? <strong key={index}>{part.visible}</strong> : <span key={index}>{part.visible}</span>) : null);
   const items = rendered.filter((block) => block.kind === "li" && !block.empty);
   const firstLi = rendered.findIndex((block) => block.kind === "li");
   return <div className="chat-reply" aria-label="Example reply from Replit" aria-busy={shown < total}>
     <p className="chat-reply-note">Here’s an example of what Replit can answer. Yours may be different.</p>
-    <p className={`chat-reply-thinking ${thinking ? "is-thinking" : ""}`}>{exchange.thinking}</p>
+    {exchange.thinking && <p className={`chat-reply-thinking ${thinking ? "is-thinking" : ""}`}>{exchange.thinking}</p>}
+    {thinking && !exchange.thinking && <p className="chat-reply-thinking is-thinking">Thinking…</p>}
     {!thinking && <div className="chat-reply-answer">
       {rendered.map((block, index) => {
         if (block.kind === "li") return index === firstLi && items.length ? <ol key="list">{items.map((item, itemIndex) => <li key={itemIndex}>{content(item)}</li>)}</ol> : null;
+        if (block.kind === "image") return block.done && exchange.imageCard ? <figure key={index} className="chat-reply-image-card fade-in-step">
+          <div className="chat-reply-image-header"><span aria-hidden="true"><Icons.Image size={16} /></span><div><strong>{exchange.imageCard.title}</strong><small>Image</small></div></div>
+          <div className="chat-reply-image-body"><ZoomableImage src={exchange.imageCard.src} alt={exchange.imageCard.alt} lazy /></div>
+        </figure> : null;
+        if (block.kind === "tools") return block.empty ? null : <p key={index} className="chat-reply-tools">{content(block)}</p>;
         return block.empty ? null : <p key={index}>{content(block)}</p>;
       })}
     </div>}

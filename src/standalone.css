@@ -1180,3 +1180,13 @@
 @media (max-width: 820px) {
   .app-shell .learn-page { padding-top: 72px; }
 }
+
+/* Replit reply extras: grey tools line and an image card like Replit's ("Pokémon Park Birthday · Image"). */
+.lesson-content .lesson-chat-thread p.chat-reply-tools { font-size: 14px !important; color: var(--replit-medium-gray) !important; margin: 4px 0 10px; }
+.chat-reply-image-card { margin: 0 0 16px; border: 1px solid var(--replit-light-silver); border-radius: 14px; overflow: hidden; background: var(--replit-off-white); }
+.chat-reply-image-header { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid var(--replit-light-silver); }
+.chat-reply-image-header > span { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid var(--replit-light-silver); border-radius: 9px; color: var(--replit-dark-gray); }
+.chat-reply-image-header strong { display: block; font-size: 15px; font-weight: 500; color: var(--replit-off-black); }
+.chat-reply-image-header small { display: block; font-size: 12px; color: var(--replit-medium-gray); }
+.chat-reply-image-body { padding: 12px; }
+.chat-reply-image-body .screenshot-zoom-trigger img { display: block; width: 100%; height: auto; border-radius: 10px; }

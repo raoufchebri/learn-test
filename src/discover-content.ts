@@ -52,7 +52,12 @@ export const discoverLessons: LearnLesson[] = [
           { label: 'Pokémon Freeze Dance', text: 'Play upbeat music; when it stops, call out a Pokémon and have everyone freeze in a matching pose—like Pikachu’s thunderbolt or a Squirtle splash.' },
         ],
       } },
-      { heading: 'Picture the party', body: 'Now ask for a picture of the theme you chose. You don’t need to repeat the whole plan in the same chat.', prompt: 'Create an image of what this birthday party could look like, with decorations and a picnic table in a park, using our chosen theme.', afterPrompt: 'Look at the picture. Does it fit your idea? You can ask for one change, such as different colors or simpler decorations. That’s a chat: describe, review, and refine.' },
+      { heading: 'Picture the party', body: 'Now ask for a picture of the theme you chose. You don’t need to repeat the whole plan in the same chat.', prompt: 'Create an image of what this birthday party could look like, with decorations and a picnic table in a park, using our chosen theme.', afterPrompt: 'Look at the picture. Does it fit your idea? You can ask for one change, such as different colors or simpler decorations. That’s a chat: describe, review, and refine.', exchange: {
+        intro: 'I’ll make this as a cheerful, realistic park-party illustration, keeping the Pokémon decorations kid-friendly and the picnic setup easy to recreate.',
+        tools: 'Used 3 tools',
+        imageCard: { title: 'Pokémon Park Birthday', src: '/images/pokemon-park-party.jpg', alt: 'Illustration of a Pokémon birthday party in a park: a picnic table with a red cloth, a Poké Ball cake and cupcakes, Poké Ball lanterns and balloons in the trees, Pikachu, Squirtle, Bulbasaur and Charmander around the table, and children playing games on the grass.' },
+        outro: 'I created a storybook-style scene of the Pokémon park party, with a decorated picnic table, Pokémon-themed treats, and kids playing nearby.',
+      } },
     ],
     quiz: [
       { prompt: 'What does the generated party image show?', choices: ['Proof that every decoration is in stock', 'A visual idea to review and refine', 'A confirmed order from a store'], answer: 1 },

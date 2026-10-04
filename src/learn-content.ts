@@ -63,10 +63,12 @@ export function learnDisplayTitle(value: string) {
 
 // A recreated Replit chat shown in a lesson: the learner's message, Replit's thinking line, and its answer.
 export type ChatExchangeExample = {
-  thinking: string;
+  thinking?: string;
   intro?: string;
-  items: Array<{ label: string; text: string }>;
-  labelSeparator: " — " | ": ";
+  tools?: string;                       // grey status line, e.g. "Used 3 tools"
+  imageCard?: { title: string; src: string; alt: string };
+  items?: Array<{ label: string; text: string }>;
+  labelSeparator?: " — " | ": ";
   outro?: string;
   question?: string;
 };
