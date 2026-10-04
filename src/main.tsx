@@ -1256,14 +1256,8 @@ function App() {
   const [askTurns, setAskTurns] = useState<AskTurn[]>([]);
   const [askViewMode, setAskViewMode] = useState<AskViewMode>("split");
   const [chatDismissedOn, setChatDismissedOn] = useState<string | null>(null);
-  const [wideLessonLayout, setWideLessonLayout] = useState(() => window.innerWidth >= 1100);
-  useEffect(() => {
-    const query = window.matchMedia('(min-width: 1100px)');
-    const update = () => setWideLessonLayout(query.matches);
-    query.addEventListener('change', update);
-    return () => query.removeEventListener('change', update);
-  }, []);
-  const showLessonChat = askTurns.length > 0 || (wideLessonLayout && location.pathname.startsWith('/learn/') && chatDismissedOn !== location.pathname);
+  // Assistant opens only when the learner asks something, not automatically.
+  const showLessonChat = askTurns.length > 0;
   const closeLessonChat = () => { setAskTurns([]); setChatDismissedOn(location.pathname); };
   useEffect(() => { setChatDismissedOn(null); }, [location.pathname]);
   const [selectedAskAppId, setSelectedAskAppId] = useState("");
