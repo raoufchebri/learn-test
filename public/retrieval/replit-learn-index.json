@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-10-04T09:25:54.952Z",
+  "generatedAt": "2026-10-04T11:49:57.754Z",
   "mode": "full",
-  "hash": "43de597daefadf4f9b5955c2f6d3f24c8bdd927632bee8a9c6c85f5d778bcce3",
+  "hash": "f57b68580a9d00380e47c9501d19ec35071e9079dcd4e05e201cc3cd3b26996a",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "072878e974a6f3620e8f",
@@ -791,7 +791,7 @@
       "sourceId": "bd28a68246d15291632f",
       "title": "Start with a chat",
       "heading": "Overview",
-      "text": "Replit 101\nWhen you open Replit’s home screen, you’ll see a large composer, also called the prompt box.\nIt’s one of the main ways you interact with Replit. Everything starts with a chat where you explain what you want to achieve.\nIn this lesson, you’ll brainstorm birthday-party themes, choose one, and ask for a picture. Keep the same chat open so you can build on your ideas.\nUse fictional details for this exercise. You don’t need to share a child’s name, photo, or exact location.\nWrite a prompt to brainstorm party themes\nChoose a theme with a follow-up\nAsk for an image to visualize your idea\n",
+      "text": "Replit 101\nWhen you open Replit’s home screen, you’ll see a large composer, also called the prompt box.\nIt’s one of the main ways you interact with Replit. Everything starts with a chat where you explain what you want to achieve.\nIn this lesson, you’ll brainstorm birthday-party themes, choose one, and ask for a picture. Keep the same chat open so you can build on your ideas.\nFeel free to use your own party details. If you don’t have a party in mind, use the example prompts below.\nWrite a prompt to brainstorm party themes\nChoose a theme with a follow-up\nAsk for an image to visualize your idea\n",
       "url": "/learn/replit-101/from-conversation-to-outcome",
       "pageUrl": "/learn/replit-101/from-conversation-to-outcome",
       "sourcePath": "src/learn-content.ts#bd28a68246d15291632f"
