@@ -11,10 +11,10 @@ export const discoverLessons: LearnLesson[] = [
     introduction: [
       { text: 'For example, you can:', items: ['Research an idea, compare options, and check sources.', 'Summarize notes or find information in tools you choose to connect.', 'Schedule recurring tasks, such as a weekly update.', 'Turn an idea into a web app you can try and improve.', 'Explore different designs and create visual assets, such as images.'] },
       'The good news is that you don’t need technical or coding experience to get started. You describe what you want, review the result, and ask Replit for improvements.',
-      { text: 'Before you begin, have these ready:', items: ['A Replit account you can sign into.', 'A Google account with Google Calendar that you’re allowed to connect to Replit. A personal or test account works well; a managed work or school account may need administrator approval.', 'Fictional party details for practice. Don’t include a child’s name, photo, or home address.'] },
-      'We’ll connect Google Calendar in “Connect your tools.” You don’t need to connect it before starting. Gmail is not required for this exercise, and you can read along without connecting an account.',
+      { text: 'Before you begin, here’s what you’ll need:', items: ['Your Replit account, which you already have.', 'A Google account, which includes Google Calendar. A personal or test account works well. Don’t have one? [Create a Google account](https://accounts.google.com/signup).'] },
+      'We’ll connect Google Calendar later, in “Connect your tools,” so you don’t need to set anything up now. We’ll also give you fictional party details to practice with, so you don’t need to prepare your own.',
       { text: 'Throughout this course, you’ll plan a child’s birthday party. Step by step, you’ll:', items: ['Brainstorm ideas and explore party themes.', 'Connect Google Calendar, then ask Replit to add the birthday event.', 'Create a shopping list of things to buy.', 'Build a website where guests can RSVP.', 'Design invitations and create supporting images.'] },
-      'You can use fictional details while practicing. Let’s get started!',
+      'Let’s get started!',
     ],
     sections: [],
     quiz: [

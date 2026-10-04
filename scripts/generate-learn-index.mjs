@@ -67,7 +67,7 @@ for (const lesson of allLessons) {
   const lessonSections = [
     {
       heading: "Overview",
-      text: [lesson.module, lesson.summary, ...(lesson.introduction ?? []).flatMap((part) => typeof part === 'string' ? [part] : [part.text, ...part.items]), ...(lesson.outcomes ?? []), lesson.replitExample].join("\n"),
+      text: [lesson.module, lesson.summary, ...(lesson.introduction ?? []).flatMap((part) => typeof part === 'string' ? [part] : [part.text, ...part.items]), ...(lesson.outcomes ?? []), lesson.replitExample].join("\n").replace(/\[([^\]]+)\]\(https:\/\/[^)\s]+\)/g, "$1"),
     },
     ...lesson.sections.map((section) => ({
       heading: section.heading,

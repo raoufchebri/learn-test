@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-09-22T16:40:33.475Z",
+  "generatedAt": "2026-10-04T09:25:54.952Z",
   "mode": "full",
-  "hash": "4c59c23f18531bc52033089b40aadaf6423938c24782536fffe18e03fb6c504c",
+  "hash": "43de597daefadf4f9b5955c2f6d3f24c8bdd927632bee8a9c6c85f5d778bcce3",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "072878e974a6f3620e8f",
@@ -781,7 +781,7 @@
       "sourceId": "9cd2486d955837a53a89",
       "title": "Welcome to Replit",
       "heading": "Overview",
-      "text": "Replit 101\nWelcome! Whether you’re new to Replit or have built a few projects with it, this is a place to discover what you can do. Replit helps you explore information, get work done, and turn your ideas into apps.\nFor example, you can:\nResearch an idea, compare options, and check sources.\nSummarize notes or find information in tools you choose to connect.\nSchedule recurring tasks, such as a weekly update.\nTurn an idea into a web app you can try and improve.\nExplore different designs and create visual assets, such as images.\nThe good news is that you don’t need technical or coding experience to get started. You describe what you want, review the result, and ask Replit for improvements.\nBefore you begin, have these ready:\nA Replit account you can sign into.\nA Google account with Google Calendar that you’re allowed to connect to Replit. A personal or test account works well; a managed work or school account may need administrator approval.\nFictional party details for practice. Don’t include a child’s name, photo, or home address.\nWe’ll connect Google Calendar in “Connect your tools.” You don’t need to connect it before starting. Gmail is not required for this exercise, and you can read along without connecting an account.\nThroughout this course, you’ll plan a child’s birthday party. Step by step, you’ll:\nBrainstorm ideas and explore party themes.\nConnect Google Calendar, then ask Replit to add the birthday event.\nCreate a shopping list of things to buy.\nBuild a website where guests can RSVP.\nDesign invitations and create supporting images.\nYou can use fictional details while practicing. Let’s get started!\n",
+      "text": "Replit 101\nWelcome! Whether you’re new to Replit or have built a few projects with it, this is a place to discover what you can do. Replit helps you explore information, get work done, and turn your ideas into apps.\nFor example, you can:\nResearch an idea, compare options, and check sources.\nSummarize notes or find information in tools you choose to connect.\nSchedule recurring tasks, such as a weekly update.\nTurn an idea into a web app you can try and improve.\nExplore different designs and create visual assets, such as images.\nThe good news is that you don’t need technical or coding experience to get started. You describe what you want, review the result, and ask Replit for improvements.\nBefore you begin, here’s what you’ll need:\nYour Replit account, which you already have.\nA Google account, which includes Google Calendar. A personal or test account works well. Don’t have one? Create a Google account.\nWe’ll connect Google Calendar later, in “Connect your tools,” so you don’t need to set anything up now. We’ll also give you fictional party details to practice with, so you don’t need to prepare your own.\nThroughout this course, you’ll plan a child’s birthday party. Step by step, you’ll:\nBrainstorm ideas and explore party themes.\nConnect Google Calendar, then ask Replit to add the birthday event.\nCreate a shopping list of things to buy.\nBuild a website where guests can RSVP.\nDesign invitations and create supporting images.\nLet’s get started!\n",
       "url": "/learn/replit-101/what-you-can-do-with-replit",
       "pageUrl": "/learn/replit-101/what-you-can-do-with-replit",
       "sourcePath": "src/learn-content.ts#9cd2486d955837a53a89"

@@ -217,6 +217,15 @@ function FrontendExample() {
   );
 }
 
+// Renders [label](https://...) in lesson copy as an external link; everything else stays plain text.
+function LinkedText({ text }: { text: string }) {
+  const parts = text.split(/(\[[^\]]+\]\(https:\/\/[^)\s]+\))/g);
+  return <>{parts.map((part, index) => {
+    const match = /^\[([^\]]+)\]\((https:\/\/[^)\s]+)\)$/.exec(part);
+    return match ? <a key={index} href={match[2]} target="_blank" rel="noopener noreferrer">{match[1]}</a> : part;
+  })}</>;
+}
+
 function LessonPage({
   lesson,
   chapter,
@@ -406,8 +415,8 @@ function LessonPage({
       <p className="intro">{lesson.summary}</p>
       {lesson.openingImage && <figure className="lesson-app-screenshot"><img src={lesson.openingImage.src} alt={lesson.openingImage.alt} /><figcaption>Replit home · Personal details replaced for this example.</figcaption></figure>}
       {lesson.introduction?.map((paragraph) => typeof paragraph === 'string'
-        ? <p className="lesson-introduction-copy" key={paragraph}>{paragraph}</p>
-        : <div className="lesson-introduction-copy" key={paragraph.text}><p>{paragraph.text}</p><ul>{paragraph.items.map((item) => <li key={item}>{item}</li>)}</ul></div>)}
+        ? <p className="lesson-introduction-copy" key={paragraph}><LinkedText text={paragraph} /></p>
+        : <div className="lesson-introduction-copy" key={paragraph.text}><p><LinkedText text={paragraph.text} /></p><ul>{paragraph.items.map((item) => <li key={item}><LinkedText text={item} /></li>)}</ul></div>)}
       {lesson.title === 'What Is Replit Building?' && <RecipeProjectLink />}
       {lesson.encouragement && (
         <aside className="lesson-encouragement">
