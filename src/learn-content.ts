@@ -61,6 +61,17 @@ export function learnDisplayTitle(value: string) {
   });
 }
 
+// A recreated Replit chat shown in a lesson: the learner's message, Replit's thinking line, and its answer.
+export type ChatExchangeExample = {
+  thinking: string;
+  intro?: string;
+  items: Array<{ label: string; text: string }>;
+  labelSeparator: " — " | ": ";
+  outro?: string;
+  question?: string;
+  workedFor: string;
+};
+
 export type LearnLesson = {
   module: string;
   title: string;
@@ -81,7 +92,7 @@ export type LearnLesson = {
   practice?: { prompt: string; checks: string[] };
   checkpoint?: { afterSection: number; questions: QuizQuestion[] };
   outcomes?: string[];
-  sections: Array<{ heading: string; id?: string; body: string; prompt?: string; afterPrompt?: string; items?: string[]; image?: { src: string; alt: string; caption: string; source?: string }; diagram?: 'recipe-architecture' | 'recipe-iteration' }>;
+  sections: Array<{ heading: string; id?: string; body: string; prompt?: string; afterPrompt?: string; items?: string[]; image?: { src: string; alt: string; caption: string; source?: string }; exchange?: ChatExchangeExample; diagram?: 'recipe-architecture' | 'recipe-iteration' }>;
   replitExample: string;
   quiz: QuizQuestion[];
 };

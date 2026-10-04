@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { createPortal } from "react-dom";
 import { BrowserRouter, useLocation, useNavigate } from "react-router-dom";
 import * as Icons from "lucide-react";
-import { appFoundationLessons, courseLessons, learnDisplayTitle, type LearnLesson } from "./learn-content";
+import { appFoundationLessons, courseLessons, learnDisplayTitle, type ChatExchangeExample, type LearnLesson } from "./learn-content";
 import { ReplitAccount } from "./replit-account";
 import { CapstoneSubmission } from "./capstone-submission";
 import { CourseCertificate } from "./course-certificate";
@@ -106,6 +106,22 @@ function LinkedText({ text }: { text: string }) {
     const match = /^\[([^\]]+)\]\((https:\/\/[^)\s]+)\)$/.exec(part);
     return match ? <a key={index} href={match[2]} target="_blank" rel="noopener noreferrer">{match[1]}</a> : part;
   })}</>;
+}
+
+// A Replit chat recreated in the lesson: the learner's message bubble, Replit's thinking line, then its answer.
+function ChatExchange({ prompt, exchange }: { prompt: string; exchange: ChatExchangeExample }) {
+  return <figure className="chat-exchange" aria-label="Example chat in Replit">
+    <figcaption className="chat-exchange-label">Example chat in Replit</figcaption>
+    <div className="chat-exchange-user"><p>{prompt}</p></div>
+    <p className="chat-exchange-thinking" aria-label={`Replit thinking: ${exchange.thinking}`}>{exchange.thinking}</p>
+    <div className="chat-exchange-answer">
+      {exchange.intro && <p>{exchange.intro}</p>}
+      <ol>{exchange.items.map((item) => <li key={item.label}><strong>{item.label}</strong>{exchange.labelSeparator === " — " ? " — " : ": "}{item.text}</li>)}</ol>
+      {exchange.outro && <p>{exchange.outro}</p>}
+      {exchange.question && <p><strong>{exchange.question}</strong></p>}
+    </div>
+    <p className="chat-exchange-meta">{exchange.workedFor}</p>
+  </figure>;
 }
 
 // Screenshot that opens large on click. In the viewer, clicking the image toggles fit-to-screen and full size.
@@ -406,6 +422,7 @@ function LessonPage({
             <p>That means an interface with forms and buttons, app logic that responds when you use them, and storage that keeps your recipes in this browser. For this first version, all three work in the browser. No sign-in or separate backend is needed.</p>
             <p>Let’s explore the building blocks this prompt describes.</p>
           </> : <p>{section.afterPrompt}</p>)}
+          {section.exchange && section.prompt && isUnlocked(promptUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex)?.id) && <ChatExchange prompt={section.prompt} exchange={section.exchange} />}
           {section.items && <ul className="lesson-points">{section.items.map((item) => <li key={item}>{item}</li>)}</ul>}
           {hasCheckpoint && sectionIndex === checkpointIndex && <div className="lesson-quiz" aria-label="Lesson checkpoint">
             <h3>Try these two ideas</h3>
