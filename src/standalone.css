@@ -1137,8 +1137,8 @@
 /* Reveal button: grey until the prompt is copied, green once it can be clicked. */
 .reveal-unlock.is-ready .recipe-create-button:not(:disabled) { background: #23734d; border-color: #23734d; color: #fff; }
 .reveal-unlock.is-ready .recipe-create-button:not(:disabled):hover { background: #1d5f40; border-color: #1d5f40; }
-/* Before copying: the usual unlock button look; clicking it copies the prompt. */
-.reveal-unlock:not(.is-ready) .recipe-create-button { cursor: copy; }
+/* The usual unlock button look; clicking it copies the prompt. Green with a check once copied. */
+.reveal-unlock .recipe-create-button { cursor: copy; }
 .prompt-bubble-row.is-done .prompt-bubble-meta svg:first-child { color: #23734d; }
 .chat-reply { margin-top: 20px; }
 .lesson-content .chat-reply .chat-reply-thinking { margin: 0 0 12px; overflow: hidden; white-space: nowrap; font-size: 15px; line-height: 1.5; color: #9a9a9a; -webkit-mask-image: linear-gradient(90deg, #000 72%, transparent); mask-image: linear-gradient(90deg, #000 72%, transparent); }
@@ -1156,3 +1156,8 @@
 .lesson-content .lesson-chat-thread p.chat-reply-note { font-size: 13px !important; line-height: 1.5 !important; }
 .lesson-content .lesson-chat-thread p.chat-reply-thinking { font-size: 15px !important; line-height: 1.5 !important; }
 .lesson-content .lesson-chat-thread .chat-reply-answer p, .lesson-content .lesson-chat-thread .chat-reply-answer li { font-size: 17px !important; line-height: 1.6 !important; }
+
+/* Simulated stream: the thinking line shimmers while Replit "thinks". */
+.lesson-content .lesson-chat-thread p.chat-reply-thinking.is-thinking { background: linear-gradient(90deg, #9a9a9a 0%, #d6d6d6 45%, #9a9a9a 90%); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: chat-thinking-shimmer 1.2s linear infinite; }
+@keyframes chat-thinking-shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+@media (prefers-reduced-motion: reduce) { .lesson-content .lesson-chat-thread p.chat-reply-thinking.is-thinking { animation: none; color: #9a9a9a; } }

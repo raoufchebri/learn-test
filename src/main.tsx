@@ -123,17 +123,48 @@ function PromptBubble({ prompt, done, status, onCopy }: { prompt: string; done: 
   </div>;
 }
 
-// Replit's reply under the bubble: a note that it's an example, the faded thinking line, then the answer.
-function ChatExchange({ exchange }: { exchange: ChatExchangeExample }) {
-  return <div className="chat-reply" aria-label="Example reply from Replit">
+// Replit's reply under the bubble: a note that it's an example, the thinking line, then the answer.
+// With stream, the thinking line shimmers briefly and the answer appears a few words at a time, like Replit's chat.
+function ChatExchange({ exchange, stream = false }: { exchange: ChatExchangeExample; stream?: boolean }) {
+  type Part = { text: string; bold?: boolean };
+  const blocks = useMemo(() => {
+    const list: Array<{ kind: "p" | "li"; parts: Part[] }> = [];
+    if (exchange.intro) list.push({ kind: "p", parts: [{ text: exchange.intro }] });
+    exchange.items.forEach((item) => list.push({ kind: "li", parts: [{ text: item.label, bold: true }, { text: `${exchange.labelSeparator}${item.text}` }] }));
+    if (exchange.outro) list.push({ kind: "p", parts: [{ text: exchange.outro }] });
+    if (exchange.question) list.push({ kind: "p", parts: [{ text: exchange.question, bold: true }] });
+    return list.map((block) => ({ ...block, parts: block.parts.map((part) => ({ ...part, tokens: part.text.split(/(\s+)/).filter(Boolean) })) }));
+  }, [exchange]);
+  const total = blocks.reduce((sum, block) => sum + block.parts.reduce((count, part) => count + part.tokens.length, 0), 0);
+  const animate = stream && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const [thinking, setThinking] = useState(animate);
+  const [shown, setShown] = useState(animate ? 0 : total);
+  useEffect(() => {
+    if (!animate) return;
+    let interval = 0;
+    const start = window.setTimeout(() => {
+      setThinking(false);
+      interval = window.setInterval(() => setShown((value) => { const next = value + 3; if (next >= total) window.clearInterval(interval); return Math.min(next, total); }), 40);
+    }, 1000);
+    return () => { window.clearTimeout(start); window.clearInterval(interval); };
+  }, [animate, total]);
+  let budget = shown;
+  const rendered = blocks.map((block) => {
+    const parts = block.parts.map((part) => { const take = Math.max(0, Math.min(part.tokens.length, budget)); budget -= take; return { ...part, visible: part.tokens.slice(0, take).join("") }; });
+    return { kind: block.kind, parts, empty: parts.every((part) => !part.visible) };
+  });
+  const content = (block: typeof rendered[number]) => block.parts.map((part, index) => part.visible ? (part.bold ? <strong key={index}>{part.visible}</strong> : <span key={index}>{part.visible}</span>) : null);
+  const items = rendered.filter((block) => block.kind === "li" && !block.empty);
+  const firstLi = rendered.findIndex((block) => block.kind === "li");
+  return <div className="chat-reply" aria-label="Example reply from Replit" aria-busy={shown < total}>
     <p className="chat-reply-note">Here’s an example of what Replit can answer. Yours may be different.</p>
-    <p className="chat-reply-thinking">{exchange.thinking}</p>
-    <div className="chat-reply-answer">
-      {exchange.intro && <p>{exchange.intro}</p>}
-      <ol>{exchange.items.map((item) => <li key={item.label}><strong>{item.label}</strong>{exchange.labelSeparator}{item.text}</li>)}</ol>
-      {exchange.outro && <p>{exchange.outro}</p>}
-      {exchange.question && <p><strong>{exchange.question}</strong></p>}
-    </div>
+    <p className={`chat-reply-thinking ${thinking ? "is-thinking" : ""}`}>{exchange.thinking}</p>
+    {!thinking && <div className="chat-reply-answer">
+      {rendered.map((block, index) => {
+        if (block.kind === "li") return index === firstLi && items.length ? <ol key="list">{items.map((item, itemIndex) => <li key={itemIndex}>{content(item)}</li>)}</ol> : null;
+        return block.empty ? null : <p key={index}>{content(block)}</p>;
+      })}
+    </div>}
   </div>;
 }
 
@@ -208,6 +239,8 @@ function LessonPage({
   const entryOpened = entryOpenedState || isUnlocked(entryUnlock?.id) && !!entryUnlock || completed;
   const promptContinued = LEARN_DEV_MODE || completed || firstLockedPrompt < 0;
   const [promptCopy, setPromptCopy] = useState<Record<number, "copied" | "failed">>({});
+  // Sections whose example answer was just revealed in this visit: those stream in; stored ones appear instantly.
+  const [streamingSections, setStreamingSections] = useState<number[]>([]);
   const hasFrontendCheck = lesson.title === 'What Is Replit Building?';
   const hasCheckpoint = hasFrontendCheck || !!lesson.checkpoint;
   const checkpointIndex = lesson.checkpoint?.afterSection ?? 2;
@@ -441,20 +474,25 @@ function LessonPage({
             const copy = promptCopy[sectionIndex];
             const revealUnlock = revealUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex);
             const revealed = isUnlocked(revealUnlock?.id);
+            // Copying the prompt also reveals Replit's example answer (streamed, with confetti) in the chat above.
             const copyPrompt = async () => {
               try { await navigator.clipboard.writeText(section.prompt!); setPromptCopy((current) => ({ ...current, [sectionIndex]: "copied" })); }
               catch { setPromptCopy((current) => ({ ...current, [sectionIndex]: "failed" })); }
               unlockStep(promptUnlock.id);
+              const reveal = revealUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex);
+              if (reveal && !isUnlocked(reveal.id)) {
+                setStreamingSections((current) => [...current, sectionIndex]);
+                unlockStep(reveal.id, false, true);
+              }
             };
             return <>
               <div className="lesson-chat-thread" role="group" aria-label="Chat in Replit">
                 <PromptBubble prompt={section.prompt} done={done} status={copy} onCopy={copyPrompt} />
-                {section.exchange && done && revealed && <ChatExchange exchange={section.exchange} />}
+                {section.exchange && done && revealed && <ChatExchange exchange={section.exchange} stream={streamingSections.includes(sectionIndex)} />}
               </div>
-              {revealUnlock && !revealed && <div className={`recipe-unlock-action reveal-unlock ${done ? 'is-ready' : ''}`}>
-                {/* Before copying, the button tells learners what to do (and copies too); after, it reveals the example answer. */}
-                <button type="button" className="recipe-create-button" onClick={() => done ? unlockStep(revealUnlock.id, false, true) : void copyPrompt()}>
-                  <LessonUnlockIcon /><span>{done ? 'Show an example answer' : 'Click on the prompt to copy it'}</span>
+              {revealUnlock && <div className={`recipe-unlock-action reveal-unlock ${done && revealed ? 'is-open' : ''}`}>
+                <button type="button" className="recipe-create-button" onClick={() => void copyPrompt()}>
+                  {done && revealed ? <Icons.Check size={20} aria-hidden="true" /> : <LessonUnlockIcon />}<span>Click on the prompt to copy it</span>
                 </button>
               </div>}
             </>;
