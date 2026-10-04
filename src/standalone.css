@@ -1248,3 +1248,17 @@
 .lesson-content .lesson-chat-thread p.project-card-description.is-expanded { display: block; -webkit-line-clamp: unset; }
 .chat-reply-approval.is-project .project-card-more { display: block; margin: 6px auto 14px; border: 0; background: none; font: inherit; font-size: 14px; color: var(--replit-dark-gray); cursor: pointer; }
 .chat-reply-approval.is-project .chat-reply-approval-actions button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+/* The learner's new project, with Open as the next step's lock. */
+.project-link-card { margin: 8px 0 24px; }
+.lesson-content p.project-link-intro { margin: 0 0 10px; }
+.project-link-row { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border: 1px solid var(--replit-light-silver); border-radius: 12px; background: var(--replit-off-white); }
+.project-link-icon { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--replit-light-silver); border-radius: 10px; background: #fff; color: var(--replit-dark-gray); flex: none; }
+.project-link-name { display: grid; gap: 2px; min-width: 0; flex: 1; }
+.project-link-name strong { font-size: 16px; font-weight: 600; color: var(--replit-off-black); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.project-link-name small { font-size: 13px; color: var(--replit-medium-gray); }
+.project-link-open { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 8px; background: #23734d; color: #fff; text-decoration: none; font-size: 15px; font-weight: 500; flex: none; }
+.project-link-open[aria-disabled="true"] { opacity: .5; pointer-events: none; }
+.project-link-card.is-open .project-link-open { background: var(--replit-light-gray); color: var(--replit-off-black); }
+.lesson-content p.project-link-hint { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 10px 0 0; font-size: 14px; color: var(--replit-medium-gray); }
+.project-link-card.is-open p.project-link-hint { color: #23734d; }
+.project-link-hint button { margin-left: auto; border: 0; background: none; font: inherit; font-size: 13px; color: var(--replit-dark-gray); text-decoration: underline; cursor: pointer; }

@@ -145,6 +145,8 @@ export function lessonUnlocks(module: CourseModule, lesson: LearnLesson): Lesson
       const accepted = ([] as string[]).concat(section.approval.approve);
       unlocks.push({ id: `${base}:step-${sectionIndex}`, kind: "step", label: section.approval.kind === "mode" ? `Choose ${accepted.join(" or ")} and continue` : section.approval.kind === "routine" || section.approval.kind === "project" ? `Click ${accepted[0]}` : `Select ${accepted[0]} and click Submit`, sectionIndex });
     }
+    // After the card: open the new project (found through the learner's Replit apps) to continue.
+    if (gated && section.prompt && section.openProject) unlocks.push({ id: `${base}:project-${sectionIndex}`, kind: "step", label: section.openProject.label, sectionIndex });
     if (section.step) unlocks.push({ id: `${base}:step-${sectionIndex}`, kind: "step", label: section.step.label, sectionIndex });
   });
   if (lesson.activityConfirmation && lesson.module !== "Your capstone") unlocks.push({ id: `${base}:activity`, kind: "activity", label: lesson.activityConfirmation });

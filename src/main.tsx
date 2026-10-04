@@ -192,6 +192,45 @@ function ApprovalCard({ spec, approved, onApprove }: { spec: ApprovalSpec; appro
   </div>;
 }
 
+// The learner's new project, found through their Replit apps (newest first, preferring a name that matches).
+// Open opens it beside the lesson and unlocks the next step. Without app access, it links to Replit home.
+function ProjectLinkCard({ label, match, opened, onOpen, className = "" }: { label: string; match?: string; opened: boolean; onOpen: () => void; className?: string }) {
+  type App = { id: string; title: string; url?: string; updatedAt?: string };
+  const [state, setState] = useState<{ status: "loading" | "ready" | "fallback"; app?: App }>({ status: "loading" });
+  const load = () => {
+    setState({ status: "loading" });
+    fetch("/api/mcp/apps", { credentials: "same-origin" })
+      .then((response) => response.ok ? response.json() as Promise<{ status?: string; apps?: App[] }> : Promise.reject())
+      .then((result) => {
+        const apps = (result.status === "ready" && Array.isArray(result.apps) ? result.apps : []).filter((app) => app.url);
+        const newest = [...apps].sort((a, b) => (b.updatedAt ?? "").localeCompare(a.updatedAt ?? ""));
+        const pattern = new RegExp(match ?? "pok[eé]|rsvp|birthday|party", "i");
+        const app = newest.find((entry) => pattern.test(entry.title)) ?? newest[0];
+        setState(app ? { status: "ready", app } : { status: "fallback" });
+      })
+      .catch(() => setState({ status: "fallback" }));
+  };
+  useEffect(load, []);
+  const href = state.app?.url ?? "https://replit.com/~";
+  const title = state.status === "loading" ? "Finding your new project…" : state.app?.title ?? "Your new project";
+  return <div className={`project-link-card ${opened ? "is-open" : ""} ${className}`}>
+    <p className="project-link-intro">{state.status === "fallback" ? "Open Replit to find your new project and watch it being built." : "Here’s the project Replit is building. Open it to watch the app come together."}</p>
+    <div className="project-link-row">
+      <span className="project-link-icon" aria-hidden="true"><Icons.LayoutGrid size={18} /></span>
+      <div className="project-link-name"><strong>{title}</strong><small>{state.status === "fallback" ? "Replit home" : "Project"}</small></div>
+      <a className="project-link-open" href={href} target="_blank" rel="noopener noreferrer" aria-disabled={state.status === "loading"} onClick={(event) => {
+        if (state.status === "loading") { event.preventDefault(); return; }
+        if (!event.metaKey && !event.ctrlKey && !event.shiftKey && openBesideLesson(href)) event.preventDefault();
+        onOpen();
+      }} onAuxClick={(event) => { if (event.button === 1 && state.status !== "loading") onOpen(); }}>Open <Icons.ArrowUpRight size={15} aria-hidden="true" /></a>
+    </div>
+    <p className="project-link-hint" role="status">
+      {opened ? <><Icons.Check size={14} aria-hidden="true" /> Project opened</> : <><Icons.LockKeyhole size={14} aria-hidden="true" /> {label}: click Open to continue.</>}
+      {state.status !== "loading" && <button type="button" onClick={load}>{state.status === "ready" ? "Not this one? Refresh" : "Refresh"}</button>}
+    </p>
+  </div>;
+}
+
 // Splits reply text into parts: **bold** and [label](url) links.
 function inlineParts(text: string): Array<{ text: string; bold?: boolean; href?: string }> {
   const parts: Array<{ text: string; bold?: boolean; href?: string }> = [];
@@ -350,7 +389,9 @@ function LessonPage({
   const revealUnlocks = unlocks.filter((unlock) => unlock.kind === "reveal");
   // Steps that gate the rest of the lesson, in order: copy the prompt, then (when there's an example) reveal the answer.
   const stepUnlocks = unlocks.filter((unlock) => unlock.kind === "step");
-  const approvalDone = (sectionIndex: number) => { const unlock = stepUnlocks.find((entry) => entry.sectionIndex === sectionIndex); return !!unlock && isUnlocked(unlock.id); };
+  const stepUnlockFor = (sectionIndex: number, kind: "step" | "project") => stepUnlocks.find((entry) => entry.id.endsWith(`:${kind}-${sectionIndex}`));
+  const approvalDone = (sectionIndex: number) => { const unlock = stepUnlockFor(sectionIndex, "step"); return !!unlock && isUnlocked(unlock.id); };
+  const projectOpened = (sectionIndex: number) => { const unlock = stepUnlockFor(sectionIndex, "project"); return !!unlock && isUnlocked(unlock.id); };
   const firstLockedPrompt = unlocks.filter((unlock) => unlock.kind === "prompt" || unlock.kind === "reveal" || unlock.kind === "step").find((unlock) => !isUnlocked(unlock.id))?.sectionIndex ?? -1;
   const sectionStepsDone = (sectionIndex: number) => isUnlocked(promptUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex)?.id) && isUnlocked(revealUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex)?.id);
   const [entryOpenedState, setEntryOpened] = useState(LEARN_DEV_MODE || !lesson.entryLink);
@@ -662,7 +703,7 @@ function LessonPage({
             };
             // Approval card after the example reply: its stream uses key sectionIndex + 0.5, so later sections wait for it.
             const approval = section.approval;
-            const approvalUnlock = approval ? stepUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex) : undefined;
+            const approvalUnlock = approval ? stepUnlockFor(sectionIndex, "step") : undefined;
             const approved = !!approvalUnlock && isUnlocked(approvalUnlock.id);
             const approvalKey = sectionIndex + 0.5;
             const approve = () => {
@@ -694,7 +735,7 @@ function LessonPage({
           })()}
           {section.step && (() => {
             const step = section.step;
-            const stepUnlock = stepUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex);
+            const stepUnlock = stepUnlockFor(sectionIndex, "step");
             const done = isUnlocked(stepUnlock?.id);
             const open = done && holdingSection !== sectionIndex;
             // Same sequence as copying a prompt: the example answer streams, then the button turns green and the next step fades in.
@@ -749,7 +790,11 @@ function LessonPage({
             </div>
           </div>}
           {recipeLesson && section.id === "a-few-building-blocks-make-it-work" && <p>In the next lesson, you’ll explore what Replit is doing while your app builds. After that, you’ll look inside its project, code, and files.</p>}
-          {section.image && sectionStepsDone(sectionIndex) && (!section.approval || (approvalDone(sectionIndex) && holdingSection !== sectionIndex + 0.5)) && (
+          {section.openProject && sectionStepsDone(sectionIndex) && approvalDone(sectionIndex) && holdingSection !== sectionIndex + 0.5 && (() => {
+            const unlock = stepUnlockFor(sectionIndex, "project");
+            return <ProjectLinkCard key={`project-${sectionIndex}`} label={section.openProject.label} match={section.openProject.match} opened={projectOpened(sectionIndex)} onOpen={() => unlockStep(unlock?.id)} className={fadeClass(`project-${sectionIndex}`)} />;
+          })()}
+          {section.image && sectionStepsDone(sectionIndex) && (!section.approval || (approvalDone(sectionIndex) && holdingSection !== sectionIndex + 0.5)) && (!section.openProject || projectOpened(sectionIndex)) && (
             <figure className="lesson-app-screenshot">
               <ZoomableImage src={section.image.src} alt={section.image.alt} lazy />
               <figcaption>{section.image.caption}{section.image.source && <> <a href={section.image.source} target="_blank" rel="noreferrer">Source</a></>}</figcaption>
