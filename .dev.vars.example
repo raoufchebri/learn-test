@@ -7,3 +7,6 @@ RAG_INDEX_SECRET=
 # Optional overrides. The defaults point to Replit's production OIDC and MCP endpoints.
 # REPLIT_OIDC_ISSUER=https://replit.com/oidc
 # REPLIT_MCP_URL=https://replit-mcp.com/server/mcp
+
+# Neon Postgres. Records who signed in and when (users, sign_ins). Run `pnpm db:migrate` after adding migrations.
+NEON_DATABASE_URL=

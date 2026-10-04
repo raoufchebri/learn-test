@@ -1,5 +1,6 @@
 import { CAPSTONE_REVIEW, parseCapstoneReview, type CapstoneCheck } from "../src/capstone-rubric";
 import { createRemoteJWKSet, jwtVerify } from "jose";
+import { neon } from "@neondatabase/serverless";
 import { RECIPE_PROMPT, type RecipeBuild } from "../src/recipe-activity";
 
 type StoredUser = {
@@ -62,6 +63,7 @@ type DurableObjectNamespaceLike = {
 };
 
 type Env = {
+  NEON_DATABASE_URL?: string;
   ASSETS: { fetch(request: Request): Promise<Response> };
   AUTH_SESSIONS: DurableObjectNamespaceLike;
   OPENAI_API_KEY?: string;
@@ -327,7 +329,7 @@ async function userFromIdToken(env: Env, clientId: string, idToken: string, expe
   };
 }
 
-async function finishLogin(request: Request, env: Env): Promise<Response> {
+async function finishLogin(request: Request, env: Env, ctx?: ExecutionContext): Promise<Response> {
   const requestUrl = new URL(request.url);
   const flowId = cookieValue(request, OAUTH_COOKIE);
   if (!flowId) return authFailureRedirect(request, "missing_flow");
@@ -344,6 +346,9 @@ async function finishLogin(request: Request, env: Env): Promise<Response> {
     const user = await userFromIdToken(env, flow.clientId, tokens.id_token, flow.nonce);
     if (!tokens.access_token) throw new Error("OIDC token response did not include an MCP access token");
     const sessionId = randomToken();
+    // Record the sign-in in the background; a database problem never blocks signing in.
+    const signIn = recordSignIn(env, user);
+    if (ctx) ctx.waitUntil(signIn); else await signIn;
     await putRecord(env, `session:${sessionId}`, {
       kind: "auth-session",
       user,
@@ -362,6 +367,24 @@ async function finishLogin(request: Request, env: Env): Promise<Response> {
     return new Response(null, { status: 302, headers });
   } catch {
     return authFailureRedirect(request, "callback_failed");
+  }
+}
+
+// Saves who signed in and when: upserts the user and adds one sign_ins row. Failures are logged, never thrown.
+async function recordSignIn(env: Env, user: StoredUser): Promise<void> {
+  if (!env.NEON_DATABASE_URL) return;
+  try {
+    const sql = neon(env.NEON_DATABASE_URL);
+    await sql.transaction([
+      sql`INSERT INTO users (id, username, first_name, email, email_verified, profile_image_url)
+          VALUES (${user.id}, ${user.username}, ${user.firstName ?? null}, ${user.email ?? null}, ${user.emailVerified}, ${user.profileImageUrl ?? null})
+          ON CONFLICT (id) DO UPDATE SET username = EXCLUDED.username, first_name = EXCLUDED.first_name, email = EXCLUDED.email,
+            email_verified = EXCLUDED.email_verified, profile_image_url = EXCLUDED.profile_image_url,
+            last_signed_in_at = now(), sign_in_count = users.sign_in_count + 1`,
+      sql`INSERT INTO sign_ins (user_id) VALUES (${user.id})`,
+    ]);
+  } catch (error) {
+    console.error("Could not record sign-in", error instanceof Error ? error.message : error);
   }
 }
 
@@ -1101,10 +1124,10 @@ function withSecurityHeaders(response: Response): Response {
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
 }
 
-async function route(request: Request, env: Env): Promise<Response> {
+async function route(request: Request, env: Env, ctx?: ExecutionContext): Promise<Response> {
   const { pathname } = new URL(request.url);
   if (pathname === "/api/auth/login" && request.method === "GET") return startLogin(request, env);
-  if (pathname === "/api/auth/callback" && request.method === "GET") return finishLogin(request, env);
+  if (pathname === "/api/auth/callback" && request.method === "GET") return finishLogin(request, env, ctx);
   if (pathname === "/api/auth/session" && request.method === "GET") return sessionResponse(request, env);
   if (pathname === "/api/auth/logout" && request.method === "POST") return logout(request, env);
   if (pathname === "/api/mcp/apps" && request.method === "GET") return mcpAppsResponse(request, env);
@@ -1119,9 +1142,9 @@ async function route(request: Request, env: Env): Promise<Response> {
 }
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     try {
-      return withSecurityHeaders(await route(request, env));
+      return withSecurityHeaders(await route(request, env, ctx));
     } catch (error) {
       console.error("Worker request failed", error);
       return withSecurityHeaders(json({ error: "The Replit connection is temporarily unavailable" }, { status: 503 }));

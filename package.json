@@ -14,9 +14,11 @@
     "preview": "vite preview",
     "generate:learn-index": "node scripts/generate-learn-index.mjs",
     "upsert:learn-index": "node scripts/upsert-rag-manifest.mjs public/retrieval/replit-learn-index.json",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "db:migrate": "node scripts/db-migrate.mjs"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.2.0",
     "fumadocs-core": "16.14.1",
     "fumadocs-mdx": "15.2.2",
     "fumadocs-ui": "16.14.0",
