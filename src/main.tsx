@@ -595,10 +595,7 @@ function LessonConfetti({ onDone }: { onDone: () => void }) {
   } as CSSProperties} /></i>)}</div>, document.body);
 }
 
-const AVATAR_GRADIENTS = [
-  ["#f4a261", "#e76f51"], ["#8ecae6", "#3a86c8"], ["#a7c957", "#4f9d69"], ["#cdb4db", "#8e6fc1"],
-  ["#ffcf77", "#e9a23b"], ["#f7a1b8", "#d45d84"], ["#90e0d3", "#2a9d8f"], ["#b8c0ff", "#6c74e0"],
-];
+const AVATAR_COLORS = ["#d9643a", "#2f7fbf", "#3f8a5c", "#7b5cc4", "#c98a1c", "#c2507a", "#23877b", "#5a62d6"];
 
 // Initials from first and last name, else from the username's word parts (RaoufChebri1 → RC).
 function avatarInitials(username: string, first?: string, last?: string) {
@@ -609,12 +606,11 @@ function avatarInitials(username: string, first?: string, last?: string) {
   return (fromName.length === 1 ? fromName + (parts[1]?.[0] ?? "") : fromUsername).toUpperCase();
 }
 
-// Fallback avatar when Replit doesn't share a profile picture: initials on a gradient picked from the username.
-function InitialsAvatar({ username, first, last }: { username: string; first?: string; last?: string }) {
+// Fallback when Replit doesn't share a profile picture: initials on one plain color picked from the username.
+function avatarColor(username: string) {
   let hash = 0;
   for (const char of username) hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
-  const [from, to] = AVATAR_GRADIENTS[hash % AVATAR_GRADIENTS.length];
-  return <span className="initials-avatar" style={{ background: `linear-gradient(135deg, ${from}, ${to})` }}>{avatarInitials(username, first, last)}</span>;
+  return AVATAR_COLORS[hash % AVATAR_COLORS.length];
 }
 
 function playUnlockChime() {
@@ -1304,8 +1300,9 @@ function LearnSettingsDock({
       )}
 
       <div className="learn-settings-dock-row">
-        <button className="learn-settings-dock-toggle" type="button" onClick={() => setOpen((value) => !value)} aria-label="Learn settings" aria-haspopup="dialog" aria-controls="learn-settings-panel" aria-expanded={open}>
-          {avatar ? <img src={avatar} alt="" /> : username ? <InitialsAvatar username={username} first={displayName.first} last={displayName.last} /> : <Icons.UserRound size={18} />}
+        <button className={`learn-settings-dock-toggle ${!avatar && username ? 'is-initials' : ''}`} type="button" onClick={() => setOpen((value) => !value)} aria-label="Learn settings" aria-haspopup="dialog" aria-controls="learn-settings-panel" aria-expanded={open}
+          style={!avatar && username ? { background: avatarColor(username) } : undefined}>
+          {avatar ? <img src={avatar} alt="" /> : username ? avatarInitials(username, displayName.first, displayName.last) : <Icons.UserRound size={18} />}
         </button>
       </div>
     </aside>
