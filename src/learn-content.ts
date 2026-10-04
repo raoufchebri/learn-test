@@ -71,7 +71,6 @@ export type ChatExchangeExample = {
   labelSeparator?: " — " | ": ";
   outro?: string;
   question?: string;
-  approvalCard?: { question: string; options: string[] };  // Replit's approval card, shown after the reply
 };
 
 export type LearnLesson = {
@@ -97,7 +96,7 @@ export type LearnLesson = {
   practice?: { prompt: string; checks: string[] };
   checkpoint?: { afterSection: number; questions: QuizQuestion[] };
   outcomes?: string[];
-  sections: Array<{ heading: string; id?: string; body: string; link?: { href: string; label: string }; prompt?: string; chatPrompt?: boolean; step?: { label: string; href?: string; exchange?: ChatExchangeExample }; afterPrompt?: string; items?: string[]; image?: { src: string; alt: string; caption: string; source?: string }; exchange?: ChatExchangeExample; diagram?: 'recipe-architecture' | 'recipe-iteration' }>;
+  sections: Array<{ heading: string; id?: string; body: string; link?: { href: string; label: string }; prompt?: string; chatPrompt?: boolean; approval?: { question: string; options: string[]; approve: string; exchange: ChatExchangeExample }; step?: { label: string; href?: string; exchange?: ChatExchangeExample }; afterPrompt?: string; items?: string[]; image?: { src: string; alt: string; caption: string; source?: string }; exchange?: ChatExchangeExample; diagram?: 'recipe-architecture' | 'recipe-iteration' }>;
   replitExample: string;
   quiz: QuizQuestion[];
 };

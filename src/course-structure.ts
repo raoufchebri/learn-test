@@ -140,6 +140,8 @@ export function lessonUnlocks(module: CourseModule, lesson: LearnLesson): Lesson
     const gated = (lesson.promptGate || lesson.copyPrompts) && !section.chatPrompt;
     if (gated && section.prompt) unlocks.push({ id: `${base}:prompt-${sectionIndex}`, kind: "prompt", label: "Copy the prompt", sectionIndex });
     if (gated && section.prompt && section.exchange) unlocks.push({ id: `${base}:reveal-${sectionIndex}`, kind: "reveal", label: "Show an example answer", sectionIndex });
+    // The example reply's approval card: choosing the approve option and submitting unlocks the rest.
+    if (gated && section.prompt && section.approval) unlocks.push({ id: `${base}:step-${sectionIndex}`, kind: "step", label: `Select ${section.approval.approve} and click Submit`, sectionIndex });
     if (section.step) unlocks.push({ id: `${base}:step-${sectionIndex}`, kind: "step", label: section.step.label, sectionIndex });
   });
   if (lesson.activityConfirmation && lesson.module !== "Your capstone") unlocks.push({ id: `${base}:activity`, kind: "activity", label: lesson.activityConfirmation });

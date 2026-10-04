@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { createPortal } from "react-dom";
 import { BrowserRouter, useLocation, useNavigate } from "react-router-dom";
@@ -125,7 +125,27 @@ function PromptBubble({ prompt, done, status, onCopy }: { prompt: string; done: 
 
 // Replit's reply under the bubble: a note that it's an example, the thinking line, then the answer.
 // With stream, the thinking line shimmers briefly and the answer appears a few words at a time, like Replit's chat.
-function ChatExchange({ exchange, stream = false, onDone }: { exchange: ChatExchangeExample; stream?: boolean; onDone?: () => void }) {
+// Replit's approval card in an example reply. Choosing the approve option and clicking Submit unlocks the next step.
+function ApprovalCard({ question, options, approve, approved, onApprove }: { question: string; options: string[]; approve: string; approved: boolean; onApprove: () => void }) {
+  const name = useId();
+  const [choice, setChoice] = useState<string | undefined>(approved ? approve : undefined);
+  const [hint, setHint] = useState("");
+  const nudge = `For this lesson, select ${approve}, then click Submit.`;
+  return <div className={`chat-reply-approval fade-in-step ${approved ? "is-approved" : ""}`} role="group" aria-label={question}>
+    <strong>{question}</strong>
+    <div className="chat-reply-approval-options">{options.map((option) => <label key={option}>
+      <input type="radio" name={name} checked={(approved ? approve : choice) === option} disabled={approved} onChange={() => { setChoice(option); setHint(""); }} />
+      <span>{option}</span>
+    </label>)}</div>
+    <div className="chat-reply-approval-actions">
+      <button type="button" disabled={approved} onClick={() => setHint(nudge)}>Decline</button>
+      <button type="button" disabled={approved || !choice} onClick={() => { if (choice === approve) { setHint(""); onApprove(); } else setHint(nudge); }}>Submit</button>
+    </div>
+    <p className="chat-reply-approval-hint" role="status">{approved ? <><Icons.Check size={14} aria-hidden="true" /> Submitted</> : hint || <><Icons.LockKeyhole size={14} aria-hidden="true" /> Select {approve}, then click Submit to continue.</>}</p>
+  </div>;
+}
+
+function ChatExchange({ exchange, stream = false, note = true, onDone }: { exchange: ChatExchangeExample; stream?: boolean; note?: boolean; onDone?: () => void }) {
   type Part = { text: string; bold?: boolean };
   type Block = { kind: "p" | "li" | "tools" | "image"; parts: Part[] };
   const blocks = useMemo(() => {
@@ -163,7 +183,7 @@ function ChatExchange({ exchange, stream = false, onDone }: { exchange: ChatExch
   const items = rendered.filter((block) => block.kind === "li" && !block.empty);
   const firstLi = rendered.findIndex((block) => block.kind === "li");
   return <div className="chat-reply" aria-label="Example reply from Replit" aria-busy={shown < total}>
-    <p className="chat-reply-note">Here’s an example of what Replit can answer. Yours may be different.</p>
+    {note && <p className="chat-reply-note">Here’s an example of what Replit can answer. Yours may be different.</p>}
     {exchange.thinking && <p className={`chat-reply-thinking ${thinking ? "is-thinking" : ""}`}>{exchange.thinking}</p>}
     {thinking && !exchange.thinking && <p className="chat-reply-thinking is-thinking">Thinking…</p>}
     {!thinking && <div className="chat-reply-answer">
@@ -176,11 +196,6 @@ function ChatExchange({ exchange, stream = false, onDone }: { exchange: ChatExch
         if (block.kind === "tools") return block.empty ? null : <p key={index} className="chat-reply-tools">{content(block)}</p>;
         return block.empty ? null : <p key={index}>{content(block)}</p>;
       })}
-      {exchange.approvalCard && shown >= total && <div className="chat-reply-approval fade-in-step" aria-label="Example approval card">
-        <strong>{exchange.approvalCard.question}</strong>
-        <ul>{exchange.approvalCard.options.map((option) => <li key={option}><span aria-hidden="true" />{option}</li>)}</ul>
-        <div className="chat-reply-approval-actions" aria-hidden="true"><span>Decline</span><span>Submit</span></div>
-      </div>}
     </div>}
   </div>;
 }
@@ -554,11 +569,24 @@ function LessonPage({
                 unlockStep(reveal.id, false, false, true);
               } else unlockStep(promptUnlock.id);
             };
+            // Approval card after the example reply: its stream uses key sectionIndex + 0.5, so later sections wait for it.
+            const approval = section.approval;
+            const approvalUnlock = approval ? stepUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex) : undefined;
+            const approved = !!approvalUnlock && isUnlocked(approvalUnlock.id);
+            const approvalKey = sectionIndex + 0.5;
+            const approve = () => {
+              if (!approvalUnlock || approved) return;
+              pendingCelebrations.current.set(approvalKey, false);
+              setStreamingSections((current) => [...current, approvalKey]);
+              unlockStep(approvalUnlock.id, false, false, true);
+            };
             return <>
-              <div className={`lesson-chat-thread ${holdingSection === sectionIndex ? 'is-streaming' : ''}`} role="group" aria-label="Chat in Replit">
+              <div className={`lesson-chat-thread ${holdingSection === sectionIndex || holdingSection === approvalKey ? 'is-streaming' : ''}`} role="group" aria-label="Chat in Replit">
                 <PromptBubble prompt={section.prompt} done={done} status={copy} onCopy={copyPrompt} />
                 {section.exchange && done && revealed && <ChatExchange exchange={section.exchange} stream={streamingSections.includes(sectionIndex)}
                   onDone={() => finishStream(sectionIndex)} />}
+                {approval && done && revealed && holdingSection !== sectionIndex && <ApprovalCard question={approval.question} options={approval.options} approve={approval.approve} approved={approved} onApprove={approve} />}
+                {approval && approved && <ChatExchange exchange={approval.exchange} note={false} stream={streamingSections.includes(approvalKey)} onDone={() => finishStream(approvalKey)} />}
               </div>
               {/* Unlock button under each chat: stays in place and turns green with a check once unlocked. */}
               {revealUnlock && <div className={`recipe-unlock-action reveal-unlock ${done && revealed && holdingSection !== sectionIndex ? 'is-open' : ''}`}>

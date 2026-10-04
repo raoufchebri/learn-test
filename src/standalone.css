@@ -1194,13 +1194,16 @@
 
 /* Step buttons (no prompt to copy) use a normal pointer. */
 .step-unlock .recipe-create-button { cursor: pointer; }
-/* Example of Replit's approval card, shown under a reply. Not interactive. */
+/* Replit's approval card under an example reply. Selecting the approve option and clicking Submit unlocks the next step. */
 .chat-reply-approval { margin: 4px 0 16px; padding: 18px 20px; border: 1px solid var(--replit-light-silver); border-radius: 14px; background: var(--replit-off-white); }
 .chat-reply-approval strong { display: block; margin-bottom: 10px; font-size: 16px; font-weight: 600; color: var(--replit-off-black); }
-.lesson-content .chat-reply-approval ul { margin: 0 0 14px; padding: 0; list-style: none; }
-.lesson-content .chat-reply-approval li { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; padding: 0; font-size: 15px; color: var(--replit-off-black); }
-.lesson-content .chat-reply-approval li::before, .lesson-content .chat-reply-approval li::after { content: none; }
-.chat-reply-approval li span { width: 16px; height: 16px; border: 1px solid var(--replit-light-silver); border-radius: 50%; background: #fff; flex: none; }
+.chat-reply-approval-options { display: grid; gap: 8px; margin-bottom: 14px; }
+.chat-reply-approval-options label { display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--replit-off-black); cursor: pointer; }
+.chat-reply-approval-options input { width: 16px; height: 16px; margin: 0; accent-color: #0079f2; cursor: pointer; }
+.chat-reply-approval.is-approved label, .chat-reply-approval.is-approved input { cursor: default; }
 .chat-reply-approval-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.chat-reply-approval-actions span { padding: 10px; border-radius: 8px; text-align: center; font-size: 15px; background: var(--replit-light-gray); color: var(--replit-off-black); }
-.chat-reply-approval-actions span:last-child { background: #0079f2; color: #fff; }
+.chat-reply-approval-actions button { padding: 10px; border: 0; border-radius: 8px; font: inherit; font-size: 15px; background: var(--replit-light-gray); color: var(--replit-off-black); cursor: pointer; transition: background .2s ease, opacity .2s ease; }
+.chat-reply-approval-actions button:last-child { background: #0079f2; color: #fff; }
+.chat-reply-approval-actions button:disabled { opacity: .5; cursor: default; }
+.lesson-content .lesson-chat-thread p.chat-reply-approval-hint { display: flex; align-items: center; gap: 6px; margin: 12px 0 0; font-size: 14px !important; color: var(--replit-medium-gray) !important; }
+.chat-reply-approval.is-approved .chat-reply-approval-hint { color: #23734d !important; }
