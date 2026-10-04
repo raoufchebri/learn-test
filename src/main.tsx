@@ -830,6 +830,9 @@ function useLessonSession() {
   const [attempt, setAttempt] = useState(0);
   const [learnerName, setLearnerName] = useState<string | undefined>();
   const [learnerKey, setLearnerKey] = useState<string | undefined>();
+  // After the first answer, moving between lessons re-checks the session in the background. Showing "checking"
+  // again would briefly hide the lesson and flash the homepage between pages.
+  const checkedOnce = useRef(false);
   useEffect(() => {
     let active = true;
     let request = 0;
@@ -841,13 +844,14 @@ function useLessonSession() {
         if (!response.ok) throw new Error();
         const session = await response.json();
         if (active && current === request) {
+          checkedOnce.current = true;
           setStatus(session.authenticated === true ? "signed-in" : "signed-out");
           setLearnerName(session.authenticated === true ? (session.user?.firstName || session.user?.username || '') : undefined);
           setLearnerKey(session.authenticated === true ? String(session.user?.id || session.user?.username || '') : undefined);
         }
       } catch { if (active && current === request && !background) setStatus("error"); }
     };
-    void check();
+    void check(checkedOnce.current);
     const authChanged = () => void check();
     const refocused = () => void check(true);
     window.addEventListener("replit-auth-changed", authChanged);
@@ -1231,6 +1235,10 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
             <p>{module.description}</p>
             <p>The lessons in this module are coming soon.</p>
           </article>
+        ) : location.pathname.startsWith("/learn/") && (access === "checking" || (access === "signed-in" && currentLocked)) ? (
+          // Opening a lesson link: stay blank while sign-in and progress load, or while a locked lesson redirects,
+          // instead of flashing the homepage and its video.
+          <article className="lesson-content learn-content-stage" aria-busy="true" aria-label="Loading lesson" />
         ) : (
           <WelcomePage onStart={startPillar} learnerName={access === 'signed-in' ? learnerName : undefined} learnerKey={access === 'signed-in' ? learnerKey : undefined} resume={access === 'signed-in' ? resumeTarget : undefined}
             welcomeDismissed={serverProgress ? welcomeDismissed : undefined}
