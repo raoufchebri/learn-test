@@ -441,20 +441,21 @@ function LessonPage({
             const copy = promptCopy[sectionIndex];
             const revealUnlock = revealUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex);
             const revealed = isUnlocked(revealUnlock?.id);
+            const copyPrompt = async () => {
+              try { await navigator.clipboard.writeText(section.prompt!); setPromptCopy((current) => ({ ...current, [sectionIndex]: "copied" })); }
+              catch { setPromptCopy((current) => ({ ...current, [sectionIndex]: "failed" })); }
+              unlockStep(promptUnlock.id);
+            };
             return <>
               <div className="lesson-chat-thread" role="group" aria-label="Chat in Replit">
-                <PromptBubble prompt={section.prompt} done={done} status={copy} onCopy={async () => {
-                  try { await navigator.clipboard.writeText(section.prompt!); setPromptCopy((current) => ({ ...current, [sectionIndex]: "copied" })); }
-                  catch { setPromptCopy((current) => ({ ...current, [sectionIndex]: "failed" })); }
-                  unlockStep(promptUnlock.id);
-                }} />
+                <PromptBubble prompt={section.prompt} done={done} status={copy} onCopy={copyPrompt} />
                 {section.exchange && done && revealed && <ChatExchange exchange={section.exchange} />}
               </div>
               {revealUnlock && !revealed && <div className={`recipe-unlock-action reveal-unlock ${done ? 'is-ready' : ''}`}>
-                <button type="button" className="recipe-create-button" disabled={!done} onClick={() => unlockStep(revealUnlock.id, false, true)}>
-                  <LessonUnlockIcon /><span>Show an example answer</span>
+                {/* Before copying, the button tells learners what to do (and copies too); after, it reveals the example answer. */}
+                <button type="button" className="recipe-create-button" onClick={() => done ? unlockStep(revealUnlock.id, false, true) : void copyPrompt()}>
+                  <LessonUnlockIcon /><span>{done ? 'Show an example answer' : 'Click on the prompt to copy it'}</span>
                 </button>
-                <small role="status">{done ? 'Paste the prompt into Replit and send it, then see an example of what Replit can answer.' : 'Click the blue bubble to copy the prompt first.'}</small>
               </div>}
             </>;
           })()}

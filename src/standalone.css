@@ -1137,7 +1137,8 @@
 /* Reveal button: grey until the prompt is copied, green once it can be clicked. */
 .reveal-unlock.is-ready .recipe-create-button:not(:disabled) { background: #23734d; border-color: #23734d; color: #fff; }
 .reveal-unlock.is-ready .recipe-create-button:not(:disabled):hover { background: #1d5f40; border-color: #1d5f40; }
-.reveal-unlock small { text-align: center; }
+/* Before copying: the usual unlock button look; clicking it copies the prompt. */
+.reveal-unlock:not(.is-ready) .recipe-create-button { cursor: copy; }
 .prompt-bubble-row.is-done .prompt-bubble-meta svg:first-child { color: #23734d; }
 .chat-reply { margin-top: 20px; }
 .lesson-content .chat-reply .chat-reply-thinking { margin: 0 0 12px; overflow: hidden; white-space: nowrap; font-size: 15px; line-height: 1.5; color: #9a9a9a; -webkit-mask-image: linear-gradient(90deg, #000 72%, transparent); mask-image: linear-gradient(90deg, #000 72%, transparent); }
