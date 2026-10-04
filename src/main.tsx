@@ -176,6 +176,11 @@ function ChatExchange({ exchange, stream = false, onDone }: { exchange: ChatExch
         if (block.kind === "tools") return block.empty ? null : <p key={index} className="chat-reply-tools">{content(block)}</p>;
         return block.empty ? null : <p key={index}>{content(block)}</p>;
       })}
+      {exchange.approvalCard && shown >= total && <div className="chat-reply-approval fade-in-step" aria-label="Example approval card">
+        <strong>{exchange.approvalCard.question}</strong>
+        <ul>{exchange.approvalCard.options.map((option) => <li key={option}><span aria-hidden="true" />{option}</li>)}</ul>
+        <div className="chat-reply-approval-actions" aria-hidden="true"><span>Decline</span><span>Submit</span></div>
+      </div>}
     </div>}
   </div>;
 }
@@ -247,7 +252,8 @@ function LessonPage({
   const promptUnlocks = unlocks.filter((unlock) => unlock.kind === "prompt");
   const revealUnlocks = unlocks.filter((unlock) => unlock.kind === "reveal");
   // Steps that gate the rest of the lesson, in order: copy the prompt, then (when there's an example) reveal the answer.
-  const firstLockedPrompt = unlocks.filter((unlock) => unlock.kind === "prompt" || unlock.kind === "reveal").find((unlock) => !isUnlocked(unlock.id))?.sectionIndex ?? -1;
+  const stepUnlocks = unlocks.filter((unlock) => unlock.kind === "step");
+  const firstLockedPrompt = unlocks.filter((unlock) => unlock.kind === "prompt" || unlock.kind === "reveal" || unlock.kind === "step").find((unlock) => !isUnlocked(unlock.id))?.sectionIndex ?? -1;
   const sectionStepsDone = (sectionIndex: number) => isUnlocked(promptUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex)?.id) && isUnlocked(revealUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex)?.id);
   const [entryOpenedState, setEntryOpened] = useState(LEARN_DEV_MODE || !lesson.entryLink);
   const entryOpened = entryOpenedState || isUnlocked(entryUnlock?.id) && !!entryUnlock || completed;
@@ -313,6 +319,14 @@ function LessonPage({
   };
   // Sections waiting to celebrate once their answer finishes streaming (value: whether to add confetti).
   const pendingCelebrations = useRef(new Map<number, boolean>());
+  // An example answer finished streaming: release the next content and play the delayed celebration.
+  const finishStream = (sectionIndex: number) => {
+    setStreamDone((current) => current.includes(sectionIndex) ? current : [...current, sectionIndex]);
+    const confetti = pendingCelebrations.current.get(sectionIndex);
+    if (confetti === undefined) return;
+    pendingCelebrations.current.delete(sectionIndex);
+    celebrateUnlock(false, confetti);
+  };
   const inspectedBefore = useRef(unlocked);
   useEffect(() => {
     const justInspected = !inspectedBefore.current && unlocked;
@@ -544,13 +558,7 @@ function LessonPage({
               <div className={`lesson-chat-thread ${holdingSection === sectionIndex ? 'is-streaming' : ''}`} role="group" aria-label="Chat in Replit">
                 <PromptBubble prompt={section.prompt} done={done} status={copy} onCopy={copyPrompt} />
                 {section.exchange && done && revealed && <ChatExchange exchange={section.exchange} stream={streamingSections.includes(sectionIndex)}
-                  onDone={() => {
-                    setStreamDone((current) => current.includes(sectionIndex) ? current : [...current, sectionIndex]);
-                    const confetti = pendingCelebrations.current.get(sectionIndex);
-                    if (confetti === undefined) return;
-                    pendingCelebrations.current.delete(sectionIndex);
-                    celebrateUnlock(false, confetti);
-                  }} />}
+                  onDone={() => finishStream(sectionIndex)} />}
               </div>
               {/* Unlock button under each chat: stays in place and turns green with a check once unlocked. */}
               {revealUnlock && <div className={`recipe-unlock-action reveal-unlock ${done && revealed && holdingSection !== sectionIndex ? 'is-open' : ''}`}>
@@ -558,6 +566,34 @@ function LessonPage({
                   {done && revealed && holdingSection !== sectionIndex ? <Icons.Check size={20} aria-hidden="true" /> : <LessonUnlockIcon />}<span>Click on the prompt to copy it</span>
                 </button>
               </div>}
+            </>;
+          })()}
+          {section.step && (() => {
+            const step = section.step;
+            const stepUnlock = stepUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex);
+            const done = isUnlocked(stepUnlock?.id);
+            const open = done && holdingSection !== sectionIndex;
+            // Same sequence as copying a prompt: the example answer streams, then the button turns green and the next step fades in.
+            const unlock = () => {
+              if (!stepUnlock || done) return;
+              if (step.exchange) {
+                pendingCelebrations.current.set(sectionIndex, false);
+                setStreamingSections((current) => [...current, sectionIndex]);
+                unlockStep(stepUnlock.id, false, false, true);
+              } else unlockStep(stepUnlock.id);
+            };
+            const icon = open ? <Icons.Check size={20} aria-hidden="true" /> : <LessonUnlockIcon />;
+            return <>
+              {step.exchange && done && <div className={`lesson-chat-thread ${holdingSection === sectionIndex ? 'is-streaming' : ''}`} role="group" aria-label="Chat in Replit">
+                <ChatExchange exchange={step.exchange} stream={streamingSections.includes(sectionIndex)} onDone={() => finishStream(sectionIndex)} />
+              </div>}
+              <div className={`recipe-unlock-action step-unlock ${open ? 'is-open' : ''}`}>
+                {step.href ? <a className="recipe-create-button" href={step.href} target="_blank" rel="noopener noreferrer" onClick={(event) => {
+                  if (!event.metaKey && !event.ctrlKey && !event.shiftKey && openBesideLesson(step.href!)) event.preventDefault();
+                  unlock();
+                }} onAuxClick={(event) => { if (event.button === 1) unlock(); }}>{icon}<span>{step.label}</span></a>
+                  : <button type="button" className="recipe-create-button" onClick={unlock}>{icon}<span>{step.label}</span></button>}
+              </div>
             </>;
           })()}
           {recipeLesson && section.prompt && <RecipeBuildStep unlocking={unlockCelebration} />}
