@@ -1120,7 +1120,8 @@
 .screenshot-viewer-close:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 
 /* Lesson prompts as Replit chat: blue message bubble (click to copy), then Replit's reply. Matches Replit's chat UI. */
-.lesson-chat-thread { margin: 22px 0 26px; font-family: 'ABC Diatype Plus', 'Diatype', sans-serif; }
+.lesson-chat-thread { margin: 24px 0 28px; padding: 20px 22px; border: 1px solid var(--replit-light-silver); border-radius: 16px; background: color-mix(in srgb, var(--replit-off-white) 55%, #fff); font-family: 'ABC Diatype Plus', 'Diatype', sans-serif; }
+:root[data-theme="dark"] .lesson-chat-thread { background: color-mix(in srgb, var(--replit-off-white) 85%, #000); }
 .prompt-bubble-row { display: flex; flex-direction: column; align-items: flex-end; }
 .lesson-content .prompt-bubble { max-width: min(440px, 82%); margin: 0; padding: 11px 15px; border: 0; border-radius: 14px; background: #dde7f5; color: #27476f; font: inherit; font-size: 16px; line-height: 1.55; text-align: left; cursor: copy; transition: background .15s ease, box-shadow .15s ease; }
 .lesson-content .prompt-bubble:hover { background: #d2dff1; }

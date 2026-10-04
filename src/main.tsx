@@ -413,7 +413,7 @@ function LessonPage({
             if (!promptUnlock) return <LessonPrompt key={section.prompt} prompt={section.prompt} />;
             const done = isUnlocked(promptUnlock.id);
             const copy = promptCopy[sectionIndex];
-            return <div className="lesson-chat-thread">
+            return <div className="lesson-chat-thread" role="group" aria-label="Chat in Replit">
               <PromptBubble prompt={section.prompt} done={done} status={copy} onCopy={async () => {
                 try { await navigator.clipboard.writeText(section.prompt!); setPromptCopy((current) => ({ ...current, [sectionIndex]: "copied" })); }
                 catch { setPromptCopy((current) => ({ ...current, [sectionIndex]: "failed" })); }
