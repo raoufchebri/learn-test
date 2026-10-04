@@ -536,7 +536,7 @@ const pillarCategory = (id: CoursePillarId) => id === "discover" || id === "ai"
 type ResumeTarget = { lessonTitle: string; moduleTitle: string; done: number; total: number; onClick: () => void };
 
 // welcomeDismissed comes from the database (undefined = not loaded or unavailable, then the browser flag is used).
-function WelcomePage({ onStart, learnerName, learnerKey, resume, welcomeDismissed, onWelcomeDismissed }: { onStart: (pillar: CoursePillar) => void; learnerName?: string; learnerKey?: string; resume?: ResumeTarget; welcomeDismissed?: boolean; onWelcomeDismissed?: () => void }) {
+function WelcomePage({ onStart, learnerName, learnerKey, resume, welcomeDismissed, welcomeReady = true, onWelcomeDismissed }: { onStart: (pillar: CoursePillar) => void; learnerName?: string; learnerKey?: string; resume?: ResumeTarget; welcomeDismissed?: boolean; welcomeReady?: boolean; onWelcomeDismissed?: () => void }) {
   const welcomeDialog = useRef<HTMLDialogElement>(null);
   const greeted = useRef(false);
   const [hasProjects, setHasProjects] = useState(false);
@@ -544,8 +544,9 @@ function WelcomePage({ onStart, learnerName, learnerKey, resume, welcomeDismisse
     if (learnerName === undefined) { greeted.current = false; return; }
     if (!learnerKey) return;
     const storageKey = `replit-learn-welcome-seen:${learnerKey}`;
-    let seen = false;
-    if (welcomeDismissed !== undefined) seen = welcomeDismissed;
+    let seen = !welcomeReady; // Wait for the database's answer before deciding.
+    if (!welcomeReady) { /* still loading */ }
+    else if (welcomeDismissed !== undefined) seen = welcomeDismissed;
     else { try { seen = window.localStorage.getItem(storageKey) === 'true'; } catch { /* Storage may be unavailable. */ } }
     if (!greeted.current && !seen && welcomeDialog.current) {
       greeted.current = true;
@@ -558,7 +559,7 @@ function WelcomePage({ onStart, learnerName, learnerKey, resume, welcomeDismisse
       .then((result) => { if (!controller.signal.aborted) setHasProjects(result?.status === 'ready' && Array.isArray(result.apps) && result.apps.length > 0); })
       .catch(() => {});
     return () => controller.abort();
-  }, [learnerName, learnerKey, welcomeDismissed]);
+  }, [learnerName, learnerKey, welcomeDismissed, welcomeReady]);
   return (
     <article className="lesson-content learn-content-stage">
       <p className="eyebrow">WELCOME TO REPLIT LEARN</p>
@@ -776,9 +777,15 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
   // The database is the source of truth when it's reachable; browser storage is the instant first paint and the fallback.
   const [serverProgress, setServerProgress] = useState(false);
   const [welcomeDismissed, setWelcomeDismissed] = useState<boolean | undefined>();
+  // True once the learner has opened any Replit 101 page (database: user_course_state), even before completing one.
+  const [courseStarted, setCourseStarted] = useState(false);
+  // False until the progress request finishes (either answer or failure), so the welcome modal doesn't guess.
+  const [progressSettled, setProgressSettled] = useState(false);
   useEffect(() => {
     setServerProgress(false);
     setWelcomeDismissed(undefined);
+    setCourseStarted(false);
+    setProgressSettled(false);
     if (!learnerKey || progressOwner !== learnerKey) return;
     let active = true;
     const local = (() => { try { const saved = JSON.parse(localStorage.getItem(`replit-101-progress:v2:${learnerKey}`) ?? '[]'); return Array.isArray(saved) ? saved.filter((url): url is string => typeof url === 'string' && availableLessonUrls.has(url)) : []; } catch { return []; } })();
@@ -787,25 +794,27 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
       try {
         const response = await fetch('/api/progress', { credentials: 'same-origin', headers: { accept: 'application/json' } });
         if (!response.ok) return;
-        type Snapshot = { completed?: string[]; welcomeDismissed?: boolean; progressImported?: boolean };
+        type Snapshot = { completed?: string[]; lastLessons?: Record<string, string>; welcomeDismissed?: boolean; progressImported?: boolean };
         let snapshot = await response.json() as Snapshot;
         // Browser progress is copied in once per learner; after that the database always wins.
         if (!snapshot.progressImported) {
-          const imported = await post('/api/progress/import', { pages: local });
+          const imported = await post('/api/progress/import', { lessons: local });
           if (imported.ok) snapshot = await imported.json() as Snapshot;
         }
         if (!active || !Array.isArray(snapshot.completed)) return;
         setCompletedLessons(snapshot.completed.filter((url) => availableLessonUrls.has(url)));
         setWelcomeDismissed(snapshot.welcomeDismissed === true);
+        setCourseStarted(Boolean(snapshot.lastLessons?.discover));
         setServerProgress(true);
       } catch { /* Keep browser progress when the server is unreachable. */ }
+      finally { if (active) setProgressSettled(true); }
     })();
     return () => { active = false; };
   }, [learnerKey, progressOwner]);
   const recordCompletion = (url: string) => {
     setCompletedLessons((current) => current.includes(url) ? current : [...current, url]);
     if (!serverProgress) return;
-    fetch('/api/progress/complete', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ page: url }) })
+    fetch('/api/progress/complete', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ lesson: url }) })
       .then((response) => response.ok ? response.json() as Promise<{ completed?: string[] }> : undefined)
       .then((snapshot) => { if (snapshot?.completed) setCompletedLessons((current) => [...new Set([...current, ...snapshot.completed!.filter((entry) => availableLessonUrls.has(entry))])]); })
       .catch(() => { /* Browser storage still has it; the next sign-in imports it. */ });
@@ -820,10 +829,10 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
     const index = sequence.findIndex((entry) => entry.url === url);
     return index > 0 && sequence.slice(0, index).some((entry) => !completedLessons.includes(entry.url));
   };
-  // Shown on the courses page once a learner has completed some lessons but not all of them.
+  // Shown on the courses page once a learner has started Replit 101 (opened a page or completed one) and hasn't finished it.
   const completedInSequence = sequence.filter((entry) => completedLessons.includes(entry.url)).length;
   const nextUnfinished = sequence.find((entry) => !completedLessons.includes(entry.url));
-  const resumeTarget: ResumeTarget | undefined = progressOwner === learnerKey && completedInSequence > 0 && nextUnfinished ? {
+  const resumeTarget: ResumeTarget | undefined = progressOwner === learnerKey && (completedInSequence > 0 || courseStarted) && nextUnfinished ? {
     lessonTitle: nextUnfinished.lesson.navigationTitle ?? learnDisplayTitle(nextUnfinished.lesson.title),
     moduleTitle: nextUnfinished.module.title,
     done: completedInSequence,
@@ -836,7 +845,8 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
   // Last page seen: recorded whenever a learner opens a page they're allowed to see.
   useEffect(() => {
     if (!serverProgress || !currentUrl || currentLocked || !availableLessonUrls.has(currentUrl)) return;
-    fetch('/api/progress/seen', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ page: currentUrl }) }).catch(() => undefined);
+    setCourseStarted(true);
+    fetch('/api/progress/seen', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ lesson: currentUrl }) }).catch(() => undefined);
   }, [serverProgress, currentUrl, currentLocked]);
   useEffect(() => {
     if (access === "signed-in" && progressOwner === learnerKey && currentLocked) {
@@ -1021,6 +1031,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
         ) : (
           <WelcomePage onStart={startPillar} learnerName={access === 'signed-in' ? learnerName : undefined} learnerKey={access === 'signed-in' ? learnerKey : undefined} resume={access === 'signed-in' ? resumeTarget : undefined}
             welcomeDismissed={serverProgress ? welcomeDismissed : undefined}
+            welcomeReady={progressSettled}
             onWelcomeDismissed={() => {
               if (!serverProgress || welcomeDismissed) return;
               setWelcomeDismissed(true);

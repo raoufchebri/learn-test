@@ -31,8 +31,9 @@ html { scrollbar-gutter: stable; }
   .learn-page .course-module-heading > strong { font-size: 13px; }
   .learn-page .course-module-heading > small { font-size: 10px; white-space: nowrap; }
   .learn-page .course-module-group > .course-chapters button { font-size: 12px; }
-  .learn-page:not(.welcome-mode) { padding-left: 244px; padding-right: 24px; padding-top: 12px; }
-  .learn-with-ask .learn-page:not(.welcome-mode) { display: block; margin: 0 320px 0 0; max-width: none; padding: 12px 24px 100px 244px; }
+  /* 72px top band: content starts below the theme, light/dark and avatar icons, like a nav bar. */
+  .learn-page:not(.welcome-mode) { padding-left: 244px; padding-right: 24px; padding-top: 72px; }
+  .learn-with-ask .learn-page:not(.welcome-mode) { display: block; margin: 0 320px 0 0; max-width: none; padding: 72px 24px 100px 244px; }
   .learn-page:not(.welcome-mode) .learn-main-column { width: 100%; max-width: 720px; margin: 0 auto; }
   .learn-page:not(.welcome-mode) .lesson-content.learn-content-stage { width: 100%; max-width: none; margin: 0; }
   .learn-with-ask .learn-page.course-nav-collapsed:not(.welcome-mode) { padding-left: 88px; }

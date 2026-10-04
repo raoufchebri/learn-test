@@ -1093,9 +1093,9 @@ function sameOrigin(request: Request): boolean {
   return !origin || origin === new URL(request.url).origin;
 }
 
-// ---- Learner progress (Neon). Pages are addressed by url_path; the page ID is that path without "/learn/". ----
+// ---- Learner progress (Neon). Lessons are addressed by url_path; the lesson ID is that path without "/learn/". ----
 
-const pageIdFromPath = (value: unknown) => typeof value === "string" && /^\/learn\/[a-z0-9-]+\/[a-z0-9-]+$/.test(value) ? value.slice("/learn/".length) : undefined;
+const lessonIdFromPath = (value: unknown) => typeof value === "string" && /^\/learn\/[a-z0-9-]+\/[a-z0-9-]+$/.test(value) ? value.slice("/learn/".length) : undefined;
 
 async function progressContext(request: Request, env: Env, write: boolean) {
   if (write && !sameOrigin(request)) return { error: json({ error: "Invalid request origin" }, { status: 403 }) };
@@ -1116,13 +1116,13 @@ async function readJson(request: Request): Promise<Record<string, unknown>> {
 }
 
 async function progressSnapshot(sql: NeonQueryFunction<false, false>, userId: string) {
-  const completed = await sql`SELECT p.url_path FROM user_page_progress u JOIN pages p ON p.id = u.page_id
+  const completed = await sql`SELECT p.url_path FROM user_lesson_progress u JOIN lessons p ON p.id = u.lesson_id
                               WHERE u.user_id = ${userId} AND u.completed_at IS NOT NULL AND p.archived_at IS NULL` as Array<{ url_path: string }>;
-  const last = await sql`SELECT s.course_id, p.url_path FROM user_course_state s JOIN pages p ON p.id = s.last_page_id WHERE s.user_id = ${userId}` as Array<{ course_id: string; url_path: string }>;
+  const last = await sql`SELECT s.course_id, p.url_path FROM user_course_state s JOIN lessons p ON p.id = s.last_lesson_id WHERE s.user_id = ${userId}` as Array<{ course_id: string; url_path: string }>;
   const [flags] = await sql`SELECT welcome_dismissed_at IS NOT NULL AS welcome_dismissed, progress_imported_at IS NOT NULL AS progress_imported FROM users WHERE id = ${userId}` as Array<{ welcome_dismissed: boolean; progress_imported: boolean }>;
   return {
     completed: completed.map((row) => row.url_path),
-    lastPages: Object.fromEntries(last.map((row) => [row.course_id, row.url_path])),
+    lastLessons: Object.fromEntries(last.map((row) => [row.course_id, row.url_path])),
     welcomeDismissed: flags?.welcome_dismissed === true,
     progressImported: flags?.progress_imported === true,
   };
@@ -1134,75 +1134,75 @@ async function getProgress(request: Request, env: Env): Promise<Response> {
   return json(await progressSnapshot(ctx.sql, ctx.userId));
 }
 
-async function markPageSeen(request: Request, env: Env): Promise<Response> {
+async function markLessonSeen(request: Request, env: Env): Promise<Response> {
   const ctx = await progressContext(request, env, true);
   if ("error" in ctx) return ctx.error!;
-  const pageId = pageIdFromPath((await readJson(request)).page);
-  if (!pageId) return json({ error: "Unknown page" }, { status: 400 });
+  const lessonId = lessonIdFromPath((await readJson(request)).lesson);
+  if (!lessonId) return json({ error: "Unknown lesson" }, { status: 400 });
   const rows = await ctx.sql`
     WITH target AS (
-      SELECT p.id, m.course_id FROM pages p JOIN modules m ON m.id = p.module_id JOIN courses c ON c.id = m.course_id
-      WHERE p.id = ${pageId} AND p.archived_at IS NULL AND c.published
+      SELECT p.id, m.course_id FROM lessons p JOIN modules m ON m.id = p.module_id JOIN courses c ON c.id = m.course_id
+      WHERE p.id = ${lessonId} AND p.archived_at IS NULL AND c.published
     ), seen AS (
-      INSERT INTO user_page_progress (user_id, page_id) SELECT ${ctx.userId}, id FROM target
-      ON CONFLICT (user_id, page_id) DO UPDATE SET last_seen_at = now() RETURNING page_id
+      INSERT INTO user_lesson_progress (user_id, lesson_id) SELECT ${ctx.userId}, id FROM target
+      ON CONFLICT (user_id, lesson_id) DO UPDATE SET last_seen_at = now() RETURNING lesson_id
     )
-    INSERT INTO user_course_state (user_id, course_id, last_page_id) SELECT ${ctx.userId}, course_id, id FROM target
-    ON CONFLICT (user_id, course_id) DO UPDATE SET last_page_id = EXCLUDED.last_page_id, updated_at = now()
+    INSERT INTO user_course_state (user_id, course_id, last_lesson_id) SELECT ${ctx.userId}, course_id, id FROM target
+    ON CONFLICT (user_id, course_id) DO UPDATE SET last_lesson_id = EXCLUDED.last_lesson_id, updated_at = now()
     RETURNING course_id` as Array<{ course_id: string }>;
-  if (!rows.length) return json({ error: "Unknown page" }, { status: 404 });
+  if (!rows.length) return json({ error: "Unknown lesson" }, { status: 404 });
   return json({ ok: true });
 }
 
-async function completePage(request: Request, env: Env): Promise<Response> {
+async function completeLesson(request: Request, env: Env): Promise<Response> {
   const ctx = await progressContext(request, env, true);
   if ("error" in ctx) return ctx.error!;
-  const pageId = pageIdFromPath((await readJson(request)).page);
-  if (!pageId) return json({ error: "Unknown page" }, { status: 400 });
-  // A page can only be completed when every earlier page in its course is already complete.
+  const lessonId = lessonIdFromPath((await readJson(request)).lesson);
+  if (!lessonId) return json({ error: "Unknown lesson" }, { status: 400 });
+  // A lesson can only be completed when every earlier lesson in its course is already complete.
   const [check] = await ctx.sql`
     WITH target AS (
       SELECT p.id, m.course_id, m.position AS mpos, p.position AS ppos
-      FROM pages p JOIN modules m ON m.id = p.module_id JOIN courses c ON c.id = m.course_id
-      WHERE p.id = ${pageId} AND p.archived_at IS NULL AND c.published
+      FROM lessons p JOIN modules m ON m.id = p.module_id JOIN courses c ON c.id = m.course_id
+      WHERE p.id = ${lessonId} AND p.archived_at IS NULL AND c.published
     )
     SELECT (SELECT count(*) FROM target)::int AS found,
-           (SELECT count(*) FROM pages p JOIN modules m ON m.id = p.module_id, target t
+           (SELECT count(*) FROM lessons p JOIN modules m ON m.id = p.module_id, target t
             WHERE m.course_id = t.course_id AND p.archived_at IS NULL AND m.archived_at IS NULL
               AND (m.position, p.position) < (t.mpos, t.ppos)
-              AND NOT EXISTS (SELECT 1 FROM user_page_progress u WHERE u.user_id = ${ctx.userId} AND u.page_id = p.id AND u.completed_at IS NOT NULL))::int AS missing` as Array<{ found: number; missing: number }>;
-  if (!check?.found) return json({ error: "Unknown page" }, { status: 404 });
+              AND NOT EXISTS (SELECT 1 FROM user_lesson_progress u WHERE u.user_id = ${ctx.userId} AND u.lesson_id = p.id AND u.completed_at IS NOT NULL))::int AS missing` as Array<{ found: number; missing: number }>;
+  if (!check?.found) return json({ error: "Unknown lesson" }, { status: 404 });
   if (check.missing > 0) return json({ error: "Complete the earlier lessons first" }, { status: 409 });
-  await ctx.sql`INSERT INTO user_page_progress (user_id, page_id, completed_at) VALUES (${ctx.userId}, ${pageId}, now())
-                ON CONFLICT (user_id, page_id) DO UPDATE SET completed_at = COALESCE(user_page_progress.completed_at, now()), last_seen_at = now()`;
+  await ctx.sql`INSERT INTO user_lesson_progress (user_id, lesson_id, completed_at) VALUES (${ctx.userId}, ${lessonId}, now())
+                ON CONFLICT (user_id, lesson_id) DO UPDATE SET completed_at = COALESCE(user_lesson_progress.completed_at, now()), last_seen_at = now()`;
   return json(await progressSnapshot(ctx.sql, ctx.userId));
 }
 
-// One-time copy of progress saved in the browser. Only an in-order run of completed pages is accepted per course.
+// One-time copy of progress saved in the browser. Only an in-order run of completed lessons is accepted per course.
 async function importProgress(request: Request, env: Env): Promise<Response> {
   const ctx = await progressContext(request, env, true);
   if ("error" in ctx) return ctx.error!;
   const [user] = await ctx.sql`SELECT progress_imported_at IS NOT NULL AS done FROM users WHERE id = ${ctx.userId}` as Array<{ done: boolean }>;
   if (user?.done) return json({ imported: 0, ...(await progressSnapshot(ctx.sql, ctx.userId)) });
-  const raw = (await readJson(request)).pages;
-  const claimed = new Set((Array.isArray(raw) ? raw : []).slice(0, 500).map(pageIdFromPath).filter((id): id is string => !!id));
+  const raw = (await readJson(request)).lessons;
+  const claimed = new Set((Array.isArray(raw) ? raw : []).slice(0, 500).map(lessonIdFromPath).filter((id): id is string => !!id));
   const ordered = await ctx.sql`
     SELECT p.id, m.course_id, (u.completed_at IS NOT NULL) AS done
-    FROM pages p JOIN modules m ON m.id = p.module_id JOIN courses c ON c.id = m.course_id
-    LEFT JOIN user_page_progress u ON u.page_id = p.id AND u.user_id = ${ctx.userId}
+    FROM lessons p JOIN modules m ON m.id = p.module_id JOIN courses c ON c.id = m.course_id
+    LEFT JOIN user_lesson_progress u ON u.lesson_id = p.id AND u.user_id = ${ctx.userId}
     WHERE c.published AND p.archived_at IS NULL AND m.archived_at IS NULL
     ORDER BY c.position, m.position, p.position` as Array<{ id: string; course_id: string; done: boolean }>;
   const toAdd: string[] = [];
   const blocked = new Set<string>();
-  for (const page of ordered) {
-    if (blocked.has(page.course_id)) continue;
-    if (page.done) continue;
-    if (claimed.has(page.id)) toAdd.push(page.id); else blocked.add(page.course_id);
+  for (const lesson of ordered) {
+    if (blocked.has(lesson.course_id)) continue;
+    if (lesson.done) continue;
+    if (claimed.has(lesson.id)) toAdd.push(lesson.id); else blocked.add(lesson.course_id);
   }
   if (toAdd.length) {
-    await ctx.sql`INSERT INTO user_page_progress (user_id, page_id, completed_at)
+    await ctx.sql`INSERT INTO user_lesson_progress (user_id, lesson_id, completed_at)
                   SELECT ${ctx.userId}, unnest(${toAdd}::text[]), now()
-                  ON CONFLICT (user_id, page_id) DO UPDATE SET completed_at = COALESCE(user_page_progress.completed_at, now())`;
+                  ON CONFLICT (user_id, lesson_id) DO UPDATE SET completed_at = COALESCE(user_lesson_progress.completed_at, now())`;
   }
   await ctx.sql`UPDATE users SET progress_imported_at = now() WHERE id = ${ctx.userId}`;
   return json({ imported: toAdd.length, ...(await progressSnapshot(ctx.sql, ctx.userId)) });
@@ -1269,8 +1269,8 @@ async function route(request: Request, env: Env, ctx?: ExecutionContext): Promis
   if (pathname === "/api/auth/session" && request.method === "GET") return sessionResponse(request, env);
   if (pathname === "/api/auth/logout" && request.method === "POST") return logout(request, env);
   if (pathname === "/api/progress" && request.method === "GET") return getProgress(request, env);
-  if (pathname === "/api/progress/seen" && request.method === "POST") return markPageSeen(request, env);
-  if (pathname === "/api/progress/complete" && request.method === "POST") return completePage(request, env);
+  if (pathname === "/api/progress/seen" && request.method === "POST") return markLessonSeen(request, env);
+  if (pathname === "/api/progress/complete" && request.method === "POST") return completeLesson(request, env);
   if (pathname === "/api/progress/import" && request.method === "POST") return importProgress(request, env);
   if (pathname === "/api/onboarding/welcome-dismissed" && request.method === "POST") return dismissWelcome(request, env);
   if (pathname === "/api/mcp/apps" && request.method === "GET") return mcpAppsResponse(request, env);

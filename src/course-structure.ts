@@ -124,26 +124,27 @@ export const isAvailableModule = (module: CourseModule) => isAvailablePillar(mod
 export const availableLessonUrls = new Set(courseModules.filter(isAvailableModule)
   .flatMap((module) => module.lessons.map((lesson) => lessonUrl(module, lesson))));
 
-// Permanent page ID: the lesson's address after /learn/ (e.g. "replit-101/what-you-can-do-with-replit").
-// Titles can change; once published, a page keeps this ID so saved progress stays attached.
-export const pageId = (module: CourseModule, lesson: LearnLesson) => lessonUrl(module, lesson).replace(/^\/learn\//, "");
+// Permanent lesson ID: the lesson's address after /learn/ (e.g. "replit-101/what-you-can-do-with-replit").
+// Titles can change; once published, a lesson keeps this ID so saved progress stays attached.
+export const lessonId = (module: CourseModule, lesson: LearnLesson) => lessonUrl(module, lesson).replace(/^\/learn\//, "");
 
 export type CatalogRows = {
   courses: Array<{ id: string; title: string; position: number; published: boolean }>;
   modules: Array<{ id: string; courseId: string; title: string; position: number }>;
-  pages: Array<{ id: string; moduleId: string; title: string; urlPath: string; position: number; hasQuiz: boolean }>;
+  lessons: Array<{ id: string; moduleId: string; title: string; urlPath: string; position: number; hasQuiz: boolean }>;
 };
 
-// Flat rows for the database: every course, module, and page in display order.
+// Flat rows for the database: confirmed (published) courses only, with their modules and lessons in display order.
 export function catalogRows(): CatalogRows {
-  const rows: CatalogRows = { courses: [], modules: [], pages: [] };
+  const rows: CatalogRows = { courses: [], modules: [], lessons: [] };
   coursePillars.forEach((pillar, coursePosition) => {
+    if (!PUBLISHED_PILLARS.includes(pillar.id)) return;
     rows.courses.push({ id: pillar.id, title: pillar.title, position: coursePosition, published: PUBLISHED_PILLARS.includes(pillar.id) });
     pillar.modules.forEach((module, modulePosition) => {
       const moduleId = learnSegment(module.title);
       rows.modules.push({ id: moduleId, courseId: pillar.id, title: module.title, position: modulePosition });
       module.lessons.forEach((lesson, pagePosition) => {
-        rows.pages.push({ id: pageId(module, lesson), moduleId, title: lesson.navigationTitle ?? learnDisplayTitle(lesson.title), urlPath: lessonUrl(module, lesson), position: pagePosition, hasQuiz: lesson.quiz.length > 0 });
+        rows.lessons.push({ id: lessonId(module, lesson), moduleId, title: lesson.navigationTitle ?? learnDisplayTitle(lesson.title), urlPath: lessonUrl(module, lesson), position: pagePosition, hasQuiz: lesson.quiz.length > 0 });
       });
     });
   });
