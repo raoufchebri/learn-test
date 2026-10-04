@@ -160,19 +160,39 @@ function ApprovalCard({ spec, approved, onApprove }: { spec: ApprovalSpec; appro
   </div>;
 }
 
+// Splits reply text into parts: **bold** and [label](url) links.
+function inlineParts(text: string): Array<{ text: string; bold?: boolean; href?: string }> {
+  const parts: Array<{ text: string; bold?: boolean; href?: string }> = [];
+  let last = 0;
+  for (const match of text.matchAll(/\*\*(.+?)\*\*|\[([^\]]+)\]\(([^)]+)\)/g)) {
+    if (match.index! > last) parts.push({ text: text.slice(last, match.index) });
+    parts.push(match[1] ? { text: match[1], bold: true } : { text: match[2], href: match[3] });
+    last = match.index! + match[0].length;
+  }
+  if (last < text.length) parts.push({ text: text.slice(last) });
+  return parts;
+}
+
 function ChatExchange({ exchange, stream = false, note = true, onDone }: { exchange: ChatExchangeExample; stream?: boolean; note?: boolean; onDone?: () => void }) {
-  type Part = { text: string; bold?: boolean };
-  type Block = { kind: "p" | "li" | "tools" | "image"; parts: Part[] };
+  type Part = { text: string; bold?: boolean; href?: string };
+  type Table = { head: string[]; rows: string[][]; align?: Array<"left" | "right"> };
+  type Block = { kind: "p" | "li" | "tools" | "image" | "h" | "uli" | "table"; parts: Part[]; table?: Table };
   const blocks = useMemo(() => {
     const list: Block[] = [];
-    if (exchange.intro) list.push({ kind: "p", parts: [{ text: exchange.intro }] });
+    if (exchange.intro) list.push({ kind: "p", parts: inlineParts(exchange.intro) });
     if (exchange.tools) list.push({ kind: "tools", parts: [{ text: exchange.tools }] });
     if (exchange.imageCard) list.push({ kind: "image", parts: [{ text: "image" }] });
+    (exchange.rich ?? []).forEach((block) => {
+      if ("p" in block) list.push({ kind: "p", parts: inlineParts(block.p) });
+      else if ("h" in block) list.push({ kind: "h", parts: [{ text: block.h }] });
+      else if ("ul" in block) block.ul.forEach((item) => list.push({ kind: "uli", parts: inlineParts(item) }));
+      else list.push({ kind: "table", parts: [{ text: "table" }], table: block.table });
+    });
     (exchange.items ?? []).forEach((item) => list.push({ kind: "li", parts: [{ text: item.label, bold: true }, { text: `${exchange.labelSeparator ?? ": "}${item.text}` }] }));
-    if (exchange.outro) list.push({ kind: "p", parts: [{ text: exchange.outro }] });
+    if (exchange.outro) list.push({ kind: "p", parts: inlineParts(exchange.outro) });
     if (exchange.question) list.push({ kind: "p", parts: [{ text: exchange.question, bold: true }] });
     // The image card counts as a few "words" so it appears as one piece mid-stream.
-    return list.map((block) => ({ ...block, parts: block.parts.map((part) => ({ ...part, tokens: block.kind === "image" ? ["", "", "", "", "", ""] : part.text.split(/(\s+)/).filter(Boolean) })) }));
+    return list.map((block) => ({ ...block, parts: block.parts.map((part) => ({ ...part, tokens: block.kind === "image" || block.kind === "table" ? ["", "", "", "", "", ""] : part.text.split(/(\s+)/).filter(Boolean) })) }));
   }, [exchange]);
   const total = blocks.reduce((sum, block) => sum + block.parts.reduce((count, part) => count + part.tokens.length, 0), 0);
   const animate = stream && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -183,7 +203,8 @@ function ChatExchange({ exchange, stream = false, note = true, onDone }: { excha
     let interval = 0;
     const start = window.setTimeout(() => {
       setThinking(false);
-      interval = window.setInterval(() => setShown((value) => { const next = value + 3; if (next >= total) window.clearInterval(interval); return Math.min(next, total); }), 40);
+      const step = Math.max(3, Math.ceil(total / 75));
+      interval = window.setInterval(() => setShown((value) => { const next = value + step; if (next >= total) window.clearInterval(interval); return Math.min(next, total); }), 40);
     }, exchange.thinking ? 1000 : 600);
     return () => { window.clearTimeout(start); window.clearInterval(interval); };
   }, [animate, total]);
@@ -192,9 +213,12 @@ function ChatExchange({ exchange, stream = false, note = true, onDone }: { excha
   let budget = shown;
   const rendered = blocks.map((block) => {
     const parts = block.parts.map((part) => { const take = Math.max(0, Math.min(part.tokens.length, budget)); budget -= take; return { ...part, visible: part.tokens.slice(0, take).join(""), complete: take === part.tokens.length }; });
-    return { kind: block.kind, parts, empty: block.kind === "image" ? !parts.every((part) => part.complete) : parts.every((part) => !part.visible), done: parts.every((part) => part.complete) };
+    return { kind: block.kind, table: block.table, parts, empty: block.kind === "image" || block.kind === "table" ? !parts.every((part) => part.complete) : parts.every((part) => !part.visible), done: parts.every((part) => part.complete) };
   });
-  const content = (block: typeof rendered[number]) => block.parts.map((part, index) => part.visible ? (part.bold ? <strong key={index}>{part.visible}</strong> : <span key={index}>{part.visible}</span>) : null);
+  const content = (block: { parts: Array<Part & { visible: string }> }) => block.parts.map((part, index) => !part.visible ? null
+    : part.href ? <a key={index} href={part.href} target="_blank" rel="noopener noreferrer">{part.bold ? <strong>{part.visible}</strong> : part.visible}</a>
+    : part.bold ? <strong key={index}>{part.visible}</strong> : <span key={index}>{part.visible}</span>);
+  const cell = (text: string) => content({ parts: inlineParts(text).map((part) => ({ ...part, visible: part.text })) });
   const items = rendered.filter((block) => block.kind === "li" && !block.empty);
   const firstLi = rendered.findIndex((block) => block.kind === "li");
   return <div className="chat-reply" aria-label="Example reply from Replit" aria-busy={shown < total}>
@@ -209,6 +233,17 @@ function ChatExchange({ exchange, stream = false, note = true, onDone }: { excha
           <div className="chat-reply-image-body"><ZoomableImage src={exchange.imageCard.src} alt={exchange.imageCard.alt} lazy /></div>
         </figure> : null;
         if (block.kind === "tools") return block.empty ? null : <p key={index} className="chat-reply-tools">{content(block)}</p>;
+        if (block.kind === "h") return block.empty ? null : <h4 key={index} className="chat-reply-heading">{content(block)}</h4>;
+        if (block.kind === "uli") {
+          if (rendered[index - 1]?.kind === "uli") return null;
+          const group: typeof rendered = [];
+          for (let next = index; rendered[next]?.kind === "uli"; next++) if (!rendered[next].empty) group.push(rendered[next]);
+          return group.length ? <ul key={index} className="chat-reply-bullets">{group.map((item, itemIndex) => <li key={itemIndex}>{content(item)}</li>)}</ul> : null;
+        }
+        if (block.kind === "table") return block.done && block.table ? <div key={index} className="chat-reply-table fade-in-step"><table>
+          <thead><tr>{block.table.head.map((heading, column) => <th key={column} style={{ textAlign: block.table!.align?.[column] ?? "left" }}>{heading}</th>)}</tr></thead>
+          <tbody>{block.table.rows.map((row, rowIndex) => <tr key={rowIndex}>{row.map((value, column) => <td key={column} style={{ textAlign: block.table!.align?.[column] ?? "left" }}>{cell(value)}</td>)}</tr>)}</tbody>
+        </table></div> : null;
         return block.empty ? null : <p key={index}>{content(block)}</p>;
       })}
     </div>}
@@ -283,6 +318,7 @@ function LessonPage({
   const revealUnlocks = unlocks.filter((unlock) => unlock.kind === "reveal");
   // Steps that gate the rest of the lesson, in order: copy the prompt, then (when there's an example) reveal the answer.
   const stepUnlocks = unlocks.filter((unlock) => unlock.kind === "step");
+  const approvalDone = (sectionIndex: number) => { const unlock = stepUnlocks.find((entry) => entry.sectionIndex === sectionIndex); return !!unlock && isUnlocked(unlock.id); };
   const firstLockedPrompt = unlocks.filter((unlock) => unlock.kind === "prompt" || unlock.kind === "reveal" || unlock.kind === "step").find((unlock) => !isUnlocked(unlock.id))?.sectionIndex ?? -1;
   const sectionStepsDone = (sectionIndex: number) => isUnlocked(promptUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex)?.id) && isUnlocked(revealUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex)?.id);
   const [entryOpenedState, setEntryOpened] = useState(LEARN_DEV_MODE || !lesson.entryLink);
@@ -604,11 +640,16 @@ function LessonPage({
                 {approval && approved && <ChatExchange exchange={approval.exchange} note={false} stream={streamingSections.includes(approvalKey)} onDone={() => finishStream(approvalKey)} />}
               </div>
               {/* Unlock button under each chat: stays in place and turns green with a check once unlocked. */}
-              {revealUnlock && <div className={`recipe-unlock-action reveal-unlock ${done && revealed && holdingSection !== sectionIndex ? 'is-open' : ''}`}>
-                <button type="button" className="recipe-create-button" onClick={() => void copyPrompt()}>
-                  {done && revealed && holdingSection !== sectionIndex ? <Icons.Check size={20} aria-hidden="true" /> : <LessonUnlockIcon />}<span>Click on the prompt to copy it</span>
-                </button>
-              </div>}
+              {revealUnlock && (() => {
+                // With a buttonLabel (agent modes), the button names the card's choice after copying and turns green only once it's made.
+                const choosing = !!approval?.buttonLabel && done && revealed;
+                const green = done && revealed && holdingSection !== sectionIndex && (!approval?.buttonLabel || (approved && holdingSection !== approvalKey));
+                return <div className={`recipe-unlock-action reveal-unlock ${choosing ? 'is-choosing' : ''} ${green ? 'is-open' : ''}`}>
+                  <button type="button" className="recipe-create-button" onClick={() => { if (!choosing) void copyPrompt(); }}>
+                    {green ? <Icons.Check size={20} aria-hidden="true" /> : <LessonUnlockIcon />}<span>{choosing ? approval!.buttonLabel : 'Click on the prompt to copy it'}</span>
+                  </button>
+                </div>;
+              })()}
             </>;
           })()}
           {section.step && (() => {
@@ -647,7 +688,10 @@ function LessonPage({
             <p>You asked for a personal recipe app where you can add, edit, and find recipes. Each recipe needs a name, ingredients, and instructions.</p>
             <p>That means an interface with forms and buttons, app logic that responds when you use them, and storage that keeps your recipes in this browser. For this first version, all three work in the browser. No sign-in or separate backend is needed.</p>
             <p>Let’s explore the building blocks this prompt describes.</p>
-          </> : <p className={fadeClass(`after-${sectionIndex}`)}>{section.afterPrompt}</p>)}
+          </> : (() => {
+            const swapped = !!section.approval?.after && approvalDone(sectionIndex) && holdingSection !== sectionIndex + 0.5;
+            return <p key={swapped ? 'after-approval' : 'after'} className={fadeClass(`after-${sectionIndex}-${swapped ? 'approval' : 'prompt'}`)}>{swapped ? section.approval!.after : section.afterPrompt}</p>;
+          })())}
           {section.items && <ul className="lesson-points">{section.items.map((item) => <li key={item}>{item}</li>)}</ul>}
           {hasCheckpoint && sectionIndex === checkpointIndex && <div className="lesson-quiz" aria-label="Lesson checkpoint">
             <h3>Try these two ideas</h3>

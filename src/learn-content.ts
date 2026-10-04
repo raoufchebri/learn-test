@@ -71,6 +71,8 @@ export type ChatExchangeExample = {
   labelSeparator?: " — " | ": ";
   outro?: string;
   question?: string;
+  // Longer replies after intro/tools: paragraphs, headings, bullet lists and tables. Text supports **bold** and [links](url).
+  rich?: Array<{ p: string } | { h: string } | { ul: string[] } | { table: { head: string[]; rows: string[][]; align?: Array<'left' | 'right'> } }>;
 };
 
 export type LearnLesson = {
@@ -96,7 +98,7 @@ export type LearnLesson = {
   practice?: { prompt: string; checks: string[] };
   checkpoint?: { afterSection: number; questions: QuizQuestion[] };
   outcomes?: string[];
-  sections: Array<{ heading: string; id?: string; body: string; link?: { href: string; label: string }; prompt?: string; chatPrompt?: boolean; approval?: { kind?: 'approval' | 'mode'; question: string; options: string[]; approve: string | string[]; badges?: Record<string, string>; initial?: string; exchange: ChatExchangeExample }; step?: { label: string; href?: string; exchange?: ChatExchangeExample }; afterPrompt?: string; items?: string[]; image?: { src: string; alt: string; caption: string; source?: string }; exchange?: ChatExchangeExample; diagram?: 'recipe-architecture' | 'recipe-iteration' }>;
+  sections: Array<{ heading: string; id?: string; body: string; link?: { href: string; label: string }; prompt?: string; chatPrompt?: boolean; approval?: { kind?: 'approval' | 'mode'; question: string; options: string[]; approve: string | string[]; badges?: Record<string, string>; initial?: string; buttonLabel?: string; after?: string; exchange: ChatExchangeExample }; step?: { label: string; href?: string; exchange?: ChatExchangeExample }; afterPrompt?: string; items?: string[]; image?: { src: string; alt: string; caption: string; source?: string }; exchange?: ChatExchangeExample; diagram?: 'recipe-architecture' | 'recipe-iteration' }>;
   replitExample: string;
   quiz: QuizQuestion[];
 };

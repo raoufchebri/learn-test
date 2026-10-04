@@ -1214,3 +1214,15 @@
 .chat-reply-approval .mode-dots { fill: var(--replit-off-black); flex: none; }
 .chat-reply-approval-continue { width: 100%; padding: 11px; border: 0; border-radius: 8px; font: inherit; font-size: 15px; background: #0079f2; color: #fff; cursor: pointer; transition: opacity .2s ease; }
 .chat-reply-approval-continue:disabled { opacity: .5; cursor: default; }
+/* Rich example replies: headings, bullet lists, tables. */
+.lesson-content .lesson-chat-thread h4.chat-reply-heading { margin: 18px 0 8px; font-size: 17px; font-weight: 600; color: var(--replit-off-black); }
+.lesson-content .chat-reply-answer ul.chat-reply-bullets { margin: 0 0 14px; padding-left: 22px; list-style: disc outside; }
+.lesson-content .chat-reply-answer ul.chat-reply-bullets li { position: static; margin: 0 0 6px; padding: 0 0 0 4px; }
+.lesson-content .chat-reply-answer ul.chat-reply-bullets li::before, .lesson-content .chat-reply-answer ul.chat-reply-bullets li::after { content: none; }
+.chat-reply-answer a { color: #0079f2; text-decoration: underline; text-underline-offset: 2px; }
+.chat-reply-table { margin: 0 0 14px; overflow-x: auto; border: 1px solid var(--replit-light-silver); border-radius: 10px; }
+.chat-reply-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.chat-reply-table th, .chat-reply-table td { padding: 8px 12px; border-bottom: 1px solid var(--replit-light-silver); vertical-align: top; color: var(--replit-off-black); }
+.chat-reply-table th { font-weight: 600; background: var(--replit-off-white); }
+.chat-reply-table tr:last-child td { border-bottom: 0; }
+.reveal-unlock.is-choosing .recipe-create-button { cursor: default; }
