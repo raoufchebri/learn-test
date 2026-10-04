@@ -1219,7 +1219,7 @@ async function recordUnlock(request: Request, env: Env): Promise<Response> {
   const ctx = await progressContext(request, env, true);
   if ("error" in ctx) return ctx.error!;
   const raw = (await readJson(request)).unlock;
-  const unlockId = typeof raw === "string" && /^[a-z0-9-]+\/[a-z0-9-]+:(entry|activity|prompt-\d+)$/.test(raw) ? raw : undefined;
+  const unlockId = typeof raw === "string" && /^[a-z0-9-]+\/[a-z0-9-]+:(entry|activity|prompt-\d+|reveal-\d+)$/.test(raw) ? raw : undefined;
   if (!unlockId) return json({ error: "Unknown unlock" }, { status: 400 });
   const [check] = await ctx.sql`
     WITH target AS (

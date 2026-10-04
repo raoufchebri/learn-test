@@ -108,22 +108,25 @@ function LinkedText({ text }: { text: string }) {
   })}</>;
 }
 
-// The lesson's prompt as a Replit chat bubble. Clicking the bubble copies the prompt and unlocks the next step.
+// The lesson's prompt as a Replit chat bubble. Clicking it copies the prompt; hovering shows how.
 function PromptBubble({ prompt, done, status, onCopy }: { prompt: string; done: boolean; status?: "copied" | "failed"; onCopy: () => void }) {
-  return <div className={`prompt-bubble-row ${done ? "is-done" : ""}`}>
-    <button type="button" className="prompt-bubble" onClick={onCopy} aria-label={`Copy prompt: ${prompt}`}>{prompt}</button>
+  return <div className={`prompt-bubble-row ${done ? "is-done" : ""} ${status ? "has-status" : ""}`}>
+    <button type="button" className="prompt-bubble" onClick={onCopy} aria-label={`Copy prompt: ${prompt}`} aria-describedby={undefined}>
+      <span className="prompt-bubble-copy" aria-hidden="true"><Icons.Copy size={14} /></span>
+      {prompt}
+    </button>
     <p className="prompt-bubble-meta" role="status">
-      {status === "failed" ? "Couldn’t copy automatically. Select the text in the bubble and copy it."
-        : status === "copied" ? <><Icons.Check size={13} aria-hidden="true" /> Copied. Paste it into Replit and send it.</>
-        : done ? <><Icons.Copy size={13} aria-hidden="true" /> Click the bubble to copy it again</>
-        : <><Icons.Copy size={13} aria-hidden="true" /> Click the bubble to copy the prompt, or write your own</>}
+      {status === "failed" ? "Couldn’t copy automatically. Select the text and copy it."
+        : status === "copied" ? <><Icons.Check size={12} aria-hidden="true" /> Copied</>
+        : <><Icons.Copy size={12} aria-hidden="true" /> Click to copy</>}
     </p>
   </div>;
 }
 
-// Replit's reply under the bubble: the faded thinking line, the answer, and how long it worked.
+// Replit's reply under the bubble: a note that it's an example, the faded thinking line, then the answer.
 function ChatExchange({ exchange }: { exchange: ChatExchangeExample }) {
   return <div className="chat-reply" aria-label="Example reply from Replit">
+    <p className="chat-reply-note">Here’s an example of what Replit can answer. Yours may be different.</p>
     <p className="chat-reply-thinking">{exchange.thinking}</p>
     <div className="chat-reply-answer">
       {exchange.intro && <p>{exchange.intro}</p>}
@@ -131,7 +134,6 @@ function ChatExchange({ exchange }: { exchange: ChatExchangeExample }) {
       {exchange.outro && <p>{exchange.outro}</p>}
       {exchange.question && <p><strong>{exchange.question}</strong></p>}
     </div>
-    <p className="chat-reply-meta"><Icons.Copy size={13} aria-hidden="true" /> {exchange.workedFor}</p>
   </div>;
 }
 
@@ -184,7 +186,10 @@ function LessonPage({
   const entryUnlock = unlocks.find((unlock) => unlock.kind === "entry");
   const activityUnlock = unlocks.find((unlock) => unlock.kind === "activity");
   const promptUnlocks = unlocks.filter((unlock) => unlock.kind === "prompt");
-  const firstLockedPrompt = promptUnlocks.find((unlock) => !isUnlocked(unlock.id))?.sectionIndex ?? -1;
+  const revealUnlocks = unlocks.filter((unlock) => unlock.kind === "reveal");
+  // Steps that gate the rest of the lesson, in order: copy the prompt, then (when there's an example) reveal the answer.
+  const firstLockedPrompt = unlocks.filter((unlock) => unlock.kind === "prompt" || unlock.kind === "reveal").find((unlock) => !isUnlocked(unlock.id))?.sectionIndex ?? -1;
+  const sectionStepsDone = (sectionIndex: number) => isUnlocked(promptUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex)?.id) && isUnlocked(revealUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex)?.id);
   const [entryOpenedState, setEntryOpened] = useState(LEARN_DEV_MODE || !lesson.entryLink);
   const entryOpened = entryOpenedState || isUnlocked(entryUnlock?.id) && !!entryUnlock || completed;
   const promptContinued = LEARN_DEV_MODE || completed || firstLockedPrompt < 0;
@@ -220,10 +225,11 @@ function LessonPage({
   }, [recipe.iteration, hasFrontendCheck]);
   const unlockTimers = useRef<number[]>([]);
   // Unlock a step once: celebrate and save it. Already-unlocked steps (stored or this visit) do nothing.
-  const unlockStep = (id?: string, alwaysChime = false) => {
+  const unlockStep = (id?: string, alwaysChime = false, confetti = false) => {
     if (id && isUnlocked(id)) return;
     if (id) { setSessionUnlocks((current) => [...current, id]); onUnlock?.(id); }
     setUnlockCelebration(true);
+    if (confetti) setConfettiBurst((burst) => burst + 1);
     if (alwaysChime || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) playUnlockChime();
     unlockTimers.current.push(window.setTimeout(() => setUnlockCelebration(false), 2000));
   };
@@ -413,18 +419,28 @@ function LessonPage({
             if (!promptUnlock) return <LessonPrompt key={section.prompt} prompt={section.prompt} />;
             const done = isUnlocked(promptUnlock.id);
             const copy = promptCopy[sectionIndex];
-            return <div className="lesson-chat-thread" role="group" aria-label="Chat in Replit">
-              <PromptBubble prompt={section.prompt} done={done} status={copy} onCopy={async () => {
-                try { await navigator.clipboard.writeText(section.prompt!); setPromptCopy((current) => ({ ...current, [sectionIndex]: "copied" })); }
-                catch { setPromptCopy((current) => ({ ...current, [sectionIndex]: "failed" })); }
-                unlockStep(promptUnlock.id);
-              }} />
-              {section.exchange && done && <ChatExchange exchange={section.exchange} />}
-            </div>;
+            const revealUnlock = revealUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex);
+            const revealed = isUnlocked(revealUnlock?.id);
+            return <>
+              <div className="lesson-chat-thread" role="group" aria-label="Chat in Replit">
+                <PromptBubble prompt={section.prompt} done={done} status={copy} onCopy={async () => {
+                  try { await navigator.clipboard.writeText(section.prompt!); setPromptCopy((current) => ({ ...current, [sectionIndex]: "copied" })); }
+                  catch { setPromptCopy((current) => ({ ...current, [sectionIndex]: "failed" })); }
+                  unlockStep(promptUnlock.id);
+                }} />
+                {section.exchange && done && revealed && <ChatExchange exchange={section.exchange} />}
+              </div>
+              {revealUnlock && !revealed && <div className={`recipe-unlock-action reveal-unlock ${done ? 'is-ready' : ''}`}>
+                <button type="button" className="recipe-create-button" disabled={!done} onClick={() => unlockStep(revealUnlock.id, false, true)}>
+                  <LessonUnlockIcon /><span>Show an example answer</span>
+                </button>
+                <small role="status">{done ? 'Paste the prompt into Replit and send it, then see an example of what Replit can answer.' : 'Click the blue bubble to copy the prompt first.'}</small>
+              </div>}
+            </>;
           })()}
           {recipeLesson && section.prompt && <RecipeBuildStep unlocking={unlockCelebration} />}
           {lesson.projectTask && sectionIndex === 0 && <ProjectLessonStep task={lesson.projectTask} />}
-          {section.afterPrompt && unlocked && isUnlocked(promptUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex)?.id) && (recipeLesson ? <>
+          {section.afterPrompt && unlocked && sectionStepsDone(sectionIndex) && (recipeLesson ? <>
             <h2 id="recipe-prompt-explanation">What just happened now?</h2>
             <p>The highlighted area on the right side of the screen is the chat. It shows your request in a message bubble. On smaller screens, the chat opens in its own panel. That request is a prompt: a description of what you want to create, written in natural language.</p>
             <p>You asked for a personal recipe app where you can add, edit, and find recipes. Each recipe needs a name, ingredients, and instructions.</p>
@@ -448,7 +464,7 @@ function LessonPage({
             </div>
           </div>}
           {recipeLesson && section.id === "a-few-building-blocks-make-it-work" && <p>In the next lesson, you’ll explore what Replit is doing while your app builds. After that, you’ll look inside its project, code, and files.</p>}
-          {section.image && isUnlocked(promptUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex)?.id) && (
+          {section.image && sectionStepsDone(sectionIndex) && (
             <figure className="lesson-app-screenshot">
               <ZoomableImage src={section.image.src} alt={section.image.alt} lazy />
               <figcaption>{section.image.caption}{section.image.source && <> <a href={section.image.source} target="_blank" rel="noreferrer">Source</a></>}</figcaption>

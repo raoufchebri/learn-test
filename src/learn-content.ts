@@ -69,7 +69,6 @@ export type ChatExchangeExample = {
   labelSeparator: " — " | ": ";
   outro?: string;
   question?: string;
-  workedFor: string;
 };
 
 export type LearnLesson = {

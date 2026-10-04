@@ -1124,11 +1124,20 @@
 .lesson-chat-thread { margin: 28px 0 32px; padding: 78px 0; border-top: 1px solid var(--replit-light-silver); border-bottom: 1px solid var(--replit-light-silver); background: transparent; font-family: 'ABC Diatype Plus', 'Diatype', sans-serif; }
 
 .prompt-bubble-row { display: flex; flex-direction: column; align-items: flex-end; }
-.lesson-content .prompt-bubble { max-width: min(440px, 82%); margin: 0; padding: 11px 15px; border: 0; border-radius: 14px; background: #dde7f5; color: #27476f; font: inherit; font-size: 16px; line-height: 1.55; text-align: left; cursor: copy; transition: background .15s ease, box-shadow .15s ease; }
+.lesson-content .prompt-bubble { position: relative; max-width: min(440px, 82%); margin: 0; padding: 11px 15px; border: 0; border-radius: 14px; background: #dde7f5; color: #27476f; font: inherit; font-size: 16px; line-height: 1.55; text-align: left; cursor: copy; transition: background .15s ease, box-shadow .15s ease; }
 .lesson-content .prompt-bubble:hover { background: #d2dff1; }
 .lesson-content .prompt-bubble:focus-visible { outline: 2px solid #27476f; outline-offset: 3px; }
 .prompt-bubble-row:not(.is-done) .prompt-bubble { box-shadow: 0 0 0 3px #dde7f580; }
-.lesson-content .prompt-bubble-meta { display: inline-flex; align-items: center; gap: 6px; margin: 7px 2px 0 0; font-size: 13px; line-height: 1.4; color: var(--replit-medium-gray); }
+.lesson-content .prompt-bubble-meta { display: inline-flex; align-items: center; gap: 5px; min-height: 16px; margin: 6px 2px 0 0; font-size: 12px; line-height: 1.3; color: var(--replit-medium-gray); opacity: 0; transition: opacity .15s ease; }
+/* "Click to copy" only on hover or keyboard focus; "Copied" stays visible. */
+.prompt-bubble-row:hover .prompt-bubble-meta, .prompt-bubble-row:focus-within .prompt-bubble-meta, .prompt-bubble-row.has-status .prompt-bubble-meta { opacity: 1; }
+.prompt-bubble-copy { position: absolute; left: -30px; top: 50%; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 6px; color: var(--replit-medium-gray); transform: translateY(-50%); opacity: 0; transition: opacity .15s ease; }
+.prompt-bubble:hover .prompt-bubble-copy, .prompt-bubble:focus-visible .prompt-bubble-copy { opacity: 1; }
+.lesson-content .chat-reply .chat-reply-note { margin: 0 0 14px; font-size: 13px; line-height: 1.5; color: var(--replit-medium-gray); }
+/* Reveal button: grey until the prompt is copied, green once it can be clicked. */
+.reveal-unlock.is-ready .recipe-create-button:not(:disabled) { background: #23734d; border-color: #23734d; color: #fff; }
+.reveal-unlock.is-ready .recipe-create-button:not(:disabled):hover { background: #1d5f40; border-color: #1d5f40; }
+.reveal-unlock small { text-align: center; }
 .prompt-bubble-row.is-done .prompt-bubble-meta svg:first-child { color: #23734d; }
 .chat-reply { margin-top: 20px; }
 .lesson-content .chat-reply .chat-reply-thinking { margin: 0 0 12px; overflow: hidden; white-space: nowrap; font-size: 15px; line-height: 1.5; color: #9a9a9a; -webkit-mask-image: linear-gradient(90deg, #000 72%, transparent); mask-image: linear-gradient(90deg, #000 72%, transparent); }
@@ -1138,7 +1147,11 @@
 .lesson-content .chat-reply-answer li { position: static; margin: 0 0 6px; padding: 0 0 0 4px; }
 .lesson-content .chat-reply-answer li::before, .lesson-content .chat-reply-answer li::after { content: none; }
 .lesson-content .chat-reply-answer li::marker { color: var(--replit-off-black); }
-.lesson-content .chat-reply .chat-reply-meta { display: inline-flex; align-items: center; gap: 6px; margin: 4px 0 0; font-size: 14px; color: var(--replit-medium-gray); }
 :root[data-theme="dark"] .lesson-content .prompt-bubble { background: #22344d; color: #d6e4f7; }
 :root[data-theme="dark"] .lesson-content .prompt-bubble:hover { background: #2a3f5d; }
 :root[data-theme="dark"] .prompt-bubble-row:not(.is-done) .prompt-bubble { box-shadow: 0 0 0 3px #22344d80; }
+/* Chat text sizes stay fixed; general lesson paragraph rules (19px) must not apply inside the chat. */
+.lesson-content .lesson-chat-thread p.prompt-bubble-meta { font-size: 12px !important; line-height: 1.3 !important; }
+.lesson-content .lesson-chat-thread p.chat-reply-note { font-size: 13px !important; line-height: 1.5 !important; }
+.lesson-content .lesson-chat-thread p.chat-reply-thinking { font-size: 15px !important; line-height: 1.5 !important; }
+.lesson-content .lesson-chat-thread .chat-reply-answer p, .lesson-content .lesson-chat-thread .chat-reply-answer li { font-size: 17px !important; line-height: 1.6 !important; }

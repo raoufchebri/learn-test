@@ -30,7 +30,7 @@ export const discoverLessons: LearnLesson[] = [
     promptGate: true,
     outcomes: ['Write a prompt to brainstorm party themes', 'Choose a theme with a follow-up', 'Ask for an image to visualize your idea'],
     sections: [
-      { heading: 'Tell Replit what you have in mind', body: 'Write your request in the prompt box. That request is a prompt. Start with the goal and a few helpful details. You’re just asking for ideas for now. You’ll ask for the website later.', prompt: 'I’m planning a birthday party for a six-year-old, with ten children in a park. Help me brainstorm four themes with simple activities.', afterPrompt: 'Paste the prompt in Replit and send it. Replit thinks about your question first, then shares an answer. Read the suggestions and notice how your details give the ideas a direction. Your answer may differ from the example below, and that’s fine.', exchange: {
+      { heading: 'Tell Replit what you have in mind', body: 'Write your request in the prompt box. That request is a prompt. Start with the goal and a few helpful details. You’re just asking for ideas for now. You’ll ask for the website later.', prompt: 'I’m planning a birthday party for a six-year-old, with ten children in a park. Help me brainstorm four themes with simple activities.', afterPrompt: 'Replit thinks about your question first, then shares an answer. Read the suggestions and notice how your details give the ideas a direction.', exchange: {
         thinking: 'I need to brainstorm four themes along with simple activities for a group of ten six-year-olds',
         intro: 'Here are four park-friendly themes with simple activities for ten six-year-olds:',
         labelSeparator: ' — ',
@@ -42,7 +42,6 @@ export const discoverLessons: LearnLesson[] = [
         ],
         outro: 'For ten kids, a few small activity stations work well—kids can move around without waiting in a long line.',
         question: 'Want me to turn one theme into a simple party schedule with a supply list?',
-        workedFor: 'Worked for 11s',
       }},
       { heading: 'Let’s choose a theme together', body: 'Read Replit’s suggestions and explore the ideas you like. For the rest of this course, we’ll choose a Pokémon theme so our checklist, birthday app, and designs all follow the same story. Reply in the same chat to continue.', prompt: 'Let’s go with a Pokémon theme. Suggest three simple activities that fit it.', afterPrompt: 'Read the activities and ask for a simpler option if you need one. You’re welcome to use your own theme, but the examples from here on will use Pokémon.', exchange: {
         thinking: 'I need to come up with three simple activities for a group of ten 6-year-olds at the park',
@@ -52,7 +51,6 @@ export const discoverLessons: LearnLesson[] = [
           { label: 'Poké Ball Toss', text: 'Use red-and-white beanbags—or soft balls—and toss them into buckets or hoops at different distances. Everyone gets a turn, with no scoring needed.' },
           { label: 'Pokémon Freeze Dance', text: 'Play upbeat music; when it stops, call out a Pokémon and have everyone freeze in a matching pose—like Pikachu’s thunderbolt or a Squirtle splash.' },
         ],
-        workedFor: 'Worked for 9s',
       } },
       { heading: 'Picture the party', body: 'Now ask for a picture of the theme you chose. You don’t need to repeat the whole plan in the same chat.', prompt: 'Create an image of what this birthday party could look like, with decorations and a picnic table in a park, using our chosen theme.', afterPrompt: 'Look at the picture. Does it fit your idea? You can ask for one change, such as different colors or simpler decorations. That’s a chat: describe, review, and refine.' },
     ],

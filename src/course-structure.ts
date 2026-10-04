@@ -128,15 +128,17 @@ export const availableLessonUrls = new Set(courseModules.filter(isAvailableModul
 // Titles can change; once published, a lesson keeps this ID so saved progress stays attached.
 export const lessonId = (module: CourseModule, lesson: LearnLesson) => lessonUrl(module, lesson).replace(/^\/learn\//, "");
 
-export type LessonUnlock = { id: string; kind: "entry" | "prompt" | "activity"; label: string; position: number; sectionIndex?: number };
+export type LessonUnlock = { id: string; kind: "entry" | "prompt" | "reveal" | "activity"; label: string; position: number; sectionIndex?: number };
 
-// Unlock buttons inside a lesson, in page order. IDs are permanent: "<lesson id>:entry", ":prompt-<section index>", ":activity".
+// Unlock buttons inside a lesson, in page order. IDs are permanent: "<lesson id>:entry", ":prompt-<section index>",
+// ":reveal-<section index>" (show Replit's example answer after copying), ":activity".
 export function lessonUnlocks(module: CourseModule, lesson: LearnLesson): LessonUnlock[] {
   const base = lessonId(module, lesson);
   const unlocks: Omit<LessonUnlock, "position">[] = [];
   if (lesson.entryLink) unlocks.push({ id: `${base}:entry`, kind: "entry", label: "Open Replit and start a chat" });
   if (lesson.promptGate || lesson.copyPrompts) lesson.sections.forEach((section, sectionIndex) => {
     if (section.prompt) unlocks.push({ id: `${base}:prompt-${sectionIndex}`, kind: "prompt", label: "Copy the prompt", sectionIndex });
+    if (section.prompt && section.exchange) unlocks.push({ id: `${base}:reveal-${sectionIndex}`, kind: "reveal", label: "Show an example answer", sectionIndex });
   });
   if (lesson.activityConfirmation && lesson.module !== "Your capstone") unlocks.push({ id: `${base}:activity`, kind: "activity", label: lesson.activityConfirmation });
   return unlocks.map((unlock, position) => ({ ...unlock, position }));
