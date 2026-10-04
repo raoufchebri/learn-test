@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-10-04T13:19:12.640Z",
+  "generatedAt": "2026-10-04T22:09:26.447Z",
   "mode": "full",
-  "hash": "6ce613bf1ae662b11a4247592497c0cb986dd6aec2b4d9bb5894734da8df7a7e",
+  "hash": "a3873a9400747f1362ed0823a02d82930128bf75f9770fbe9f16d29a70c8a5dd",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "072878e974a6f3620e8f",
@@ -826,7 +826,7 @@
       "sourceId": "c16efe98d5781aa4f839",
       "title": "Connect your tools",
       "heading": "Connect to Google Calendar",
-      "text": "Replit 101\nFollow these five steps in Replit and Google. The screenshots have account details and private sidebar content removed. Your screen may look slightly different, especially if you already have a connection.",
+      "text": "Replit 101\nThe button opened Google Calendar directly, so you can start at step 3. Steps 1 and 2 show how to find it yourself next time. Follow the steps in Replit and Google. The screenshots have account details and private sidebar content removed. Your screen may look slightly different, especially if you already have a connection.",
       "url": "/learn/replit-101/connect-your-tools#connect-to-google-calendar",
       "pageUrl": "/learn/replit-101/connect-your-tools",
       "sourcePath": "src/learn-content.ts#c16efe98d5781aa4f839"
@@ -886,7 +886,7 @@
       "sourceId": "c16efe98d5781aa4f839",
       "title": "Connect your tools",
       "heading": "Alternatively, ask Replit",
-      "text": "Replit 101\nYou can also type “Connect to my Google Calendar” in a Replit chat. Replit can guide you through the connection steps. You’ll still choose your Google account and review its permissions yourself. There’s no need to connect Gmail for this lesson.",
+      "text": "Replit 101\nYou can also ask Replit to connect it for you. Click the prompt to copy it, then paste it into a Replit chat. Replit will guide you through the connection. You’ll still choose your Google account and review its permissions yourself. There’s no need to connect Gmail for this lesson.\nConnect my Google Calendar so you can help me plan the birthday party. Walk me through it, and tell me which permissions I’m granting before I approve.",
       "url": "/learn/replit-101/connect-your-tools#alternatively-ask-replit",
       "pageUrl": "/learn/replit-101/connect-your-tools",
       "sourcePath": "src/learn-content.ts#c16efe98d5781aa4f839"
@@ -896,7 +896,7 @@
       "sourceId": "f4fbb3611e7f86a0ff44",
       "title": "Use your tools",
       "heading": "Overview",
-      "text": "Replit 101\nNow that Google Calendar is connected, let’s use it. You’ll ask Replit to add a birthday event, review the details, and check the result in Google Calendar. This is a real action in a connected tool, not just a suggested plan.\nContinue in your party-planning chat with Google Calendar connected. You don’t need Gmail for this activity, including calendar invitations.\nThe example uses fictional party details: September 22, 2026, from 3:00 to 5:00 PM in the Europe/Zurich time zone. Replace the date, year, time zone, and calendar name with the ones you intend to use. Choose a calendar where you’re allowed to create a test event.\nAsk Replit to create a calendar event from a prompt\nReview the details and verify the saved event\nUnderstand how integrations let Replit act in connected tools\n",
+      "text": "Replit 101\nNow that Google Calendar is connected, let’s use it. You’ll ask Replit to add a birthday event, review the details, and check the result in Google Calendar. This is a real action in a connected tool, not just a suggested plan.\nContinue in your party-planning chat with Google Calendar connected. You don’t need Gmail for this activity, including calendar invitations.\nThe example uses fictional party details: November 4, 2026, from 3:00 to 5:00 PM. If you’re planning a real party, change the date and details to match it. Choose a calendar where you’re allowed to create a test event.\nAsk Replit to create a calendar event from a prompt\nReview the details and verify the saved event\nUnderstand how integrations let Replit act in connected tools\n",
       "url": "/learn/replit-101/add-the-birthday-to-your-calendar",
       "pageUrl": "/learn/replit-101/add-the-birthday-to-your-calendar",
       "sourcePath": "src/learn-content.ts#f4fbb3611e7f86a0ff44"
@@ -906,7 +906,7 @@
       "sourceId": "f4fbb3611e7f86a0ff44",
       "title": "Use your tools",
       "heading": "1. Ask Replit to add the birthday",
-      "text": "Replit 101\nCopy the prompt below, or write it in your own words. Replace [calendar name] before sending it in Replit. Include a title, full date, start and end time, and time zone so Replit doesn’t have to guess. For this first try, don’t add guests or a private address.\nCreate an event called “Birthday party · practice” on September 22, 2026, from 3:00 to 5:00 PM, using the Europe/Zurich time zone, in my Google Calendar named [calendar name]. Add “Fictional birthday-party planning exercise” to the description. Show me the details before creating it and wait for my confirmation. Ask me if the calendar or any detail is unclear. Don’t add guests or send invitations.\nCopying the prompt here does not send it or change your calendar. Paste it into Replit, edit the example details, and send it there.",
+      "text": "Replit 101\nCopy the prompt below, or write it in your own words. It adds the event to your main Google Calendar; to use a different calendar, name it in the prompt. Include a title, full date, and start and end time so Replit doesn’t have to guess. For this first try, don’t add guests or a private address.\nAdd an event called “Pokémon birthday party (fictional)” to my main Google Calendar on November 4, 2026, from 3:00 to 5:00 PM. In the description, write “Picnic in the park for ten kids, Pokémon theme. Fictional practice event.” Show me the details before creating it and wait for my confirmation. Don’t add guests or send invitations.\nIn Replit, check the preview before approving: the title, date and year, start and end time, and calendar. If something is wrong, tell Replit in the same chat and it will update the preview. When everything is right, select Create event on the approval card and click Submit. Try it on the example card above to continue.",
       "url": "/learn/replit-101/add-the-birthday-to-your-calendar#1-ask-replit-to-add-the-birthday",
       "pageUrl": "/learn/replit-101/add-the-birthday-to-your-calendar",
       "sourcePath": "src/learn-content.ts#f4fbb3611e7f86a0ff44"
@@ -915,9 +915,9 @@
       "id": "f4fbb3611e7f86a0ff44:002",
       "sourceId": "f4fbb3611e7f86a0ff44",
       "title": "Use your tools",
-      "heading": "2. Review and confirm",
-      "text": "Replit 101\nRead the proposed event. Check the title, date and year, start and end time, time zone, and destination calendar. Correct anything that is wrong in the same chat. Once everything is right, ask Replit to create the event and review any approval card it shows.\nCreate the one birthday event we just reviewed, using the confirmed details and calendar. Don’t add guests or send invitations. Give me a link to the saved event.",
-      "url": "/learn/replit-101/add-the-birthday-to-your-calendar#2-review-and-confirm",
+      "heading": "2. Check the event in Google Calendar",
+      "text": "Replit 101\nOpen the returned event link or go to Google Calendar. Check that the event exists on the intended calendar at the correct date and time, and that it has no guests. A proposed event in chat is not the same as a saved event. If creation fails or the result is unclear, check your calendar before trying again so you don’t create duplicates. You can delete the practice event when you’re finished.",
+      "url": "/learn/replit-101/add-the-birthday-to-your-calendar#2-check-the-event-in-google-calendar",
       "pageUrl": "/learn/replit-101/add-the-birthday-to-your-calendar",
       "sourcePath": "src/learn-content.ts#f4fbb3611e7f86a0ff44"
     },
@@ -925,24 +925,14 @@
       "id": "f4fbb3611e7f86a0ff44:003",
       "sourceId": "f4fbb3611e7f86a0ff44",
       "title": "Use your tools",
-      "heading": "3. Check the event in Google Calendar",
-      "text": "Replit 101\nOpen the returned event link or go to Google Calendar. Check that the event exists on the intended calendar at the correct date and time, and that it has no guests. A proposed event in chat is not the same as a saved event. If creation fails or the result is unclear, check your calendar before trying again so you don’t create duplicates. You can delete the practice event when you’re finished.",
-      "url": "/learn/replit-101/add-the-birthday-to-your-calendar#3-check-the-event-in-google-calendar",
-      "pageUrl": "/learn/replit-101/add-the-birthday-to-your-calendar",
-      "sourcePath": "src/learn-content.ts#f4fbb3611e7f86a0ff44"
-    },
-    {
-      "id": "f4fbb3611e7f86a0ff44:004",
-      "sourceId": "f4fbb3611e7f86a0ff44",
-      "title": "Use your tools",
       "heading": "Optional: invite your guests",
-      "text": "Replit 101\nIf you have the email addresses of people you intend to invite, you can ask Replit to add them to the existing event and send Google Calendar invitations. This uses Calendar, not Gmail. Invitations notify real people, so skip this during a fictional practice exercise. For a real party, replace the placeholders, check every address, and review the guest list before authorizing invitations.\nFor the existing birthday event we just created, prepare to invite [guest email addresses]. Show me the event and guest list first. Don’t add guests or send invitations until I confirm, and don’t create another event.\nWhen the real guest list is correct, explicitly ask Replit to add those guests and send the calendar invitations. Review any approval card, then check the event’s guest list. An invitation is not an RSVP: guests still need to respond.",
+      "text": "Replit 101\nIf you have the email addresses of people you intend to invite, you can ask Replit to add them to the existing event and send Google Calendar invitations. This uses Calendar, not Gmail. Invitations notify real people, so skip this during a fictional practice exercise. For a real party, replace the example addresses with your guests’, check every address, and review the guest list before authorizing invitations.\nFor the existing birthday event we just created, prepare to invite maya@example.com, leo@example.com, and sam@example.com. Show me the event and guest list first. Don’t add guests or send invitations until I confirm, and don’t create another event.\nWhen the real guest list is correct, explicitly ask Replit to add those guests and send the calendar invitations. Review any approval card, then check the event’s guest list. An invitation is not an RSVP: guests still need to respond.",
       "url": "/learn/replit-101/add-the-birthday-to-your-calendar#optional-invite-your-guests",
       "pageUrl": "/learn/replit-101/add-the-birthday-to-your-calendar",
       "sourcePath": "src/learn-content.ts#f4fbb3611e7f86a0ff44"
     },
     {
-      "id": "f4fbb3611e7f86a0ff44:005",
+      "id": "f4fbb3611e7f86a0ff44:004",
       "sourceId": "f4fbb3611e7f86a0ff44",
       "title": "Use your tools",
       "heading": "What did the integration make possible?",
@@ -966,7 +956,7 @@
       "sourceId": "bcdfc673c3ead9df1416",
       "title": "Create a checklist",
       "heading": "1. Find supplies for your theme",
-      "text": "Replit 101\nContinue in the chat where you chose your theme. Maybe it’s dinosaurs, space, or something entirely different. Let’s find decorations, tableware, and games that fit. Copy this prompt, replace the brackets, and give Replit a budget and a country or region to shop in. There’s no need to share your home address.\nLet’s find supplies for the birthday party we’ve been planning. Use our chosen theme, [number] guests, and a shopping budget of [amount and currency]. Search the web for decorations, plates and cups, and simple party-game supplies available in [country or region]. Suggest a few affordable options with product links, quantities, listed prices, and delivery information where available. Ask if the theme or party date is unclear, and flag anything you cannot verify. Don’t buy anything.",
+      "text": "Replit 101\nContinue in the chat where you chose the Pokémon theme. Let’s find decorations, tableware, and games that fit. Copy this prompt and send it in Replit. If Replit asks where you are, a city or country is enough. There’s no need to share your home address.\nFind Pokémon party supplies for ten kids that I can buy near me: decorations, plates and cups, and a few party games. Keep the total under $100. Show the links and prices. Don’t buy anything.\nReplit suggests a different agent mode when a task needs more work, like checking many shops for stock, prices, and delivery. Choose Power or Max on the card above to continue.",
       "url": "/learn/replit-101/work-effectively-with-replit#1-find-supplies-for-your-theme",
       "pageUrl": "/learn/replit-101/work-effectively-with-replit",
       "sourcePath": "src/learn-content.ts#bcdfc673c3ead9df1416"
@@ -976,7 +966,7 @@
       "sourceId": "bcdfc673c3ead9df1416",
       "title": "Create a checklist",
       "heading": "2. Take a look at what Replit found",
-      "text": "Replit 101\nOpen a few of the product links. Do the items fit your theme? Are there enough plates for everyone? Check pack sizes, prices, shipping costs, and whether delivery is likely before the party. Prices and availability can change, so treat the results as shopping research, not a reservation. If something isn’t quite right, ask for a small change.\nKeep the theme and guest count. Find a less expensive alternative for [item], and update the estimated total. Show the product link and flag any shipping costs or delivery dates you could not confirm.",
+      "text": "Replit 101\nOpen a few of the product links. Do the items fit your theme? Are there enough plates for everyone? Check pack sizes, prices, shipping costs, and whether delivery is likely before the party. Prices and availability can change, so treat the results as shopping research, not a reservation. If something isn’t quite right, ask for a small change.\nFind cheaper plates and cups, and update the total.",
       "url": "/learn/replit-101/work-effectively-with-replit#2-take-a-look-at-what-replit-found",
       "pageUrl": "/learn/replit-101/work-effectively-with-replit",
       "sourcePath": "src/learn-content.ts#bcdfc673c3ead9df1416"
@@ -986,7 +976,7 @@
       "sourceId": "bcdfc673c3ead9df1416",
       "title": "Create a checklist",
       "heading": "3. Turn your choices into a checklist",
-      "text": "Replit 101\nOnce you like the options, let’s put everything in one place. Keep the checklist in this chat so you can return to it as you prepare. We’ll use the same list in the next lesson to check your progress each week.\nTurn the party supplies we chose into a checklist in this chat. Give each item an ID, quantity, product link, estimated cost, buy-by date, purchase status, and notes. Use “Not started,” “Ordered,” and “Delivered” for purchases, and don’t mark anything bought unless I’ve confirmed it. Add a separate preparation section for invitations and RSVPs, the cake, and planning games. Keep the total within our agreed budget, and show unknown costs separately. Ask about missing details rather than guessing. Don’t place orders or send invitations.\nAlready have the plates at home? Bought decorations in a shop? Tell Replit and ask it to update the notes. Your updates matter just as much as an email receipt.",
+      "text": "Replit 101\nOnce you like the options, let’s put everything in one place. Keep the checklist in this chat so you can return to it as you prepare. We’ll use the same list in the next lesson to check your progress each week.\nTurn the supplies we chose into a checklist with the item, quantity, link, price, and status: Not started, Ordered, or Delivered. Add a section for invitations, the cake, and games. Don’t order anything.\nReplit saves the checklist as a file connected to your chat. It appears as a card in the conversation: click it to open the spreadsheet next to the chat, or download it. Because Replit keeps the file with this chat, you can come back any time and ask Replit to update it. Already have the plates at home? Bought decorations in a shop? Tell Replit, and it will update the checklist.\nReplit chat with the Pokémon Party Checklist spreadsheet card on the left and the spreadsheet open on the right, listing supplies, invitations, cake, games, delivery, and budget rows with quantities and product links.\nThe checklist file in Replit: a card in your chat, with the spreadsheet open next to it. Click the image to zoom in.\n",
       "url": "/learn/replit-101/work-effectively-with-replit#3-turn-your-choices-into-a-checklist",
       "pageUrl": "/learn/replit-101/work-effectively-with-replit",
       "sourcePath": "src/learn-content.ts#bcdfc673c3ead9df1416"
@@ -1016,7 +1006,7 @@
       "sourceId": "c29185cacb2ae6783540",
       "title": "Create a Routine",
       "heading": "2. Let’s connect Gmail",
-      "text": "Replit 101\nWe connected Google Calendar earlier. Now let’s add Gmail so Replit can find party replies and order confirmations. Open Integrations, search for Gmail, and follow the sign-in steps. Choose the right account and review the permissions before approving. You can also simply ask Replit to connect Gmail.\nFinish connecting before scheduling the review, since a Routine can’t sign in for you. Use an account you’re allowed to connect. If you’re just practicing, you can use non-sensitive test messages or review the example without connecting. No purchases or real invitations are required.",
+      "text": "Replit 101\nWe connected Google Calendar earlier. Now let’s add Gmail so Replit can find party replies and order confirmations. Click the button below to open Gmail on the Integrations page, then follow the sign-in steps. Choose the right account and review the permissions before approving. You can also simply ask Replit to connect Gmail.\nFinish connecting before scheduling the review, since a Routine can’t sign in for you. Use an account you’re allowed to connect. If you’re just practicing, you can use non-sensitive test messages or review the example without connecting. No purchases or real invitations are required.",
       "url": "/learn/replit-101/create-a-routine#2-let-s-connect-gmail",
       "pageUrl": "/learn/replit-101/create-a-routine",
       "sourcePath": "src/learn-content.ts#c29185cacb2ae6783540"
@@ -1036,7 +1026,7 @@
       "sourceId": "c29185cacb2ae6783540",
       "title": "Create a Routine",
       "heading": "4. Make it a weekly check-in",
-      "text": "Replit 101\nHappy with the review? Let’s have Replit do this each week. In Replit, we call this creating a Routine. For example, every Thursday morning, Replit can check your purchase confirmations and update your checklist. Ask in the same chat so Replit knows which result you mean. If the party is tomorrow, try this with a later practice date so a weekly schedule makes sense.\nI like this result. Can you please turn it into a routine and run it every Thursday morning?\nRoutines require a paid plan and available workspace access. If you’re not ready to activate one, that’s fine: you can review the proposal and run the check-in manually instead.",
+      "text": "Replit 101\nHappy with the review? Let’s have Replit do this each week. In Replit, we call this creating a Routine. For example, every Thursday morning, Replit can check your purchase confirmations and update your checklist. Ask in the same chat so Replit knows which result you mean. If the party is tomorrow, try this with a later practice date so a weekly schedule makes sense.\nI like this result. Can you please turn it into a routine and run it every Thursday morning?\nReplit shows a New routine card before anything is scheduled. Review the title, schedule, and prompt, then click Create routine on the card above to continue.",
       "url": "/learn/replit-101/create-a-routine#4-make-it-a-weekly-check-in",
       "pageUrl": "/learn/replit-101/create-a-routine",
       "sourcePath": "src/learn-content.ts#c29185cacb2ae6783540"
@@ -1046,7 +1036,7 @@
       "sourceId": "c29185cacb2ae6783540",
       "title": "Create a Routine",
       "heading": "5. Take a look inside your Routine",
-      "text": "Replit 101\nHere’s an example of the proposal Replit shows before the weekly check-in starts. Let’s read it together: the Title names your Routine, Schedule says when it runs, and Prompt contains the instructions it will follow. You can review these before choosing Create routine. This card is a proposal, not proof that the Routine is already active.\nTitle: the screenshot uses “Birthday preparation review.” Choose a name you’ll recognize later.\nSchedule: the example runs at 9 AM on Thursdays. The time-zone value is hidden in this image for privacy; check yours before confirming.\nPrompt: check that the instructions repeat your purchase review using the right checklist, without buying anything or sending messages. This example also mentions RSVP replies and other possible checklist sources. Your checklist is in this chat, so you don’t need to connect Notion or Google Drive.\nPer-run budget: no budget field is visible in this screenshot. Review the amount when it is presented during setup. It covers Replit carrying out one check-in, not shopping for party supplies or the entire series of weekly reviews.\nExpected result: your updated checklist with links to the purchase confirmation emails, returned to this chat.\nCreate routine: confirm when the details are right, or choose Not now if you’re only exploring.\nNew routine proposal showing the Title, Thursday 9 AM Schedule, Prompt, Not now, and Create routine controls. The time-zone value is redacted.\nReview the title, schedule, and instructions before creating the Routine. The time zone is redacted; no budget field is visible in this example.\n/images/routine-setup/routine-proposal.webp",
+      "text": "Replit 101\nLet’s read the New routine card together. It shows exactly what will run each week, so check it before choosing Create routine.\nTitle: “Birthday checklist purchase check.” Choose a name you’ll recognize later in the Routines list.\nSchedule: every Thursday at 11:10 AM. Change the day or time on the card if another moment suits you better.\nPower mode: all routines run in Power mode, the same mode you chose for researching supplies, so each run can search and verify carefully.\nPrompt: the instructions the routine follows each week. Check that it uses your checklist, looks only for purchase confirmations, and doesn’t buy anything or send emails.\nExpected result: your updated checklist, with links to the confirmation emails, reported back in this chat.\nCreate routine or Not now: confirm when the details are right, or choose Not now if you’re only exploring.",
       "url": "/learn/replit-101/create-a-routine#5-take-a-look-inside-your-routine",
       "pageUrl": "/learn/replit-101/create-a-routine",
       "sourcePath": "src/learn-content.ts#c29185cacb2ae6783540"
@@ -1096,7 +1086,7 @@
       "sourceId": "91a21c98ad3525889549",
       "title": "Build your first app",
       "heading": "2. Start with a simple prompt",
-      "text": "Replit 101\nContinue in your planning chat and ask Replit to build the app. It will move the app-building work into a project, where you can try it and keep improving it. We’ll start small, then add a couple of details with follow-up prompts.\nBuild a Pokémon-themed birthday RSVP app. Let guests tap a big Poké Ball to open the invitation, enter their name, and say if they’re coming. Make it playful and easy to use on a phone. Use fictional party details and don’t publish it yet.\nGive Replit a little time to build, and answer any questions it asks. Then open Preview and tap the Poké Ball. Your version may look different from this example.\nEdited example of a birthday app in Replit Preview with a park scene and a large Poké Ball. Personal names and location labels are replaced, avatars are generic, and the agent message is rewritten.\nAn example of the invitation screen, not an exact result guaranteed by the prompt. Identifying details and avatars have been replaced, and the agent message is edited for illustration.\n/images/birthday-app/birthday-rsvp-example.webp",
+      "text": "Replit 101\nContinue in your planning chat and ask Replit to build the app. The party is in a park, so let’s show Replit the park too. Download the image below, then attach it to your message in Replit with the + button in the chat box. A picture gives Replit more context, so the invitation can show the park where guests will meet. Replit will move the app-building work into a project, where you can try it and keep improving it.\nBuild a Pokémon-themed birthday RSVP app. The party is happening in a park, so use the attached image of the park as the basis for the app. Put one big Poké Ball in the middle of the park. When a guest clicks it, they can enter their name and RSVP. Once they RSVP, a smaller Poké Ball appears somewhere in the park. Make it easy to use on a phone, and don’t publish it yet.\nReplit suggests building the app in a new project, so your planning chat stays as it is. Review the card, then click Start new project to continue.\nEdited example of a birthday app in Replit Preview with a park scene and a large Poké Ball. Personal names and location labels are replaced, avatars are generic, and the agent message is rewritten.\nAn example of the invitation screen, not an exact result guaranteed by the prompt. Identifying details and avatars have been replaced, and the agent message is edited for illustration.\n/images/birthday-app/birthday-rsvp-example.webp",
       "url": "/learn/replit-101/build-and-publish-a-simple-app#2-start-with-a-simple-prompt",
       "pageUrl": "/learn/replit-101/build-and-publish-a-simple-app",
       "sourcePath": "src/learn-content.ts#91a21c98ad3525889549"
@@ -1135,9 +1125,9 @@
       "id": "91a21c98ad3525889549:006",
       "sourceId": "91a21c98ad3525889549",
       "title": "Build your first app",
-      "heading": "6. Get ready to share with your friends",
-      "text": "Replit 101\nWhen you’re happy with the app, review the party details and remove test responses before using it for real. Keep a child’s full name, photos, and home address off a public invitation page. Share any private location details separately with your guests. Test that only you can access the host view.\nYou can finish this lesson by testing in Preview. Publishing and sending the link are your next steps when you’re ready, not automatic actions.\nWhen you choose to go live, use Publish in the project and review the publishing settings and any costs.\nOpen the published URL on your phone and test an RSVP again, including the favorite Pokémon picker. Confirm it appears in your private host view.\nShare the published link with the people you want to invite. A link can be forwarded, so don’t treat it as private access control.\nReplies in this app are stored in its database. They do not automatically update Google Calendar or appear in Gmail, so your Gmail Routine won’t see them unless you add that connection later.",
-      "url": "/learn/replit-101/build-and-publish-a-simple-app#6-get-ready-to-share-with-your-friends",
+      "heading": "6. Publish your app",
+      "text": "Replit 101\nWhen you’re ready for guests to see the invitation, publish the app. Publishing gives it its own web address that anyone with the link can open, even when your project is closed.\nClick Publish in the top right of your project.\nDomain: choose your app’s address. It ends in .replit.app, and Replit shows Available when the name is free.\nWho can access your app: Public means anyone on the internet with the URL can open it.\nClick Review security if you’d like Replit to check the app first, then click Publish.\nReplit project with the Publish panel open over the Poké Ball invitation, showing the domain poke-park-birthday-rsvp.replit.app marked Available, Public access, a feedback widget toggle, and the Review security and Publish buttons.\nThe Publish panel: choose a domain and who can access your app, then click Publish. Click the image to zoom in.\n",
+      "url": "/learn/replit-101/build-and-publish-a-simple-app#6-publish-your-app",
       "pageUrl": "/learn/replit-101/build-and-publish-a-simple-app",
       "sourcePath": "src/learn-content.ts#91a21c98ad3525889549"
     },
@@ -1145,9 +1135,19 @@
       "id": "91a21c98ad3525889549:007",
       "sourceId": "91a21c98ad3525889549",
       "title": "Build your first app",
-      "heading": "Your turn",
-      "text": "Help me check our birthday RSVP app before sharing it. Walk me through a test guest response, confirm it is saved, and help me verify that only the signed-in host can see the guest list. Don’t publish or send invitations yet.\nI submitted test RSVPs and checked the saved responses as the host.\nI checked the phone layout and verified that signed-out visitors cannot see the guest list.\nI know publishing and sharing the link are separate decisions.",
-      "url": "/learn/replit-101/build-and-publish-a-simple-app#your-turn",
+      "heading": "7. Watch it go live",
+      "text": "Replit 101\nReplit now publishes your app in a few stages: Provision, Security checks, Build, Bundle, and Promote. It usually takes a few minutes. When it’s done, your app’s address appears under Preview, for example poke-park-birthday-rsvp.replit.app. Use the copy button next to it to grab the link. Publishing can have costs depending on your plan, so check them in the publishing settings.\nReplit Publishing page with stages Provision complete and Security checks in progress, public sharing, Europe region with autoscale, and a preview of the invitation with its replit.app address. Names and photos are blurred.\nPublishing in progress, with your app’s address on the right. Names and photos are blurred in this example.\n",
+      "url": "/learn/replit-101/build-and-publish-a-simple-app#7-watch-it-go-live",
+      "pageUrl": "/learn/replit-101/build-and-publish-a-simple-app",
+      "sourcePath": "src/learn-content.ts#91a21c98ad3525889549"
+    },
+    {
+      "id": "91a21c98ad3525889549:008",
+      "sourceId": "91a21c98ad3525889549",
+      "title": "Build your first app",
+      "heading": "8. Get ready to share with your friends",
+      "text": "Replit 101\nWhen you’re happy with the app, review the party details and remove test responses before using it for real. Keep a child’s full name, photos, and home address off a public invitation page. Share any private location details separately with your guests. Test that only you can access the host view.\nYou can finish this lesson by testing in Preview. Publishing and sending the link are your next steps when you’re ready, not automatic actions.\nOpen the published URL on your phone and test an RSVP again, including the favorite Pokémon picker. Confirm it appears in your private host view.\nShare the published link with the people you want to invite. A link can be forwarded, so don’t treat it as private access control.\nReplies in this app are stored in its database. They do not automatically update Google Calendar or appear in Gmail, so your Gmail Routine won’t see them unless you add that connection later.",
+      "url": "/learn/replit-101/build-and-publish-a-simple-app#8-get-ready-to-share-with-your-friends",
       "pageUrl": "/learn/replit-101/build-and-publish-a-simple-app",
       "sourcePath": "src/learn-content.ts#91a21c98ad3525889549"
     },
