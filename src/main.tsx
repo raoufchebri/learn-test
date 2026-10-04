@@ -514,6 +514,13 @@ function LessonPage({
           </div>}
           {section.prompt && (() => {
             const promptUnlock = promptUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex);
+            // chatPrompt: an optional prompt shown as a copyable chat bubble that doesn't lock anything.
+            if (!promptUnlock && section.chatPrompt) return <div className="lesson-chat-thread" role="group" aria-label="Chat in Replit">
+              <PromptBubble prompt={section.prompt} done={false} status={promptCopy[sectionIndex]} onCopy={async () => {
+                try { await navigator.clipboard.writeText(section.prompt!); setPromptCopy((current) => ({ ...current, [sectionIndex]: "copied" })); }
+                catch { setPromptCopy((current) => ({ ...current, [sectionIndex]: "failed" })); }
+              }} />
+            </div>;
             if (!promptUnlock) return <LessonPrompt key={section.prompt} prompt={section.prompt} />;
             const done = isUnlocked(promptUnlock.id);
             const copy = promptCopy[sectionIndex];
