@@ -1121,7 +1121,7 @@
 
 /* Lesson prompts as Replit chat: blue message bubble (click to copy), then Replit's reply. Matches Replit's chat UI. */
 /* Chat between learner and Replit: set apart by a thin line above and below and extra spacing, same background as the page. */
-.lesson-chat-thread { margin: 28px 0 32px; padding: 26px 0; border-top: 1px solid var(--replit-light-silver); border-bottom: 1px solid var(--replit-light-silver); background: transparent; font-family: 'ABC Diatype Plus', 'Diatype', sans-serif; }
+.lesson-chat-thread { margin: 28px 0 32px; padding: 78px 0; border-top: 1px solid var(--replit-light-silver); border-bottom: 1px solid var(--replit-light-silver); background: transparent; font-family: 'ABC Diatype Plus', 'Diatype', sans-serif; }
 
 .prompt-bubble-row { display: flex; flex-direction: column; align-items: flex-end; }
 .lesson-content .prompt-bubble { max-width: min(440px, 82%); margin: 0; padding: 11px 15px; border: 0; border-radius: 14px; background: #dde7f5; color: #27476f; font: inherit; font-size: 16px; line-height: 1.55; text-align: left; cursor: copy; transition: background .15s ease, box-shadow .15s ease; }
