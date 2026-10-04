@@ -84,6 +84,8 @@ export type LearnLesson = {
   summary: string;
   openingImage?: { src: string; alt: string };
   entryLink?: string;
+  // A project review lesson (Agent checks the learner's app before they move on).
+  review?: 'replit-101';
   // Label and lead-in for the entry button; defaults suit opening a new Replit chat.
   entryLabel?: string;
   entryIntro?: string;

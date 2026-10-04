@@ -298,6 +298,18 @@ export const discoverLessons: LearnLesson[] = [
     ],
   },
   {
+    ...base, title: 'Review your app', duration: '5 min',
+    summary: 'Before we wrap up Module 1, let’s check the birthday RSVP app you built. Choose your project, and Replit’s Agent will review it against the steps from this module.',
+    introduction: [
+      'The review is read-only: Agent looks at your project and reports what it finds, without changing anything. Your results are saved here so you can come back after making improvements.',
+      'If every check passes, you can move on to the next module. If something needs work, you’ll get feedback and a prompt to paste into your project’s Agent. Make the change, test it, then recheck.',
+    ],
+    activityConfirmation: 'Submit my app for review.',
+    review: 'replit-101',
+    sections: [],
+    quiz: [],
+  },
+  {
     ...base, title: 'You’ve discovered Replit', duration: '2 min',
     summary: 'Congratulations! You’ve gone from a birthday-party idea to a working app, and explored several ways Replit can help along the way.',
     introduction: [

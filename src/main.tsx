@@ -5,7 +5,10 @@ import { BrowserRouter, useLocation, useNavigate } from "react-router-dom";
 import * as Icons from "lucide-react";
 import { appFoundationLessons, courseLessons, learnDisplayTitle, type ChatExchangeExample, type LearnLesson } from "./learn-content";
 import { ReplitAccount } from "./replit-account";
-import { CapstoneSubmission } from "./capstone-submission";
+import { CapstoneSubmission, type ReviewConfig } from "./capstone-submission";
+import { MODULE1_REQUIREMENTS } from "./module-review-rubric";
+
+const MODULE1_REVIEW_CONFIG: ReviewConfig = { endpoint: "/api/activities/module-review", requirements: MODULE1_REQUIREMENTS, subject: "birthday RSVP app", kind: "Module 1", complete: "Your app passed the review", cta: "I’ve built my birthday RSVP app", page: "review page" };
 import { CourseCertificate } from "./course-certificate";
 import { LessonPrompt } from "./lesson-prompt";
 import { LessonQuizCard } from "./lesson-quiz-card";
@@ -843,7 +846,10 @@ function LessonPage({
       {lesson.module === 'Your capstone' && lesson.title === 'Review' && <CapstoneSubmission onValidated={(passed) => {
         setConfirmedActivity(passed ? lesson.title : null);
       }} />}
-      {lesson.activityConfirmation && lesson.module !== 'Your capstone' && <div className={`recipe-unlock-action activity-confirmation ${activityConfirmed ? 'is-open' : ''}`}>
+      {lesson.review === 'replit-101' && <CapstoneSubmission config={MODULE1_REVIEW_CONFIG} onValidated={(passed) => {
+        setConfirmedActivity(passed ? lesson.title : null);
+      }} />}
+      {lesson.activityConfirmation && lesson.module !== 'Your capstone' && !lesson.review && <div className={`recipe-unlock-action activity-confirmation ${activityConfirmed ? 'is-open' : ''}`}>
         <button type="button" className="recipe-create-button" disabled={activityConfirmed} aria-expanded={activityConfirmed} aria-controls="confirmed-activity-quiz" onClick={() => {
           setConfirmedActivity(lesson.title);
           unlockStep(activityUnlock?.id, true);
@@ -853,7 +859,7 @@ function LessonPage({
         </button>
         <small aria-live="polite">{activityConfirmed ? 'Success! Your quiz is unlocked.' : 'Confirm you’ve completed the activity to unlock the quiz. This records your progress; it doesn’t verify actions in Replit.'}</small>
       </div>}
-      {lesson.quiz.length === 0 && nextLesson && <button className="next-lesson" onClick={() => { onComplete?.(); nextLesson.onClick(); }}>
+      {lesson.quiz.length === 0 && nextLesson && (!lesson.review || activityConfirmed) && <button className="next-lesson" onClick={() => { onComplete?.(); nextLesson.onClick(); }}>
         <span>{lesson.module === 'Your capstone' ? 'CONTINUE' : 'NEXT MODULE'}</span><strong>{learnDisplayTitle(nextLesson.title)}</strong><b>→</b>
       </button>}
       {activityConfirmed && lesson.quiz.length > 0 && !quizMode && <div className="recipe-unlock-action lesson-quiz-entry" id={lesson.activityConfirmation ? 'confirmed-activity-quiz' : undefined}>

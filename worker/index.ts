@@ -1,4 +1,5 @@
 import { CAPSTONE_REVIEW, parseCapstoneReview, type CapstoneCheck } from "../src/capstone-rubric";
+import { MODULE1_REQUIREMENTS, MODULE1_REVIEW, parseReview } from "../src/module-review-rubric";
 import { createRemoteJWKSet, jwtVerify } from "jose";
 import { neon, type NeonQueryFunction } from "@neondatabase/serverless";
 import { RECIPE_PROMPT, type RecipeBuild } from "../src/recipe-activity";
@@ -1285,6 +1286,37 @@ async function capstoneResponse(request: Request, env: Env): Promise<Response> {
   }
 }
 
+// Module 1 review: the learner picks their RSVP app; Agent reviews it read-only against the Module 1 checklist.
+async function moduleReviewResponse(request: Request, env: Env): Promise<Response> {
+  const sessionId = cookieValue(request, SESSION_COOKIE);
+  const session = await authenticatedSession(request, env);
+  if (!session || !sessionId) return json({ error: "authentication_required" }, { status: 401 });
+  const key = `module-review:v1:replit-101:${session.user.id}`;
+  if (request.method === "GET") return json({ submission: await getRecord(env, key) ?? null });
+  if (request.headers.get("origin") !== new URL(request.url).origin) return json({ error: "invalid_origin" }, { status: 403 });
+  let appId: string | undefined;
+  try { appId = safeString((await request.json<{ appId?: unknown }>()).appId, 160); }
+  catch { return json({ error: "invalid_request" }, { status: 400 }); }
+  if (!appId) return json({ error: "invalid_project" }, { status: 400 });
+  const authorized = await refreshMcpAccess(env, sessionId, session);
+  if (!authorized?.mcpAccess) return json({ error: "reauth_required" }, { status: 401 });
+  try {
+    const apps = await listMcpApps(env, authorized.mcpAccess.accessToken);
+    const app = apps.find((candidate) => candidate.id === appId);
+    if (!app) return json({ error: "invalid_project" }, { status: 403 });
+    const answer = await askMcpQuestion(env, authorized.mcpAccess.accessToken, appId, MODULE1_REVIEW);
+    const review = parseReview(answer, MODULE1_REQUIREMENTS);
+    if (!review) return json({ error: "inconclusive_review" }, { status: 502 });
+    const submission: CapstoneRecord = { kind: "capstone", appId, title: app.title, url: app.url, ...review, checkedAt: new Date().toISOString(), rubricVersion: 1 };
+    await putRecord(env, key, submission);
+    return json({ submission });
+  } catch (error) {
+    if (error instanceof McpBusyError) return json({ error: "app_busy" }, { status: 409 });
+    if (error instanceof McpAuthorizationError) return json({ error: "reauth_required" }, { status: 401 });
+    return json({ error: "review_unavailable" }, { status: 503 });
+  }
+}
+
 function withSecurityHeaders(response: Response): Response {
   const headers = new Headers(response.headers);
   headers.set("x-content-type-options", "nosniff");
@@ -1307,6 +1339,7 @@ async function route(request: Request, env: Env, ctx?: ExecutionContext): Promis
   if (pathname === "/api/progress/unlock" && request.method === "POST") return recordUnlock(request, env);
   if (pathname === "/api/mcp/apps" && request.method === "GET") return mcpAppsResponse(request, env);
   if (pathname === "/api/activities/capstone" && ["GET", "POST"].includes(request.method)) return capstoneResponse(request, env);
+  if (pathname === "/api/activities/module-review" && ["GET", "POST"].includes(request.method)) return moduleReviewResponse(request, env);
   if (pathname === "/api/activities/recipe" && ["GET", "POST"].includes(request.method)) return recipeBuildResponse(request, env);
   if (pathname === "/api/activities/recipe/events" && request.method === "GET") return recipeBuildEvents(request, env);
   if (pathname === '/api/activities/recipe/iterate' && request.method === 'POST') return recipeIterationResponse(request, env);

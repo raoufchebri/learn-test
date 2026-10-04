@@ -149,7 +149,7 @@ export function lessonUnlocks(module: CourseModule, lesson: LearnLesson): Lesson
     if (gated && section.prompt && section.openProject) unlocks.push({ id: `${base}:project-${sectionIndex}`, kind: "step", label: section.openProject.label, sectionIndex });
     if (section.step) unlocks.push({ id: `${base}:step-${sectionIndex}`, kind: "step", label: section.step.label, sectionIndex });
   });
-  if (lesson.activityConfirmation && lesson.module !== "Your capstone") unlocks.push({ id: `${base}:activity`, kind: "activity", label: lesson.activityConfirmation });
+  if (lesson.activityConfirmation && lesson.module !== "Your capstone" && !lesson.review) unlocks.push({ id: `${base}:activity`, kind: "activity", label: lesson.activityConfirmation });
   return unlocks.map((unlock, position) => ({ ...unlock, position }));
 }
 

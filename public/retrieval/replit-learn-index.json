@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-10-04T22:11:39.389Z",
+  "generatedAt": "2026-10-04T22:14:21.709Z",
   "mode": "full",
-  "hash": "d886267b2986b43108a53270796a234e4492dacd37eca84fae6f90d3f75da98c",
+  "hash": "64d537f41fecbf0b92de6a7584f3b367cc215ec7005c69bdc64f05e92510b087",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "072878e974a6f3620e8f",
@@ -51,6 +51,7 @@
     "6d3aff938c39dca0c873",
     "7246458a3d230b3db2c6",
     "7383119f922acf4aa3ce",
+    "7926fd72df80a8a0a733",
     "798afc26ed3e26bc9331",
     "7af51a05c93d059bc6be",
     "7d986d37e042bf1e5be2",
@@ -155,6 +156,7 @@
     "src/learn-content.ts#6d3aff938c39dca0c873",
     "src/learn-content.ts#7246458a3d230b3db2c6",
     "src/learn-content.ts#7383119f922acf4aa3ce",
+    "src/learn-content.ts#7926fd72df80a8a0a733",
     "src/learn-content.ts#798afc26ed3e26bc9331",
     "src/learn-content.ts#7af51a05c93d059bc6be",
     "src/learn-content.ts#7d986d37e042bf1e5be2",
@@ -1250,6 +1252,16 @@
       "url": "/learn/replit-101/create-assets#3-add-it-to-the-app",
       "pageUrl": "/learn/replit-101/create-assets",
       "sourcePath": "src/learn-content.ts#d46e7c337891ba07fd8b"
+    },
+    {
+      "id": "7926fd72df80a8a0a733:000",
+      "sourceId": "7926fd72df80a8a0a733",
+      "title": "Review your app",
+      "heading": "Overview",
+      "text": "Replit 101\nBefore we wrap up Module 1, let’s check the birthday RSVP app you built. Choose your project, and Replit’s Agent will review it against the steps from this module.\nThe review is read-only: Agent looks at your project and reports what it finds, without changing anything. Your results are saved here so you can come back after making improvements.\nIf every check passes, you can move on to the next module. If something needs work, you’ll get feedback and a prompt to paste into your project’s Agent. Make the change, test it, then recheck.\n",
+      "url": "/learn/replit-101/review-your-app",
+      "pageUrl": "/learn/replit-101/review-your-app",
+      "sourcePath": "src/learn-content.ts#7926fd72df80a8a0a733"
     },
     {
       "id": "6d3aff938c39dca0c873:000",
