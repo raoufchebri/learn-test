@@ -125,8 +125,11 @@ function LessonPage({
 }) {
   const recipe = useRecipeActivity();
   const recipeLesson = lesson.activity === "recipe-build";
-  const [entryOpened, setEntryOpened] = useState(LEARN_DEV_MODE || !lesson.entryLink);
-  const [promptContinued, setPromptContinued] = useState(LEARN_DEV_MODE || !lesson.promptGate);
+  // A completed lesson opens fully: every gate below counts as passed.
+  const [entryOpenedState, setEntryOpened] = useState(LEARN_DEV_MODE || !lesson.entryLink);
+  const entryOpened = entryOpenedState || completed;
+  const [promptContinuedState, setPromptContinued] = useState(LEARN_DEV_MODE || !lesson.promptGate);
+  const promptContinued = promptContinuedState || completed;
   const hasFrontendCheck = lesson.title === 'What Is Replit Building?';
   const hasCheckpoint = hasFrontendCheck || !!lesson.checkpoint;
   const checkpointIndex = lesson.checkpoint?.afterSection ?? 2;
@@ -139,9 +142,9 @@ function LessonPage({
   const [frontendReady, setFrontendReady] = useState(RECIPE_DEMO && hasFrontendCheck);
   const [frontendOpened, setFrontendOpened] = useState(RECIPE_DEMO && hasFrontendCheck);
   const frontendUnlockRef = useRef<HTMLButtonElement>(null);
-  const frontendVisible = LEARN_DEV_MODE || !hasCheckpoint || frontendOpened;
+  const frontendVisible = LEARN_DEV_MODE || completed || !hasCheckpoint || frontendOpened;
   useEffect(() => { setFrontendAnswers([]); setFrontendReady(RECIPE_DEMO && hasFrontendCheck); setFrontendOpened(RECIPE_DEMO && hasFrontendCheck); }, [lesson.title]);
-  const unlocked = LEARN_DEV_MODE || lesson.testingUnlocked || (lesson.projectTask ? recipe.inspections[lesson.projectTask.id] === 'complete' : !recipeLesson || (!!recipe.build.replId && ['creating', 'complete'].includes(recipe.build.status)));
+  const unlocked = LEARN_DEV_MODE || completed || lesson.testingUnlocked || (lesson.projectTask ? recipe.inspections[lesson.projectTask.id] === 'complete' : !recipeLesson || (!!recipe.build.replId && ['creating', 'complete'].includes(recipe.build.status)));
   const promptIndex = lesson.projectTask ? 0 : lesson.sections.findIndex((section) => !!section.prompt);
   const location = useLocation();
   const [unlockCelebration, setUnlockCelebration] = useState(false);
@@ -200,13 +203,13 @@ function LessonPage({
   const [answers, setAnswers] = useState<number[]>([]);
   const [practiceChecks, setPracticeChecks] = useState<number[]>([]);
   const [confirmedActivity, setConfirmedActivity] = useState<string | null>(null);
-  const activityConfirmed = !lesson.activityConfirmation || confirmedActivity === lesson.title;
+  const activityConfirmed = completed || !lesson.activityConfirmation || confirmedActivity === lesson.title;
   useEffect(() => {
     setConfirmedActivity(null);
     setUnlockCelebration(false);
   }, [lesson.title]);
   const [copyStatus, setCopyStatus] = useState('Copy request');
-  const practiceDone = activityConfirmed && (!lesson.practice || lesson.practice.checks.every((_, index) => practiceChecks.includes(index)));
+  const practiceDone = completed || activityConfirmed && (!lesson.practice || lesson.practice.checks.every((_, index) => practiceChecks.includes(index)));
   const quizPassed = practiceDone && lesson.quiz.length > 0 && lesson.quiz.every((question, index) => answers[index] === question.answer);
   const nextUnlockRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
@@ -268,6 +271,7 @@ function LessonPage({
     return () => window.clearTimeout(reveal);
   }, [quizPassed, completed, unlocked]);
   const [quizMode, setQuizMode] = useState(false);
+  const quizReview = useRef(false);
   // Each celebration starts a confetti shower that runs to the end on its own timer.
   const [confettiBurst, setConfettiBurst] = useState(0);
   useEffect(() => { if (unlockCelebration) setConfettiBurst((burst) => burst + 1); }, [unlockCelebration]);
@@ -275,6 +279,7 @@ function LessonPage({
   useEffect(() => {
     if (!quizMode) return;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (quizReview.current) return; // Revisiting a completed lesson: show the passed quiz in place, don't jump to it.
     quizCardRef.current?.scrollIntoView({ behavior: reduced ? "instant" : "smooth", block: "start" });
     quizCardRef.current?.focus({ preventScroll: true });
   }, [quizMode]);
@@ -290,6 +295,13 @@ function LessonPage({
     }
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [lesson.title, location.hash]);
+  // Completed lesson: the quiz is shown as taken, with the correct answers checked and the Continue button.
+  useEffect(() => {
+    if (!completed || lesson.quiz.length === 0 || quizMode) return;
+    quizReview.current = true;
+    setAnswers(lesson.quiz.map((question) => question.answer));
+    setQuizMode(true);
+  }, [completed]);
 
   return (
     <article className={`lesson-content learn-content-stage ${quizMode ? 'quiz-mode' : ''}`} id="overview" key={lesson.title}>
@@ -330,7 +342,7 @@ function LessonPage({
       </div>}
       {entryOpened && <>
       {lesson.sections.map((section, sectionIndex) => (
-        (!LEARN_DEV_MODE && ((!promptContinued && sectionIndex > 0) || (!unlocked && sectionIndex > promptIndex) || (!frontendVisible && sectionIndex > checkpointIndex) || (hasFrontendCheck && sectionIndex > 5 && recipe.iteration !== 'complete'))) ? null : <section className={`foundation-section ${((recipeLesson || lesson.projectTask) && sectionIndex > promptIndex) || (hasCheckpoint && sectionIndex > checkpointIndex) || (lesson.promptGate && sectionIndex > 0) ? "lesson-unlocked" : ""}`} id={section.id ?? learnSegment(section.heading)} key={section.heading}>
+        (!LEARN_DEV_MODE && !completed && ((!promptContinued && sectionIndex > 0) || (!unlocked && sectionIndex > promptIndex) || (!frontendVisible && sectionIndex > checkpointIndex) || (hasFrontendCheck && sectionIndex > 5 && recipe.iteration !== 'complete'))) ? null : <section className={`foundation-section ${((recipeLesson || lesson.projectTask) && sectionIndex > promptIndex) || (hasCheckpoint && sectionIndex > checkpointIndex) || (lesson.promptGate && sectionIndex > 0) ? "lesson-unlocked" : ""}`} id={section.id ?? learnSegment(section.heading)} key={section.heading}>
           <h2>{section.heading}</h2>
           <p>{section.body}</p>
           {section.prompt && <LessonPrompt key={section.prompt} prompt={section.prompt} copyable={Boolean(lesson.promptGate || lesson.copyPrompts)} />}
@@ -385,7 +397,7 @@ function LessonPage({
           </div>}
         </section>
       ))}
-      {promptContinued && unlocked && frontendVisible && (LEARN_DEV_MODE || !hasFrontendCheck || recipe.iteration === 'complete') && <div className={recipeLesson ? "lesson-unlocked" : undefined}>
+      {promptContinued && unlocked && frontendVisible && (LEARN_DEV_MODE || completed || !hasFrontendCheck || recipe.iteration === 'complete') && <div className={recipeLesson ? "lesson-unlocked" : undefined}>
       {lesson.replitExample && !recipeLesson && <section className="replit-example">
         <p className="eyebrow">IN REPLIT</p>
         <p>{lesson.replitExample}</p>
@@ -779,6 +791,8 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
   const [welcomeDismissed, setWelcomeDismissed] = useState<boolean | undefined>();
   // True once the learner has opened any Replit 101 page (database: user_course_state), even before completing one.
   const [courseStarted, setCourseStarted] = useState(false);
+  // Lessons the learner has opened (database: a user_lesson_progress row). Only these show the in-progress check.
+  const [seenLessons, setSeenLessons] = useState<string[]>([]);
   // False until the progress request finishes (either answer or failure), so the welcome modal doesn't guess.
   const [progressSettled, setProgressSettled] = useState(false);
   useEffect(() => {
@@ -786,6 +800,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
     setWelcomeDismissed(undefined);
     setCourseStarted(false);
     setProgressSettled(false);
+    setSeenLessons([]);
     if (!learnerKey || progressOwner !== learnerKey) return;
     let active = true;
     const local = (() => { try { const saved = JSON.parse(localStorage.getItem(`replit-101-progress:v2:${learnerKey}`) ?? '[]'); return Array.isArray(saved) ? saved.filter((url): url is string => typeof url === 'string' && availableLessonUrls.has(url)) : []; } catch { return []; } })();
@@ -794,7 +809,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
       try {
         const response = await fetch('/api/progress', { credentials: 'same-origin', headers: { accept: 'application/json' } });
         if (!response.ok) return;
-        type Snapshot = { completed?: string[]; lastLessons?: Record<string, string>; welcomeDismissed?: boolean; progressImported?: boolean };
+        type Snapshot = { completed?: string[]; seen?: string[]; lastLessons?: Record<string, string>; welcomeDismissed?: boolean; progressImported?: boolean };
         let snapshot = await response.json() as Snapshot;
         // Browser progress is copied in once per learner; after that the database always wins.
         if (!snapshot.progressImported) {
@@ -805,6 +820,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
         setCompletedLessons(snapshot.completed.filter((url) => availableLessonUrls.has(url)));
         setWelcomeDismissed(snapshot.welcomeDismissed === true);
         setCourseStarted(Boolean(snapshot.lastLessons?.discover));
+        if (Array.isArray(snapshot.seen)) setSeenLessons((current) => [...new Set([...current, ...snapshot.seen!])]);
         setServerProgress(true);
       } catch { /* Keep browser progress when the server is unreachable. */ }
       finally { if (active) setProgressSettled(true); }
@@ -844,6 +860,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
   const currentLocked = isLocked(currentUrl);
   // Last page seen: recorded whenever a learner opens a page they're allowed to see.
   useEffect(() => {
+    if (currentUrl && !currentLocked && availableLessonUrls.has(currentUrl)) setSeenLessons((current) => current.includes(currentUrl) ? current : [...current, currentUrl]);
     if (!serverProgress || !currentUrl || currentLocked || !availableLessonUrls.has(currentUrl)) return;
     setCourseStarted(true);
     fetch('/api/progress/seen', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ lesson: currentUrl }) }).catch(() => undefined);
@@ -972,7 +989,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
                                 key={targetLesson.title}
                               >
                                 <span>{targetLesson.navigationTitle ?? learnDisplayTitle(targetLesson.title)}</span>
-                                {locked ? <Icons.LockKeyhole size={16} aria-label="Locked" /> : <span className={`lesson-nav-state ${lessonComplete ? 'is-complete' : 'is-progress'}`} role="img" aria-label={lessonComplete ? 'Completed' : 'In progress'}>{lessonComplete ? <Icons.Check size={12} strokeWidth={2.5} aria-hidden="true" /> : <Icons.Hourglass size={15} strokeWidth={2} aria-hidden="true" />}</span>}
+                                {locked ? <Icons.LockKeyhole size={16} aria-label="Locked" /> : lessonComplete ? <span className="lesson-nav-state is-complete" role="img" aria-label="Completed"><Icons.Check size={12} strokeWidth={2.5} aria-hidden="true" /></span> : seenLessons.includes(lessonUrl(targetModule, targetLesson)) ? <span className="lesson-nav-state is-progress" role="img" aria-label="In progress"><Icons.Check size={12} strokeWidth={2.5} aria-hidden="true" /></span> : <span className="lesson-nav-state is-unseen" aria-hidden="true" />}
                               </button>
                             );
                           })}

@@ -1119,9 +1119,12 @@ async function progressSnapshot(sql: NeonQueryFunction<false, false>, userId: st
   const completed = await sql`SELECT p.url_path FROM user_lesson_progress u JOIN lessons p ON p.id = u.lesson_id
                               WHERE u.user_id = ${userId} AND u.completed_at IS NOT NULL AND p.archived_at IS NULL` as Array<{ url_path: string }>;
   const last = await sql`SELECT s.course_id, p.url_path FROM user_course_state s JOIN lessons p ON p.id = s.last_lesson_id WHERE s.user_id = ${userId}` as Array<{ course_id: string; url_path: string }>;
+  const seen = await sql`SELECT p.url_path FROM user_lesson_progress u JOIN lessons p ON p.id = u.lesson_id
+                         WHERE u.user_id = ${userId} AND p.archived_at IS NULL` as Array<{ url_path: string }>;
   const [flags] = await sql`SELECT welcome_dismissed_at IS NOT NULL AS welcome_dismissed, progress_imported_at IS NOT NULL AS progress_imported FROM users WHERE id = ${userId}` as Array<{ welcome_dismissed: boolean; progress_imported: boolean }>;
   return {
     completed: completed.map((row) => row.url_path),
+    seen: seen.map((row) => row.url_path),
     lastLessons: Object.fromEntries(last.map((row) => [row.course_id, row.url_path])),
     welcomeDismissed: flags?.welcome_dismissed === true,
     progressImported: flags?.progress_imported === true,
