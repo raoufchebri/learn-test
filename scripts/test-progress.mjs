@@ -17,7 +17,7 @@ const call = async (method, path, body, headers = {}) => {
   return { status: res.status, body: await res.json().catch(() => null) };
 };
 const P = (slug) => `/learn/replit-101/${slug}`;
-const log = (label, r) => console.log(label.padEnd(34), r.status, JSON.stringify(r.body).slice(0, 150));
+const log = (label, r) => console.log(label.padEnd(34), r.status, JSON.stringify(r.body).slice(0, 150), r.body && "welcomeDismissed" in r.body ? `welcome=${r.body.welcomeDismissed} imported=${r.body.progressImported}` : "");
 try {
   log("GET progress (empty)", await call("GET", "/api/progress"));
   log("complete page 2 before page 1", await call("POST", "/api/progress/complete", { page: P("from-conversation-to-outcome") }));
@@ -34,6 +34,8 @@ try {
   const order = await sql`SELECT p.url_path FROM pages p JOIN modules m ON m.id = p.module_id WHERE m.course_id = 'discover' AND p.archived_at IS NULL ORDER BY m.position, p.position LIMIT 6`;
   const urls = order.map((r) => r.url_path);
   log("import [p1,p2,p5] (gap at p3)", await call("POST", "/api/progress/import", { pages: [urls[0], urls[1], urls[4]] }));
+  log("import again (already imported)", await call("POST", "/api/progress/import", { pages: [urls[2], urls[3]] }));
+  log("dismiss welcome", await call("POST", "/api/onboarding/welcome-dismissed"));
   log("GET progress (final)", await call("GET", "/api/progress"));
   const [state] = await sql`SELECT last_page_id FROM user_course_state WHERE user_id = ${userId}`;
   console.log("last_page_id:", state?.last_page_id);

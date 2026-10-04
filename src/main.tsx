@@ -535,7 +535,8 @@ const pillarCategory = (id: CoursePillarId) => id === "discover" || id === "ai"
 
 type ResumeTarget = { lessonTitle: string; moduleTitle: string; done: number; total: number; onClick: () => void };
 
-function WelcomePage({ onStart, learnerName, learnerKey, resume }: { onStart: (pillar: CoursePillar) => void; learnerName?: string; learnerKey?: string; resume?: ResumeTarget }) {
+// welcomeDismissed comes from the database (undefined = not loaded or unavailable, then the browser flag is used).
+function WelcomePage({ onStart, learnerName, learnerKey, resume, welcomeDismissed, onWelcomeDismissed }: { onStart: (pillar: CoursePillar) => void; learnerName?: string; learnerKey?: string; resume?: ResumeTarget; welcomeDismissed?: boolean; onWelcomeDismissed?: () => void }) {
   const welcomeDialog = useRef<HTMLDialogElement>(null);
   const greeted = useRef(false);
   const [hasProjects, setHasProjects] = useState(false);
@@ -544,11 +545,12 @@ function WelcomePage({ onStart, learnerName, learnerKey, resume }: { onStart: (p
     if (!learnerKey) return;
     const storageKey = `replit-learn-welcome-seen:${learnerKey}`;
     let seen = false;
-    try { seen = window.localStorage.getItem(storageKey) === 'true'; } catch { /* Storage may be unavailable. */ }
+    if (welcomeDismissed !== undefined) seen = welcomeDismissed;
+    else { try { seen = window.localStorage.getItem(storageKey) === 'true'; } catch { /* Storage may be unavailable. */ } }
     if (!greeted.current && !seen && welcomeDialog.current) {
       greeted.current = true;
       welcomeDialog.current.showModal();
-      try { window.localStorage.setItem(storageKey, 'true'); } catch { /* Keep the welcome usable without storage. */ }
+      if (welcomeDismissed === undefined) { try { window.localStorage.setItem(storageKey, 'true'); } catch { /* Keep the welcome usable without storage. */ } }
     }
     const controller = new AbortController();
     void fetch('/api/mcp/apps', { credentials: 'same-origin', signal: controller.signal })
@@ -556,7 +558,7 @@ function WelcomePage({ onStart, learnerName, learnerKey, resume }: { onStart: (p
       .then((result) => { if (!controller.signal.aborted) setHasProjects(result?.status === 'ready' && Array.isArray(result.apps) && result.apps.length > 0); })
       .catch(() => {});
     return () => controller.abort();
-  }, [learnerName, learnerKey]);
+  }, [learnerName, learnerKey, welcomeDismissed]);
   return (
     <article className="lesson-content learn-content-stage">
       <p className="eyebrow">WELCOME TO REPLIT LEARN</p>
@@ -570,7 +572,7 @@ function WelcomePage({ onStart, learnerName, learnerKey, resume }: { onStart: (p
         </div>
         <button type="button" className="recipe-create-button resume-card-button" onClick={resume.onClick}>Continue lesson <Icons.ArrowRight size={18} aria-hidden="true" /></button>
       </section>}
-      {learnerName !== undefined && <dialog ref={welcomeDialog} className="learner-welcome learner-welcome-modal" aria-labelledby="learner-welcome-title">
+      {learnerName !== undefined && <dialog ref={welcomeDialog} className="learner-welcome learner-welcome-modal" aria-labelledby="learner-welcome-title" onClose={() => onWelcomeDismissed?.()}>
         <button className="welcome-modal-close" aria-label="Close welcome" onClick={() => welcomeDialog.current?.close()}><Icons.X size={20} /></button>
         <span className="learner-welcome-icon" aria-hidden="true"><Icons.Sparkles size={24} /></span>
         <h2 id="learner-welcome-title">{learnerName ? `Welcome, ${learnerName}.` : 'Welcome to Replit Learn.'}</h2>
@@ -773,8 +775,10 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
   }, [learnerKey]);
   // The database is the source of truth when it's reachable; browser storage is the instant first paint and the fallback.
   const [serverProgress, setServerProgress] = useState(false);
+  const [welcomeDismissed, setWelcomeDismissed] = useState<boolean | undefined>();
   useEffect(() => {
     setServerProgress(false);
+    setWelcomeDismissed(undefined);
     if (!learnerKey || progressOwner !== learnerKey) return;
     let active = true;
     const local = (() => { try { const saved = JSON.parse(localStorage.getItem(`replit-101-progress:v2:${learnerKey}`) ?? '[]'); return Array.isArray(saved) ? saved.filter((url): url is string => typeof url === 'string' && availableLessonUrls.has(url)) : []; } catch { return []; } })();
@@ -783,13 +787,16 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
       try {
         const response = await fetch('/api/progress', { credentials: 'same-origin', headers: { accept: 'application/json' } });
         if (!response.ok) return;
-        let snapshot = await response.json() as { completed?: string[] };
-        if (local.some((url) => !snapshot.completed?.includes(url))) {
+        type Snapshot = { completed?: string[]; welcomeDismissed?: boolean; progressImported?: boolean };
+        let snapshot = await response.json() as Snapshot;
+        // Browser progress is copied in once per learner; after that the database always wins.
+        if (!snapshot.progressImported) {
           const imported = await post('/api/progress/import', { pages: local });
-          if (imported.ok) snapshot = await imported.json() as { completed?: string[] };
+          if (imported.ok) snapshot = await imported.json() as Snapshot;
         }
         if (!active || !Array.isArray(snapshot.completed)) return;
         setCompletedLessons(snapshot.completed.filter((url) => availableLessonUrls.has(url)));
+        setWelcomeDismissed(snapshot.welcomeDismissed === true);
         setServerProgress(true);
       } catch { /* Keep browser progress when the server is unreachable. */ }
     })();
@@ -1012,7 +1019,13 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
             <p>The lessons in this module are coming soon.</p>
           </article>
         ) : (
-          <WelcomePage onStart={startPillar} learnerName={access === 'signed-in' ? learnerName : undefined} learnerKey={access === 'signed-in' ? learnerKey : undefined} resume={access === 'signed-in' ? resumeTarget : undefined} />
+          <WelcomePage onStart={startPillar} learnerName={access === 'signed-in' ? learnerName : undefined} learnerKey={access === 'signed-in' ? learnerKey : undefined} resume={access === 'signed-in' ? resumeTarget : undefined}
+            welcomeDismissed={serverProgress ? welcomeDismissed : undefined}
+            onWelcomeDismissed={() => {
+              if (!serverProgress || welcomeDismissed) return;
+              setWelcomeDismissed(true);
+              fetch('/api/onboarding/welcome-dismissed', { method: 'POST', credentials: 'same-origin' }).catch(() => undefined);
+            }} />
         )}
         <dialog className="learn-sign-in-modal" ref={signInDialog} onCancel={dismissSignIn} onClose={dismissSignIn} aria-labelledby="learn-sign-in-title" aria-describedby="learn-sign-in-description">
           <button className="modal-close" aria-label="Close sign-in" onClick={dismissSignIn}><Icons.X size={20} /></button>

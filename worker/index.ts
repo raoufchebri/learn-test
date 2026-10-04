@@ -1119,7 +1119,13 @@ async function progressSnapshot(sql: NeonQueryFunction<false, false>, userId: st
   const completed = await sql`SELECT p.url_path FROM user_page_progress u JOIN pages p ON p.id = u.page_id
                               WHERE u.user_id = ${userId} AND u.completed_at IS NOT NULL AND p.archived_at IS NULL` as Array<{ url_path: string }>;
   const last = await sql`SELECT s.course_id, p.url_path FROM user_course_state s JOIN pages p ON p.id = s.last_page_id WHERE s.user_id = ${userId}` as Array<{ course_id: string; url_path: string }>;
-  return { completed: completed.map((row) => row.url_path), lastPages: Object.fromEntries(last.map((row) => [row.course_id, row.url_path])) };
+  const [flags] = await sql`SELECT welcome_dismissed_at IS NOT NULL AS welcome_dismissed, progress_imported_at IS NOT NULL AS progress_imported FROM users WHERE id = ${userId}` as Array<{ welcome_dismissed: boolean; progress_imported: boolean }>;
+  return {
+    completed: completed.map((row) => row.url_path),
+    lastPages: Object.fromEntries(last.map((row) => [row.course_id, row.url_path])),
+    welcomeDismissed: flags?.welcome_dismissed === true,
+    progressImported: flags?.progress_imported === true,
+  };
 }
 
 async function getProgress(request: Request, env: Env): Promise<Response> {
@@ -1176,6 +1182,8 @@ async function completePage(request: Request, env: Env): Promise<Response> {
 async function importProgress(request: Request, env: Env): Promise<Response> {
   const ctx = await progressContext(request, env, true);
   if ("error" in ctx) return ctx.error!;
+  const [user] = await ctx.sql`SELECT progress_imported_at IS NOT NULL AS done FROM users WHERE id = ${ctx.userId}` as Array<{ done: boolean }>;
+  if (user?.done) return json({ imported: 0, ...(await progressSnapshot(ctx.sql, ctx.userId)) });
   const raw = (await readJson(request)).pages;
   const claimed = new Set((Array.isArray(raw) ? raw : []).slice(0, 500).map(pageIdFromPath).filter((id): id is string => !!id));
   const ordered = await ctx.sql`
@@ -1196,7 +1204,15 @@ async function importProgress(request: Request, env: Env): Promise<Response> {
                   SELECT ${ctx.userId}, unnest(${toAdd}::text[]), now()
                   ON CONFLICT (user_id, page_id) DO UPDATE SET completed_at = COALESCE(user_page_progress.completed_at, now())`;
   }
+  await ctx.sql`UPDATE users SET progress_imported_at = now() WHERE id = ${ctx.userId}`;
   return json({ imported: toAdd.length, ...(await progressSnapshot(ctx.sql, ctx.userId)) });
+}
+
+async function dismissWelcome(request: Request, env: Env): Promise<Response> {
+  const ctx = await progressContext(request, env, true);
+  if ("error" in ctx) return ctx.error!;
+  await ctx.sql`UPDATE users SET welcome_dismissed_at = COALESCE(welcome_dismissed_at, now()) WHERE id = ${ctx.userId}`;
+  return json({ ok: true });
 }
 
 async function logout(request: Request, env: Env): Promise<Response> {
@@ -1256,6 +1272,7 @@ async function route(request: Request, env: Env, ctx?: ExecutionContext): Promis
   if (pathname === "/api/progress/seen" && request.method === "POST") return markPageSeen(request, env);
   if (pathname === "/api/progress/complete" && request.method === "POST") return completePage(request, env);
   if (pathname === "/api/progress/import" && request.method === "POST") return importProgress(request, env);
+  if (pathname === "/api/onboarding/welcome-dismissed" && request.method === "POST") return dismissWelcome(request, env);
   if (pathname === "/api/mcp/apps" && request.method === "GET") return mcpAppsResponse(request, env);
   if (pathname === "/api/activities/capstone" && ["GET", "POST"].includes(request.method)) return capstoneResponse(request, env);
   if (pathname === "/api/activities/recipe" && ["GET", "POST"].includes(request.method)) return recipeBuildResponse(request, env);
