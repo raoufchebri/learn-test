@@ -343,8 +343,9 @@ async function finishLogin(request: Request, env: Env, ctx?: ExecutionContext): 
   try {
     const tokens = await exchangeCode(env, flow, code);
     if (!tokens.id_token) throw new Error("OIDC token response did not include an ID token");
-    const user = await userFromIdToken(env, flow.clientId, tokens.id_token, flow.nonce);
+    const tokenUser = await userFromIdToken(env, flow.clientId, tokens.id_token, flow.nonce);
     if (!tokens.access_token) throw new Error("OIDC token response did not include an MCP access token");
+    const user = await withUserInfoProfile(env, tokenUser, tokens.access_token);
     const sessionId = randomToken();
     // Record the sign-in in the background; a database problem never blocks signing in.
     const signIn = recordSignIn(env, user);
@@ -367,6 +368,21 @@ async function finishLogin(request: Request, env: Env, ctx?: ExecutionContext): 
     return new Response(null, { status: 302, headers });
   } catch {
     return authFailureRedirect(request, "callback_failed");
+  }
+}
+
+// Replit's ID token can omit profile_image_url; the userinfo endpoint returns it. Optional, never blocks sign-in.
+async function withUserInfoProfile(env: Env, user: StoredUser, accessToken: string): Promise<StoredUser> {
+  if (user.profileImageUrl) return user;
+  try {
+    const response = await fetch(`${issuer(env)}/me`, { headers: { authorization: `Bearer ${accessToken}`, accept: "application/json" } });
+    if (!response.ok) return user;
+    const info = await response.json() as Record<string, unknown>;
+    if (info.sub !== user.id) return user;
+    const image = typeof info.profile_image_url === "string" && info.profile_image_url.startsWith("https://") ? info.profile_image_url : undefined;
+    return image ? { ...user, profileImageUrl: image } : user;
+  } catch {
+    return user;
   }
 }
 
