@@ -458,6 +458,36 @@ function LessonPage({
   };
   // Sections waiting to celebrate once their answer finishes streaming (value: whether to add confetti).
   const pendingCelebrations = useRef(new Map<number, boolean>());
+  // Step button (no prompt): optional streamed reply, then the button that unlocks the next step.
+  const renderStep = (section: LearnLesson["sections"][number], sectionIndex: number) => {
+            const step = section.step;
+            if (!step) return null;
+            const stepUnlock = stepUnlockFor(sectionIndex, "step");
+            const done = isUnlocked(stepUnlock?.id);
+            const open = done && holdingSection !== sectionIndex;
+            // Same sequence as copying a prompt: the example answer streams, then the button turns green and the next step fades in.
+            const unlock = () => {
+              if (!stepUnlock || done) return;
+              if (step.exchange) {
+                pendingCelebrations.current.set(sectionIndex, false);
+                setStreamingSections((current) => [...current, sectionIndex]);
+                unlockStep(stepUnlock.id, false, false, true);
+              } else unlockStep(stepUnlock.id);
+            };
+            const icon = open ? <Icons.Check size={20} aria-hidden="true" /> : <LessonUnlockIcon />;
+            return <>
+              {step.exchange && done && <div className={`lesson-chat-thread ${holdingSection === sectionIndex ? 'is-streaming' : ''}`} role="group" aria-label="Chat in Replit">
+                <ChatExchange exchange={step.exchange} stream={streamingSections.includes(sectionIndex)} onDone={() => finishStream(sectionIndex)} />
+              </div>}
+              <div className={`recipe-unlock-action step-unlock ${open ? 'is-open' : ''}`}>
+                {step.href ? <a className="recipe-create-button" href={step.href} target="_blank" rel="noopener noreferrer" onClick={(event) => {
+                  if (!event.metaKey && !event.ctrlKey && !event.shiftKey && openBesideLesson(step.href!)) event.preventDefault();
+                  unlock();
+                }} onAuxClick={(event) => { if (event.button === 1) unlock(); }}>{icon}<span>{step.label}</span></a>
+                  : <button type="button" className="recipe-create-button" onClick={unlock}>{icon}<span>{step.label}</span></button>}
+              </div>
+            </>;
+  };
   // An example answer finished streaming: release the next content and play the delayed celebration.
   const finishStream = (sectionIndex: number) => {
     setStreamDone((current) => current.includes(sectionIndex) ? current : [...current, sectionIndex]);
@@ -733,34 +763,7 @@ function LessonPage({
               })()}
             </>;
           })()}
-          {section.step && (() => {
-            const step = section.step;
-            const stepUnlock = stepUnlockFor(sectionIndex, "step");
-            const done = isUnlocked(stepUnlock?.id);
-            const open = done && holdingSection !== sectionIndex;
-            // Same sequence as copying a prompt: the example answer streams, then the button turns green and the next step fades in.
-            const unlock = () => {
-              if (!stepUnlock || done) return;
-              if (step.exchange) {
-                pendingCelebrations.current.set(sectionIndex, false);
-                setStreamingSections((current) => [...current, sectionIndex]);
-                unlockStep(stepUnlock.id, false, false, true);
-              } else unlockStep(stepUnlock.id);
-            };
-            const icon = open ? <Icons.Check size={20} aria-hidden="true" /> : <LessonUnlockIcon />;
-            return <>
-              {step.exchange && done && <div className={`lesson-chat-thread ${holdingSection === sectionIndex ? 'is-streaming' : ''}`} role="group" aria-label="Chat in Replit">
-                <ChatExchange exchange={step.exchange} stream={streamingSections.includes(sectionIndex)} onDone={() => finishStream(sectionIndex)} />
-              </div>}
-              <div className={`recipe-unlock-action step-unlock ${open ? 'is-open' : ''}`}>
-                {step.href ? <a className="recipe-create-button" href={step.href} target="_blank" rel="noopener noreferrer" onClick={(event) => {
-                  if (!event.metaKey && !event.ctrlKey && !event.shiftKey && openBesideLesson(step.href!)) event.preventDefault();
-                  unlock();
-                }} onAuxClick={(event) => { if (event.button === 1) unlock(); }}>{icon}<span>{step.label}</span></a>
-                  : <button type="button" className="recipe-create-button" onClick={unlock}>{icon}<span>{step.label}</span></button>}
-              </div>
-            </>;
-          })()}
+          {section.step && !section.step.atEnd && renderStep(section, sectionIndex)}
           {recipeLesson && section.prompt && <RecipeBuildStep unlocking={unlockCelebration} />}
           {lesson.projectTask && sectionIndex === 0 && <ProjectLessonStep task={lesson.projectTask} />}
           {section.afterPrompt && unlocked && sectionStepsDone(sectionIndex) && holdingSection !== sectionIndex && (recipeLesson ? <>
@@ -800,6 +803,7 @@ function LessonPage({
               <figcaption>{section.image.caption}{section.image.source && <> <a href={section.image.source} target="_blank" rel="noreferrer">Source</a></>}</figcaption>
             </figure>
           )}
+          {section.step?.atEnd && renderStep(section, sectionIndex)}
           {section.diagram === 'recipe-architecture' && <AppArchitectureMap />}
           {section.diagram === 'recipe-iteration' && <div><p>This is what the cycle looks like:</p><ol className="recipe-iteration-flow">{['Describe your idea in a prompt.', 'Create a first version.', 'Try it and compare it with your expectations.', 'Request one specific improvement.', 'Try again. Repeat as your idea takes shape.'].map(step => <li key={step}>{step}</li>)}</ol><p>For example: “Keep the current recipe features, but add a way to mark favorites.” Try that change before asking for another.</p><p>This course focuses on how the app’s components work together. Explore the Design course to go deeper into appearance and different visual directions.</p></div>}
           {lesson.title === 'What Is Replit Building?' && section.heading === 'When it is ready, give it a small test' && <RecipeProjectPreview />}

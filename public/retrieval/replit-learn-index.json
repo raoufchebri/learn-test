@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-10-04T22:09:26.447Z",
+  "generatedAt": "2026-10-04T22:11:39.389Z",
   "mode": "full",
-  "hash": "a3873a9400747f1362ed0823a02d82930128bf75f9770fbe9f16d29a70c8a5dd",
+  "hash": "d886267b2986b43108a53270796a234e4492dacd37eca84fae6f90d3f75da98c",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "072878e974a6f3620e8f",
@@ -1146,7 +1146,7 @@
       "sourceId": "91a21c98ad3525889549",
       "title": "Build your first app",
       "heading": "8. Get ready to share with your friends",
-      "text": "Replit 101\nWhen you’re happy with the app, review the party details and remove test responses before using it for real. Keep a child’s full name, photos, and home address off a public invitation page. Share any private location details separately with your guests. Test that only you can access the host view.\nYou can finish this lesson by testing in Preview. Publishing and sending the link are your next steps when you’re ready, not automatic actions.\nOpen the published URL on your phone and test an RSVP again, including the favorite Pokémon picker. Confirm it appears in your private host view.\nShare the published link with the people you want to invite. A link can be forwarded, so don’t treat it as private access control.\nReplies in this app are stored in its database. They do not automatically update Google Calendar or appear in Gmail, so your Gmail Routine won’t see them unless you add that connection later.",
+      "text": "Replit 101\nWhen you’re happy with the app, review the party details and remove test responses before using it for real. Keep a child’s full name, photos, and home address off a public invitation page. Share any private location details separately with your guests. Test that only you can access the host view.\nPublishing makes the app available at its address, but nothing is sent to anyone. Sharing the link is up to you, when you’re ready.\nOpen the published URL on your phone and test an RSVP again, including the favorite Pokémon picker. Confirm it appears in your private host view.\nShare the published link with the people you want to invite. A link can be forwarded, so don’t treat it as private access control.\nReplies in this app are stored in its database. They do not automatically update Google Calendar or appear in Gmail, so your Gmail Routine won’t see them unless you add that connection later.",
       "url": "/learn/replit-101/build-and-publish-a-simple-app#8-get-ready-to-share-with-your-friends",
       "pageUrl": "/learn/replit-101/build-and-publish-a-simple-app",
       "sourcePath": "src/learn-content.ts#91a21c98ad3525889549"
