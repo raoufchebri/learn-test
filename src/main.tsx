@@ -539,7 +539,7 @@ function LessonPage({
       {lesson.quiz.length === 0 && nextLesson && <button className="next-lesson" onClick={() => { onComplete?.(); nextLesson.onClick(); }}>
         <span>{lesson.module === 'Your capstone' ? 'CONTINUE' : 'NEXT MODULE'}</span><strong>{learnDisplayTitle(nextLesson.title)}</strong><b>→</b>
       </button>}
-      {activityConfirmed && lesson.quiz.length > 0 && <div className="lesson-quiz-entry" id={lesson.activityConfirmation ? 'confirmed-activity-quiz' : undefined}>
+      {activityConfirmed && lesson.quiz.length > 0 && <div className="recipe-unlock-action lesson-quiz-entry" id={lesson.activityConfirmation ? 'confirmed-activity-quiz' : undefined}>
         <p>Ready to check what you’ve learned?</p>
         <button type="button" className="recipe-create-button" disabled={!practiceDone} onClick={() => setQuizMode(true)}>Take the quiz →</button>
         {!practiceDone && <small>Complete the activity checks above first.</small>}
@@ -548,7 +548,7 @@ function LessonPage({
       </>}
       </div>
       {quizMode && <div ref={quizCardRef} tabIndex={-1} className="lesson-quiz-stage">
-        <LessonQuizCard lesson={lesson} answers={answers} completed={completed} next={nextLesson} onBack={() => setQuizMode(false)}
+        <LessonQuizCard key={lesson.title} lesson={lesson} answers={answers} completed={completed} next={nextLesson} onBack={() => setQuizMode(false)}
           onAnswer={(index, answer) => setAnswers(current => { const next = [...current]; next[index] = answer; return next; })} />
       </div>}
     </article>

@@ -17,7 +17,6 @@ html { scrollbar-gutter: stable; }
 .quiz-card-choices .is-correct { border-color: #278657; background: #27865715; }
 .quiz-card-feedback { font-size: 13px; line-height: 1.4; margin: 12px 0; }
 .lesson-quiz-card footer button { padding: 9px 12px; border: 1px solid var(--replit-light-silver); border-radius: 8px; background: transparent; font-size: 13px; }
-.lesson-quiz-card footer button:last-child { margin-left: auto; background: #23734d; color: white; border-color: #23734d; }
 .lesson-quiz-card button:disabled { opacity: .45; cursor: default; }
 .lesson-quiz-card button:focus-visible { outline: 2px solid #ca9d1c; outline-offset: 2px; }
 @media(max-width:600px) { .quiz-card-choices { grid-template-columns: 1fr; } .lesson-quiz-card { padding: 14px; } }
@@ -41,3 +40,15 @@ html { scrollbar-gutter: stable; }
   .standalone-ask-blade .ask-conversation-view > header { flex-wrap: wrap; gap: 8px; }
   .standalone-ask-blade .ask-conversation-view > header > button:last-child { display: none; }
 }
+/* Quiz entry: centered grey pill, same pattern as the activity unlock buttons. */
+.lesson-quiz-entry.recipe-unlock-action { margin: 32px 0 12px; padding: 0; border-top: 0; text-align: center; }
+.lesson-quiz-entry.recipe-unlock-action p { margin: 0; color: var(--replit-medium-gray); font-size: 14px; }
+.lesson-quiz-entry .recipe-create-button:not(:disabled) { background: var(--replit-light-gray); color: var(--replit-off-black); }
+/* Quiz buttons: green when active, grey when not. */
+.quiz-card-question { border: 0; margin: 0 0 18px; padding: 0; min-width: 0; }
+.quiz-card-question legend { padding: 0; }
+.quiz-card-choices .is-wrong { border-color: #c2622d; background: #c2622d12; }
+.lesson-quiz-card footer { flex-direction: column; justify-content: center; margin-top: 8px; }
+.lesson-quiz-card footer small { font-size: 12px; color: var(--replit-medium-gray); min-height: 1em; }
+.lesson-quiz-card .quiz-primary-button { padding: 13px 24px; border-radius: 999px; border: 1px solid #23734d; background: #23734d; color: #fff; font-weight: 600; }
+.lesson-quiz-card .quiz-primary-button:disabled { background: var(--replit-light-gray); border-color: var(--replit-light-gray); color: var(--replit-medium-gray); opacity: 1; cursor: default; }
