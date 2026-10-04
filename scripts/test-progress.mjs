@@ -17,7 +17,7 @@ const call = async (method, path, body, headers = {}) => {
   return { status: res.status, body: await res.json().catch(() => null) };
 };
 const P = (slug) => `/learn/replit-101/${slug}`;
-const log = (label, r) => console.log(label.padEnd(34), r.status, JSON.stringify(r.body).slice(0, 150), r.body && "welcomeDismissed" in r.body ? `welcome=${r.body.welcomeDismissed} imported=${r.body.progressImported}` : "");
+const log = (label, r) => console.log(label.padEnd(34), r.status, JSON.stringify(r.body).slice(0, 150), r.body && "welcomeDismissed" in r.body ? `welcome=${r.body.welcomeDismissed} imported=${r.body.progressImported} unlocked=${JSON.stringify(r.body.unlocked)} newly=${r.body.newlyUnlocked}` : "");
 try {
   log("GET progress (empty)", await call("GET", "/api/progress"));
   log("complete page 2 before page 1", await call("POST", "/api/progress/complete", { lesson: P("from-conversation-to-outcome") }));
@@ -35,6 +35,10 @@ try {
   const urls = order.map((r) => r.url_path);
   log("import [p1,p2,p5] (gap at p3)", await call("POST", "/api/progress/import", { lessons: [urls[0], urls[1], urls[4]] }));
   log("import again (already imported)", await call("POST", "/api/progress/import", { lessons: [urls[2], urls[3]] }));
+  log("unlock lesson 2 entry", await call("POST", "/api/progress/unlock", { unlock: "replit-101/from-conversation-to-outcome:entry" }));
+  log("unlock lesson 2 entry again", await call("POST", "/api/progress/unlock", { unlock: "replit-101/from-conversation-to-outcome:entry" }));
+  log("unlock locked lesson (lesson 4)", await call("POST", "/api/progress/unlock", { unlock: `${urls[3].replace("/learn/", "")}:activity` }));
+  log("unlock unknown", await call("POST", "/api/progress/unlock", { unlock: "replit-101/what-you-can-do-with-replit:prompt-9" }));
   log("dismiss welcome", await call("POST", "/api/onboarding/welcome-dismissed"));
   log("GET progress (final)", await call("GET", "/api/progress"));
   const [state] = await sql`SELECT last_lesson_id FROM user_course_state WHERE user_id = ${userId}`;
@@ -42,6 +46,6 @@ try {
 } finally {
   const sql = neon(process.env.NEON_DATABASE_URL);
   await sql`DELETE FROM users WHERE id = ${userId}`;
-  const [left] = await sql`SELECT (SELECT count(*) FROM user_lesson_progress WHERE user_id = ${userId}) + (SELECT count(*) FROM user_course_state WHERE user_id = ${userId}) AS n`;
+  const [left] = await sql`SELECT (SELECT count(*) FROM user_lesson_progress WHERE user_id = ${userId}) + (SELECT count(*) FROM user_course_state WHERE user_id = ${userId}) + (SELECT count(*) FROM user_unlocks WHERE user_id = ${userId}) AS n`;
   console.log("cleanup, rows left:", left.n);
 }

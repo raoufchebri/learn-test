@@ -10,7 +10,7 @@ import { CourseCertificate } from "./course-certificate";
 import { LessonPrompt } from "./lesson-prompt";
 import { LessonQuizCard } from "./lesson-quiz-card";
 import { LEARN_DEV_MODE } from "./learn-mode";
-import { courseModules, coursePillars, learnSegment, lessonUrl, isAvailablePillar, isAvailableModule, availableLessonUrls, type CourseModule, type CoursePillar, type CoursePillarId } from "./course-structure";
+import { courseModules, coursePillars, learnSegment, lessonUrl, lessonUnlocks, isAvailablePillar, isAvailableModule, availableLessonUrls, type CourseModule, type CoursePillar, type CoursePillarId, type LessonUnlock } from "./course-structure";
 import { RecipeBuildProvider, RecipeBuildStep, RecipeBuildStatus, ProjectLessonStep, useRecipeActivity, RECIPE_PROMPT, RECIPE_DEMO } from "./recipe-build";
 import {
   ReplitPromptComposer,
@@ -134,21 +134,34 @@ function LessonPage({
   chatOpen = false,
   onComplete,
   completed = false,
+  unlocks = [],
+  doneUnlocks = [],
+  onUnlock,
 }: {
   lesson: LearnLesson;
   chapter: number;
   chatOpen?: boolean;
   onComplete?: () => void;
   completed?: boolean;
+  unlocks?: LessonUnlock[];
+  doneUnlocks?: string[];
+  onUnlock?: (id: string) => void;
   nextLesson?: { title: string; onClick: () => void };
 }) {
   const recipe = useRecipeActivity();
   const recipeLesson = lesson.activity === "recipe-build";
   // A completed lesson opens fully: every gate below counts as passed.
+  // Unlock buttons (entry, copy-the-prompt, activity) are stored per learner, so an unlocked step stays unlocked.
+  const [sessionUnlocks, setSessionUnlocks] = useState<string[]>([]);
+  const isUnlocked = (id?: string) => !id || LEARN_DEV_MODE || completed || doneUnlocks.includes(id) || sessionUnlocks.includes(id);
+  const entryUnlock = unlocks.find((unlock) => unlock.kind === "entry");
+  const activityUnlock = unlocks.find((unlock) => unlock.kind === "activity");
+  const promptUnlocks = unlocks.filter((unlock) => unlock.kind === "prompt");
+  const firstLockedPrompt = promptUnlocks.find((unlock) => !isUnlocked(unlock.id))?.sectionIndex ?? -1;
   const [entryOpenedState, setEntryOpened] = useState(LEARN_DEV_MODE || !lesson.entryLink);
-  const entryOpened = entryOpenedState || completed;
-  const [promptContinuedState, setPromptContinued] = useState(LEARN_DEV_MODE || !lesson.promptGate);
-  const promptContinued = promptContinuedState || completed;
+  const entryOpened = entryOpenedState || isUnlocked(entryUnlock?.id) && !!entryUnlock || completed;
+  const promptContinued = LEARN_DEV_MODE || completed || firstLockedPrompt < 0;
+  const [promptCopy, setPromptCopy] = useState<Record<number, "copied" | "failed">>({});
   const hasFrontendCheck = lesson.title === 'What Is Replit Building?';
   const hasCheckpoint = hasFrontendCheck || !!lesson.checkpoint;
   const checkpointIndex = lesson.checkpoint?.afterSection ?? 2;
@@ -179,6 +192,14 @@ function LessonPage({
     return () => window.clearTimeout(timer);
   }, [recipe.iteration, hasFrontendCheck]);
   const unlockTimers = useRef<number[]>([]);
+  // Unlock a step once: celebrate and save it. Already-unlocked steps (stored or this visit) do nothing.
+  const unlockStep = (id?: string, alwaysChime = false) => {
+    if (id && isUnlocked(id)) return;
+    if (id) { setSessionUnlocks((current) => [...current, id]); onUnlock?.(id); }
+    setUnlockCelebration(true);
+    if (alwaysChime || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) playUnlockChime();
+    unlockTimers.current.push(window.setTimeout(() => setUnlockCelebration(false), 2000));
+  };
   const inspectedBefore = useRef(unlocked);
   useEffect(() => {
     const justInspected = !inspectedBefore.current && unlocked;
@@ -222,7 +243,7 @@ function LessonPage({
   const [answers, setAnswers] = useState<number[]>([]);
   const [practiceChecks, setPracticeChecks] = useState<number[]>([]);
   const [confirmedActivity, setConfirmedActivity] = useState<string | null>(null);
-  const activityConfirmed = completed || !lesson.activityConfirmation || confirmedActivity === lesson.title;
+  const activityConfirmed = completed || !lesson.activityConfirmation || confirmedActivity === lesson.title || (!!activityUnlock && isUnlocked(activityUnlock.id));
   useEffect(() => {
     setConfirmedActivity(null);
     setUnlockCelebration(false);
@@ -350,29 +371,34 @@ function LessonPage({
       {lesson.entryLink && <div className={`recipe-unlock-action ${entryOpened ? 'is-open' : ''}`}>
         <p>First, open a new conversation in Replit. Keep this lesson open so you can follow along.</p>
         <a className="recipe-create-button" href={lesson.entryLink} target="_blank" rel="noopener noreferrer" onClick={() => {
-          if (!entryOpened) {
-            setEntryOpened(true);
-            setUnlockCelebration(true);
-            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) playUnlockChime();
-            unlockTimers.current.push(window.setTimeout(() => setUnlockCelebration(false), 2000));
-          }
-        }}><LessonUnlockIcon /><span>Open Replit and start a chat ↗</span></a>
+          if (!entryOpened) { setEntryOpened(true); unlockStep(entryUnlock?.id); }
+        }}><LessonUnlockIcon /><span>Open Replit and start a chat</span></a>
         <small>Opens in a new tab. Write and send your prompt there.</small>
       </div>}
       {entryOpened && <>
       {lesson.sections.map((section, sectionIndex) => (
-        (!LEARN_DEV_MODE && !completed && ((!promptContinued && sectionIndex > 0) || (!unlocked && sectionIndex > promptIndex) || (!frontendVisible && sectionIndex > checkpointIndex) || (hasFrontendCheck && sectionIndex > 5 && recipe.iteration !== 'complete'))) ? null : <section className={`foundation-section ${((recipeLesson || lesson.projectTask) && sectionIndex > promptIndex) || (hasCheckpoint && sectionIndex > checkpointIndex) || (lesson.promptGate && sectionIndex > 0) ? "lesson-unlocked" : ""}`} id={section.id ?? learnSegment(section.heading)} key={section.heading}>
+        (!LEARN_DEV_MODE && !completed && ((firstLockedPrompt >= 0 && sectionIndex > firstLockedPrompt) || (!unlocked && sectionIndex > promptIndex) || (!frontendVisible && sectionIndex > checkpointIndex) || (hasFrontendCheck && sectionIndex > 5 && recipe.iteration !== 'complete'))) ? null : <section className={`foundation-section ${((recipeLesson || lesson.projectTask) && sectionIndex > promptIndex) || (hasCheckpoint && sectionIndex > checkpointIndex) || (lesson.promptGate && sectionIndex > 0) ? "lesson-unlocked" : ""}`} id={section.id ?? learnSegment(section.heading)} key={section.heading}>
           <h2>{section.heading}</h2>
           <p>{section.body}</p>
-          {section.prompt && <LessonPrompt key={section.prompt} prompt={section.prompt} copyable={Boolean(lesson.promptGate || lesson.copyPrompts)} />}
-          {lesson.promptGate && sectionIndex === 0 && <div className={`recipe-unlock-action ${promptContinued ? 'is-open' : ''}`}><button className="recipe-create-button" disabled={promptContinued} onClick={() => {
-            setPromptContinued(true); setUnlockCelebration(true);
-            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) playUnlockChime();
-            unlockTimers.current.push(window.setTimeout(() => setUnlockCelebration(false), 2000));
-          }}><LessonUnlockIcon /><span>{promptContinued ? 'Next section unlocked' : 'I’ve sent the prompt · Continue'}</span></button><small>This confirms your progress here; it doesn’t send the prompt for you.</small></div>}
+          {section.prompt && (() => {
+            const promptUnlock = promptUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex);
+            if (!promptUnlock) return <LessonPrompt key={section.prompt} prompt={section.prompt} />;
+            const done = isUnlocked(promptUnlock.id);
+            return <>
+              <LessonPrompt key={section.prompt} prompt={section.prompt} />
+              <div className={`recipe-unlock-action prompt-unlock ${done ? 'is-open' : ''}`}>
+                <button type="button" className="recipe-create-button" onClick={async () => {
+                  try { await navigator.clipboard.writeText(section.prompt!); setPromptCopy((current) => ({ ...current, [sectionIndex]: "copied" })); }
+                  catch { setPromptCopy((current) => ({ ...current, [sectionIndex]: "failed" })); }
+                  unlockStep(promptUnlock.id);
+                }}>{done ? <Icons.Check size={20} aria-hidden="true" /> : <LessonUnlockIcon />}<span>{done ? (promptCopy[sectionIndex] === "copied" ? 'Prompt copied' : 'Copy the prompt again') : 'Copy the prompt'}</span></button>
+                <small role="status">{promptCopy[sectionIndex] === "failed" ? 'Couldn’t copy automatically. Select the prompt above and copy it.' : 'Copy and paste the prompt into Replit, or write your own.'}</small>
+              </div>
+            </>;
+          })()}
           {recipeLesson && section.prompt && <RecipeBuildStep unlocking={unlockCelebration} />}
           {lesson.projectTask && sectionIndex === 0 && <ProjectLessonStep task={lesson.projectTask} />}
-          {section.afterPrompt && unlocked && (recipeLesson ? <>
+          {section.afterPrompt && unlocked && isUnlocked(promptUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex)?.id) && (recipeLesson ? <>
             <h2 id="recipe-prompt-explanation">What just happened now?</h2>
             <p>The highlighted area on the right side of the screen is the chat. It shows your request in a message bubble. On smaller screens, the chat opens in its own panel. That request is a prompt: a description of what you want to create, written in natural language.</p>
             <p>You asked for a personal recipe app where you can add, edit, and find recipes. Each recipe needs a name, ingredients, and instructions.</p>
@@ -444,9 +470,7 @@ function LessonPage({
       {lesson.activityConfirmation && lesson.module !== 'Your capstone' && <div className={`recipe-unlock-action activity-confirmation ${activityConfirmed ? 'is-open' : ''}`}>
         <button type="button" className="recipe-create-button" disabled={activityConfirmed} aria-expanded={activityConfirmed} aria-controls="confirmed-activity-quiz" onClick={() => {
           setConfirmedActivity(lesson.title);
-          setUnlockCelebration(true);
-          playUnlockChime();
-          unlockTimers.current.push(window.setTimeout(() => setUnlockCelebration(false), 2000));
+          unlockStep(activityUnlock?.id, true);
         }}>
           {activityConfirmed ? <Icons.Check size={20} aria-hidden="true" /> : <LessonUnlockIcon />}
           <span>{lesson.activityConfirmation}</span>
@@ -812,6 +836,8 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
   const [courseStarted, setCourseStarted] = useState(false);
   // Lessons the learner has opened (database: a user_lesson_progress row). Only these show the in-progress check.
   const [seenLessons, setSeenLessons] = useState<string[]>([]);
+  // Unlock buttons the learner has used (database: user_unlocks).
+  const [unlockedSteps, setUnlockedSteps] = useState<string[]>([]);
   // False until the progress request finishes (either answer or failure), so the welcome modal doesn't guess.
   const [progressSettled, setProgressSettled] = useState(false);
   useEffect(() => {
@@ -820,6 +846,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
     setCourseStarted(false);
     setProgressSettled(false);
     setSeenLessons([]);
+    setUnlockedSteps([]);
     if (!learnerKey || progressOwner !== learnerKey) return;
     let active = true;
     const local = (() => { try { const saved = JSON.parse(localStorage.getItem(`replit-101-progress:v2:${learnerKey}`) ?? '[]'); return Array.isArray(saved) ? saved.filter((url): url is string => typeof url === 'string' && availableLessonUrls.has(url)) : []; } catch { return []; } })();
@@ -828,7 +855,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
       try {
         const response = await fetch('/api/progress', { credentials: 'same-origin', headers: { accept: 'application/json' } });
         if (!response.ok) return;
-        type Snapshot = { completed?: string[]; seen?: string[]; lastLessons?: Record<string, string>; welcomeDismissed?: boolean; progressImported?: boolean };
+        type Snapshot = { completed?: string[]; seen?: string[]; unlocked?: string[]; lastLessons?: Record<string, string>; welcomeDismissed?: boolean; progressImported?: boolean };
         let snapshot = await response.json() as Snapshot;
         // Browser progress is copied in once per learner; after that the database always wins.
         if (!snapshot.progressImported) {
@@ -839,6 +866,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
         setCompletedLessons(snapshot.completed.filter((url) => availableLessonUrls.has(url)));
         setWelcomeDismissed(snapshot.welcomeDismissed === true);
         setCourseStarted(Boolean(snapshot.lastLessons?.discover));
+        if (Array.isArray(snapshot.unlocked)) setUnlockedSteps((current) => [...new Set([...current, ...snapshot.unlocked!])]);
         if (Array.isArray(snapshot.seen)) setSeenLessons((current) => [...new Set([...current, ...snapshot.seen!])]);
         setServerProgress(true);
       } catch { /* Keep browser progress when the server is unreachable. */ }
@@ -846,6 +874,11 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
     })();
     return () => { active = false; };
   }, [learnerKey, progressOwner]);
+  const recordUnlock = (id: string) => {
+    setUnlockedSteps((current) => current.includes(id) ? current : [...current, id]);
+    if (!serverProgress) return;
+    fetch('/api/progress/unlock', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ unlock: id }) }).catch(() => undefined);
+  };
   const recordCompletion = (url: string) => {
     setCompletedLessons((current) => current.includes(url) ? current : [...current, url]);
     if (!serverProgress) return;
@@ -885,12 +918,13 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
     fetch('/api/progress/seen', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ lesson: currentUrl }) }).catch(() => undefined);
   }, [serverProgress, currentUrl, currentLocked]);
   useEffect(() => {
-    if (access === "signed-in" && progressOwner === learnerKey && currentLocked) {
+    // Wait for the database's progress before redirecting away from a lesson that only looks locked.
+    if (access === "signed-in" && progressOwner === learnerKey && progressSettled && currentLocked) {
       if (!availableLessonUrls.has(currentUrl)) { navigate('/', { replace: true }); return; }
       const available = sequence.find((entry) => !completedLessons.includes(entry.url));
       if (available) navigate(available.url, { replace: true });
     }
-  }, [access, currentLocked, currentUrl, completedLessons, navigate, progressOwner, learnerKey]);
+  }, [access, currentLocked, currentUrl, completedLessons, navigate, progressOwner, learnerKey, progressSettled]);
 
   useEffect(() => {
     if (location.pathname === "/") {
@@ -1030,6 +1064,9 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
           <LessonPage
             key={currentUrl}
             completed={completedLessons.includes(currentUrl)}
+            unlocks={module && lesson ? lessonUnlocks(module, lesson) : []}
+            doneUnlocks={unlockedSteps}
+            onUnlock={recordUnlock}
             onComplete={sequenceIndex >= 0 || module.pillar === 'discover' ? () => recordCompletion(currentUrl) : undefined}
             chatOpen={chatOpen}
             lesson={lesson}

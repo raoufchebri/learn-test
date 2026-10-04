@@ -1121,10 +1121,13 @@ async function progressSnapshot(sql: NeonQueryFunction<false, false>, userId: st
   const last = await sql`SELECT s.course_id, p.url_path FROM user_course_state s JOIN lessons p ON p.id = s.last_lesson_id WHERE s.user_id = ${userId}` as Array<{ course_id: string; url_path: string }>;
   const seen = await sql`SELECT p.url_path FROM user_lesson_progress u JOIN lessons p ON p.id = u.lesson_id
                          WHERE u.user_id = ${userId} AND p.archived_at IS NULL` as Array<{ url_path: string }>;
+  const unlocks = await sql`SELECT x.unlock_id FROM user_unlocks x JOIN lesson_unlocks l ON l.id = x.unlock_id
+                            WHERE x.user_id = ${userId} AND l.archived_at IS NULL` as Array<{ unlock_id: string }>;
   const [flags] = await sql`SELECT welcome_dismissed_at IS NOT NULL AS welcome_dismissed, progress_imported_at IS NOT NULL AS progress_imported FROM users WHERE id = ${userId}` as Array<{ welcome_dismissed: boolean; progress_imported: boolean }>;
   return {
     completed: completed.map((row) => row.url_path),
     seen: seen.map((row) => row.url_path),
+    unlocked: unlocks.map((row) => row.unlock_id),
     lastLessons: Object.fromEntries(last.map((row) => [row.course_id, row.url_path])),
     welcomeDismissed: flags?.welcome_dismissed === true,
     progressImported: flags?.progress_imported === true,
@@ -1211,6 +1214,31 @@ async function importProgress(request: Request, env: Env): Promise<Response> {
   return json({ imported: toAdd.length, ...(await progressSnapshot(ctx.sql, ctx.userId)) });
 }
 
+// Records an unlock button once. Only accepted for a lesson the learner can open (every earlier lesson completed).
+async function recordUnlock(request: Request, env: Env): Promise<Response> {
+  const ctx = await progressContext(request, env, true);
+  if ("error" in ctx) return ctx.error!;
+  const raw = (await readJson(request)).unlock;
+  const unlockId = typeof raw === "string" && /^[a-z0-9-]+\/[a-z0-9-]+:(entry|activity|prompt-\d+)$/.test(raw) ? raw : undefined;
+  if (!unlockId) return json({ error: "Unknown unlock" }, { status: 400 });
+  const [check] = await ctx.sql`
+    WITH target AS (
+      SELECT p.id, m.course_id, m.position AS mpos, p.position AS ppos
+      FROM lesson_unlocks x JOIN lessons p ON p.id = x.lesson_id JOIN modules m ON m.id = p.module_id JOIN courses c ON c.id = m.course_id
+      WHERE x.id = ${unlockId} AND x.archived_at IS NULL AND p.archived_at IS NULL AND c.published
+    )
+    SELECT (SELECT count(*) FROM target)::int AS found,
+           (SELECT count(*) FROM lessons p JOIN modules m ON m.id = p.module_id, target t
+            WHERE m.course_id = t.course_id AND p.archived_at IS NULL AND m.archived_at IS NULL
+              AND (m.position, p.position) < (t.mpos, t.ppos)
+              AND NOT EXISTS (SELECT 1 FROM user_lesson_progress u WHERE u.user_id = ${ctx.userId} AND u.lesson_id = p.id AND u.completed_at IS NOT NULL))::int AS missing` as Array<{ found: number; missing: number }>;
+  if (!check?.found) return json({ error: "Unknown unlock" }, { status: 404 });
+  if (check.missing > 0) return json({ error: "Complete the earlier lessons first" }, { status: 409 });
+  const inserted = await ctx.sql`INSERT INTO user_unlocks (user_id, unlock_id) VALUES (${ctx.userId}, ${unlockId})
+                                 ON CONFLICT (user_id, unlock_id) DO NOTHING RETURNING unlock_id` as Array<{ unlock_id: string }>;
+  return json({ newlyUnlocked: inserted.length > 0, ...(await progressSnapshot(ctx.sql, ctx.userId)) });
+}
+
 async function dismissWelcome(request: Request, env: Env): Promise<Response> {
   const ctx = await progressContext(request, env, true);
   if ("error" in ctx) return ctx.error!;
@@ -1276,6 +1304,7 @@ async function route(request: Request, env: Env, ctx?: ExecutionContext): Promis
   if (pathname === "/api/progress/complete" && request.method === "POST") return completeLesson(request, env);
   if (pathname === "/api/progress/import" && request.method === "POST") return importProgress(request, env);
   if (pathname === "/api/onboarding/welcome-dismissed" && request.method === "POST") return dismissWelcome(request, env);
+  if (pathname === "/api/progress/unlock" && request.method === "POST") return recordUnlock(request, env);
   if (pathname === "/api/mcp/apps" && request.method === "GET") return mcpAppsResponse(request, env);
   if (pathname === "/api/activities/capstone" && ["GET", "POST"].includes(request.method)) return capstoneResponse(request, env);
   if (pathname === "/api/activities/recipe" && ["GET", "POST"].includes(request.method)) return recipeBuildResponse(request, env);

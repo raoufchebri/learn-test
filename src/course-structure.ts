@@ -128,15 +128,30 @@ export const availableLessonUrls = new Set(courseModules.filter(isAvailableModul
 // Titles can change; once published, a lesson keeps this ID so saved progress stays attached.
 export const lessonId = (module: CourseModule, lesson: LearnLesson) => lessonUrl(module, lesson).replace(/^\/learn\//, "");
 
+export type LessonUnlock = { id: string; kind: "entry" | "prompt" | "activity"; label: string; position: number; sectionIndex?: number };
+
+// Unlock buttons inside a lesson, in page order. IDs are permanent: "<lesson id>:entry", ":prompt-<section index>", ":activity".
+export function lessonUnlocks(module: CourseModule, lesson: LearnLesson): LessonUnlock[] {
+  const base = lessonId(module, lesson);
+  const unlocks: Omit<LessonUnlock, "position">[] = [];
+  if (lesson.entryLink) unlocks.push({ id: `${base}:entry`, kind: "entry", label: "Open Replit and start a chat" });
+  if (lesson.promptGate || lesson.copyPrompts) lesson.sections.forEach((section, sectionIndex) => {
+    if (section.prompt) unlocks.push({ id: `${base}:prompt-${sectionIndex}`, kind: "prompt", label: "Copy the prompt", sectionIndex });
+  });
+  if (lesson.activityConfirmation && lesson.module !== "Your capstone") unlocks.push({ id: `${base}:activity`, kind: "activity", label: lesson.activityConfirmation });
+  return unlocks.map((unlock, position) => ({ ...unlock, position }));
+}
+
 export type CatalogRows = {
   courses: Array<{ id: string; title: string; position: number; published: boolean }>;
   modules: Array<{ id: string; courseId: string; title: string; position: number }>;
+  unlocks: Array<{ id: string; lessonId: string; kind: string; label: string; position: number }>;
   lessons: Array<{ id: string; moduleId: string; title: string; urlPath: string; position: number; hasQuiz: boolean }>;
 };
 
 // Flat rows for the database: confirmed (published) courses only, with their modules and lessons in display order.
 export function catalogRows(): CatalogRows {
-  const rows: CatalogRows = { courses: [], modules: [], lessons: [] };
+  const rows: CatalogRows = { courses: [], modules: [], lessons: [], unlocks: [] };
   coursePillars.forEach((pillar, coursePosition) => {
     if (!PUBLISHED_PILLARS.includes(pillar.id)) return;
     rows.courses.push({ id: pillar.id, title: pillar.title, position: coursePosition, published: PUBLISHED_PILLARS.includes(pillar.id) });
@@ -144,6 +159,7 @@ export function catalogRows(): CatalogRows {
       const moduleId = learnSegment(module.title);
       rows.modules.push({ id: moduleId, courseId: pillar.id, title: module.title, position: modulePosition });
       module.lessons.forEach((lesson, pagePosition) => {
+        lessonUnlocks(module, lesson).forEach((unlock) => rows.unlocks.push({ id: unlock.id, lessonId: lessonId(module, lesson), kind: unlock.kind, label: unlock.label, position: unlock.position }));
         rows.lessons.push({ id: lessonId(module, lesson), moduleId, title: lesson.navigationTitle ?? learnDisplayTitle(lesson.title), urlPath: lessonUrl(module, lesson), position: pagePosition, hasQuiz: lesson.quiz.length > 0 });
       });
     });
