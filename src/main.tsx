@@ -651,7 +651,9 @@ const pillarCategory = (id: CoursePillarId) => id === "discover" || id === "ai"
     ? "Enterprise"
     : "Specialist";
 
-function WelcomePage({ onStart, learnerName, learnerKey }: { onStart: (pillar: CoursePillar) => void; learnerName?: string; learnerKey?: string }) {
+type ResumeTarget = { lessonTitle: string; moduleTitle: string; done: number; total: number; onClick: () => void };
+
+function WelcomePage({ onStart, learnerName, learnerKey, resume }: { onStart: (pillar: CoursePillar) => void; learnerName?: string; learnerKey?: string; resume?: ResumeTarget }) {
   const welcomeDialog = useRef<HTMLDialogElement>(null);
   const greeted = useRef(false);
   const [hasProjects, setHasProjects] = useState(false);
@@ -677,6 +679,15 @@ function WelcomePage({ onStart, learnerName, learnerKey }: { onStart: (pillar: C
     <article className="lesson-content learn-content-stage">
       <p className="eyebrow">WELCOME TO REPLIT LEARN</p>
       <h1>Start where you are. Build from there.</h1>
+      {resume && <section className="resume-card" aria-labelledby="resume-card-title">
+        <div className="resume-card-copy">
+          <p className="resume-card-eyebrow">Replit 101 · {resume.done} of {resume.total} lessons completed</p>
+          <h2 id="resume-card-title">Pick up right where you left off</h2>
+          <p>Next up: <strong>{resume.lessonTitle}</strong> <span>in {resume.moduleTitle}</span></p>
+          <div className="resume-card-progress" role="progressbar" aria-label="Course progress" aria-valuemin={0} aria-valuemax={resume.total} aria-valuenow={resume.done}><i style={{ width: `${Math.round((resume.done / resume.total) * 100)}%` }} /></div>
+        </div>
+        <button type="button" className="recipe-create-button resume-card-button" onClick={resume.onClick}>Continue lesson <Icons.ArrowRight size={18} aria-hidden="true" /></button>
+      </section>}
       {learnerName !== undefined && <dialog ref={welcomeDialog} className="learner-welcome learner-welcome-modal" aria-labelledby="learner-welcome-title">
         <button className="welcome-modal-close" aria-label="Close welcome" onClick={() => welcomeDialog.current?.close()}><Icons.X size={20} /></button>
         <span className="learner-welcome-icon" aria-hidden="true"><Icons.Sparkles size={24} /></span>
@@ -888,6 +899,16 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
     const index = sequence.findIndex((entry) => entry.url === url);
     return index > 0 && sequence.slice(0, index).some((entry) => !completedLessons.includes(entry.url));
   };
+  // Shown on the courses page once a learner has completed some lessons but not all of them.
+  const completedInSequence = sequence.filter((entry) => completedLessons.includes(entry.url)).length;
+  const nextUnfinished = sequence.find((entry) => !completedLessons.includes(entry.url));
+  const resumeTarget: ResumeTarget | undefined = progressOwner === learnerKey && completedInSequence > 0 && nextUnfinished ? {
+    lessonTitle: nextUnfinished.lesson.navigationTitle ?? learnDisplayTitle(nextUnfinished.lesson.title),
+    moduleTitle: nextUnfinished.module.title,
+    done: completedInSequence,
+    total: sequence.length,
+    onClick: () => navigate(nextUnfinished.url),
+  } : undefined;
   const currentUrl = module && lesson ? lessonUrl(module, lesson) : "";
   const sequenceIndex = sequence.findIndex((entry) => entry.url === currentUrl);
   const currentLocked = isLocked(currentUrl);
@@ -1072,7 +1093,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
             <p>The lessons in this module are coming soon.</p>
           </article>
         ) : (
-          <WelcomePage onStart={startPillar} learnerName={access === 'signed-in' ? learnerName : undefined} learnerKey={access === 'signed-in' ? learnerKey : undefined} />
+          <WelcomePage onStart={startPillar} learnerName={access === 'signed-in' ? learnerName : undefined} learnerKey={access === 'signed-in' ? learnerKey : undefined} resume={access === 'signed-in' ? resumeTarget : undefined} />
         )}
         <dialog className="learn-sign-in-modal" ref={signInDialog} onCancel={dismissSignIn} onClose={dismissSignIn} aria-labelledby="learn-sign-in-title" aria-describedby="learn-sign-in-description">
           <button className="modal-close" aria-label="Close sign-in" onClick={dismissSignIn}><Icons.X size={20} /></button>
