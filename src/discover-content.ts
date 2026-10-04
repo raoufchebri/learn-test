@@ -132,7 +132,20 @@ export const discoverLessons: LearnLesson[] = [
     copyPrompts: true,
     outcomes: ['Search the web for supplies that fit your party theme and budget', 'Check product links, prices, and delivery details', 'Create a checklist you can use to track purchases'],
     sections: [
-      { heading: '1. Find supplies for your theme', body: 'Continue in the chat where you chose the Pokémon theme. Let’s find decorations, tableware, and games that fit. Copy this prompt and send it in Replit. If Replit asks where you are, a city or country is enough. There’s no need to share your home address.', prompt: 'Find Pokémon party supplies for ten kids that I can buy near me: decorations, plates and cups, and a few party games. Keep the total under $100. Show the links and prices. Don’t buy anything.' },
+      { heading: '1. Find supplies for your theme', body: 'Continue in the chat where you chose the Pokémon theme. Let’s find decorations, tableware, and games that fit. Copy this prompt and send it in Replit. If Replit asks where you are, a city or country is enough. There’s no need to share your home address.', prompt: 'Find Pokémon party supplies for ten kids that I can buy near me: decorations, plates and cups, and a few party games. Keep the total under $100. Show the links and prices. Don’t buy anything.', exchange: {
+        intro: 'I’ll price a ten-child Pokémon party against the $100 cap. I don’t have your town, so I’ll search retailers in your country and separate delivery listings from local stock I can’t verify.',
+        tools: 'Searched 50 websites and used 4 tools',
+        outro: 'I found a promising option: an online shop lists Pokémon cups and plates in eight-packs, plus a Pokémon birthday balloon. I’m checking the product pages for exact quantities, current delivery details, and low-cost game supplies before totaling a practical basket.',
+      }, approval: { kind: 'mode', question: 'Power is a better fit for this task. It can verify current product links, prices, quantities, and delivery details across several suppliers while keeping the basket under $100.', options: ['Free', 'Power', 'Max'], approve: ['Power', 'Max'], initial: 'Power', badges: { Free: 'Current', Power: 'Recommended' }, exchange: {
+        intro: 'Switched modes. I checked the product pages and put together a basket under $100.',
+        tools: 'Read 9 web pages and used 2 tools',
+        items: [
+          { label: 'Decorations', text: 'Pokémon balloon set and a “Happy Birthday” banner, about $18' },
+          { label: 'Plates and cups', text: 'two eight-packs of each, about $24' },
+          { label: 'Party games', text: 'Pokémon bingo cards and a Poké Ball piñata, about $30' },
+        ],
+        outro: 'Estimated total: about $72, plus delivery. Each item links to its product page, and I flagged two listings whose delivery date I couldn’t confirm. I haven’t bought anything.',
+      } }, afterPrompt: 'Replit may suggest a different mode when a task needs more work, like checking many shops. Free is great for everyday questions. Power and Max use more capable models that can research further and verify more details. Choose Power or Max on the card above to continue.' },
       { heading: '2. Take a look at what Replit found', body: 'Open a few of the product links. Do the items fit your theme? Are there enough plates for everyone? Check pack sizes, prices, shipping costs, and whether delivery is likely before the party. Prices and availability can change, so treat the results as shopping research, not a reservation. If something isn’t quite right, ask for a small change.', prompt: 'Find cheaper plates and cups, and update the total.' },
       { heading: '3. Turn your choices into a checklist', body: 'Once you like the options, let’s put everything in one place. Keep the checklist in this chat so you can return to it as you prepare. We’ll use the same list in the next lesson to check your progress each week.', prompt: 'Turn the supplies we chose into a checklist with the item, quantity, link, price, and status: Not started, Ordered, or Delivered. Add a section for invitations, the cake, and games. Don’t order anything.', afterPrompt: 'Already have the plates at home? Bought decorations in a shop? Tell Replit and ask it to update the notes. Your updates matter just as much as an email receipt.' },
     ],

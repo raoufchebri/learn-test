@@ -1207,3 +1207,10 @@
 .chat-reply-approval-actions button:disabled { opacity: .5; cursor: default; }
 .lesson-content .lesson-chat-thread p.chat-reply-approval-hint { display: flex; align-items: center; gap: 6px; margin: 12px 0 0; font-size: 14px !important; color: var(--replit-medium-gray) !important; }
 .chat-reply-approval.is-approved .chat-reply-approval-hint { color: #23734d !important; }
+/* Mode picker variant (Free, Power, Max), like Replit's suggestion card. */
+.lesson-content .lesson-chat-thread p.chat-reply-approval-text { margin: 0 0 12px; font-size: 15px !important; line-height: 1.5 !important; color: var(--replit-off-black) !important; }
+.chat-reply-approval.is-mode .chat-reply-approval-options label { padding: 12px 14px; border: 1px solid var(--replit-light-silver); border-radius: 10px; background: #fff; }
+.chat-reply-approval.is-mode .chat-reply-approval-options em { margin-left: auto; padding: 2px 8px; border-radius: 6px; background: var(--replit-light-gray); font-style: normal; font-size: 12px; color: var(--replit-medium-gray); }
+.chat-reply-approval .mode-dots { fill: var(--replit-off-black); flex: none; }
+.chat-reply-approval-continue { width: 100%; padding: 11px; border: 0; border-radius: 8px; font: inherit; font-size: 15px; background: #0079f2; color: #fff; cursor: pointer; transition: opacity .2s ease; }
+.chat-reply-approval-continue:disabled { opacity: .5; cursor: default; }

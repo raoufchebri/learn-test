@@ -125,23 +125,38 @@ function PromptBubble({ prompt, done, status, onCopy }: { prompt: string; done: 
 
 // Replit's reply under the bubble: a note that it's an example, the thinking line, then the answer.
 // With stream, the thinking line shimmers briefly and the answer appears a few words at a time, like Replit's chat.
-// Replit's approval card in an example reply. Choosing the approve option and clicking Submit unlocks the next step.
-function ApprovalCard({ question, options, approve, approved, onApprove }: { question: string; options: string[]; approve: string; approved: boolean; onApprove: () => void }) {
+// Replit's cards in an example reply. "approval": choose the approve option and click Submit.
+// "mode": Replit suggests a stronger mode; any accepted mode plus Continue unlocks the next step.
+type ApprovalSpec = NonNullable<LearnLesson["sections"][number]["approval"]>;
+function ModeDots({ level }: { level: number }) {
+  return <svg className="mode-dots" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+    {[0, 1, 2].flatMap((row) => [0, 1, 2].map((col) => <circle key={`${row}-${col}`} cx={2 + col * 5} cy={2 + row * 5} r="1.6" opacity={col < level ? 1 : .3} />))}
+  </svg>;
+}
+function ApprovalCard({ spec, approved, onApprove }: { spec: ApprovalSpec; approved: boolean; onApprove: () => void }) {
   const name = useId();
-  const [choice, setChoice] = useState<string | undefined>(approved ? approve : undefined);
+  const accepted = ([] as string[]).concat(spec.approve);
+  const [choice, setChoice] = useState<string | undefined>(spec.initial);
   const [hint, setHint] = useState("");
-  const nudge = `For this lesson, select ${approve}, then click Submit.`;
-  return <div className={`chat-reply-approval fade-in-step ${approved ? "is-approved" : ""}`} role="group" aria-label={question}>
-    <strong>{question}</strong>
-    <div className="chat-reply-approval-options">{options.map((option) => <label key={option}>
-      <input type="radio" name={name} checked={(approved ? approve : choice) === option} disabled={approved} onChange={() => { setChoice(option); setHint(""); }} />
+  const mode = spec.kind === "mode";
+  const nudge = mode ? `For this lesson, choose ${accepted.join(" or ")}, then continue.` : `For this lesson, select ${accepted[0]}, then click Submit.`;
+  const selected = approved && !(choice && accepted.includes(choice)) ? accepted[0] : choice;
+  const submit = () => { if (choice && accepted.includes(choice)) { setHint(""); onApprove(); } else setHint(nudge); };
+  return <div className={`chat-reply-approval fade-in-step ${mode ? "is-mode" : ""} ${approved ? "is-approved" : ""}`} role="group" aria-label={spec.question}>
+    {mode ? <p className="chat-reply-approval-text">{spec.question}</p> : <strong>{spec.question}</strong>}
+    <div className="chat-reply-approval-options">{spec.options.map((option, index) => <label key={option}>
+      <input type="radio" name={name} checked={selected === option} disabled={approved} onChange={() => { setChoice(option); setHint(""); }} />
+      {mode && <ModeDots level={index + 1} />}
       <span>{option}</span>
+      {spec.badges?.[option] && <em>{spec.badges[option]}</em>}
     </label>)}</div>
-    <div className="chat-reply-approval-actions">
-      <button type="button" disabled={approved} onClick={() => setHint(nudge)}>Decline</button>
-      <button type="button" disabled={approved || !choice} onClick={() => { if (choice === approve) { setHint(""); onApprove(); } else setHint(nudge); }}>Submit</button>
-    </div>
-    <p className="chat-reply-approval-hint" role="status">{approved ? <><Icons.Check size={14} aria-hidden="true" /> Submitted</> : hint || <><Icons.LockKeyhole size={14} aria-hidden="true" /> Select {approve}, then click Submit to continue.</>}</p>
+    {mode
+      ? <button type="button" className="chat-reply-approval-continue" disabled={approved || !choice} onClick={submit}>Continue on {selected ?? "…"}</button>
+      : <div className="chat-reply-approval-actions">
+        <button type="button" disabled={approved} onClick={() => setHint(nudge)}>Decline</button>
+        <button type="button" disabled={approved || !choice} onClick={submit}>Submit</button>
+      </div>}
+    <p className="chat-reply-approval-hint" role="status">{approved ? <><Icons.Check size={14} aria-hidden="true" /> {mode ? `Continuing on ${selected}` : "Submitted"}</> : hint || <><Icons.LockKeyhole size={14} aria-hidden="true" /> {mode ? `Choose ${accepted.join(" or ")}, then continue.` : `Select ${accepted[0]}, then click Submit to continue.`}</>}</p>
   </div>;
 }
 
@@ -585,7 +600,7 @@ function LessonPage({
                 <PromptBubble prompt={section.prompt} done={done} status={copy} onCopy={copyPrompt} />
                 {section.exchange && done && revealed && <ChatExchange exchange={section.exchange} stream={streamingSections.includes(sectionIndex)}
                   onDone={() => finishStream(sectionIndex)} />}
-                {approval && done && revealed && holdingSection !== sectionIndex && <ApprovalCard question={approval.question} options={approval.options} approve={approval.approve} approved={approved} onApprove={approve} />}
+                {approval && done && revealed && holdingSection !== sectionIndex && <ApprovalCard spec={approval} approved={approved} onApprove={approve} />}
                 {approval && approved && <ChatExchange exchange={approval.exchange} note={false} stream={streamingSections.includes(approvalKey)} onDone={() => finishStream(approvalKey)} />}
               </div>
               {/* Unlock button under each chat: stays in place and turns green with a check once unlocked. */}
