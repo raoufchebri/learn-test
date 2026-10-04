@@ -386,6 +386,9 @@ function LessonPage({
     return () => window.clearTimeout(reveal);
   }, [quizPassed, completed, unlocked]);
   const [quizMode, setQuizMode] = useState(false);
+  // Each celebration starts a confetti shower that runs to the end on its own timer.
+  const [confettiBurst, setConfettiBurst] = useState(0);
+  useEffect(() => { if (unlockCelebration) setConfettiBurst((burst) => burst + 1); }, [unlockCelebration]);
   const quizCardRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!quizMode) return;
@@ -408,7 +411,7 @@ function LessonPage({
 
   return (
     <article className={`lesson-content learn-content-stage ${quizMode ? 'quiz-mode' : ''}`} id="overview" key={lesson.title}>
-      {unlockCelebration && createPortal(<div className="lesson-confetti" aria-hidden="true">{Array.from({ length: 64 }, (_, i) => <i key={i} style={{ left: `${(i * 37) % 100}%`, background: ["#e89a58", "#91bca5", "#a299cf", "#edc76b", "#88b9ce"][i % 5], animationDelay: `${(i % 8) * 35}ms`, "--drift": `${((i * 19) % 160) - 80}px` } as CSSProperties} />)}</div>, document.body)}
+      {confettiBurst > 0 && <LessonConfetti key={confettiBurst} onDone={() => setConfettiBurst(0)} />}
       <p className="eyebrow">{learnDisplayTitle(lesson.module).toUpperCase()} / {lesson.navigationTitle === 'Module overview' ? 'MODULE OVERVIEW' : `CHAPTER ${chapter + 1}`} · {lesson.duration}</p>
       <h1>{learnDisplayTitle(lesson.title)}</h1>
       <div className="lesson-reading-body">
@@ -554,6 +557,42 @@ function LessonPage({
       </div>}
     </article>
   );
+}
+
+const CONFETTI_COLORS = ["#e89a58", "#91bca5", "#a299cf", "#edc76b", "#88b9ce", "#e07a8a"];
+const CONFETTI_MS = 6400;
+
+// Confetti falls from above the viewport to below it. Every piece gets its own speed, delay, sway, and tumble.
+function LessonConfetti({ onDone }: { onDone: () => void }) {
+  const [pieces] = useState(() => Array.from({ length: 110 }, () => {
+    const round = Math.random() < .25;
+    const width = 6 + Math.random() * 6;
+    return {
+      left: Math.random() * 100,
+      delay: Math.random() * 1400,
+      fall: 2800 + Math.random() * 2200,
+      drift: (Math.random() - .5) * 180,
+      sway: 18 + Math.random() * 34,
+      swayMs: 700 + Math.random() * 900,
+      flipMs: 450 + Math.random() * 1100,
+      axis: `${(.2 + Math.random() * .8).toFixed(2)}, ${Math.random().toFixed(2)}, ${(Math.random() * .4).toFixed(2)}`,
+      width,
+      height: round ? width : width * (1.3 + Math.random() * .8),
+      round,
+      color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
+    };
+  }));
+  useEffect(() => {
+    const timer = window.setTimeout(onDone, CONFETTI_MS);
+    return () => window.clearTimeout(timer);
+  }, []);
+  return createPortal(<div className="lesson-confetti" aria-hidden="true">{pieces.map((piece, i) => <i key={i} style={{
+    left: `${piece.left}%`, animationDuration: `${piece.fall}ms`, animationDelay: `${piece.delay}ms`, "--drift": `${piece.drift}px`,
+  } as CSSProperties}><b style={{
+    width: piece.width, height: piece.height, background: piece.color, borderRadius: piece.round ? "50%" : 2,
+    "--sway": `${piece.sway}px`, "--axis": piece.axis,
+    animationDuration: `${piece.swayMs}ms, ${piece.flipMs}ms`, animationDelay: `-${Math.round(piece.swayMs * Math.random())}ms, 0ms`,
+  } as CSSProperties} /></i>)}</div>, document.body);
 }
 
 function playUnlockChime() {

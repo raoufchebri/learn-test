@@ -976,9 +976,12 @@
 .recipe-chat-arrow { display: inline-block; color: var(--replit-medium-gray); font-size: 24px; vertical-align: middle; }
 @media (max-width: 1000px) { .recipe-chat-arrow { display: none; } }
 .lesson-confetti { position: fixed; inset: 0; z-index: 100; pointer-events: none; overflow: hidden; }
-.lesson-confetti i { position: absolute; top: 45%; width: 10px; height: 16px; border-radius: 2px; animation: lesson-confetti-fall 1.8s ease-out both; }
-.lesson-confetti i:nth-child(3n) { border-radius: 50%; width: 10px; height: 10px; }
-@keyframes lesson-confetti-fall { 0% { transform: translate3d(0,20vh,0) rotate(0) scale(.3); opacity: 0; } 15% { opacity: 1; } 40% { transform: translate3d(var(--drift),-28vh,0) rotate(180deg); opacity: 1; } 100% { transform: translate3d(calc(var(--drift) * 2),30vh,0) rotate(620deg); opacity: 0; } }
+/* Confetti: each piece falls from above the screen to below it; the inner shape sways and tumbles. */
+.lesson-confetti i { position: absolute; top: -32px; display: block; animation-name: lesson-confetti-fall; animation-timing-function: cubic-bezier(.35, .1, .65, 1); animation-fill-mode: both; will-change: transform; }
+.lesson-confetti b { display: block; animation-name: lesson-confetti-sway, lesson-confetti-tumble; animation-timing-function: ease-in-out, linear; animation-iteration-count: infinite; animation-direction: alternate, normal; }
+@keyframes lesson-confetti-fall { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(var(--drift), calc(100vh + 64px), 0); } }
+@keyframes lesson-confetti-sway { from { translate: calc(var(--sway) * -1) 0; } to { translate: var(--sway) 0; } }
+@keyframes lesson-confetti-tumble { from { transform: rotate3d(var(--axis), 0deg); } to { transform: rotate3d(var(--axis), 360deg); } }
 .recipe-chat-turn .ask-conversation-question { animation: recipe-prompt-enter .4s .55s ease-out both; }
 .recipe-chat-turn .ask-conversation-answer { animation: recipe-prompt-enter .35s .9s ease-out both; }
 @keyframes recipe-prompt-enter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
