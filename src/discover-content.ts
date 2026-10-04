@@ -168,7 +168,19 @@ export const discoverLessons: LearnLesson[] = [
         ],
         question: 'What town or postcode should I use to check nearby pickup options?',
       } }, afterPrompt: 'Replit suggests a different agent mode when a task needs more work, like checking many shops for stock, prices, and delivery. Choose Power or Max on the card above to continue.' },
-      { heading: '2. Take a look at what Replit found', body: 'Open a few of the product links. Do the items fit your theme? Are there enough plates for everyone? Check pack sizes, prices, shipping costs, and whether delivery is likely before the party. Prices and availability can change, so treat the results as shopping research, not a reservation. If something isn’t quite right, ask for a small change.', prompt: 'Find cheaper plates and cups, and update the total.' },
+      { heading: '2. Take a look at what Replit found', body: 'Open a few of the product links. Do the items fit your theme? Are there enough plates for everyone? Check pack sizes, prices, shipping costs, and whether delivery is likely before the party. Prices and availability can change, so treat the results as shopping research, not a reservation. If something isn’t quite right, ask for a small change.', prompt: 'Find cheaper plates and cups, and update the total.', exchange: {
+        intro: 'I’ll look for cheaper Swiss listings, keeping enough plates and cups for ten children, and include any shipping changes in the new total.',
+        tools: 'Read 6 web pages and used 1 tool',
+        rich: [
+          { p: 'Switching to **plain yellow plates and cups** keeps the Pikachu colour scheme and saves **CHF 7.60**, without adding another retailer or delivery charge.' },
+          { table: { head: ['Replacement', 'Quantity', 'Listed price'], align: ['left', 'right', 'right'], rows: [
+            ['[Neon-yellow paper plates, 22 cm](https://kinderparties.ch/en/products/pappteller-neon-gelb-unifarben-16-stueck-o-22-cm)', '1 pack of 16', '**CHF 5.90**'],
+            ['[Yellow paper cups, 266 ml](https://kinderparties.ch/en/products/partybecher-gelb-unifarben-14-stueck)', '1 pack of 14', '**CHF 4.50**'],
+          ] } },
+          { p: 'Both listings indicate **in stock**, and both packs cover ten children with spares. Keep the Pokémon napkins, garland, and tablecloth from the original list.' },
+          { p: '**Updated estimated total: CHF 56.60 ≈ US$69.17**, down from CHF 64.20. This includes all the other supplies unchanged and the same CHF 15.10 shipping allowance. The USD estimate uses the previously retrieved exchange rate; final checkout prices and conversion fees may vary. Nothing has been purchased.' },
+        ],
+      } },
       { heading: '3. Turn your choices into a checklist', body: 'Once you like the options, let’s put everything in one place. Keep the checklist in this chat so you can return to it as you prepare. We’ll use the same list in the next lesson to check your progress each week.', prompt: 'Turn the supplies we chose into a checklist with the item, quantity, link, price, and status: Not started, Ordered, or Delivered. Add a section for invitations, the cake, and games. Don’t order anything.', afterPrompt: 'Already have the plates at home? Bought decorations in a shop? Tell Replit and ask it to update the notes. Your updates matter just as much as an email receipt.' },
     ],
     quiz: [
