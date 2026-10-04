@@ -108,20 +108,31 @@ function LinkedText({ text }: { text: string }) {
   })}</>;
 }
 
-// A Replit chat recreated in the lesson: the learner's message bubble, Replit's thinking line, then its answer.
-function ChatExchange({ prompt, exchange }: { prompt: string; exchange: ChatExchangeExample }) {
-  return <figure className="chat-exchange" aria-label="Example chat in Replit">
-    <figcaption className="chat-exchange-label">Example chat in Replit</figcaption>
-    <div className="chat-exchange-user"><p>{prompt}</p></div>
-    <p className="chat-exchange-thinking" aria-label={`Replit thinking: ${exchange.thinking}`}>{exchange.thinking}</p>
-    <div className="chat-exchange-answer">
+// The lesson's prompt as a Replit chat bubble. Clicking the bubble copies the prompt and unlocks the next step.
+function PromptBubble({ prompt, done, status, onCopy }: { prompt: string; done: boolean; status?: "copied" | "failed"; onCopy: () => void }) {
+  return <div className={`prompt-bubble-row ${done ? "is-done" : ""}`}>
+    <button type="button" className="prompt-bubble" onClick={onCopy} aria-label={`Copy prompt: ${prompt}`}>{prompt}</button>
+    <p className="prompt-bubble-meta" role="status">
+      {status === "failed" ? "Couldn’t copy automatically. Select the text in the bubble and copy it."
+        : status === "copied" ? <><Icons.Check size={13} aria-hidden="true" /> Copied. Paste it into Replit and send it.</>
+        : done ? <><Icons.Copy size={13} aria-hidden="true" /> Click the bubble to copy it again</>
+        : <><Icons.Copy size={13} aria-hidden="true" /> Click the bubble to copy the prompt, or write your own</>}
+    </p>
+  </div>;
+}
+
+// Replit's reply under the bubble: the faded thinking line, the answer, and how long it worked.
+function ChatExchange({ exchange }: { exchange: ChatExchangeExample }) {
+  return <div className="chat-reply" aria-label="Example reply from Replit">
+    <p className="chat-reply-thinking">{exchange.thinking}</p>
+    <div className="chat-reply-answer">
       {exchange.intro && <p>{exchange.intro}</p>}
-      <ol>{exchange.items.map((item) => <li key={item.label}><strong>{item.label}</strong>{exchange.labelSeparator === " — " ? " — " : ": "}{item.text}</li>)}</ol>
+      <ol>{exchange.items.map((item) => <li key={item.label}><strong>{item.label}</strong>{exchange.labelSeparator}{item.text}</li>)}</ol>
       {exchange.outro && <p>{exchange.outro}</p>}
       {exchange.question && <p><strong>{exchange.question}</strong></p>}
     </div>
-    <p className="chat-exchange-meta">{exchange.workedFor}</p>
-  </figure>;
+    <p className="chat-reply-meta"><Icons.Copy size={13} aria-hidden="true" /> {exchange.workedFor}</p>
+  </div>;
 }
 
 // Screenshot that opens large on click. In the viewer, clicking the image toggles fit-to-screen and full size.
@@ -401,17 +412,15 @@ function LessonPage({
             const promptUnlock = promptUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex);
             if (!promptUnlock) return <LessonPrompt key={section.prompt} prompt={section.prompt} />;
             const done = isUnlocked(promptUnlock.id);
-            return <>
-              <LessonPrompt key={section.prompt} prompt={section.prompt} />
-              <div className={`recipe-unlock-action prompt-unlock ${done ? 'is-open' : ''}`}>
-                <button type="button" className="recipe-create-button" onClick={async () => {
-                  try { await navigator.clipboard.writeText(section.prompt!); setPromptCopy((current) => ({ ...current, [sectionIndex]: "copied" })); }
-                  catch { setPromptCopy((current) => ({ ...current, [sectionIndex]: "failed" })); }
-                  unlockStep(promptUnlock.id);
-                }}>{done ? <Icons.Check size={20} aria-hidden="true" /> : <LessonUnlockIcon />}<span>{done ? (promptCopy[sectionIndex] === "copied" ? 'Prompt copied' : 'Copy the prompt again') : 'Copy the prompt'}</span></button>
-                <small role="status">{promptCopy[sectionIndex] === "failed" ? 'Couldn’t copy automatically. Select the prompt above and copy it.' : 'Copy and paste the prompt into Replit, or write your own.'}</small>
-              </div>
-            </>;
+            const copy = promptCopy[sectionIndex];
+            return <div className="chat-thread">
+              <PromptBubble prompt={section.prompt} done={done} status={copy} onCopy={async () => {
+                try { await navigator.clipboard.writeText(section.prompt!); setPromptCopy((current) => ({ ...current, [sectionIndex]: "copied" })); }
+                catch { setPromptCopy((current) => ({ ...current, [sectionIndex]: "failed" })); }
+                unlockStep(promptUnlock.id);
+              }} />
+              {section.exchange && done && <ChatExchange exchange={section.exchange} />}
+            </div>;
           })()}
           {recipeLesson && section.prompt && <RecipeBuildStep unlocking={unlockCelebration} />}
           {lesson.projectTask && sectionIndex === 0 && <ProjectLessonStep task={lesson.projectTask} />}
@@ -422,7 +431,6 @@ function LessonPage({
             <p>That means an interface with forms and buttons, app logic that responds when you use them, and storage that keeps your recipes in this browser. For this first version, all three work in the browser. No sign-in or separate backend is needed.</p>
             <p>Let’s explore the building blocks this prompt describes.</p>
           </> : <p>{section.afterPrompt}</p>)}
-          {section.exchange && section.prompt && isUnlocked(promptUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex)?.id) && <ChatExchange prompt={section.prompt} exchange={section.exchange} />}
           {section.items && <ul className="lesson-points">{section.items.map((item) => <li key={item}>{item}</li>)}</ul>}
           {hasCheckpoint && sectionIndex === checkpointIndex && <div className="lesson-quiz" aria-label="Lesson checkpoint">
             <h3>Try these two ideas</h3>
