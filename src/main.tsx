@@ -181,6 +181,8 @@ function openBesideLesson(url: string): boolean {
   const opened = window.open(url, "replit-beside-lesson", `popup=yes,width=${width},height=${height},left=${left},top=${screenTop}`);
   if (!opened) return false;
   try { opened.opener = null; } catch { /* Cross-origin windows may not allow this. */ }
+  // Best effort: ask to keep the lesson in front. Most browsers ignore this on purpose (no pop-unders); a few honour it.
+  try { opened.blur(); window.focus(); window.setTimeout(() => window.focus(), 0); } catch { /* Ignored by the browser. */ }
   return true;
 }
 
@@ -499,7 +501,8 @@ function LessonPage({
                 setStreamingSections((current) => [...current, sectionIndex]);
                 setFadingButtons((current) => [...current, sectionIndex]);
                 unlockTimers.current.push(window.setTimeout(() => setFadingButtons((current) => current.filter((index) => index !== sectionIndex)), 450));
-                unlockStep(reveal.id, false, true);
+                // Confetti only for the lesson's first example answer; later ones just play the unlock sound.
+                unlockStep(reveal.id, false, reveal.id === revealUnlocks[0]?.id);
               }
             };
             return <>
