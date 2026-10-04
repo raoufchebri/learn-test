@@ -389,7 +389,8 @@ function LessonPage({
   const quizCardRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!quizMode) return;
-    window.scrollTo({ top: 0, behavior: "instant" });
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    quizCardRef.current?.scrollIntoView({ behavior: reduced ? "instant" : "smooth", block: "start" });
     quizCardRef.current?.focus({ preventScroll: true });
   }, [quizMode]);
 
@@ -410,7 +411,7 @@ function LessonPage({
       {unlockCelebration && createPortal(<div className="lesson-confetti" aria-hidden="true">{Array.from({ length: 64 }, (_, i) => <i key={i} style={{ left: `${(i * 37) % 100}%`, background: ["#e89a58", "#91bca5", "#a299cf", "#edc76b", "#88b9ce"][i % 5], animationDelay: `${(i % 8) * 35}ms`, "--drift": `${((i * 19) % 160) - 80}px` } as CSSProperties} />)}</div>, document.body)}
       <p className="eyebrow">{learnDisplayTitle(lesson.module).toUpperCase()} / {lesson.navigationTitle === 'Module overview' ? 'MODULE OVERVIEW' : `CHAPTER ${chapter + 1}`} · {lesson.duration}</p>
       <h1>{learnDisplayTitle(lesson.title)}</h1>
-      <div className="lesson-reading-body" hidden={quizMode}>
+      <div className="lesson-reading-body">
       {lesson.testingUnlocked && lesson.projectTask && <p className="caption">Testing access: this lesson is open for review. Project inspection still requires a completed app.</p>}
       <p className="intro">{lesson.summary}</p>
       {lesson.openingImage && <figure className="lesson-app-screenshot"><img src={lesson.openingImage.src} alt={lesson.openingImage.alt} /><figcaption>Replit home · Personal details replaced for this example.</figcaption></figure>}
@@ -539,7 +540,7 @@ function LessonPage({
       {lesson.quiz.length === 0 && nextLesson && <button className="next-lesson" onClick={() => { onComplete?.(); nextLesson.onClick(); }}>
         <span>{lesson.module === 'Your capstone' ? 'CONTINUE' : 'NEXT MODULE'}</span><strong>{learnDisplayTitle(nextLesson.title)}</strong><b>→</b>
       </button>}
-      {activityConfirmed && lesson.quiz.length > 0 && <div className="recipe-unlock-action lesson-quiz-entry" id={lesson.activityConfirmation ? 'confirmed-activity-quiz' : undefined}>
+      {activityConfirmed && lesson.quiz.length > 0 && !quizMode && <div className="recipe-unlock-action lesson-quiz-entry" id={lesson.activityConfirmation ? 'confirmed-activity-quiz' : undefined}>
         <p>Ready to check what you’ve learned?</p>
         <button type="button" className="recipe-create-button" disabled={!practiceDone} onClick={() => setQuizMode(true)}>Take the quiz →</button>
         {!practiceDone && <small>Complete the activity checks above first.</small>}
@@ -548,7 +549,7 @@ function LessonPage({
       </>}
       </div>
       {quizMode && <div ref={quizCardRef} tabIndex={-1} className="lesson-quiz-stage">
-        <LessonQuizCard key={lesson.title} lesson={lesson} answers={answers} completed={completed} next={nextLesson} onBack={() => setQuizMode(false)}
+        <LessonQuizCard key={lesson.title} lesson={lesson} answers={answers} completed={completed} next={nextLesson}
           onAnswer={(index, answer) => setAnswers(current => { const next = [...current]; next[index] = answer; return next; })} />
       </div>}
     </article>

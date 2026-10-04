@@ -43,12 +43,27 @@ html { scrollbar-gutter: stable; }
 /* Quiz entry: centered grey pill, same pattern as the activity unlock buttons. */
 .lesson-quiz-entry.recipe-unlock-action { margin: 32px 0 12px; padding: 0; border-top: 0; text-align: center; }
 .lesson-quiz-entry.recipe-unlock-action p { margin: 0; color: var(--replit-medium-gray); font-size: 14px; }
-.lesson-quiz-entry .recipe-create-button:not(:disabled) { background: var(--replit-light-gray); color: var(--replit-off-black); }
+.lesson-quiz-entry .recipe-create-button:not(:disabled) { background: #23734d; border-color: #23734d; color: #fff; }
+.lesson-quiz-entry .recipe-create-button:not(:disabled):hover { background: #1d5f40; border-color: #1d5f40; }
 /* Quiz buttons: green when active, grey when not. */
 .quiz-card-question { border: 0; margin: 0 0 18px; padding: 0; min-width: 0; }
 .quiz-card-question legend { padding: 0; }
 .quiz-card-choices .is-wrong { border-color: #c2622d; background: #c2622d12; }
-.lesson-quiz-card footer { flex-direction: column; justify-content: center; margin-top: 8px; }
-.lesson-quiz-card footer small { font-size: 12px; color: var(--replit-medium-gray); min-height: 1em; }
-.lesson-quiz-card .quiz-primary-button { padding: 13px 24px; border-radius: 999px; border: 1px solid #23734d; background: #23734d; color: #fff; font-weight: 600; }
+/* Inline quiz: part of the page, no box, one answer per row. */
+.lesson-quiz-stage { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--replit-light-silver); scroll-margin-top: 24px; }
+.lesson-quiz-card { border: 0; border-radius: 0; padding: 0; background: transparent; }
+.lesson-quiz-card .quiz-card-choices { grid-template-columns: minmax(0, 1fr); }
+/* Quiz text matches the lesson body (19px); answers get rounder corners. */
+.lesson-quiz-card h2 { font-size: 19px; line-height: 1.55; font-weight: 600; margin: 12px 0 16px; }
+.lesson-quiz-card .quiz-card-choices { gap: 10px; }
+.lesson-quiz-card .quiz-card-choices button { gap: 14px; padding: 14px 18px; border-radius: 16px; font-size: 19px; line-height: 1.5; }
+.lesson-quiz-card .quiz-card-choices button > span { font-size: 14px; }
+.lesson-quiz-card .quiz-card-feedback { font-size: 19px; line-height: 1.6; margin: 14px 0 0; }
+/* Check my answers uses the same centered structure and size as Take the quiz: line above, button, line below. */
+.quiz-check-action { margin: 28px 0 12px; }
+.quiz-check-action small { text-align: center; font-size: 14px; color: var(--replit-medium-gray); }
+.quiz-check-action small:empty { display: none; }
+.lesson-quiz-card .quiz-primary-button:not(:disabled) { background: #23734d; border-color: #23734d; color: #fff; }
+.lesson-quiz-card .quiz-primary-button:not(:disabled):hover { background: #1d5f40; border-color: #1d5f40; }
 .lesson-quiz-card .quiz-primary-button:disabled { background: var(--replit-light-gray); border-color: var(--replit-light-gray); color: var(--replit-medium-gray); opacity: 1; cursor: default; }
+.lesson-quiz-card .quiz-primary-button { margin: 0; padding: 16px 26px; font-size: 16px; font-weight: 500; border-radius: 999px; }

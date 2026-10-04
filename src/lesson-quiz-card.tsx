@@ -2,9 +2,9 @@ import { useState } from "react";
 import type { LearnLesson } from "./learn-content";
 
 // All questions on one card. Answers are only recorded (and the lesson completed) after "Check my answers".
-export function LessonQuizCard({ lesson, answers, onAnswer, completed, onBack, next }: {
+export function LessonQuizCard({ lesson, answers, onAnswer, completed, next }: {
   lesson: LearnLesson; answers: number[]; onAnswer: (index: number, answer: number) => void;
-  completed: boolean; onBack: () => void; next?: { title: string; onClick: () => void };
+  completed: boolean; next?: { title: string; onClick: () => void };
 }) {
   const [selected, setSelected] = useState<(number | undefined)[]>(() => lesson.quiz.map((_, i) => answers[i]));
   const [checked, setChecked] = useState(() => lesson.quiz.every((_, i) => answers[i] !== undefined));
@@ -22,7 +22,7 @@ export function LessonQuizCard({ lesson, answers, onAnswer, completed, onBack, n
   };
   const count = lesson.quiz.length;
   return <section className="lesson-quiz-card" aria-label="Lesson quiz">
-    <header><button type="button" onClick={onBack}>← Back to lesson</button><span>{count === 1 ? "1 question" : `${count} questions`}</span></header>
+    <header><span>Quiz · {count === 1 ? "1 question" : `${count} questions`}</span></header>
     {lesson.quiz.map((question, index) => {
       const right = checked && selected[index] === question.answer;
       return <fieldset className="quiz-card-question" key={question.prompt}>
@@ -36,13 +36,13 @@ export function LessonQuizCard({ lesson, answers, onAnswer, completed, onBack, n
         {checked && <p className="quiz-card-feedback" role="status">{right ? question.feedback ?? "Correct. Nice work." : "Not quite. Choose another answer, then check again."}</p>}
       </fieldset>;
     })}
-    <footer>
+    <div className="recipe-unlock-action quiz-check-action">
       {!passed
-        ? <button type="button" className="quiz-primary-button" disabled={!allAnswered || checked} onClick={check}>Check my answers</button>
-        : <button type="button" className="quiz-primary-button" disabled={!completed} onClick={next?.onClick ?? (() => window.location.assign('/'))}>
+        ? <button type="button" className="recipe-create-button quiz-primary-button" disabled={!allAnswered || checked} onClick={check}>Check my answers</button>
+        : <button type="button" className="recipe-create-button quiz-primary-button" disabled={!completed} onClick={next?.onClick ?? (() => window.location.assign('/'))}>
           {completed ? next ? `Continue to ${next.title} →` : "Course section complete →" : "Saving your progress…"}
         </button>}
       <small aria-live="polite">{!allAnswered ? "Answer every question to check your answers." : checked && !allCorrect ? "Some answers aren’t right yet." : ""}</small>
-    </footer>
+    </div>
   </section>;
 }
