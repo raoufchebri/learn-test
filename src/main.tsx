@@ -957,7 +957,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
                                 key={targetLesson.title}
                               >
                                 <span>{targetLesson.navigationTitle ?? learnDisplayTitle(targetLesson.title)}</span>
-                                {locked ? <Icons.LockKeyhole size={16} aria-label="Locked" /> : <span className={`lesson-nav-state ${lessonComplete ? 'is-complete' : 'is-progress'}`} role="img" aria-label={lessonComplete ? 'Completed' : 'In progress'}><Icons.Check size={12} strokeWidth={2.5} aria-hidden="true" /></span>}
+                                {locked ? <Icons.LockKeyhole size={16} aria-label="Locked" /> : <span className={`lesson-nav-state ${lessonComplete ? 'is-complete' : 'is-progress'}`} role="img" aria-label={lessonComplete ? 'Completed' : 'In progress'}>{lessonComplete ? <Icons.Check size={12} strokeWidth={2.5} aria-hidden="true" /> : <Icons.Hourglass size={15} strokeWidth={2} aria-hidden="true" />}</span>}
                               </button>
                             );
                           })}
