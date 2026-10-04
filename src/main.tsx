@@ -8,8 +8,6 @@ import { ReplitAccount } from "./replit-account";
 import { CapstoneSubmission } from "./capstone-submission";
 import { CourseCertificate } from "./course-certificate";
 import { LessonPrompt } from "./lesson-prompt";
-import { useLessonNarration } from "./lesson-narration";
-import { buildEstimatedTranscript, formatTimestamp } from "./lesson-transcript";
 import { LessonQuizCard } from "./lesson-quiz-card";
 import { LEARN_DEV_MODE } from "./learn-mode";
 import { RecipeBuildProvider, RecipeBuildStep, RecipeBuildStatus, ProjectLessonStep, useRecipeActivity, RECIPE_PROMPT, RECIPE_DEMO } from "./recipe-build";
@@ -378,53 +376,16 @@ function LessonPage({
     }, reduced ? 250 : 1100);
     return () => window.clearTimeout(reveal);
   }, [quizPassed, completed, unlocked]);
-  const transcriptLesson = courseModules.some(entry => entry.pillar === "discover" && entry.title === lesson.module);
-  const estimatedTranscript = useMemo(
-    () => transcriptLesson && !lesson.audioTimings ? buildEstimatedTranscript(lesson, learnDisplayTitle(lesson.title)) : undefined,
-    [lesson, transcriptLesson],
-  );
-  const narration = useLessonNarration(lesson.audioTimings, estimatedTranscript);
   const [quizMode, setQuizMode] = useState(false);
   const quizCardRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!quizMode) return;
-    narration.pause();
     window.scrollTo({ top: 0, behavior: "instant" });
     quizCardRef.current?.focus({ preventScroll: true });
   }, [quizMode]);
-  const [readingView, setReadingView] = useState<"transcript" | "text">("transcript");
-  const hasTranscript = narration.blocks.length > 0;
-  const transcriptView = readingView === "transcript" && hasTranscript;
-  // The narrated overview keeps its audio-aligned list; other lessons get inline rows.
-  const showTranscript = transcriptView && !!lesson.audioTimings;
-  const transcriptRow = (text: string | undefined, node: ReactNode, extraClass = "") => {
-    const timing = text && transcriptView && !lesson.audioTimings ? narration.timeFor(text) : undefined;
-    if (!timing) return node;
-    const current = narration.time >= timing.start && narration.time < timing.end;
-    return <div key={text} className={`transcript-row ${extraClass} ${current ? "is-current" : ""}`}>
-      <button className="transcript-time" type="button" aria-label={`Jump to ${formatTimestamp(timing.start)}`} onClick={() => narration.seek(timing.start)}>{formatTimestamp(timing.start)}</button>
-      {node}
-    </div>;
-  };
-  const readingText = (text: string) => readingView === "transcript" ? narration.renderText(text) : text;
-  const [narrationPlaybackError, setNarrationPlaybackError] = useState(false);
-  const [videoFloating, setVideoFloating] = useState(false);
-  const [videoReturning, setVideoReturning] = useState(false);
-  const [videoDismissed, setVideoDismissed] = useState(false);
-  const [videoMotion, setVideoMotion] = useState({ x: 0, y: 0, scale: 1 });
-  const videoAnchorRef = useRef<HTMLDivElement>(null);
-  const videoFloatingRef = useRef(false);
-  const videoReturningRef = useRef(false);
-  const videoReturnTimerRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     setAnswers([]);
-    setVideoDismissed(false);
-    videoFloatingRef.current = false;
-    videoReturningRef.current = false;
-    setVideoReturning(false);
-    setVideoFloating(false);
-    window.clearTimeout(videoReturnTimerRef.current);
     if (location.hash) {
       const targetId = decodeURIComponent(location.hash.slice(1));
       window.requestAnimationFrame(() => {
@@ -435,162 +396,23 @@ function LessonPage({
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [lesson.title, location.hash]);
 
-  useEffect(() => {
-    const videoAnchor = videoAnchorRef.current;
-    if (!videoAnchor) return;
-    videoReturningRef.current = false;
-    setVideoReturning(false);
-    let frame = 0;
-    const updateVideoPosition = () => {
-      window.cancelAnimationFrame(frame);
-      frame = window.requestAnimationFrame(() => {
-        const videoRect = videoAnchor.getBoundingClientRect();
-        const chatVideoSlot = chatOpen;
-        // Sticky lesson media replaces the former floating corner player.
-        // Text mode scrolls the whole page and docks the video; Transcript keeps it sticky.
-        const canFloat = readingView === 'text' && !quizMode;
-        const rightOffset = chatVideoSlot ? 338 : 18;
-        if (canFloat && !videoFloatingRef.current && videoRect.top < -24) {
-          const targetWidth = chatVideoSlot ? 260 : Math.min(340, window.innerWidth - 36);
-          setVideoMotion({
-            x: videoRect.left - (window.innerWidth - targetWidth - rightOffset),
-            y: videoRect.top - 18,
-            scale: videoRect.width / targetWidth,
-          });
-          videoFloatingRef.current = true;
-          videoReturningRef.current = false;
-          setVideoReturning(false);
-          setVideoFloating(true);
-        } else if (videoFloatingRef.current && !videoReturningRef.current && (!canFloat || videoRect.top > 16)) {
-          const floatingWidth = chatVideoSlot ? 260 : Math.min(340, window.innerWidth - 36);
-          setVideoMotion({
-            x: videoRect.left - (window.innerWidth - floatingWidth - rightOffset),
-            y: videoRect.top - 18,
-            scale: videoRect.width / floatingWidth,
-          });
-          videoReturningRef.current = true;
-          setVideoReturning(true);
-          videoReturnTimerRef.current = window.setTimeout(() => {
-            videoFloatingRef.current = false;
-            videoReturningRef.current = false;
-            setVideoReturning(false);
-            setVideoFloating(false);
-          }, 380);
-        }
-        if (videoRect.top > 16) setVideoDismissed(false);
-      });
-    };
-    updateVideoPosition();
-    window.addEventListener("scroll", updateVideoPosition, { passive: true });
-    window.addEventListener("resize", updateVideoPosition);
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.clearTimeout(videoReturnTimerRef.current);
-      window.removeEventListener("scroll", updateVideoPosition);
-      window.removeEventListener("resize", updateVideoPosition);
-    };
-  }, [lesson.title, chatOpen, readingView, quizMode]);
-
   return (
-    <article className={`lesson-content learn-content-stage reading-${readingView} ${quizMode ? 'quiz-mode' : ''}`} id="overview" key={lesson.title}>
+    <article className={`lesson-content learn-content-stage ${quizMode ? 'quiz-mode' : ''}`} id="overview" key={lesson.title}>
       {unlockCelebration && createPortal(<div className="lesson-confetti" aria-hidden="true">{Array.from({ length: 64 }, (_, i) => <i key={i} style={{ left: `${(i * 37) % 100}%`, background: ["#e89a58", "#91bca5", "#a299cf", "#edc76b", "#88b9ce"][i % 5], animationDelay: `${(i % 8) * 35}ms`, "--drift": `${((i * 19) % 160) - 80}px` } as CSSProperties} />)}</div>, document.body)}
-      <div className="lesson-sticky-header">
-      <div className="lesson-video-shell" ref={videoAnchorRef}>
-        <div
-          className={`lesson-video lesson-video-embed ${videoFloating && !videoDismissed ? "floating" : ""} ${videoReturning ? "returning" : ""}`}
-          style={{
-            "--video-float-x": `${videoMotion.x}px`,
-            "--video-float-y": `${videoMotion.y}px`,
-            "--video-float-scale": videoMotion.scale,
-          } as CSSProperties}
-        >
-          <div className="welcome-video-frame">
-            <iframe
-              src="https://www.youtube-nocookie.com/embed/pajkCpfpcP4"
-              title={`${learnDisplayTitle(lesson.title)} video`}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            />
-          </div>
-          {videoFloating && !videoDismissed && (
-            <button
-              className="lesson-video-dismiss"
-              type="button"
-              aria-label="Close floating video"
-              onClick={() => setVideoDismissed(true)}
-            >
-              <Icons.X size={15} />
-            </button>
-          )}
-        </div>
-      </div>
-      <small className="caption lesson-video-caption-top">Video placeholder · This lesson will include its own walkthrough</small>
       <p className="eyebrow">{learnDisplayTitle(lesson.module).toUpperCase()} / {lesson.navigationTitle === 'Module overview' ? 'MODULE OVERVIEW' : `CHAPTER ${chapter + 1}`} · {lesson.duration}</p>
-      <div className="lesson-heading-row"><h1>{readingText(learnDisplayTitle(lesson.title))}</h1>
-        {lesson.audio && <button className="narration-test-toggle" type="button"
-          aria-label={narration.playing ? "Pause test narration" : "Play test narration"}
-          title="Test narration only. The video is still a placeholder."
-          onClick={async () => {
-            const audio = narration.audioRef.current;
-            if (!audio) return;
-            if (!audio.paused) audio.pause();
-            else {
-              setNarrationPlaybackError(false);
-              try { await audio.play(); } catch { setNarrationPlaybackError(true); }
-            }
-          }}>
-          {narration.playing ? <Icons.Pause size={14} /> : <Icons.Play size={14} />} <span>Test audio</span>
-        </button>}
-        {!lesson.audio && hasTranscript && <button className="narration-test-toggle" type="button"
-          aria-label={narration.playing ? "Pause highlight preview" : "Preview highlighting"}
-          title="Estimated timing. This lesson has no narration audio yet."
-          onClick={narration.togglePreview}>
-          {narration.playing ? <Icons.Pause size={14} /> : <Icons.Play size={14} />} <span>Preview</span>
-        </button>}
-        {hasTranscript && <div className="lesson-reading-toggle" role="group" aria-label="Reading view">
-          <button type="button" aria-pressed={readingView === "transcript"} title="Timestamped transcript follows narration"
-            onClick={() => { setQuizMode(false); setReadingView("transcript"); narration.setFollowNarration(true); }}>
-            <Icons.ListVideo size={15} aria-hidden="true" /><span>Transcript</span>
-          </button>
-          <button type="button" aria-pressed={readingView === "text"} title="Read and skim without automatic scrolling"
-            onClick={() => { setQuizMode(false); setReadingView("text"); narration.setFollowNarration(false); }}>
-            <Icons.AlignLeft size={15} aria-hidden="true" /><span>Text</span>
-          </button>
-        </div>}
-      </div>
-      {lesson.audio && <>
-        <audio key={lesson.audio} ref={narration.audioRef} {...narration.audioEvents} hidden preload="metadata" onError={() => setNarrationPlaybackError(true)}>
-          <source src={lesson.audio} type="audio/mpeg" />
-        </audio>
-        {narrationPlaybackError && <small role="alert">Narration couldn’t play. Try the test button again or refresh the page.</small>}
-        {narration.timingError && <small role="status">Timing unavailable. Read the lesson below while listening.</small>}
-      </>}
-      </div>
+      <h1>{learnDisplayTitle(lesson.title)}</h1>
       <div className="lesson-reading-body" hidden={quizMode}>
       {lesson.testingUnlocked && lesson.projectTask && <p className="caption">Testing access: this lesson is open for review. Project inspection still requires a completed app.</p>}
-      {showTranscript ? <section className="lesson-transcript" aria-label="Lesson transcript">
-        {narration.blocks.slice(1).map(block => {
-          const start = block.words[0]?.start ?? 0;
-          const end = block.words.at(-1)?.end ?? start;
-          return <div key={block.text} className={`transcript-row ${narration.time >= start && narration.time < end ? 'is-current' : ''}`}>
-            <button className="transcript-time" type="button" aria-label={`Jump to ${Math.floor(start / 60)} minutes ${Math.floor(start % 60)} seconds`} onClick={() => narration.seek(start)}>
-              {Math.floor(start / 60)}:{String(Math.floor(start % 60)).padStart(2, '0')}
-            </button>
-            <p>{narration.renderText(block.text)}</p>
-          </div>;
-        })}
-      </section> : transcriptRow(lesson.summary, <p className="intro">{readingText(lesson.summary)}</p>)}
+      <p className="intro">{lesson.summary}</p>
       {lesson.openingImage && <figure className="lesson-app-screenshot"><img src={lesson.openingImage.src} alt={lesson.openingImage.alt} /><figcaption>Replit home · Personal details replaced for this example.</figcaption></figure>}
-      {!showTranscript && lesson.introduction?.map((paragraph) => typeof paragraph === 'string'
-        ? transcriptRow(paragraph, <p className="lesson-introduction-copy" key={paragraph}>{readingText(paragraph)}</p>)
-        : transcriptView && !lesson.audioTimings
-          ? <div className="transcript-group" key={paragraph.text}>{transcriptRow(paragraph.text, <p>{readingText(paragraph.text)}</p>)}{paragraph.items.map((item) => transcriptRow(item, <p key={item}>{readingText(item)}</p>, "is-item"))}</div>
-          : <div className="lesson-introduction-copy" key={paragraph.text}><p>{readingText(paragraph.text)}</p><ul>{paragraph.items.map((item) => <li key={item}>{readingText(item)}</li>)}</ul></div>)}
+      {lesson.introduction?.map((paragraph) => typeof paragraph === 'string'
+        ? <p className="lesson-introduction-copy" key={paragraph}>{paragraph}</p>
+        : <div className="lesson-introduction-copy" key={paragraph.text}><p>{paragraph.text}</p><ul>{paragraph.items.map((item) => <li key={item}>{item}</li>)}</ul></div>)}
       {lesson.title === 'What Is Replit Building?' && <RecipeProjectLink />}
       {lesson.encouragement && (
         <aside className="lesson-encouragement">
           <Icons.Sparkles size={18} aria-hidden="true" />
-          <p>{readingText(lesson.encouragement)}</p>
+          <p>{lesson.encouragement}</p>
         </aside>
       )}
       {lesson.outcomes && (
@@ -614,8 +436,8 @@ function LessonPage({
       {entryOpened && <>
       {lesson.sections.map((section, sectionIndex) => (
         (!LEARN_DEV_MODE && ((!promptContinued && sectionIndex > 0) || (!unlocked && sectionIndex > promptIndex) || (!frontendVisible && sectionIndex > checkpointIndex) || (hasFrontendCheck && sectionIndex > 5 && recipe.iteration !== 'complete'))) ? null : <section className={`foundation-section ${((recipeLesson || lesson.projectTask) && sectionIndex > promptIndex) || (hasCheckpoint && sectionIndex > checkpointIndex) || (lesson.promptGate && sectionIndex > 0) ? "lesson-unlocked" : ""}`} id={section.id ?? learnSegment(section.heading)} key={section.heading}>
-          <h2>{readingText(section.heading)}</h2>
-          {transcriptRow(section.body, <p>{readingText(section.body)}</p>)}
+          <h2>{section.heading}</h2>
+          <p>{section.body}</p>
           {section.prompt && <LessonPrompt key={section.prompt} prompt={section.prompt} copyable={Boolean(lesson.promptGate || lesson.copyPrompts)} />}
           {lesson.promptGate && sectionIndex === 0 && <div className={`recipe-unlock-action ${promptContinued ? 'is-open' : ''}`}><button className="recipe-create-button" disabled={promptContinued} onClick={() => {
             setPromptContinued(true); setUnlockCelebration(true);
@@ -630,10 +452,8 @@ function LessonPage({
             <p>You asked for a personal recipe app where you can add, edit, and find recipes. Each recipe needs a name, ingredients, and instructions.</p>
             <p>That means an interface with forms and buttons, app logic that responds when you use them, and storage that keeps your recipes in this browser. For this first version, all three work in the browser. No sign-in or separate backend is needed.</p>
             <p>Let’s explore the building blocks this prompt describes.</p>
-          </> : transcriptRow(section.afterPrompt, <p>{readingText(section.afterPrompt)}</p>))}
-          {section.items && (transcriptView && !lesson.audioTimings
-            ? <div className="transcript-group">{section.items.map((item) => transcriptRow(item, <p key={item}>{readingText(item)}</p>, "is-item"))}</div>
-            : <ul className="lesson-points">{section.items.map((item) => <li key={item}>{readingText(item)}</li>)}</ul>)}
+          </> : <p>{section.afterPrompt}</p>)}
+          {section.items && <ul className="lesson-points">{section.items.map((item) => <li key={item}>{item}</li>)}</ul>}
           {hasCheckpoint && sectionIndex === checkpointIndex && <div className="lesson-quiz" aria-label="Lesson checkpoint">
             <h3>Try these two ideas</h3>
             {frontendQuestions.map((question, index) => <div className="quiz-question" key={question.prompt}>

@@ -1,4 +1,4 @@
-/* Video-led lesson layout. Course gates and real assistant behavior are unchanged. */
+/* Text-only lesson layout: quiz card, lesson assistant, and page columns. */
 html { scrollbar-gutter: stable; }
 .lesson-reading-body[hidden] { display: none; }
 .lesson-quiz-entry { margin: 28px 0; padding: 20px 0; border-top: 1px solid var(--replit-light-silver); }
@@ -21,38 +21,11 @@ html { scrollbar-gutter: stable; }
 .lesson-quiz-card button:disabled { opacity: .45; cursor: default; }
 .lesson-quiz-card button:focus-visible { outline: 2px solid #ca9d1c; outline-offset: 2px; }
 @media(max-width:600px) { .quiz-card-choices { grid-template-columns: 1fr; } .lesson-quiz-card { padding: 14px; } }
-.lesson-sticky-header { position: sticky; top: 0; z-index: 25; padding-top: 8px; padding-bottom: 6px; background: var(--replit-off-white); border-bottom: 1px solid var(--replit-light-silver); }
-.lesson-sticky-header .lesson-video-shell { max-width: calc(55dvh * 1.77778); margin-inline: auto; }
-.lesson-content.learn-content-stage { overflow: visible; }
-.lesson-heading-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 4px 0 8px; }
-.learn-page:not(.welcome-mode) .lesson-heading-row h1 { margin: 0; font-size: 28px; line-height: 1.2; }
-.lesson-heading-row .narration-follow { margin: 0 0 0 auto; font-size: 12px; white-space: nowrap; }
-.lesson-reading-toggle { display: inline-flex; align-items: center; gap: 2px; margin-left: auto; padding: 3px; border: 1px solid var(--replit-light-silver); border-radius: 9px; background: #88808; }
-.lesson-reading-toggle button { display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 6px 8px; font: inherit; font-size: 11px; color: inherit; border: 0; border-radius: 6px; background: transparent; cursor: pointer; }
-.lesson-reading-toggle button[aria-pressed="true"] { background: var(--replit-off-white); box-shadow: 0 1px 3px #0002; font-weight: 600; }
-.lesson-reading-toggle button:hover { background: #8881; }
-.lesson-reading-toggle button:focus-visible { outline: 2px solid #ca9d1c; outline-offset: 2px; }
-.narration-test-toggle { display: inline-flex; align-items: center; gap: 5px; padding: 6px 8px; border: 1px solid var(--replit-light-silver); border-radius: 8px; color: inherit; background: transparent; font: inherit; font-size: 11px; cursor: pointer; }
-.narration-test-toggle:focus-visible { outline: 2px solid #ca9d1c; outline-offset: 2px; }
-.lesson-video-caption-top { display: block; font-size: 11px; opacity: .65; margin: 5px 0 8px; }
-.transcript-preview-player { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 2px 12px; padding: 6px 10px; border: 1px solid var(--replit-light-silver); border-radius: 8px; margin-bottom: 8px; }
-.transcript-preview-player > span { display: flex; align-items: center; gap: 7px; font-size: 12px; }
-.transcript-preview-player audio { width: 100%; height: 32px; min-width: 0; }
-.transcript-preview-player small { grid-column: 1 / -1; font-size: 11px; opacity: .65; }
-.lesson-transcript { margin: 8px 0 28px; }
-.transcript-row { display: grid; grid-template-columns: 48px minmax(0,1fr); gap: 12px; padding: 12px 14px; border-left: 3px solid transparent; border-radius: 4px; }
-.transcript-row.is-current { background: #fff0a629; border-left-color: #ca9d1c; }
-.transcript-row > p { margin: 0; font-size: 16px; line-height: 1.65; }
-.transcript-time { align-self: start; padding: 3px 0; border: 0; background: transparent; color: var(--replit-medium-gray); font: inherit; font-size: 12px; cursor: pointer; text-align: left; }
-.transcript-time:hover { color: var(--replit-off-black); text-decoration: underline; }
-.transcript-time:focus-visible { outline: 2px solid #ca9d1c; outline-offset: 3px; }
 .lesson-assistant-title { display: flex; align-items: center; gap: 8px; font-size: 14px; }
 .lesson-assistant-welcome { margin: 24px 4px; }
 .lesson-assistant-welcome h3 { font-size: 16px; }
 .lesson-assistant-welcome p { font-size: 14px; line-height: 1.65; }
 @media (min-width: 1100px) {
-  /* One shared measure for the video, heading, and transcript. */
-  .lesson-video-shell { width: 100%; margin: 0; }
   .lesson-content.learn-content-stage > .eyebrow { margin: 8px 0 0; }
   .learn-page:not(.welcome-mode) .course-nav { width: 220px; padding: 62px 14px 0; }
   .learn-page .course-module-heading { gap: 8px; }
@@ -61,24 +34,10 @@ html { scrollbar-gutter: stable; }
   .learn-page .course-module-group > .course-chapters button { font-size: 12px; }
   .learn-page:not(.welcome-mode) { padding-left: 244px; padding-right: 24px; padding-top: 12px; }
   .learn-with-ask .learn-page:not(.welcome-mode) { display: block; margin: 0 320px 0 0; max-width: none; padding: 12px 24px 100px 244px; }
-  .learn-page:not(.welcome-mode) .learn-main-column { width: 100%; max-width: clamp(410px, calc(88.889dvh - 160px), 660px); margin: 0 auto; }
+  .learn-page:not(.welcome-mode) .learn-main-column { width: 100%; max-width: 720px; margin: 0 auto; }
   .learn-page:not(.welcome-mode) .lesson-content.learn-content-stage { width: 100%; max-width: none; margin: 0; }
   .learn-with-ask .learn-page.course-nav-collapsed:not(.welcome-mode) { padding-left: 88px; }
   .ask-chat-blade.standalone-ask-blade { width: 320px; padding-top: 20px; }
   .standalone-ask-blade .ask-conversation-view > header { flex-wrap: wrap; gap: 8px; }
   .standalone-ask-blade .ask-conversation-view > header > button:last-child { display: none; }
-  .learn-with-ask .lesson-video-embed.floating { right: 338px; width: 260px; }
 }
-@media (max-width: 600px) {
-  .transcript-preview-player { grid-template-columns: minmax(0,1fr); }
-  .transcript-row { grid-template-columns: 36px minmax(0,1fr); gap: 8px; padding: 10px 6px; }
-  .transcript-row > p { font-size: 16px; }
-}/* Inline transcript rows for lessons without a recorded narration. */
-.foundation-section > .transcript-row, .lesson-reading-body > .transcript-row { margin-inline: -14px; }
-.transcript-group { margin: 4px 0 8px; }
-.transcript-group .transcript-row { margin-inline: -14px; }
-.transcript-row.is-item > p { position: relative; padding-left: 16px; }
-.transcript-row.is-item > p::before { content: "•"; position: absolute; left: 2px; opacity: .55; }
-.transcript-row > .intro, .transcript-row > .lesson-introduction-copy { margin: 0; }
-/* Text mode: full-page scroll; the video docks top right instead of sticking. */
-.reading-text .lesson-sticky-header { position: static; border-bottom: 0; }
