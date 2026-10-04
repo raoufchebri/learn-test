@@ -125,7 +125,7 @@ function PromptBubble({ prompt, done, status, onCopy }: { prompt: string; done: 
 
 // Replit's reply under the bubble: a note that it's an example, the thinking line, then the answer.
 // With stream, the thinking line shimmers briefly and the answer appears a few words at a time, like Replit's chat.
-function ChatExchange({ exchange, stream = false }: { exchange: ChatExchangeExample; stream?: boolean }) {
+function ChatExchange({ exchange, stream = false, onDone }: { exchange: ChatExchangeExample; stream?: boolean; onDone?: () => void }) {
   type Part = { text: string; bold?: boolean };
   const blocks = useMemo(() => {
     const list: Array<{ kind: "p" | "li"; parts: Part[] }> = [];
@@ -148,6 +148,8 @@ function ChatExchange({ exchange, stream = false }: { exchange: ChatExchangeExam
     }, 1000);
     return () => { window.clearTimeout(start); window.clearInterval(interval); };
   }, [animate, total]);
+  // Tell the lesson when the answer is fully shown, so the next content can fade in.
+  useEffect(() => { if (!thinking && shown >= total) onDone?.(); }, [thinking, shown, total]);
   let budget = shown;
   const rendered = blocks.map((block) => {
     const parts = block.parts.map((part) => { const take = Math.max(0, Math.min(part.tokens.length, budget)); budget -= take; return { ...part, visible: part.tokens.slice(0, take).join("") }; });
@@ -237,10 +239,22 @@ function LessonPage({
   const sectionStepsDone = (sectionIndex: number) => isUnlocked(promptUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex)?.id) && isUnlocked(revealUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex)?.id);
   const [entryOpenedState, setEntryOpened] = useState(LEARN_DEV_MODE || !lesson.entryLink);
   const entryOpened = entryOpenedState || isUnlocked(entryUnlock?.id) && !!entryUnlock || completed;
-  const promptContinued = LEARN_DEV_MODE || completed || firstLockedPrompt < 0;
+  const promptContinuedSteps = LEARN_DEV_MODE || completed || firstLockedPrompt < 0;
   const [promptCopy, setPromptCopy] = useState<Record<number, "copied" | "failed">>({});
   // Sections whose example answer was just revealed in this visit: those stream in; stored ones appear instantly.
   const [streamingSections, setStreamingSections] = useState<number[]>([]);
+  // Sequence after copying: the button fades out, the answer streams, then the rest fades in.
+  const [streamDone, setStreamDone] = useState<number[]>([]);
+  const [fadingButtons, setFadingButtons] = useState<number[]>([]);
+  const holdingSection = streamingSections.filter((index) => !streamDone.includes(index)).sort((a, b) => a - b)[0] ?? -1;
+  // Fade in only content that first appears after a learner unlocks something in this visit (not on page load).
+  const revealAnimating = useRef(false);
+  const fadeAtMount = useRef(new Map<string, boolean>());
+  const fadeClass = (key: string) => {
+    if (!fadeAtMount.current.has(key)) fadeAtMount.current.set(key, revealAnimating.current);
+    return fadeAtMount.current.get(key) ? "fade-in-step" : "";
+  };
+  const promptContinued = promptContinuedSteps && holdingSection < 0;
   const hasFrontendCheck = lesson.title === 'What Is Replit Building?';
   const hasCheckpoint = hasFrontendCheck || !!lesson.checkpoint;
   const checkpointIndex = lesson.checkpoint?.afterSection ?? 2;
@@ -274,6 +288,7 @@ function LessonPage({
   // Unlock a step once: celebrate and save it. Already-unlocked steps (stored or this visit) do nothing.
   const unlockStep = (id?: string, alwaysChime = false, confetti = false) => {
     if (id && isUnlocked(id)) return;
+    revealAnimating.current = true;
     if (id) { setSessionUnlocks((current) => [...current, id]); onUnlock?.(id); }
     setUnlockCelebration(true);
     if (confetti) setConfettiBurst((burst) => burst + 1);
@@ -464,7 +479,7 @@ function LessonPage({
       </div>}
       {entryOpened && <>
       {lesson.sections.map((section, sectionIndex) => (
-        (!LEARN_DEV_MODE && !completed && ((firstLockedPrompt >= 0 && sectionIndex > firstLockedPrompt) || (!unlocked && sectionIndex > promptIndex) || (!frontendVisible && sectionIndex > checkpointIndex) || (hasFrontendCheck && sectionIndex > 5 && recipe.iteration !== 'complete'))) ? null : <section className={`foundation-section ${((recipeLesson || lesson.projectTask) && sectionIndex > promptIndex) || (hasCheckpoint && sectionIndex > checkpointIndex) || (lesson.promptGate && sectionIndex > 0) ? "lesson-unlocked" : ""}`} id={section.id ?? learnSegment(section.heading)} key={section.heading}>
+        (!LEARN_DEV_MODE && !completed && ((firstLockedPrompt >= 0 && sectionIndex > firstLockedPrompt) || (holdingSection >= 0 && sectionIndex > holdingSection) || (!unlocked && sectionIndex > promptIndex) || (!frontendVisible && sectionIndex > checkpointIndex) || (hasFrontendCheck && sectionIndex > 5 && recipe.iteration !== 'complete'))) ? null : <section className={`foundation-section ${fadeClass(`section-${sectionIndex}`)} ${((recipeLesson || lesson.projectTask) && sectionIndex > promptIndex) || (hasCheckpoint && sectionIndex > checkpointIndex) || (lesson.promptGate && sectionIndex > 0) ? "lesson-unlocked" : ""}`} id={section.id ?? learnSegment(section.heading)} key={section.heading}>
           <h2>{section.heading}</h2>
           <p>{section.body}</p>
           {section.prompt && (() => {
@@ -482,30 +497,34 @@ function LessonPage({
               const reveal = revealUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex);
               if (reveal && !isUnlocked(reveal.id)) {
                 setStreamingSections((current) => [...current, sectionIndex]);
+                setFadingButtons((current) => [...current, sectionIndex]);
+                unlockTimers.current.push(window.setTimeout(() => setFadingButtons((current) => current.filter((index) => index !== sectionIndex)), 450));
                 unlockStep(reveal.id, false, true);
               }
             };
             return <>
-              <div className="lesson-chat-thread" role="group" aria-label="Chat in Replit">
+              <div className={`lesson-chat-thread ${holdingSection === sectionIndex ? 'is-streaming' : ''}`} role="group" aria-label="Chat in Replit">
                 <PromptBubble prompt={section.prompt} done={done} status={copy} onCopy={copyPrompt} />
-                {section.exchange && done && revealed && <ChatExchange exchange={section.exchange} stream={streamingSections.includes(sectionIndex)} />}
+                {section.exchange && done && revealed && <ChatExchange exchange={section.exchange} stream={streamingSections.includes(sectionIndex)}
+                  onDone={() => setStreamDone((current) => current.includes(sectionIndex) ? current : [...current, sectionIndex])} />}
               </div>
-              {revealUnlock && <div className={`recipe-unlock-action reveal-unlock ${done && revealed ? 'is-open' : ''}`}>
-                <button type="button" className="recipe-create-button" onClick={() => void copyPrompt()}>
-                  {done && revealed ? <Icons.Check size={20} aria-hidden="true" /> : <LessonUnlockIcon />}<span>Click on the prompt to copy it</span>
+              {/* The button goes away once the prompt is copied: it fades out, then the answer streams above. */}
+              {revealUnlock && (!(done && revealed) || fadingButtons.includes(sectionIndex)) && <div className={`recipe-unlock-action reveal-unlock ${fadingButtons.includes(sectionIndex) ? 'is-fading-out' : ''}`}>
+                <button type="button" className="recipe-create-button" disabled={fadingButtons.includes(sectionIndex)} onClick={() => void copyPrompt()}>
+                  <LessonUnlockIcon /><span>Click on the prompt to copy it</span>
                 </button>
               </div>}
             </>;
           })()}
           {recipeLesson && section.prompt && <RecipeBuildStep unlocking={unlockCelebration} />}
           {lesson.projectTask && sectionIndex === 0 && <ProjectLessonStep task={lesson.projectTask} />}
-          {section.afterPrompt && unlocked && sectionStepsDone(sectionIndex) && (recipeLesson ? <>
+          {section.afterPrompt && unlocked && sectionStepsDone(sectionIndex) && holdingSection !== sectionIndex && (recipeLesson ? <>
             <h2 id="recipe-prompt-explanation">What just happened now?</h2>
             <p>The highlighted area on the right side of the screen is the chat. It shows your request in a message bubble. On smaller screens, the chat opens in its own panel. That request is a prompt: a description of what you want to create, written in natural language.</p>
             <p>You asked for a personal recipe app where you can add, edit, and find recipes. Each recipe needs a name, ingredients, and instructions.</p>
             <p>That means an interface with forms and buttons, app logic that responds when you use them, and storage that keeps your recipes in this browser. For this first version, all three work in the browser. No sign-in or separate backend is needed.</p>
             <p>Let’s explore the building blocks this prompt describes.</p>
-          </> : <p>{section.afterPrompt}</p>)}
+          </> : <p className={fadeClass(`after-${sectionIndex}`)}>{section.afterPrompt}</p>)}
           {section.items && <ul className="lesson-points">{section.items.map((item) => <li key={item}>{item}</li>)}</ul>}
           {hasCheckpoint && sectionIndex === checkpointIndex && <div className="lesson-quiz" aria-label="Lesson checkpoint">
             <h3>Try these two ideas</h3>
@@ -543,7 +562,7 @@ function LessonPage({
           </div>}
         </section>
       ))}
-      {promptContinued && unlocked && frontendVisible && (LEARN_DEV_MODE || completed || !hasFrontendCheck || recipe.iteration === 'complete') && <div className={recipeLesson ? "lesson-unlocked" : undefined}>
+      {promptContinued && unlocked && frontendVisible && (LEARN_DEV_MODE || completed || !hasFrontendCheck || recipe.iteration === 'complete') && <div className={`${recipeLesson ? "lesson-unlocked" : ""} ${fadeClass("lesson-end")}`}>
       {lesson.replitExample && !recipeLesson && <section className="replit-example">
         <p className="eyebrow">IN REPLIT</p>
         <p>{lesson.replitExample}</p>

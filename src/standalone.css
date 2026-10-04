@@ -1161,3 +1161,13 @@
 .lesson-content .lesson-chat-thread p.chat-reply-thinking.is-thinking { background: linear-gradient(90deg, #9a9a9a 0%, #d6d6d6 45%, #9a9a9a 90%); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: chat-thinking-shimmer 1.2s linear infinite; }
 @keyframes chat-thinking-shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
 @media (prefers-reduced-motion: reduce) { .lesson-content .lesson-chat-thread p.chat-reply-thinking.is-thinking { animation: none; color: #9a9a9a; } }
+
+/* After copying a prompt: the button fades out, the answer streams, then new content fades in. */
+.reveal-unlock.is-fading-out { animation: learn-fade-out .4s ease forwards; pointer-events: none; }
+@keyframes learn-fade-out { to { opacity: 0; transform: translateY(-4px); } }
+.fade-in-step { animation: learn-fade-in .6s ease both; }
+@keyframes learn-fade-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+/* The line under the chat appears only once the answer has finished streaming. */
+.lesson-chat-thread { transition: border-bottom-color .6s ease; }
+.lesson-chat-thread.is-streaming { border-bottom-color: transparent; }
+@media (prefers-reduced-motion: reduce) { .reveal-unlock.is-fading-out, .fade-in-step { animation: none; } .lesson-chat-thread { transition: none; } }
