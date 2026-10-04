@@ -1120,7 +1120,7 @@
 .screenshot-viewer-close:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 
 /* Lesson prompts as Replit chat: blue message bubble (click to copy), then Replit's reply. Matches Replit's chat UI. */
-.chat-thread { margin: 22px 0 26px; font-family: 'ABC Diatype Plus', 'Diatype', sans-serif; }
+.lesson-chat-thread { margin: 22px 0 26px; font-family: 'ABC Diatype Plus', 'Diatype', sans-serif; }
 .prompt-bubble-row { display: flex; flex-direction: column; align-items: flex-end; }
 .lesson-content .prompt-bubble { max-width: min(440px, 82%); margin: 0; padding: 11px 15px; border: 0; border-radius: 14px; background: #dde7f5; color: #27476f; font: inherit; font-size: 16px; line-height: 1.55; text-align: left; cursor: copy; transition: background .15s ease, box-shadow .15s ease; }
 .lesson-content .prompt-bubble:hover { background: #d2dff1; }
@@ -1132,8 +1132,10 @@
 .lesson-content .chat-reply .chat-reply-thinking { margin: 0 0 12px; overflow: hidden; white-space: nowrap; font-size: 15px; line-height: 1.5; color: #9a9a9a; -webkit-mask-image: linear-gradient(90deg, #000 72%, transparent); mask-image: linear-gradient(90deg, #000 72%, transparent); }
 .lesson-content .chat-reply-answer p, .lesson-content .chat-reply-answer li { font-size: 17px; line-height: 1.6; color: var(--replit-off-black); }
 .lesson-content .chat-reply-answer p { margin: 0 0 12px; }
-.lesson-content .chat-reply-answer ol { margin: 0 0 14px; padding-left: 24px; }
-.lesson-content .chat-reply-answer li { margin: 0 0 6px; padding-left: 4px; }
+.lesson-content .chat-reply-answer ol { margin: 0 0 14px; padding-left: 24px; list-style: decimal outside; }
+.lesson-content .chat-reply-answer li { position: static; margin: 0 0 6px; padding: 0 0 0 4px; }
+.lesson-content .chat-reply-answer li::before, .lesson-content .chat-reply-answer li::after { content: none; }
+.lesson-content .chat-reply-answer li::marker { color: var(--replit-off-black); }
 .lesson-content .chat-reply .chat-reply-meta { display: inline-flex; align-items: center; gap: 6px; margin: 4px 0 0; font-size: 14px; color: var(--replit-medium-gray); }
 :root[data-theme="dark"] .lesson-content .prompt-bubble { background: #22344d; color: #d6e4f7; }
 :root[data-theme="dark"] .lesson-content .prompt-bubble:hover { background: #2a3f5d; }
