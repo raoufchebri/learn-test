@@ -288,6 +288,7 @@ function LessonPage({
     const reveal = window.setTimeout(() => {
       onComplete();
       setUnlockCelebration(true);
+      setConfettiBurst((burst) => burst + 1);
       if (!reduced) {
         try {
           const audio = new AudioContext();
@@ -314,7 +315,7 @@ function LessonPage({
   const quizReview = useRef(false);
   // Each celebration starts a confetti shower that runs to the end on its own timer.
   const [confettiBurst, setConfettiBurst] = useState(0);
-  useEffect(() => { if (unlockCelebration) setConfettiBurst((burst) => burst + 1); }, [unlockCelebration]);
+  // Confetti is only for completing a lesson (passing its quiz). Unlock buttons keep their lock animation and chime.
   const quizCardRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!quizMode) return;
