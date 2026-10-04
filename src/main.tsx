@@ -255,9 +255,8 @@ function LessonPage({
   const [promptCopy, setPromptCopy] = useState<Record<number, "copied" | "failed">>({});
   // Sections whose example answer was just revealed in this visit: those stream in; stored ones appear instantly.
   const [streamingSections, setStreamingSections] = useState<number[]>([]);
-  // Sequence after copying: the button fades out, the answer streams, then the rest fades in.
+  // Sequence after copying: the button turns green, the answer streams, then the rest fades in.
   const [streamDone, setStreamDone] = useState<number[]>([]);
-  const [fadingButtons, setFadingButtons] = useState<number[]>([]);
   const holdingSection = streamingSections.filter((index) => !streamDone.includes(index)).sort((a, b) => a - b)[0] ?? -1;
   // Fade in only content that first appears after a learner unlocks something in this visit (not on page load).
   const revealAnimating = useRef(false);
@@ -509,8 +508,6 @@ function LessonPage({
               const reveal = revealUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex);
               if (reveal && !isUnlocked(reveal.id)) {
                 setStreamingSections((current) => [...current, sectionIndex]);
-                setFadingButtons((current) => [...current, sectionIndex]);
-                unlockTimers.current.push(window.setTimeout(() => setFadingButtons((current) => current.filter((index) => index !== sectionIndex)), 450));
                 // Confetti only for the lesson's first example answer; later ones just play the unlock sound.
                 unlockStep(reveal.id, false, reveal.id === revealUnlocks[0]?.id);
               }
@@ -521,10 +518,10 @@ function LessonPage({
                 {section.exchange && done && revealed && <ChatExchange exchange={section.exchange} stream={streamingSections.includes(sectionIndex)}
                   onDone={() => setStreamDone((current) => current.includes(sectionIndex) ? current : [...current, sectionIndex])} />}
               </div>
-              {/* The button goes away once the prompt is copied: it fades out, then the answer streams above. */}
-              {revealUnlock && (!(done && revealed) || fadingButtons.includes(sectionIndex)) && <div className={`recipe-unlock-action reveal-unlock ${fadingButtons.includes(sectionIndex) ? 'is-fading-out' : ''}`}>
-                <button type="button" className="recipe-create-button" disabled={fadingButtons.includes(sectionIndex)} onClick={() => void copyPrompt()}>
-                  <LessonUnlockIcon /><span>Click on the prompt to copy it</span>
+              {/* Unlock button under each chat: stays in place and turns green with a check once unlocked. */}
+              {revealUnlock && <div className={`recipe-unlock-action reveal-unlock ${done && revealed ? 'is-open' : ''}`}>
+                <button type="button" className="recipe-create-button" onClick={() => void copyPrompt()}>
+                  {done && revealed ? <Icons.Check size={20} aria-hidden="true" /> : <LessonUnlockIcon />}<span>Click on the prompt to copy it</span>
                 </button>
               </div>}
             </>;
