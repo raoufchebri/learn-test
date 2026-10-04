@@ -406,8 +406,11 @@ function LessonPage({
         <p>First, open a new conversation in Replit. Keep this lesson open so you can follow along.</p>
         <a className="recipe-create-button" href={lesson.entryLink} target="_blank" rel="noopener noreferrer" onClick={() => {
           if (!entryOpened) { setEntryOpened(true); unlockStep(entryUnlock?.id); }
+        }} onAuxClick={(event) => {
+          // Middle-click opens Replit in a background tab; count it as opening Replit too.
+          if (event.button === 1 && !entryOpened) { setEntryOpened(true); unlockStep(entryUnlock?.id); }
         }}><LessonUnlockIcon /><span>Open Replit and start a chat</span></a>
-        <small>Opens in a new tab. Write and send your prompt there.</small>
+        <small>Opens Replit in a new tab. To stay on this page, hold ⌘ (Mac) or Ctrl (Windows) while you click.</small>
       </div>}
       {entryOpened && <>
       {lesson.sections.map((section, sectionIndex) => (
