@@ -26,7 +26,7 @@ export const discoverLessons: LearnLesson[] = [
     summary: 'When you open Replit’s home screen, you’ll see a large composer, also called the prompt box.',
     openingImage: { src: '/images/replit-home-anonymized.png', alt: 'Replit home screen with the large prompt box below the greeting. Names, avatars, and project titles are fictional.' },
     entryLink: 'https://replit.com/~',
-    introduction: ['It’s one of the main ways you interact with Replit. Everything starts with a chat where you explain what you want to achieve.', 'In this lesson, you’ll brainstorm birthday-party themes, choose one, and ask for a picture. Keep the same chat open so you can build on your ideas.', 'Use fictional details for this exercise. You don’t need to share a child’s name, photo, or exact location.'],
+    introduction: ['It’s one of the main ways you interact with Replit. Everything starts with a chat where you explain what you want to achieve.', 'In this lesson, you’ll brainstorm birthday-party themes, choose one, and ask for a picture. Keep the same chat open so you can build on your ideas.', 'Feel free to use your own party details. If you don’t have a party in mind, use the example prompts below.'],
     promptGate: true,
     outcomes: ['Write a prompt to brainstorm party themes', 'Choose a theme with a follow-up', 'Ask for an image to visualize your idea'],
     sections: [

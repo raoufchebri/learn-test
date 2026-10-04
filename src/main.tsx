@@ -108,6 +108,25 @@ function LinkedText({ text }: { text: string }) {
   })}</>;
 }
 
+// Screenshot that opens large on click. In the viewer, clicking the image toggles fit-to-screen and full size.
+function ZoomableImage({ src, alt, lazy = false }: { src: string; alt: string; lazy?: boolean }) {
+  const viewer = useRef<HTMLDialogElement>(null);
+  const [fullSize, setFullSize] = useState(false);
+  const open = () => { setFullSize(false); viewer.current?.showModal(); };
+  return <>
+    <button type="button" className="screenshot-zoom-trigger" onClick={open} aria-label={`Zoom in: ${alt}`}>
+      <img src={src} alt={alt} loading={lazy ? "lazy" : undefined} />
+      <span className="screenshot-zoom-hint" aria-hidden="true"><Icons.ZoomIn size={16} /></span>
+    </button>
+    <dialog ref={viewer} className="screenshot-viewer" aria-label={alt} onClick={(event) => { if (event.target === event.currentTarget) viewer.current?.close(); }}>
+      <button type="button" className="screenshot-viewer-close" onClick={() => viewer.current?.close()} aria-label="Close"><Icons.X size={20} /></button>
+      <div className={`screenshot-viewer-stage ${fullSize ? "is-full" : ""}`} onClick={(event) => { if (event.target === event.currentTarget) viewer.current?.close(); }}>
+        <img src={src} alt={alt} onClick={() => setFullSize((value) => !value)} title={fullSize ? "Fit to screen" : "View full size"} />
+      </div>
+    </dialog>
+  </>;
+}
+
 function LessonPage({
   lesson,
   chapter,
@@ -311,7 +330,7 @@ function LessonPage({
       <div className="lesson-reading-body">
       {lesson.testingUnlocked && lesson.projectTask && <p className="caption">Testing access: this lesson is open for review. Project inspection still requires a completed app.</p>}
       <p className="intro">{lesson.summary}</p>
-      {lesson.openingImage && <figure className="lesson-app-screenshot"><img src={lesson.openingImage.src} alt={lesson.openingImage.alt} /><figcaption>Replit home · Personal details replaced for this example.</figcaption></figure>}
+      {lesson.openingImage && <figure className="lesson-app-screenshot"><ZoomableImage src={lesson.openingImage.src} alt={lesson.openingImage.alt} /><figcaption>Replit home · Personal details replaced for this example.</figcaption></figure>}
       {lesson.introduction?.map((paragraph) => typeof paragraph === 'string'
         ? <p className="lesson-introduction-copy" key={paragraph}><LinkedText text={paragraph} /></p>
         : <div className="lesson-introduction-copy" key={paragraph.text}><p><LinkedText text={paragraph.text} /></p><ul>{paragraph.items.map((item) => <li key={item}><LinkedText text={item} /></li>)}</ul></div>)}
@@ -337,7 +356,7 @@ function LessonPage({
             if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) playUnlockChime();
             unlockTimers.current.push(window.setTimeout(() => setUnlockCelebration(false), 2000));
           }
-        }}><LessonUnlockIcon /><span>Open Replit and start a conversation ↗</span></a>
+        }}><LessonUnlockIcon /><span>Open Replit and start a chat ↗</span></a>
         <small>Opens in a new tab. Write and send your prompt there.</small>
       </div>}
       {entryOpened && <>
@@ -379,7 +398,7 @@ function LessonPage({
           {recipeLesson && section.id === "a-few-building-blocks-make-it-work" && <p>In the next lesson, you’ll explore what Replit is doing while your app builds. After that, you’ll look inside its project, code, and files.</p>}
           {section.image && (
             <figure className="lesson-app-screenshot">
-              <img src={section.image.src} alt={section.image.alt} loading="lazy" />
+              <ZoomableImage src={section.image.src} alt={section.image.alt} lazy />
               <figcaption>{section.image.caption} <a href={section.image.source} target="_blank" rel="noreferrer">Source</a></figcaption>
             </figure>
           )}
