@@ -1239,3 +1239,12 @@
 .lesson-attachment-download { display: inline-flex; flex: none; align-items: center; gap: 8px; padding: 9px 16px; border: 1px solid var(--replit-light-silver); border-radius: 999px; color: var(--replit-off-black); text-decoration: none; font-size: 14px; font-weight: 500; }
 .lesson-attachment-download:hover { background: var(--replit-light-gray); }
 @media (max-width: 600px) { .lesson-attachment figcaption { flex-direction: column; align-items: flex-start; } }
+/* Start new project card variant. */
+.chat-reply-approval.is-project .project-card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.chat-reply-approval.is-project .project-card-head strong { margin: 0; font-size: 17px; }
+.chat-reply-approval.is-project .project-card-head em { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: 6px; background: #fff; font-style: normal; font-size: 13px; color: var(--replit-dark-gray); }
+.lesson-content .lesson-chat-thread p.project-card-name { margin: 14px 0 6px; font-size: 15px !important; font-weight: 500; color: var(--replit-off-black) !important; }
+.lesson-content .lesson-chat-thread p.project-card-description { margin: 0; font-size: 14px !important; line-height: 1.55 !important; color: var(--replit-dark-gray) !important; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.lesson-content .lesson-chat-thread p.project-card-description.is-expanded { display: block; -webkit-line-clamp: unset; }
+.chat-reply-approval.is-project .project-card-more { display: block; margin: 6px auto 14px; border: 0; background: none; font: inherit; font-size: 14px; color: var(--replit-dark-gray); cursor: pointer; }
+.chat-reply-approval.is-project .chat-reply-approval-actions button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }

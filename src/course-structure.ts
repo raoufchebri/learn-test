@@ -143,7 +143,7 @@ export function lessonUnlocks(module: CourseModule, lesson: LearnLesson): Lesson
     // The example reply's approval card: choosing the approve option and submitting unlocks the rest.
     if (gated && section.prompt && section.approval) {
       const accepted = ([] as string[]).concat(section.approval.approve);
-      unlocks.push({ id: `${base}:step-${sectionIndex}`, kind: "step", label: section.approval.kind === "mode" ? `Choose ${accepted.join(" or ")} and continue` : section.approval.kind === "routine" ? `Click ${accepted[0]}` : `Select ${accepted[0]} and click Submit`, sectionIndex });
+      unlocks.push({ id: `${base}:step-${sectionIndex}`, kind: "step", label: section.approval.kind === "mode" ? `Choose ${accepted.join(" or ")} and continue` : section.approval.kind === "routine" || section.approval.kind === "project" ? `Click ${accepted[0]}` : `Select ${accepted[0]} and click Submit`, sectionIndex });
     }
     if (section.step) unlocks.push({ id: `${base}:step-${sectionIndex}`, kind: "step", label: section.step.label, sectionIndex });
   });

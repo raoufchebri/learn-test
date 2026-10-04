@@ -138,10 +138,26 @@ function ApprovalCard({ spec, approved, onApprove }: { spec: ApprovalSpec; appro
   const accepted = ([] as string[]).concat(spec.approve);
   const [choice, setChoice] = useState<string | undefined>(spec.initial);
   const [hint, setHint] = useState("");
+  const [expanded, setExpanded] = useState(false);
   const mode = spec.kind === "mode";
   const nudge = mode ? `For this lesson, choose ${accepted.join(" or ")}, then continue.` : `For this lesson, select ${accepted[0]}, then click Submit.`;
   const selected = approved && !(choice && accepted.includes(choice)) ? accepted[0] : choice;
   const submit = () => { if (choice && accepted.includes(choice)) { setHint(""); onApprove(); } else setHint(nudge); };
+  // "project": Replit's Start new project card. Start new project unlocks the next step; this example creates nothing real.
+  if (spec.kind === "project" && spec.project) {
+    const project = spec.project;
+    return <div className={`chat-reply-approval is-project fade-in-step ${approved ? "is-approved" : ""}`} role="group" aria-label={spec.question}>
+      <div className="project-card-head"><strong>{spec.question}</strong><em><ModeDots level={2} /> {project.mode}</em></div>
+      <p className="project-card-name">{project.name}</p>
+      <p className={`project-card-description ${expanded ? "is-expanded" : ""}`}>{project.description}</p>
+      <button type="button" className="project-card-more" onClick={() => setExpanded((value) => !value)} aria-expanded={expanded}>{expanded ? "Show less" : "Show more"}</button>
+      <div className="chat-reply-approval-actions">
+        <button type="button" disabled={approved} onClick={() => setHint(`This example card doesn’t create anything. Click ${accepted[0]} to continue.`)}>Dismiss</button>
+        <button type="button" disabled={approved} onClick={() => { setHint(""); onApprove(); }}>{accepted[0]} <Icons.ArrowUpRight size={15} aria-hidden="true" /></button>
+      </div>
+      <p className="chat-reply-approval-hint" role="status">{approved ? <><Icons.Check size={14} aria-hidden="true" /> Project started</> : hint || <><Icons.LockKeyhole size={14} aria-hidden="true" /> Review the card, then click {accepted[0]} to continue.</>}</p>
+    </div>;
+  }
   // "routine": Replit's New routine card. Create routine unlocks the next step; this example creates nothing real.
   if (spec.kind === "routine" && spec.routine) {
     const routine = spec.routine;
@@ -733,7 +749,7 @@ function LessonPage({
             </div>
           </div>}
           {recipeLesson && section.id === "a-few-building-blocks-make-it-work" && <p>In the next lesson, you’ll explore what Replit is doing while your app builds. After that, you’ll look inside its project, code, and files.</p>}
-          {section.image && sectionStepsDone(sectionIndex) && (
+          {section.image && sectionStepsDone(sectionIndex) && (!section.approval || (approvalDone(sectionIndex) && holdingSection !== sectionIndex + 0.5)) && (
             <figure className="lesson-app-screenshot">
               <ZoomableImage src={section.image.src} alt={section.image.alt} lazy />
               <figcaption>{section.image.caption}{section.image.source && <> <a href={section.image.source} target="_blank" rel="noreferrer">Source</a></>}</figcaption>
