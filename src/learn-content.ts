@@ -82,6 +82,9 @@ export type LearnLesson = {
   summary: string;
   openingImage?: { src: string; alt: string };
   entryLink?: string;
+  // Label and lead-in for the entry button; defaults suit opening a new Replit chat.
+  entryLabel?: string;
+  entryIntro?: string;
   promptGate?: boolean;
   copyPrompts?: boolean;
   activityConfirmation?: string;

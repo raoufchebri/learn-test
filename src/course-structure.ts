@@ -135,7 +135,7 @@ export type LessonUnlock = { id: string; kind: "entry" | "prompt" | "reveal" | "
 export function lessonUnlocks(module: CourseModule, lesson: LearnLesson): LessonUnlock[] {
   const base = lessonId(module, lesson);
   const unlocks: Omit<LessonUnlock, "position">[] = [];
-  if (lesson.entryLink) unlocks.push({ id: `${base}:entry`, kind: "entry", label: "Open Replit and start a chat" });
+  if (lesson.entryLink) unlocks.push({ id: `${base}:entry`, kind: "entry", label: lesson.entryLabel ?? "Open Replit and start a chat" });
   if (lesson.promptGate || lesson.copyPrompts) lesson.sections.forEach((section, sectionIndex) => {
     if (section.prompt) unlocks.push({ id: `${base}:prompt-${sectionIndex}`, kind: "prompt", label: "Copy the prompt", sectionIndex });
     if (section.prompt && section.exchange) unlocks.push({ id: `${base}:reveal-${sectionIndex}`, kind: "reveal", label: "Show an example answer", sectionIndex });

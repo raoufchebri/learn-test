@@ -490,7 +490,7 @@ function LessonPage({
         </section>
       )}
       {lesson.entryLink && <div className={`recipe-unlock-action ${entryOpened ? 'is-open' : ''}`}>
-        <p>First, open a new conversation in Replit. Keep this lesson open so you can follow along.</p>
+        <p>{lesson.entryIntro ?? 'First, open a new conversation in Replit. Keep this lesson open so you can follow along.'}</p>
         <a className="recipe-create-button" href={lesson.entryLink} target="_blank" rel="noopener noreferrer" onClick={(event) => {
           // Plain click: open Replit in a window on the right half of the screen, beside the lesson.
           // ⌘/Ctrl/Shift-click keeps the browser's own behaviour (for example a background tab).
@@ -499,7 +499,7 @@ function LessonPage({
         }} onAuxClick={(event) => {
           // Middle-click opens Replit in a background tab; count it as opening Replit too.
           if (event.button === 1 && !entryOpened) { setEntryOpened(true); unlockStep(entryUnlock?.id); }
-        }}><LessonUnlockIcon /><span>Open Replit and start a chat</span></a>
+        }}><LessonUnlockIcon /><span>{lesson.entryLabel ?? 'Open Replit and start a chat'}</span></a>
         <small>Opens Replit in a window next to this lesson, so you can see both.</small>
       </div>}
       {entryOpened && <>
