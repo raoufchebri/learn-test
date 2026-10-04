@@ -137,6 +137,20 @@ function ChatExchange({ exchange }: { exchange: ChatExchangeExample }) {
   </div>;
 }
 
+// Opens a URL in a window on the right half of the screen so the lesson stays visible. Returns false if the
+// browser blocked the window, in which case the link's normal new-tab behaviour is used instead.
+function openBesideLesson(url: string): boolean {
+  const screenLeft = (window.screen as Screen & { availLeft?: number }).availLeft ?? 0;
+  const screenTop = (window.screen as Screen & { availTop?: number }).availTop ?? 0;
+  const width = Math.max(480, Math.round(window.screen.availWidth / 2));
+  const height = window.screen.availHeight;
+  const left = screenLeft + window.screen.availWidth - width;
+  const opened = window.open(url, "replit-beside-lesson", `popup=yes,width=${width},height=${height},left=${left},top=${screenTop}`);
+  if (!opened) return false;
+  try { opened.opener = null; } catch { /* Cross-origin windows may not allow this. */ }
+  return true;
+}
+
 // Screenshot that opens large on click. In the viewer, clicking the image toggles fit-to-screen and full size.
 function ZoomableImage({ src, alt, lazy = false }: { src: string; alt: string; lazy?: boolean }) {
   const viewer = useRef<HTMLDialogElement>(null);
@@ -404,13 +418,16 @@ function LessonPage({
       )}
       {lesson.entryLink && <div className={`recipe-unlock-action ${entryOpened ? 'is-open' : ''}`}>
         <p>First, open a new conversation in Replit. Keep this lesson open so you can follow along.</p>
-        <a className="recipe-create-button" href={lesson.entryLink} target="_blank" rel="noopener noreferrer" onClick={() => {
+        <a className="recipe-create-button" href={lesson.entryLink} target="_blank" rel="noopener noreferrer" onClick={(event) => {
+          // Plain click: open Replit in a window on the right half of the screen, beside the lesson.
+          // ⌘/Ctrl/Shift-click keeps the browser's own behaviour (for example a background tab).
+          if (!event.metaKey && !event.ctrlKey && !event.shiftKey && openBesideLesson(lesson.entryLink!)) event.preventDefault();
           if (!entryOpened) { setEntryOpened(true); unlockStep(entryUnlock?.id); }
         }} onAuxClick={(event) => {
           // Middle-click opens Replit in a background tab; count it as opening Replit too.
           if (event.button === 1 && !entryOpened) { setEntryOpened(true); unlockStep(entryUnlock?.id); }
         }}><LessonUnlockIcon /><span>Open Replit and start a chat</span></a>
-        <small>Opens Replit in a new tab. To stay on this page, hold ⌘ (Mac) or Ctrl (Windows) while you click.</small>
+        <small>Opens Replit in a window next to this lesson, so you can see both.</small>
       </div>}
       {entryOpened && <>
       {lesson.sections.map((section, sectionIndex) => (
