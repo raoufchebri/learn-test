@@ -1232,3 +1232,10 @@
 .chat-reply-approval.is-routine .routine-prompt { max-height: 110px; overflow-y: auto; font-size: 14px; line-height: 1.5; }
 .chat-reply-approval.is-routine .chat-reply-approval-actions { margin-top: 16px; }
 .chat-reply-approval.is-routine .chat-reply-approval-actions button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+/* Attachment to download and add to a Replit prompt. */
+.lesson-attachment { margin: 20px 0 8px; }
+.lesson-attachment img { width: 100%; border: 1px solid var(--replit-light-silver); border-radius: 12px; }
+.lesson-attachment figcaption { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 10px; font-size: 14px; color: var(--replit-medium-gray); }
+.lesson-attachment-download { display: inline-flex; flex: none; align-items: center; gap: 8px; padding: 9px 16px; border: 1px solid var(--replit-light-silver); border-radius: 999px; color: var(--replit-off-black); text-decoration: none; font-size: 14px; font-weight: 500; }
+.lesson-attachment-download:hover { background: var(--replit-light-gray); }
+@media (max-width: 600px) { .lesson-attachment figcaption { flex-direction: column; align-items: flex-start; } }

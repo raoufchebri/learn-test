@@ -603,6 +603,14 @@ function LessonPage({
         (!LEARN_DEV_MODE && !completed && ((firstLockedPrompt >= 0 && sectionIndex > firstLockedPrompt) || (holdingSection >= 0 && sectionIndex > holdingSection) || (!unlocked && sectionIndex > promptIndex) || (!frontendVisible && sectionIndex > checkpointIndex) || (hasFrontendCheck && sectionIndex > 5 && recipe.iteration !== 'complete'))) ? null : <section className={`foundation-section ${fadeClass(`section-${sectionIndex}`)} ${((recipeLesson || lesson.projectTask) && sectionIndex > promptIndex) || (hasCheckpoint && sectionIndex > checkpointIndex) || (lesson.promptGate && sectionIndex > 0) ? "lesson-unlocked" : ""}`} id={section.id ?? learnSegment(section.heading)} key={section.heading}>
           <h2>{section.heading}</h2>
           <p>{section.body}</p>
+          {/* A file to attach in Replit with the prompt: zoomable preview plus a download button. */}
+          {section.attachment && <figure className="lesson-attachment">
+            <ZoomableImage src={section.attachment.src} alt={section.attachment.alt} lazy />
+            <figcaption>
+              <span>{section.attachment.caption}</span>
+              <a className="lesson-attachment-download" href={section.attachment.src} download={section.attachment.download}><Icons.Download size={16} aria-hidden="true" /> Download the image</a>
+            </figcaption>
+          </figure>}
           {section.link && <div className="recipe-unlock-action section-link">
             <a className="recipe-create-button" href={section.link.href} target="_blank" rel="noopener noreferrer" onClick={(event) => {
               if (!event.metaKey && !event.ctrlKey && !event.shiftKey && openBesideLesson(section.link!.href)) event.preventDefault();
