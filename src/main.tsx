@@ -388,7 +388,8 @@ function LessonPage({
     return () => window.clearTimeout(timer);
   }, [hasCheckpoint, frontendPassed, frontendReady]);
   useEffect(() => {
-    if (!onComplete || completed || !quizPassed || !unlocked) return;
+    // Only a quiz the learner answered in this visit can complete the lesson (never answers filled in for review).
+    if (!onComplete || completed || !quizPassed || !unlocked || !answeredThisVisit.current) return;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     nextUnlockRef.current?.scrollIntoView({ behavior: reduced ? "instant" : "smooth", block: "center" });
     const reveal = window.setTimeout(() => {
@@ -419,6 +420,7 @@ function LessonPage({
   }, [quizPassed, completed, unlocked]);
   const [quizMode, setQuizMode] = useState(false);
   const quizReview = useRef(false);
+  const answeredThisVisit = useRef(false);
   // Each celebration starts a confetti shower that runs to the end on its own timer.
   const [confettiBurst, setConfettiBurst] = useState(0);
   // Confetti is only for completing a lesson (passing its quiz). Unlock buttons keep their lock animation and chime.
@@ -443,8 +445,13 @@ function LessonPage({
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [lesson.title, location.hash]);
   // Completed lesson: the quiz is shown as taken, with the correct answers checked and the Continue button.
+  // If the lesson turns out not to be completed (for example after a reset), clear those review answers.
   useEffect(() => {
-    if (!completed || lesson.quiz.length === 0 || quizMode) return;
+    if (!completed) {
+      if (quizReview.current && !answeredThisVisit.current) { quizReview.current = false; setAnswers([]); setQuizMode(false); }
+      return;
+    }
+    if (lesson.quiz.length === 0 || quizMode) return;
     quizReview.current = true;
     setAnswers(lesson.quiz.map((question) => question.answer));
     setQuizMode(true);
@@ -620,7 +627,7 @@ function LessonPage({
       </div>
       {quizMode && <div ref={quizCardRef} tabIndex={-1} className="lesson-quiz-stage">
         <LessonQuizCard key={lesson.title} lesson={lesson} answers={answers} completed={completed} next={nextLesson}
-          onAnswer={(index, answer) => setAnswers(current => { const next = [...current]; next[index] = answer; return next; })} />
+          onAnswer={(index, answer) => { answeredThisVisit.current = true; setAnswers(current => { const next = [...current]; next[index] = answer; return next; }); }} />
       </div>}
     </article>
   );
@@ -1235,7 +1242,7 @@ function LearnPage({ composer, chatOpen = false }: { composer?: ReactNode; chatO
             <p>{module.description}</p>
             <p>The lessons in this module are coming soon.</p>
           </article>
-        ) : location.pathname.startsWith("/learn/") && (access === "checking" || (access === "signed-in" && currentLocked)) ? (
+        ) : location.pathname.startsWith("/learn/") && (access === "checking" || (access === "signed-in" && (!progressSettled || currentLocked))) ? (
           // Opening a lesson link: stay blank while sign-in and progress load, or while a locked lesson redirects,
           // instead of flashing the homepage and its video.
           <article className="lesson-content learn-content-stage" aria-busy="true" aria-label="Loading lesson" />
