@@ -1196,7 +1196,8 @@ function LearnSettingsDock({
   onThemeChange: (theme: Theme) => void;
   onPaletteChange: (palette: Palette) => void;
 }) {
-  const [open, setOpen] = useState(false);
+  // Only one popover at a time: the theme picker or the account menu.
+  const [menu, setMenu] = useState<'theme' | 'account' | null>(null);
   const [authenticated, setAuthenticated] = useState<boolean | null>(null);
   const [avatar, setAvatar] = useState<string | undefined>();
   const [username, setUsername] = useState("");
@@ -1226,18 +1227,18 @@ function LearnSettingsDock({
   }, []);
 
   useEffect(() => {
-    if (!open) return;
+    if (!menu) return;
     const close = (event: MouseEvent) => {
-      if (dock.current && !dock.current.contains(event.target as Node)) setOpen(false);
+      if (dock.current && !dock.current.contains(event.target as Node)) setMenu(null);
     };
-    const escape = (event: KeyboardEvent) => { if (event.key === "Escape") setOpen(false); };
+    const escape = (event: KeyboardEvent) => { if (event.key === "Escape") setMenu(null); };
     document.addEventListener("mousedown", close);
     document.addEventListener("keydown", escape);
     return () => {
       document.removeEventListener("mousedown", close);
       document.removeEventListener("keydown", escape);
     };
-  }, [open]);
+  }, [menu]);
 
   const signIn = () => {
     window.location.assign('/api/auth/login?returnTo=%2F');
@@ -1262,37 +1263,11 @@ function LearnSettingsDock({
     }
   };
 
-  const openHeaderAccount = () => {
-    setOpen(false);
-    document.querySelector<HTMLButtonElement>(".account-trigger:not(.account-loading)")?.click();
-  };
-
-  const openAccount = () => {
-    if (authenticated === true) openHeaderAccount();
-    if (authenticated === false) signIn();
-  };
-
+  const isDark = theme === "dark";
   return (
     <aside className="learn-settings-dock" ref={dock} aria-label="Learn account and settings">
-      {open && (
-        <section className="learn-settings-panel" id="learn-settings-panel" role="dialog" aria-label="Learn settings">
-          <header>
-            <div><strong>Settings</strong><small>Personalize Replit Learn</small></div>
-            <button type="button" onClick={() => setOpen(false)} aria-label="Close settings"><Icons.X size={16} /></button>
-          </header>
-
-          <div className="learn-settings-section">
-            <span>Appearance</span>
-            <div className="learn-settings-mode-grid" role="group" aria-label="Appearance mode">
-              <button type="button" className={theme === "light" ? "selected" : ""} onClick={() => onThemeChange("light")} aria-pressed={theme === "light"}>
-                <Icons.Sun size={16} /> Light
-              </button>
-              <button type="button" className={theme === "dark" ? "selected" : ""} onClick={() => onThemeChange("dark")} aria-pressed={theme === "dark"}>
-                <Icons.Moon size={16} /> Dark
-              </button>
-            </div>
-          </div>
-
+      {menu === "theme" && (
+        <section className="learn-settings-panel learn-theme-panel" id="learn-theme-panel" role="dialog" aria-label="Color theme">
           <div className="learn-settings-section">
             <span>Theme</span>
             <div className="learn-settings-palette-list" role="group" aria-label="Color theme">
@@ -1313,15 +1288,26 @@ function LearnSettingsDock({
               </button>
             </div>
           </div>
-          {authenticated && <div className="learn-settings-section">
-            <button className="learn-sign-out" type="button" onClick={() => void signOut()} disabled={signingOut}><Icons.LogOut size={16} /> {signingOut ? 'Signing out…' : 'Sign out'}</button>
-            {signOutError && <p role="alert">{signOutError}</p>}
-          </div>}
+        </section>
+      )}
+
+      {menu === "account" && authenticated && (
+        <section className="learn-settings-panel learn-account-panel" id="learn-account-panel" role="dialog" aria-label="Account">
+          <button className="learn-sign-out" type="button" onClick={() => void signOut()} disabled={signingOut}><Icons.LogOut size={16} /> {signingOut ? 'Signing out…' : 'Sign out'}</button>
+          {signOutError && <p role="alert">{signOutError}</p>}
         </section>
       )}
 
       <div className="learn-settings-dock-row">
-        <button className={`learn-settings-dock-toggle ${!avatar && username ? 'is-initials' : ''}`} type="button" onClick={() => setOpen((value) => !value)} aria-label="Learn settings" aria-haspopup="dialog" aria-controls="learn-settings-panel" aria-expanded={open}
+        <button className="learn-dock-icon" type="button" onClick={() => setMenu((current) => current === "theme" ? null : "theme")} aria-label="Color theme" title="Color theme" aria-haspopup="dialog" aria-controls="learn-theme-panel" aria-expanded={menu === "theme"}>
+          <Icons.Palette size={18} aria-hidden="true" />
+        </button>
+        <button className="learn-dock-icon" type="button" onClick={() => onThemeChange(isDark ? "light" : "dark")} aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"} title={isDark ? "Light mode" : "Dark mode"}>
+          {isDark ? <Icons.Sun size={18} aria-hidden="true" /> : <Icons.Moon size={18} aria-hidden="true" />}
+        </button>
+        <button className={`learn-settings-dock-toggle ${!avatar && username ? 'is-initials' : ''}`} type="button"
+          onClick={() => { if (authenticated === false) signIn(); else setMenu((current) => current === "account" ? null : "account"); }}
+          aria-label={authenticated === false ? "Sign in" : "Account"} aria-haspopup={authenticated === false ? undefined : "dialog"} aria-controls={authenticated === false ? undefined : "learn-account-panel"} aria-expanded={authenticated === false ? undefined : menu === "account"}
           style={!avatar && username ? { background: avatarColor(username) } : undefined}>
           {avatar ? <img src={avatar} alt="" /> : username ? avatarInitials(username, displayName.first, displayName.last) : <Icons.UserRound size={18} />}
         </button>

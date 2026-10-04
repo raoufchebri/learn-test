@@ -889,9 +889,15 @@
   .learn-with-ask .lesson-video-embed.floating { right: 458px; width: 260px; }
 }
 /* Account avatar: top right corner; moves left of the lesson assistant when it is open. */
-.app-shell .learn-settings-dock { position: fixed; top: 16px; right: 24px; bottom: auto; left: auto; width: 40px; max-width: 40px; z-index: 90; }
+.app-shell .learn-settings-dock { position: fixed; top: 16px; right: 24px; bottom: auto; left: auto; width: auto; max-width: none; z-index: 90; }
 .app-shell:has(.learn-with-ask) .learn-settings-dock { right: 338px; }
-.app-shell .learn-settings-dock-row { display: block; border: 0; background: transparent; padding: 0; min-height: 40px; box-shadow: none; backdrop-filter: none; }
+.app-shell .learn-settings-dock-row { display: flex; align-items: center; gap: 4px; border: 0; background: transparent; padding: 0; min-height: 40px; box-shadow: none; backdrop-filter: none; }
+/* Theme and light/dark icons, left of the avatar. */
+.learn-dock-icon { display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--replit-dark-gray); cursor: pointer; }
+.learn-dock-icon:hover, .learn-dock-icon[aria-expanded="true"] { background: var(--replit-light-gray); color: var(--replit-off-black); }
+.learn-dock-icon:focus-visible { outline: 2px solid var(--replit-off-black); outline-offset: 2px; }
+.app-shell .learn-account-panel { width: 200px; padding: 6px; }
+.learn-account-panel .learn-sign-out { width: 100%; }
 .app-shell .learn-settings-dock-toggle { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--replit-light-silver); background: var(--replit-off-white); overflow: hidden; padding: 0; }
 .learn-settings-dock-toggle img { width: 100%; height: 100%; object-fit: cover; }
 /* Initials avatar: the button itself is one plain-colored circle. No border, ring, shadow, or inner shape. */
