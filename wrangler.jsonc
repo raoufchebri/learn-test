@@ -4,6 +4,9 @@
   "main": "worker/index.ts",
   "compatibility_date": "2026-08-07",
   "preview_urls": true,
+  "secrets": {
+    "required": ["NEON_DATABASE_URL"]
+  },
   "assets": {
     "binding": "ASSETS",
     "directory": "./dist",

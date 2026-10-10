@@ -1291,7 +1291,7 @@ async function moduleReviewResponse(request: Request, env: Env): Promise<Respons
   const sessionId = cookieValue(request, SESSION_COOKIE);
   const session = await authenticatedSession(request, env);
   if (!session || !sessionId) return json({ error: "authentication_required" }, { status: 401 });
-  const key = `module-review:v1:replit-101:${session.user.id}`;
+  const key = `module-review:v2:replit-101:${session.user.id}`;
   if (request.method === "GET") return json({ submission: await getRecord(env, key) ?? null });
   if (request.headers.get("origin") !== new URL(request.url).origin) return json({ error: "invalid_origin" }, { status: 403 });
   let appId: string | undefined;
@@ -1307,7 +1307,7 @@ async function moduleReviewResponse(request: Request, env: Env): Promise<Respons
     const answer = await askMcpQuestion(env, authorized.mcpAccess.accessToken, appId, MODULE1_REVIEW);
     const review = parseReview(answer, MODULE1_REQUIREMENTS);
     if (!review) return json({ error: "inconclusive_review" }, { status: 502 });
-    const submission: CapstoneRecord = { kind: "capstone", appId, title: app.title, url: app.url, ...review, checkedAt: new Date().toISOString(), rubricVersion: 1 };
+    const submission: CapstoneRecord = { kind: "capstone", appId, title: app.title, url: app.url, ...review, checkedAt: new Date().toISOString(), rubricVersion: 2 };
     await putRecord(env, key, submission);
     return json({ submission });
   } catch (error) {
@@ -1351,6 +1351,16 @@ async function route(request: Request, env: Env, ctx?: ExecutionContext): Promis
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+    // Replit terminates HTTPS before forwarding to the local Worker. Restore
+    // the public scheme for OAuth callbacks, secure cookies, and origin checks.
+    const publicUrl = new URL(request.url);
+    if (
+      publicUrl.protocol === "http:" &&
+      (publicUrl.hostname.endsWith(".replit.dev") || publicUrl.hostname.endsWith(".replit.app"))
+    ) {
+      publicUrl.protocol = "https:";
+      request = new Request(publicUrl, request);
+    }
     try {
       return withSecurityHeaders(await route(request, env, ctx));
     } catch (error) {

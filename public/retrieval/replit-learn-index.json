@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-10-04T22:14:21.709Z",
+  "generatedAt": "2026-10-10T17:38:21.187Z",
   "mode": "full",
-  "hash": "64d537f41fecbf0b92de6a7584f3b367cc215ec7005c69bdc64f05e92510b087",
+  "hash": "5adb720784c884e57e64be4ab90ae2cd023cbad6d132b8e7d8c66db10a74d3f7",
   "sourceIds": [
     "02a7b572f652ac611b91",
     "072878e974a6f3620e8f",
@@ -898,7 +898,7 @@
       "sourceId": "f4fbb3611e7f86a0ff44",
       "title": "Use your tools",
       "heading": "Overview",
-      "text": "Replit 101\nNow that Google Calendar is connected, let’s use it. You’ll ask Replit to add a birthday event, review the details, and check the result in Google Calendar. This is a real action in a connected tool, not just a suggested plan.\nContinue in your party-planning chat with Google Calendar connected. You don’t need Gmail for this activity, including calendar invitations.\nThe example uses fictional party details: November 4, 2026, from 3:00 to 5:00 PM. If you’re planning a real party, change the date and details to match it. Choose a calendar where you’re allowed to create a test event.\nAsk Replit to create a calendar event from a prompt\nReview the details and verify the saved event\nUnderstand how integrations let Replit act in connected tools\n",
+      "text": "Replit 101\nNow that Google Calendar is connected, let’s use it. You’ll ask Replit to add a birthday event, review the details, and check the result in Google Calendar. This is a real action in a connected tool, not just a suggested plan.\nContinue in your party-planning chat with Google Calendar connected. You don’t need Gmail for this activity, including calendar invitations.\nThe example uses fictional party details: November 10, 2026, from 3:00 to 5:00 PM. If you’re planning a real party, change the date and details to match it. Choose a calendar where you’re allowed to create a test event.\nAsk Replit to create a calendar event from a prompt\nReview the details and verify the saved event\nUnderstand how integrations let Replit act in connected tools\n",
       "url": "/learn/replit-101/add-the-birthday-to-your-calendar",
       "pageUrl": "/learn/replit-101/add-the-birthday-to-your-calendar",
       "sourcePath": "src/learn-content.ts#f4fbb3611e7f86a0ff44"
@@ -908,7 +908,7 @@
       "sourceId": "f4fbb3611e7f86a0ff44",
       "title": "Use your tools",
       "heading": "1. Ask Replit to add the birthday",
-      "text": "Replit 101\nCopy the prompt below, or write it in your own words. It adds the event to your main Google Calendar; to use a different calendar, name it in the prompt. Include a title, full date, and start and end time so Replit doesn’t have to guess. For this first try, don’t add guests or a private address.\nAdd an event called “Pokémon birthday party (fictional)” to my main Google Calendar on November 4, 2026, from 3:00 to 5:00 PM. In the description, write “Picnic in the park for ten kids, Pokémon theme. Fictional practice event.” Show me the details before creating it and wait for my confirmation. Don’t add guests or send invitations.\nIn Replit, check the preview before approving: the title, date and year, start and end time, and calendar. If something is wrong, tell Replit in the same chat and it will update the preview. When everything is right, select Create event on the approval card and click Submit. Try it on the example card above to continue.",
+      "text": "Replit 101\nCopy the prompt below, or write it in your own words. It adds the event to your main Google Calendar; to use a different calendar, name it in the prompt. Include a title, full date, and start and end time so Replit doesn’t have to guess. For this first try, don’t add guests or a private address.\nAdd an event called “Pokémon birthday party (fictional)” to my main Google Calendar on November 10, 2026, from 3:00 to 5:00 PM. In the description, write “Picnic in the park for ten kids, Pokémon theme. Fictional practice event.” Show me the details before creating it and wait for my confirmation. Don’t add guests or send invitations.\nIn Replit, check the preview before approving: the title, date and year, start and end time, and calendar. If something is wrong, tell Replit in the same chat and it will update the preview. When everything is right, select Create event on the approval card and click Submit. Try it on the example card above to continue.",
       "url": "/learn/replit-101/add-the-birthday-to-your-calendar#1-ask-replit-to-add-the-birthday",
       "pageUrl": "/learn/replit-101/add-the-birthday-to-your-calendar",
       "sourcePath": "src/learn-content.ts#f4fbb3611e7f86a0ff44"
@@ -5808,7 +5808,7 @@
       "sourceId": "2a8689287cc3571bec63",
       "title": "Build your application",
       "heading": "Security: review and test",
-      "text": "Build and Design\nFor the birthday app, a guest should not be able to open the host’s private RSVP list. Replit provides security tools to help find issues, but you still need to review findings and test access controls. Platform protections do not replace your responsibility to configure and review the app safely.",
+      "text": "Build and Design\nFor this introductory birthday app, replies may be public. Saving replies, sign-in, and a private host page are optional—not requirements to pass Module 1. Use fictional guest details while learning. Replit provides security tools to help find issues; review findings and keep secrets out of public code. If you later add private features, test their access controls.",
       "url": "/learn/build-and-design/build-your-application#security-review-and-test",
       "pageUrl": "/learn/build-and-design/build-your-application",
       "sourcePath": "src/learn-content.ts#2a8689287cc3571bec63"

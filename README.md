@@ -15,6 +15,27 @@ The project preserves the current Learn experience while removing its runtime an
 
 ## Run locally
 
+### Replit preview and publishing
+
+In this workspace, `pnpm dev` builds the app and starts a Node server that runs
+the existing Worker handlers. `pnpm dev:ui` is the Vite-only alternative.
+Publishing must run `pnpm start` (or `node server-dist/index.mjs`) after
+the build, not serve `dist` as a static-only website: `/api/auth/*` needs a server.
+
+Both preview and production require the existing `NEON_DATABASE_URL` and
+`SESSION_SECRET` secrets. No second database is needed. The server adds only
+`learn_runtime_records` to the supplied database for encrypted sessions, OAuth
+flows, and activity records. Preview and production records are isolated by
+namespace; existing course and learner tables remain unchanged.
+Keep `SESSION_SECRET` stable across publishes so stored sessions stay readable.
+
+`node scripts/test-records.mjs` checks persistence, encryption, expiration,
+atomic activity claims, and deletion using isolated temporary records.
+
+The original Cloudflare/Vite instructions below apply to `dev:auth` and
+`dev:ui`, respectively. Set the publishing build command to `pnpm build` and
+run command to `pnpm start`. The Node server listens on `PORT` (4173 by default).
+
 Install dependencies:
 
 ```bash

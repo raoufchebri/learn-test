@@ -223,7 +223,6 @@ function ProjectLinkCard({ label, match, opened, onOpen, className = "" }: { lab
       <div className="project-link-name"><strong>{title}</strong><small>{state.status === "fallback" ? "Replit home" : "Project"}</small></div>
       <a className="project-link-open" href={href} target="_blank" rel="noopener noreferrer" aria-disabled={state.status === "loading"} onClick={(event) => {
         if (state.status === "loading") { event.preventDefault(); return; }
-        if (!event.metaKey && !event.ctrlKey && !event.shiftKey && openBesideLesson(href)) event.preventDefault();
         onOpen();
       }} onAuxClick={(event) => { if (event.button === 1 && state.status !== "loading") onOpen(); }}>Open <Icons.ArrowUpRight size={15} aria-hidden="true" /></a>
     </div>
@@ -322,22 +321,6 @@ function ChatExchange({ exchange, stream = false, note = true, onDone }: { excha
       })}
     </div>}
   </div>;
-}
-
-// Opens a URL in a window on the right half of the screen so the lesson stays visible. Returns false if the
-// browser blocked the window, in which case the link's normal new-tab behaviour is used instead.
-function openBesideLesson(url: string): boolean {
-  const screenLeft = (window.screen as Screen & { availLeft?: number }).availLeft ?? 0;
-  const screenTop = (window.screen as Screen & { availTop?: number }).availTop ?? 0;
-  const width = Math.max(480, Math.round(window.screen.availWidth / 2));
-  const height = window.screen.availHeight;
-  const left = screenLeft + window.screen.availWidth - width;
-  const opened = window.open(url, "replit-beside-lesson", `popup=yes,width=${width},height=${height},left=${left},top=${screenTop}`);
-  if (!opened) return false;
-  try { opened.opener = null; } catch { /* Cross-origin windows may not allow this. */ }
-  // Best effort: ask to keep the lesson in front. Most browsers ignore this on purpose (no pop-unders); a few honour it.
-  try { opened.blur(); window.focus(); window.setTimeout(() => window.focus(), 0); } catch { /* Ignored by the browser. */ }
-  return true;
 }
 
 // Screenshot that opens large on click. In the viewer, clicking the image toggles fit-to-screen and full size.
@@ -483,8 +466,7 @@ function LessonPage({
                 <ChatExchange exchange={step.exchange} stream={streamingSections.includes(sectionIndex)} onDone={() => finishStream(sectionIndex)} />
               </div>}
               <div className={`recipe-unlock-action step-unlock ${open ? 'is-open' : ''}`}>
-                {step.href ? <a className="recipe-create-button" href={step.href} target="_blank" rel="noopener noreferrer" onClick={(event) => {
-                  if (!event.metaKey && !event.ctrlKey && !event.shiftKey && openBesideLesson(step.href!)) event.preventDefault();
+                {step.href ? <a className="recipe-create-button" href={step.href} target="_blank" rel="noopener noreferrer" onClick={() => {
                   unlock();
                 }} onAuxClick={(event) => { if (event.button === 1) unlock(); }}>{icon}<span>{step.label}</span></a>
                   : <button type="button" className="recipe-create-button" onClick={unlock}>{icon}<span>{step.label}</span></button>}
@@ -677,16 +659,13 @@ function LessonPage({
       )}
       {lesson.entryLink && <div className={`recipe-unlock-action ${entryOpened ? 'is-open' : ''}`}>
         <p>{lesson.entryIntro ?? 'First, open a new conversation in Replit. Keep this lesson open so you can follow along.'}</p>
-        <a className="recipe-create-button" href={lesson.entryLink} target="_blank" rel="noopener noreferrer" onClick={(event) => {
-          // Plain click: open Replit in a window on the right half of the screen, beside the lesson.
-          // ⌘/Ctrl/Shift-click keeps the browser's own behaviour (for example a background tab).
-          if (!event.metaKey && !event.ctrlKey && !event.shiftKey && openBesideLesson(lesson.entryLink!)) event.preventDefault();
+        <a className="recipe-create-button" href={lesson.entryLink} target="_blank" rel="noopener noreferrer" onClick={() => {
           if (!entryOpened) { setEntryOpened(true); unlockStep(entryUnlock?.id); }
         }} onAuxClick={(event) => {
           // Middle-click opens Replit in a background tab; count it as opening Replit too.
           if (event.button === 1 && !entryOpened) { setEntryOpened(true); unlockStep(entryUnlock?.id); }
         }}><LessonUnlockIcon /><span>{lesson.entryLabel ?? 'Open Replit and start a chat'}</span></a>
-        <small>Opens Replit in a window next to this lesson, so you can see both.</small>
+        <small>Opens Replit in a new tab. Ctrl-click (Windows/Linux) or ⌘-click (Mac) to keep this lesson in focus.</small>
       </div>}
       {entryOpened && <>
       {lesson.sections.map((section, sectionIndex) => (
@@ -702,9 +681,7 @@ function LessonPage({
             </figcaption>
           </figure>}
           {section.link && <div className="recipe-unlock-action section-link">
-            <a className="recipe-create-button" href={section.link.href} target="_blank" rel="noopener noreferrer" onClick={(event) => {
-              if (!event.metaKey && !event.ctrlKey && !event.shiftKey && openBesideLesson(section.link!.href)) event.preventDefault();
-            }}><Icons.ExternalLink size={20} aria-hidden="true" /><span>{section.link.label}</span></a>
+            <a className="recipe-create-button" href={section.link.href} target="_blank" rel="noopener noreferrer"><Icons.ExternalLink size={20} aria-hidden="true" /><span>{section.link.label}</span></a>
           </div>}
           {section.prompt && (() => {
             const promptUnlock = promptUnlocks.find((unlock) => unlock.sectionIndex === sectionIndex);
